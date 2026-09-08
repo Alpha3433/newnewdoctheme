@@ -232,7 +232,8 @@
       radios.forEach(function (r) { r.checked = (r.value === 'subscription') === subscription; });
       if (sellingPlan) sellingPlan.value = subscription ? defaultPlan : '';
       if (buttonPrice) buttonPrice.textContent = (subscription ? priceMain : priceOtp || priceMain).textContent.trim();
-      if (buttonCompare) buttonCompare.textContent = compareText;
+      // The one-time price has no compare-at price, so only show the strike-through on the subscription price.
+      if (buttonCompare) buttonCompare.textContent = subscription ? compareText : '';
     };
     if (toggle) toggle.addEventListener('click', function () { setMode(toggle.getAttribute('aria-checked') !== 'true'); });
     radios.forEach(function (r) { r.addEventListener('change', function () { setMode(r.value === 'subscription'); }); });
@@ -241,12 +242,12 @@
     var form = $('form', sub);
     if (form) {
       form.addEventListener('submit', function (e) {
-        // No storefront backend in this static recreation – hand off to the live product page.
+        // No storefront backend in this static recreation – hand off to the product page.
         e.preventDefault();
         var handle = sub.getAttribute('data-product-handle');
         if (handle) {
           var plan = sellingPlan && sellingPlan.value ? '&selling_plan=' + encodeURIComponent(sellingPlan.value) : '';
-          window.location.href = 'https://froyaorganics.com/products/' + handle + '?variant=' + encodeURIComponent(($('input[name="id"]', form) || {}).value || '') + plan;
+          window.location.href = '/products/' + handle + '?variant=' + encodeURIComponent(($('input[name="id"]', form) || {}).value || '') + plan;
         }
       });
     }
