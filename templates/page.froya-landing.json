@@ -1,0 +1,91 @@
+{
+  "sections": {
+    "hero": {
+      "type": "froya-hero",
+      "settings": {}
+    },
+    "benefits-strip": {
+      "type": "froya-benefits-strip",
+      "settings": {}
+    },
+    "press-slider": {
+      "type": "froya-press-slider",
+      "settings": {}
+    },
+    "reviews-slider": {
+      "type": "froya-reviews-slider",
+      "settings": {}
+    },
+    "backed-by-science": {
+      "type": "froya-backed-by-science",
+      "settings": {}
+    },
+    "clinical-trial": {
+      "type": "froya-clinical-trial",
+      "settings": {}
+    },
+    "featured-product": {
+      "type": "froya-featured-product",
+      "settings": {}
+    },
+    "founder-story": {
+      "type": "froya-founder-story",
+      "settings": {}
+    },
+    "arctic-plants": {
+      "type": "froya-arctic-plants",
+      "settings": {}
+    },
+    "review-wall": {
+      "type": "froya-review-wall",
+      "settings": {}
+    },
+    "guarantee": {
+      "type": "froya-guarantee",
+      "settings": {}
+    },
+    "video-reviews": {
+      "type": "froya-video-reviews",
+      "settings": {}
+    },
+    "how-to-use": {
+      "type": "froya-how-to-use",
+      "settings": {}
+    },
+    "ingredient-quality": {
+      "type": "froya-ingredient-quality",
+      "settings": {}
+    },
+    "arctic-ingredients": {
+      "type": "froya-arctic-ingredients",
+      "settings": {}
+    },
+    "guarantee-2": {
+      "type": "froya-guarantee-2",
+      "settings": {}
+    },
+    "newsletter": {
+      "type": "froya-newsletter",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "benefits-strip",
+    "press-slider",
+    "reviews-slider",
+    "backed-by-science",
+    "clinical-trial",
+    "featured-product",
+    "founder-story",
+    "arctic-plants",
+    "review-wall",
+    "guarantee",
+    "video-reviews",
+    "how-to-use",
+    "ingredient-quality",
+    "arctic-ingredients",
+    "guarantee-2",
+    "newsletter"
+  ]
+}

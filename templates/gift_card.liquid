@@ -1,0 +1,23 @@
+{% layout none %}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ 'gift_cards.issued.title' | t: value: gift_card.initial_value | money_without_trailing_zeros, shop: shop.name }}</title>
+  {{ 'critical.css' | asset_url | stylesheet_tag }}
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  {{ content_for_header }}
+</head>
+<body class="template-gift-card">
+  <main class="gift-card-page">
+    <h1 class="page-title">{{ 'gift_cards.issued.title' | t: value: gift_card.initial_value | money_without_trailing_zeros, shop: shop.name }}</h1>
+    {%- if gift_card.enabled -%}
+      <p class="rte">{{ 'gift_cards.issued.subtext' | t }}</p>
+      <div class="gift-card-page__code">{{ gift_card.code | format_code }}</div>
+      {%- if gift_card.balance != gift_card.initial_value -%}<p>{{ 'gift_cards.issued.remaining_html' | t: balance: gift_card.balance | money }}</p>{%- endif -%}
+    {%- endif -%}
+    <p style="margin-top: 24px;"><a class="custom-button" href="{{ shop.url }}">{{ 'gift_cards.issued.shop_link' | t }}</a></p>
+  </main>
+</body>
+</html>

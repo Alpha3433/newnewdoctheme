@@ -1,0 +1,49 @@
+<div class="page-width page-width--narrow">
+  <h1 class="page-title">{{ 'cart.general.title' | t }}</h1>
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post" novalidate>
+      <table class="cart-table">
+        <thead>
+          <tr><th>{{ 'customer.order.product' | t }}</th><th>{{ 'customer.order.quantity' | t }}</th><th>{{ 'customer.order.total' | t }}</th></tr>
+        </thead>
+        <tbody>
+          {%- for item in cart.items -%}
+            <tr>
+              <td>
+                <div class="cart-table__item">
+                  {%- if item.image -%}{{ item.image | image_url: width: 160 | image_tag: loading: 'lazy' }}{%- endif -%}
+                  <div>
+                    <a class="product-card__title" href="{{ item.url }}">{{ item.product.title }}</a>
+                    {%- unless item.product.has_only_default_variant -%}<div class="cart-footer__note">{{ item.variant.title }}</div>{%- endunless -%}
+                    {%- if item.selling_plan_allocation -%}<div class="cart-footer__note">{{ item.selling_plan_allocation.selling_plan.name }}</div>{%- endif -%}
+                    <a class="cart-footer__note link-underline" href="{{ item.url_to_remove }}">{{ 'cart.general.remove' | t }}</a>
+                  </div>
+                </div>
+              </td>
+              <td><input type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="{{ 'customer.order.quantity' | t }}"></td>
+              <td>{{ item.final_line_price | money }}</td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+      <div class="cart-footer">
+        <div class="cart-footer__subtotal">{{ 'cart.general.subtotal' | t }}: {{ cart.total_price | money }}</div>
+        <div class="cart-footer__note">{{ 'cart.general.taxes_and_shipping' | t }}</div>
+        <div style="display: flex; gap: 10px;">
+          <button type="submit" name="update" class="custom-button" style="background: #fff; color: var(--brand-ink); border: 1.5px solid var(--brand-ink);">{{ 'cart.general.update' | t }}</button>
+          <button type="submit" name="checkout" class="custom-button">{{ 'cart.general.checkout' | t }}</button>
+        </div>
+      </div>
+    </form>
+  {%- else -%}
+    <p>{{ 'cart.general.empty' | t }}</p>
+    <p style="margin-top: 16px;"><a class="custom-button" href="{{ routes.all_products_collection_url }}">{{ 'cart.general.continue_shopping' | t }}</a></p>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": []
+}
+{% endschema %}

@@ -1,6 +1,6 @@
-/* Verbatim per-section inline CSS captured from the live page. Section ids are preserved in index.html so these rules apply unchanged. */
+/* Verbatim per-section inline CSS captured from the live page. Section ids are preserved in the markup so these rules apply unchanged. */
 
-/* ---- announcement-bar ---- */
+/* ---- froya-announcement-bar ---- */
 :root {
     --enable-sticky-announcement-bar: 0;
   }
@@ -156,10 +156,10 @@
     }
   }
 
-/* ---- announcement-bar ---- */
+/* ---- froya-announcement-bar ---- */
 #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__message p {font-size: 13.1px !important;}
 
-/* ---- froya-nav-variant ---- */
+/* ---- froya-header ---- */
 /* Logo max-width: matches legacy header's logo_max_width: 100 setting. */
   #shopify-section-froya-nav-variant .header__logo-image {
     max-width: 100px;
@@ -175,7 +175,7 @@
     z-index: 100;
   }
 
-/* ---- hero ---- */
+/* ---- froya-hero ---- */
 /* base — position:relative + z-index:1 + isolation:isolate locks stacking
      so adjacent sections can't render inside this hero's painted area
      regardless of their CSS (negative margins, absolute children, etc.) */
@@ -242,7 +242,7 @@
     .s-hero-aging-lp__text--desktop{display:block;}
   }
 
-/* ---- icons-with-text-benefits ---- */
+/* ---- froya-benefits-strip ---- */
 #section-template--26717513089391__icons_with_text_hPpB9d {
     background-image: none;
     background-size: cover;
@@ -279,10 +279,10 @@
       gap: 12px !important;
     }}
 
-/* ---- icons-with-text-benefits ---- */
+/* ---- froya-benefits-strip ---- */
 #shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__bottom {display: grid; grid-template-columns: repeat(2, 1fr); padding: 12px; gap: 12px;} #shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__small-icon-item {display: flex; flex-direction: row; align-items: center; text-align: left; gap: 12px;} #shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__small-icon {flex-shrink: 0;} #shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__small-icon-text p {margin: 0; text-align: left;} #shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom {padding: 12px 0;} @media (min-width: 768px) {#shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__bottom {grid-template-columns: repeat(4, 1fr); }}
 
-/* ---- icons-slider-press ---- */
+/* ---- froya-press-slider ---- */
 .s-icons-slider {
     --slider-title-color: #050505;
     --slider-text-color: #1f1f1f;
@@ -290,7 +290,7 @@
     background-color: #faf7f0;
   }
 
-/* ---- backed-by-science ---- */
+/* ---- froya-backed-by-science ---- */
 /* Scoped to the section root via .s-backed-by-science.
      Variables on the root let the schema feed accent/card colors in. */
   .s-backed-by-science{
@@ -361,7 +361,7 @@
     .s-backed-by-science__card-text{font-size:14px;}
   }
 
-/* ---- image-and-text-story ---- */
+/* ---- froya-founder-story ---- */
 #shopify-section-template--26717513089391__custom_image_and_text_hqnCVC.custom-image-and-text {
     padding-top: 30px;
     padding-bottom: 30px;
@@ -375,7 +375,7 @@
     }
   }
 
-/* ---- image-and-text-story ---- */
+/* ---- froya-founder-story ---- */
 .block-subtitle_gDAiGX.s-image-text-section__subtitle {
                 color: #1f1f1f;
               }
@@ -385,12 +385,12 @@
                 }
               }
 
-/* ---- image-and-text-story ---- */
+/* ---- froya-founder-story ---- */
 .block-heading_bGXJ83.s-image-text-section__title {
                 max-width: 560px;
               }
 
-/* ---- icons-with-text-arctic ---- */
+/* ---- froya-arctic-plants ---- */
 #section-template--26717513089391__icons_with_text_HTCEin {
     /* Initially no background - will be loaded lazily */
     background-image: none;
@@ -415,7 +415,7 @@
     }
   }
 
-/* ---- raw-reviews ---- */
+/* ---- froya-review-wall ---- */
 #shopify-section-template--26717513089391__custom_liquid_rgXzGz {--heading-color: 31, 31, 31;
     --text-color: 31, 31, 31;
 
@@ -442,10 +442,10 @@
     }
   }
 
-/* ---- raw-reviews ---- */
+/* ---- froya-review-wall ---- */
 #shopify-section-template--26717513089391__custom_liquid_rgXzGz img {margin: auto;}
 
-/* ---- image-and-text-arctic ---- */
+/* ---- froya-arctic-ingredients ---- */
 #shopify-section-template--26717513089391__custom_image_and_text_HqBW3P.custom-image-and-text {
     padding-top: 30px;
     padding-bottom: 30px;
@@ -459,7 +459,7 @@
     }
   }
 
-/* ---- image-and-text-arctic ---- */
+/* ---- froya-arctic-ingredients ---- */
 .block-subtitle_mrgLBL.s-image-text-section__subtitle {
                 color: #e98044;
               }
@@ -469,12 +469,12 @@
                 }
               }
 
-/* ---- image-and-text-arctic ---- */
+/* ---- froya-arctic-ingredients ---- */
 .block-heading_JCJD7P.s-image-text-section__title {
                 max-width: 560px;
               }
 
-/* ---- footer ---- */
+/* ---- froya-footer ---- */
 #shopify-section-footer .footer {
     --background: 175, 137, 152;
     --heading-color: 31, 31, 31;
@@ -495,7 +495,7 @@
     border-color: #ffffff !important;
   }
 
-/* ---- footer ---- */
+/* ---- froya-footer ---- */
 .payment-methods {
     display: flex;
     flex-direction: column;

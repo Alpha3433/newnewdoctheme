@@ -1,0 +1,28 @@
+<div class="page-width page-width--narrow">
+  <h1 class="page-title">{{ 'customer.login.title' | t }}</h1>
+  {%- form 'customer_login', novalidate: 'novalidate' -%}
+    {%- if form.errors -%}<div class="form-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+    <div class="form-field"><label for="CustomerEmail">{{ 'customer.login.email' | t }}</label><input type="email" name="customer[email]" id="CustomerEmail" autocomplete="email"></div>
+    <div class="form-field"><label for="CustomerPassword">{{ 'customer.login.password' | t }}</label><input type="password" name="customer[password]" id="CustomerPassword" autocomplete="current-password"></div>
+    <button type="submit" class="custom-button">{{ 'customer.login.sign_in' | t }}</button>
+    <p style="margin-top: 16px;"><a class="link-underline" href="{{ routes.account_register_url }}">{{ 'customer.login.create_account' | t }}</a> · <a class="link-underline" href="#recover">{{ 'customer.login.forgot_password' | t }}</a></p>
+  {%- endform -%}
+
+  <div id="recover" style="margin-top: 40px;">
+    <h2 class="page-title" style="font-size: 24px;">{{ 'customer.recover_password.title' | t }}</h2>
+    <p class="rte">{{ 'customer.recover_password.subtext' | t }}</p>
+    {%- form 'recover_customer_password' -%}
+      {%- if form.posted_successfully? -%}<div class="form-success">{{ 'customer.recover_password.subtext' | t }}</div>{%- endif -%}
+      {%- if form.errors -%}<div class="form-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <div class="form-field"><label for="RecoverEmail">{{ 'customer.login.email' | t }}</label><input type="email" name="email" id="RecoverEmail" autocomplete="email"></div>
+      <button type="submit" class="custom-button">{{ 'customer.recover_password.submit' | t }}</button>
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Login",
+  "settings": []
+}
+{% endschema %}

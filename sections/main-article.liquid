@@ -1,0 +1,16 @@
+<article class="page-width page-width--narrow">
+  <header class="article-header">
+    <h1 class="page-title">{{ article.title }}</h1>
+    <div class="blog-card__meta">{{ article.published_at | date: '%B %d, %Y' }}{% if article.author != blank %} · {{ article.author }}{% endif %}</div>
+  </header>
+  {%- if article.image -%}<p style="margin-bottom: 24px;">{{ article.image | image_url: width: 1400 | image_tag: loading: 'eager' }}</p>{%- endif -%}
+  <div class="rte">{{ article.content }}</div>
+  <p style="margin-top: 32px;"><a class="link-underline" href="{{ blog.url }}">{{ 'blogs.article.back_to_blog' | t: title: blog.title }}</a></p>
+</article>
+
+{% schema %}
+{
+  "name": "Article",
+  "settings": []
+}
+{% endschema %}

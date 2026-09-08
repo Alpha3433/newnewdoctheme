@@ -1,0 +1,32 @@
+<div class="page-width">
+  <h1 class="page-title">{{ 'customer.order.title' | t: name: order.name }}</h1>
+  <p class="blog-card__meta" style="margin-bottom: 24px;">{{ 'customer.order.date' | t: date: order.created_at | date: '%B %d, %Y' }}</p>
+  <table class="cart-table">
+    <thead><tr><th>{{ 'customer.order.product' | t }}</th><th>{{ 'customer.order.quantity' | t }}</th><th>{{ 'customer.order.total' | t }}</th></tr></thead>
+    <tbody>
+      {%- for line_item in order.line_items -%}
+        <tr>
+          <td>{{ line_item.title }}</td>
+          <td>{{ line_item.quantity }}</td>
+          <td>{{ line_item.final_line_price | money }}</td>
+        </tr>
+      {%- endfor -%}
+    </tbody>
+  </table>
+  <div class="cart-footer">
+    <div>{{ 'cart.general.subtotal' | t }}: {{ order.line_items_subtotal_price | money }}</div>
+    {%- for shipping_method in order.shipping_methods -%}<div>Shipping ({{ shipping_method.title }}): {{ shipping_method.price | money }}</div>{%- endfor -%}
+    <div class="cart-footer__subtotal">{{ 'customer.order.total' | t }}: {{ order.total_price | money }}</div>
+  </div>
+  <div class="account-grid" style="margin-top: 32px;">
+    <div><h2 class="product-card__title">Billing address</h2><div class="address-card">{{ order.billing_address | format_address }}</div></div>
+    <div><h2 class="product-card__title">Shipping address</h2><div class="address-card">{{ order.shipping_address | format_address }}</div></div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Order",
+  "settings": []
+}
+{% endschema %}

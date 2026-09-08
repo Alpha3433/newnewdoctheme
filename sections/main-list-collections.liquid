@@ -1,0 +1,20 @@
+<div class="page-width">
+  <h1 class="page-title">{{ 'collections.general.view_all' | t }}</h1>
+  <div class="collection-list">
+    {%- for collection in collections -%}
+      <a class="collection-list__item" href="{{ collection.url }}">
+        {%- if collection.featured_image -%}
+          {{ collection.featured_image | image_url: width: 600 | image_tag: loading: 'lazy' }}
+        {%- endif -%}
+        <span class="product-card__title">{{ collection.title }}</span>
+      </a>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collections list",
+  "settings": []
+}
+{% endschema %}
