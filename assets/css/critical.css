@@ -1,0 +1,723 @@
+/* Verbatim inline <head> CSS captured from the live page (fonts, CSS variables, critical layout). */
+
+/* ---- live-page inline head style block 0 ---- */
+/* Critical inline styles - prevent FOUC and improve LCP */
+/* Inlined from critical.css to eliminate render-blocking request */
+/* PP Pangram Sans — all weights as WOFF2 (replacing the old OTF set) */
+@font-face {
+  font-family: 'PP Pangram Sans';
+  src: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Light_400.woff2?v=1778696600') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Pangram Sans';
+  src: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Compact_Regular_400.woff2?v=1778696600') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Pangram Sans';
+  src: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Medium_400.woff2?v=1778696600') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Pangram Sans';
+  src: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Bold_400.woff2?v=1778696599') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Objectivity';
+  src: url('https://froyaorganics.com/cdn/shop/t/207/assets/Objectivity-Regular.woff2?v=143561238108505086661775650485') format('woff2');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  unicode-range: U+0020-007F, U+00A0-00FF, U+0100-017F;
+  size-adjust: 100%;
+  ascent-override: 100%;
+  descent-override: 0%;
+  line-gap-override: 0%;
+}
+
+body {
+  font-family: 'PP Pangram Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  font-synthesis: weight style;
+  text-rendering: optimizeLegibility;
+}
+
+/* Popups/modals — skip Klaviyo; country search UI can use an id containing "modal" */
+modal-content:not([open]),
+.modal:not([open]),
+#newsletter-popup:not([open]):not([hidden]),
+[id*="modal"]:not([open]):not([hidden]):not([id^="__ss-"]):not([id*="klaviyo"]):not([class*="klaviyo"]):not([class*="kl-private"]) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0 !important;
+  height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  z-index: -1;
+}
+
+/* Sticky form trigger */
+.s-sticky-form__trigger:not(.is-visible) {
+  position: fixed;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Footer */
+footer,
+.footer {
+  min-height: 200px;
+}
+
+/* Third-party widgets — Klaviyo omitted: content-visibility applies paint
+   containment, which clips the SMS country dropdown and traps it in a
+   stacking context so later form rows swallow clicks on the country search. */
+iframe[src*="loox"],
+iframe[src*="review"],
+div[id*="loox"],
+div[class*="loox"],
+div[id*="reamaze"],
+div[class*="reamaze"],
+div[id*="convertflow"],
+div[class*="convertflow"] {
+  min-height: 1px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100px;
+}
+
+/* Klaviyo onsite forms (promo banner SMS): keep country combobox usable */
+div[id*="klaviyo"],
+div[class*="klaviyo"] {
+  content-visibility: visible;
+  contain: none;
+  contain-intrinsic-size: none;
+}
+
+div[class*="klaviyo-phoneinput"] {
+  overflow: visible !important; /* dropdown is position:absolute; must paint outside the input row */
+  content-visibility: visible !important;
+  contain: none !important;
+  position: relative;
+  z-index: 10;
+}
+
+[class*="kl-private"] [data-testid="form-row"]:has(.klaviyo-phoneinput),
+[class*="klaviyo"] [data-testid="form-row"]:has(.klaviyo-phoneinput) {
+  overflow: visible;
+  position: relative;
+  z-index: 6;
+}
+
+[class*="kl-private"] [data-testid="form-row"]:has([role="combobox"][aria-expanded="true"]),
+[class*="klaviyo"] [data-testid="form-row"]:has([role="combobox"][aria-expanded="true"]) {
+  z-index: 30;
+}
+
+/* AI chat widget — the third-party chat app ships its fixed launcher/panel
+   container at z-index:9, which the sticky nav (z-index 100) and the nav
+   drawer (z-index 1050) paint over, hiding the chat when it is open. Pin it
+   to the top of the stacking order so the chat always stays above the nav.
+   Targeted by the app's distinctive container class. */
+.right-bubble-right {
+  z-index: 2147483601 !important;
+}
+
+/* Popup images */
+.newsletter-modal__image-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.newsletter-modal__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Image aspect ratio */
+img[width][height] {
+  aspect-ratio: attr(width) / attr(height);
+}
+
+/* Announcement bar */
+.announcement-bar,
+#shopify-section-announcement-bar {
+  min-height: 40px;
+  content-visibility: auto;
+}
+
+/* Product images */
+.product-item__aspect-ratio,
+.aspect-ratio {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.aspect-ratio img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Interactive elements */
+button,
+a,
+[role="button"],
+input,
+select,
+textarea {
+  will-change: auto;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+a,
+[role="button"],
+.modal {
+  transform: translateZ(0);
+}
+
+.drawer,
+[id*="drawer"],
+cart-drawer,
+mini-cart {
+  backface-visibility: visible;
+}
+
+img,
+video,
+iframe {
+  transform: none;
+  backface-visibility: visible;
+}
+
+/* Slideshow images */
+.slideshow__image-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.slideshow__image-wrapper::before {
+  content: '';
+  display: block;
+  padding-bottom: var(--image-aspect-ratio, 37.5%);
+}
+
+.slideshow__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.slideshow .top-slide-image,
+.slideshow .bottom-slide-image,
+.slideshow .top-slide-mob-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Loading placeholders */
+[data-loading],
+.loading-placeholder {
+  min-height: 100px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 4px;
+}
+
+/* ---- live-page inline head style block 1 ---- */
+html.loading body {
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: 'PP Pangram Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #1f1f1f;
+  background: #ffffff;
+  font-synthesis: weight style;
+  text-rendering: optimizeLegibility;
+}
+.header,
+[role="banner"],
+store-header {
+  background: rgb(var(--header-background, 255, 255, 255));
+  position: relative;
+  z-index: 4;
+}
+
+/* Basic hero banner structure */
+.s-hero-banner {
+  display: block;
+  position: relative;
+  min-height: 400px;
+}
+
+.s-hero-banner__container {
+  display: flex;
+  flex-direction: column-reverse;
+  min-height: 400px;
+}
+
+.s-hero-banner__image-wrapper {
+  display: block;
+  width: 100%;
+  position: relative;
+}
+
+.s-hero-banner__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.s-hero-banner__image--mobile {
+  display: block;
+}
+
+.s-hero-banner__image--desktop {
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .s-hero-banner__container {
+    flex-direction: row;
+  }
+  
+  .s-hero-banner__image-wrapper {
+    max-width: 50%;
+  }
+  
+  .s-hero-banner__image--mobile {
+    display: none;
+  }
+  
+  .s-hero-banner__image--desktop {
+    display: block;
+  }
+}
+/* Critical CSS variables and utilities */
+:root{--color-primary:#e98044;--color-primary-dark:#c48a62;--color-primary-light:#f3c560;--color-secondary:#4a3f3c;--color-secondary-light:#6b5f5c;--color-accent:#e98044;--color-accent-dark:#c48a62;--color-cta:#c05516;--color-cta-hover:#99532c;--color-cta-active:#6c3a1c;--color-white:#fff;--color-black:#1f1f1f;--color-text-primary:#1f1f1f;--color-text-secondary:#1f262d;--color-text-muted:rgba(31,38,45,.5);--color-success:#05ac2e;--color-warning:#ff9800;--color-error:#e43044;--color-info:#2196f3;--color-bg-primary:#fff;--color-bg-secondary:#faf7f0;--color-bg-tertiary:#f7eef3;--color-bg-light-yellow:#faf7f0;--font-family-primary:Pangram,sans-serif;--font-family-secondary:Apercu Mono Pro,monospace;--font-family-heading:Libre Baskerville,serif;--font-family-body:Objectivity,sans-serif;--font-family-mori:Mori,sans-serif;--font-family-migra:Migra,sans-serif;--font-size-xs:0.75rem;--font-size-sm:0.875rem;--font-size-base:1rem;--font-size-lg:1.125rem;--font-size-xl:1.25rem;--font-size-2xl:1.5rem;--font-size-3xl:1.875rem;--font-size-4xl:2.25rem;--font-size-5xl:3rem;--font-size-6xl:3.75rem;--font-weight-light:300;--font-weight-normal:400;--font-weight-medium:500;--font-weight-semibold:600;--font-weight-bold:700;--font-weight-extrabold:800;--font-weight-black:900;--line-height-tight:1.25;--line-height-snug:1.375;--line-height-normal:1.5;--line-height-relaxed:1.625;--line-height-loose:2;--letter-spacing-tighter:-0.05em;--letter-spacing-tight:-0.025em;--letter-spacing-normal:0em;--letter-spacing-wide:0.025em;--letter-spacing-wider:0.05em;--letter-spacing-widest:0.1em;--spacing-0:0rem;--spacing-xs:0.25rem;--spacing-sm:0.5rem;--spacing-md:1rem;--spacing-lg:1.5rem;--spacing-xl:2rem;--spacing-2xl:3rem;--spacing-3xl:4rem;--spacing-4xl:6rem;--spacing-5xl:8rem;--radius-xs:0.125rem;--radius-sm:0.25rem;--radius-md:0.375rem;--radius-lg:0.5rem;--radius-xl:0.75rem;--radius-2xl:1rem;--radius-3xl:1.5rem;--radius-full:9999px;--shadow-sm:0 1px 2px 0 rgba(0,0,0,.05);--shadow-md:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06);--shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05);--shadow-xl:0 20px 25px -5px rgba(0,0,0,.1),0 10px 10px -5px rgba(0,0,0,.04);--shadow-2xl:0 25px 50px -12px rgba(0,0,0,.25);--shadow-inner:inset 0 2px 4px 0 rgba(0,0,0,.06);--transition-fast:150ms ease-in-out;--transition-normal:250ms ease-in-out;--transition-slow:350ms ease-in-out;--transition-slower:500ms ease-in-out;--z-index-dropdown:1000;--z-index-sticky:1020;--z-index-fixed:1030;--z-index-modal-backdrop:1040;--z-index-modal:1050;--z-index-popover:1060;--z-index-tooltip:1070;--container-gutter:1rem;--grid-gutter:1rem}*,:after,:before{box-sizing:border-box}body,html{overscroll-behavior:none}body{color:#1f1f1f;font-family:var(--font-family-primary),-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;line-height:1.5;margin:0;overflow:unset}img{height:auto;max-width:100%}.visually-hidden{border:0!important;clip:rect(0,0,0,0)!important;height:1px!important;margin:-1px!important;overflow:hidden!important;padding:0!important;position:absolute!important;white-space:nowrap!important;width:1px!important}.custom-section{padding-bottom:var(--spacing-xl);padding-top:var(--spacing-xl)}.tap-area,[role=button],a.button,button{align-items:center;display:inline-flex;justify-content:center}.blaze-pagination button,.dots-nav__item,.flickity-button,.flickity-prev-next-button,button[aria-label*=" of "]{min-height:7px!important;min-width:7px!important;padding:3px!important}.flickity-button:before{min-height:7px;min-width:7px}.announcement-bar__message a,.announcement-bar__message button.link{color:inherit;font-weight:700;text-decoration:underline;text-decoration-thickness:1px;text-shadow:0 0 2px rgba(0,0,0,.3);text-underline-offset:2px}@media screen and (max-width:740px){.announcement-bar__message a,.announcement-bar__message button.link,.announcement-bar__message p a{text-shadow:none}}.announcement-bar__message p a{font-weight:700;opacity:1!important}.footer__item-content p,.footer__item-title,.linklist__item a{font-weight:500!important;opacity:1!important}.s-hero-banner__subtitle{font-size:inherit;font-weight:inherit}.s-hero-banner{contain:layout;display:block;position:relative;will-change:transform}.s-hero-banner__container{contain:layout;display:flex;flex-direction:column-reverse;min-height:400px}.s-hero-banner__image-wrapper{display:block;position:relative;width:100%}.s-hero-banner__image,.s-hero-banner__image img{display:block;height:100%;width:100%}.s-hero-banner__image img{-o-object-fit:cover;object-fit:cover}.s-hero-banner__image--mobile{display:block}.s-hero-banner__image--desktop{display:none}.s-hero-banner__content-wrapper{align-items:center;background-image:url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/content_background.jpg?v=1747401326);background-position:50%;background-repeat:no-repeat;background-size:cover;contain:layout style paint;display:flex;justify-content:center;padding:20px 15px;transform:translateZ(0);width:100%}.s-hero-banner__content{align-items:center;color:#fff;display:flex;flex-direction:column;max-width:100%;row-gap:12px;text-align:center;width:100%}.s-hero-banner__highlight-label{border-radius:4px;color:#fff;font-family:PP Pangram Sans;font-size:17px;font-style:normal;font-weight:500;line-height:21px;padding:5px 10px}.s-hero-banner__review{align-items:center;display:flex;gap:8px;justify-content:center}.s-hero-banner__icon{width:100%}.s-hero-banner__icon--avatars{max-width:62px}.s-hero-banner__icon--stars{align-items:center;display:flex;justify-content:center;max-width:130px}.s-hero-banner__icon--stars picture{display:flex}.s-hero-banner__icon img{height:100%;-o-object-fit:cover;object-fit:cover;width:100%}.s-hero-banner__review-text{color:#fff;flex-shrink:0;font-family:Objectivity,sans-serif;font-size:15px;font-weight:400;line-height:12px;text-transform:uppercase}.s-hero-banner__title{margin:0;max-width:340px}.s-hero-banner__title p{color:#fff;font-family:Libre Baskerville,serif;font-size:30px;font-weight:400;letter-spacing:-.6px;line-height:110%;margin:0}.s-hero-banner__subtitle{color:#fff;font-family:PP Pangram Sans,sans-serif;font-size:18px;font-weight:500;line-height:21px;margin:0;padding-left:4px}.s-hero-banner__button{font-size:16px;font-weight:700;line-height:16px;padding:13px;width:100%}.s-hero-banner__text--mobile{display:block}.s-hero-banner__text--desktop{display:none}.s-hero-banner__text p{color:var(--mobile-text-color);font-family:var(--font-body-secondary);font-size:14px;font-weight:400;line-height:normal;margin:0;text-transform:uppercase}@media screen and (min-width:768px){.s-hero-banner__container{flex-direction:row}.s-hero-banner__image-wrapper{max-width:50%}.s-hero-banner__image--mobile{display:none}.s-hero-banner__image--desktop{display:block}.s-hero-banner__content-wrapper{align-items:center;background-image:none;display:flex;max-width:50%;padding:15px}.s-hero-banner__content{align-items:flex-start;color:#1f1f1f;margin-left:0;max-width:490px;row-gap:18px;text-align:left}.s-hero-banner__highlight-label,.s-hero-banner__review-text{color:#1f1f1f}.s-hero-banner__title{max-width:440px}.s-hero-banner__title p{color:#1f1f1f;font-size:40px;letter-spacing:-.8px}.s-hero-banner__subtitle{color:rgba(31,31,31,.8);font-size:20px}.s-hero-banner__button{font-size:18px;font-weight:500;max-width:-moz-max-content;max-width:max-content;padding:16px}.s-hero-banner__text--mobile{display:none}.s-hero-banner__text--desktop{display:block}.s-hero-banner__text p{color:#1f1f1f;line-height:12px}}#shopify-section-announcement-bar,.announcement-bar{content-visibility:auto;min-height:40px}.header,[role=banner],store-header{background:rgb(var(--header-background,255,255,255));position:relative;z-index:4}#shopify-section-header{border-bottom:.5px solid #000;z-index:10!important}.header__wrapper{align-items:center;display:flex;justify-content:space-between;padding:15px 0}.header__logo{flex:2;text-align:center}.header__inline-navigation,.header__secondary-links{align-items:center;display:flex;flex:1}.header__inline-navigation{justify-content:flex-start}.header__secondary-links{justify-content:flex-end}@media screen and (min-width:741px){.header__wrapper{padding:.9rem 0 .35rem}}.btn,.custom-button{align-items:center;border:none;border-radius:4px;cursor:pointer;display:inline-flex;font-weight:600;justify-content:center;padding:12px 24px;text-align:center;text-decoration:none;transition:all .2s ease}.btn--primary{background:#1f1f1f;border:2px solid #1f1f1f;color:#fff}.btn--primary:hover{background:transparent;color:#1f1f1f}.s-icons-slider{display:flex;flex-direction:column;gap:20px}.s-icons-slider__title{color:#050505;font-family:var(--font-body-secondary);font-size:1.125rem;font-weight:400;line-height:1.3;margin:0 auto;max-width:330px;text-align:center;text-transform:uppercase}.s-icons-slider__slide{display:flex;flex:0 0 auto;max-width:200px;width:200px}.s-icons-slider__slide-content{align-items:center;display:flex;flex-direction:column;gap:.75rem;padding:0;width:100%}.s-icons-slider__slide-icon{flex-shrink:0;height:auto;width:120px}.s-icons-slider__slide-icon img{display:block;height:auto;max-width:100%;-o-object-fit:contain;object-fit:contain;width:auto}.review-slider{background:#faf7f0;opacity:0;padding:45px;position:relative;transition:opacity .3s ease}.review-slider.flickity-ready{opacity:1}.review-slider__slide{flex:0 0 100%;padding:0 15px;visibility:visible;width:100%}.review-slider__text{font-size:16px;font-weight:500;margin-bottom:12px}.review-slider__author,.review-slider__text{color:#1f1f1f;font-family:PP Pangram Sans,sans-serif;font-style:normal;line-height:130%;text-align:center}.review-slider__author{font-size:13px;font-weight:300}.product-card{align-items:center;background:hsla(42,50%,96%,.5);border-radius:5px;box-shadow:0 0 4px rgba(0,0,0,.15);display:flex;flex-direction:column;gap:13px;padding:20px;position:relative}.product-card__image{width:100%}.product-card__image img{aspect-ratio:1;border-radius:5px;height:auto;-o-object-fit:cover;object-fit:cover;width:100%}.product-card__info{align-items:center;display:flex;flex-direction:column;gap:8px;height:100%}.product-card__title{color:#1f1f1f;font-size:20px;line-height:1.5;margin:0;text-align:center}.product-card__title a{color:inherit;font-family:var(--font-body-primary);font-weight:500;text-decoration:none;transition:color .3s ease}.product-card__add-to-cart{flex-wrap:wrap;font-size:19px;font-weight:500;line-height:normal;padding:18px 10px;row-gap:5px;text-transform:uppercase;width:100%}.product-card__price{color:#1f1f1f;font-family:Apercu Mono Pro;font-size:18px;font-style:normal;font-weight:700;line-height:normal;margin-right:5px}.s-hero-banner__content-wrapper h1,.s-hero-banner__content-wrapper h2{font-display:swap}.loading-bar{background:linear-gradient(90deg,#1f1f1f,#666);height:2px;left:0;position:fixed;top:0;transform:scaleX(0);transform-origin:left;transition:transform .3s ease;width:100%;z-index:1000}
+
+/* ---- live-page inline head style block 3 ---- */
+.product-item__quick-form button,
+footer.mini-cart__drawer-footer .checkout-button,
+.contact__main button.form__submit.button,
+.drawer__content .button-wrapper a.button,
+.product-form__buy-buttons .product-form__add-button,
+.product-form__buy-buttons .shopify-payment-button .kqsiVA9Jf8LJAbxw8Bau.h7OYsWHrW5495r9beh2n.jjzYeefyWpPZLH9pIgyw.beR_IRWWHmzzPFJUoa9p,
+.shipping-estimator .shipping-estimator__form button.form__submit,
+.cart .cart__aside button.cart__checkout-button,
+.product-item__quick-form button.product-item__quick-buy-button span,
+.button.button--primary {
+  background-color: #C05516;
+  border-color: #C05516;
+  background-image: none;
+  color: #ffffff;
+  font-size: 16px;
+}.product-item__quick-form button:hover,
+footer.mini-cart__drawer-footer .checkout-button:hover,
+.contact__main button.form__submit.button:hover,
+.drawer__content .button-wrapper a.button:hover,
+.product-form__buy-buttons .product-form__add-button:hover,
+.product-form__buy-buttons .shopify-payment-button .kqsiVA9Jf8LJAbxw8Bau.h7OYsWHrW5495r9beh2n.jjzYeefyWpPZLH9pIgyw.beR_IRWWHmzzPFJUoa9p:hover,
+.shipping-estimator .shipping-estimator__form button.form__submit:hover,
+.cart .cart__aside button.cart__checkout-button:hover,
+.product-item__quick-form button.product-item__quick-buy-button span:hover,
+.button.button--primary:hover {
+  background-color: #99532C;
+  border-color: #99532C;
+  color: #ffffff;
+  background-image: none;
+}
+
+/* ---- live-page inline head style block 4 ---- */
+/* Typography - using local fonts only, no Google Fonts */
+
+  @font-face {
+    font-family: 'Libre Baskerville';
+    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/LibreBaskerville-Regular.woff2?v=37369604778581562331777467258) format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Libre Baskerville';
+    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/LibreBaskerville-Bold.woff2?v=6890962853957226821777467257) format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Libre Baskerville';
+    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/LibreBaskerville-Italic.woff2?v=64609648977462219181777467257) format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* OPTIMIZED: Load only essential font weights to reduce font errors */
+  @font-face {
+    font-family: 'PP Pangram Sans';
+    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Regular.otf?v=11778403425827296001775650487) format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'PP Pangram Sans';
+    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Medium.otf?v=144727013393520700831775650487) format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  /* Use font-synthesis for bold weights to reduce font file loading */
+  @font-face {
+    font-family: 'PP Pangram Sans';
+    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Medium.otf?v=144727013393520700831775650487) format('opentype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'PP Pangram Sans';
+    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Medium.otf?v=144727013393520700831775650487) format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {--heading-color: 31, 31, 31;
+    --text-color: 31, 31, 31;
+    --background: 255, 255, 255;
+    --secondary-background: 239, 239, 239;
+    --border-color: 221, 221, 221;
+    --border-color-darker: 165, 165, 165;
+    --success-color: 133, 224, 119;
+    --success-background: 231, 249, 228;
+    --error-color: 243, 86, 86;
+    --error-background: 254, 243, 243;
+    --primary-button-background: 192, 85, 22;
+    --primary-button-text-color: 31, 38, 45;
+    --button-background: 175, 137, 152;
+    --secondary-button-text-color: 255, 255, 255;
+    --product-star-rating: 233, 128, 68;
+    --product-on-sale-accent: 233, 147, 91;
+    --product-sold-out-accent: 73, 39, 39;
+    --product-custom-label-background: 233, 147, 91;
+    --product-custom-label-text-color: 0, 0, 0;
+    --product-custom-label-2-background: 233, 147, 91;
+    --product-custom-label-2-text-color: 0, 0, 0;
+    --product-low-stock-text-color: 243, 86, 86;
+    --product-in-stock-text-color: 133, 224, 119;
+    --loading-bar-background: 31, 31, 31;
+
+    /* We duplicate some "base" colors as root colors, which is useful to use on drawer elements or popover without. Those should not be overridden to avoid issues */
+    --root-heading-color: 31, 31, 31;
+    --root-text-color: 31, 31, 31;
+    --root-background: 255, 255, 255;
+    --root-border-color: 221, 221, 221;
+    --root-primary-button-background: 192, 85, 22;
+    --root-primary-button-text-color: 31, 38, 45;
+
+    --base-font-size: 15px;
+    --heading-font-family: 'PP Pangram Sans', serif;
+    --heading-font-weight: 400;
+    --heading-font-style: normal;
+    --heading-text-transform: normal;
+    --text-font-family: 'PP Pangram Sans' , Arial, sans-serif;
+    --text-font-weight: 400;
+    --text-font-style: normal;
+    --text-font-bold-weight: 700;
+
+    /* Typography (font size) */
+    --font-heading: "Libre Baskerville";
+    --font-body-primary: "PP Pangram Sans";
+    --font-body-secondary: "Apercu Mono Pro";
+    --heading-xxsmall-font-size: 10px;
+    --heading-xsmall-font-size: 10px;
+    --heading-small-font-size: 11px;
+    --heading-large-font-size: 32px;
+    --heading-h1-font-size: 32px;
+    --heading-h2-font-size: 28px;
+    --heading-h3-font-size: 26px;
+    --heading-h4-font-size: 22px;
+    --heading-h5-font-size: 18px;
+    --heading-h6-font-size: 16px;
+
+    /* Control the look and feel of the theme by changing radius of various elements */
+    --button-border-radius: 2px;
+    --block-border-radius: 0px;
+    --block-border-radius-reduced: 0px;
+    --color-swatch-border-radius: 100%;
+
+    /* Button size */
+    --button-height: 48px;
+    --button-small-height: 40px;
+
+    /* Form related */
+    --form-input-field-height: 48px;
+    --form-input-gap: 16px;
+    --form-submit-margin: 24px;
+
+    /* Product listing related variables */
+    --product-list-block-spacing: 20px;
+
+    /* Video related */
+    --play-button-background: 255, 255, 255;
+    --play-button-arrow: 31, 31, 31;
+
+    /* RTL support */
+    --transform-logical-flip: 1;
+    --transform-origin-start: left;
+    --transform-origin-end: right;
+
+    /* Other */
+    --zoom-cursor-svg-url: url(https://froyaorganics.com/cdn/shop/t/207/assets/zoom-cursor.svg?v=167438376949186249741775650487);
+    --arrow-right-svg-url: url(https://froyaorganics.com/cdn/shop/t/207/assets/arrow-right.svg?v=107239692975457170211775650484);
+    --arrow-left-svg-url: url(https://froyaorganics.com/cdn/shop/t/207/assets/arrow-left.svg?v=188521);
+
+    /* Some useful variables that we can reuse in our CSS. Some explanation are needed for some of them:
+       - container-max-width-minus-gutters: represents the container max width without the edge gutters
+       - container-outer-width: considering the screen width, represent all the space outside the container
+       - container-outer-margin: same as container-outer-width but get set to 0 inside a container
+       - container-inner-width: the effective space inside the container (minus gutters)
+       - grid-column-width: represents the width of a single column of the grid
+       - vertical-breather: this is a variable that defines the global "spacing" between sections, and inside the section
+                            to create some "breath" and minimum spacing
+     */
+    --container-max-width: 1600px;
+    --container-gutter: 10px;
+    --container-max-width-minus-gutters: calc(var(--container-max-width) - (var(--container-gutter)) * 2);
+    --container-outer-width: max(calc((100vw - var(--container-max-width-minus-gutters)) / 2), var(--container-gutter));
+    --container-outer-margin: var(--container-outer-width);
+    --container-inner-width: calc(100vw - var(--container-outer-width) * 2);
+
+    --grid-column-count: 10;
+    --grid-gap: 16px;
+    --grid-column-width: calc((100vw - var(--container-outer-width) * 2 - var(--grid-gap) * (var(--grid-column-count) - 1)) / var(--grid-column-count));
+
+    --vertical-breather: 36px;
+    --vertical-breather-tight: 36px;
+
+    /* Shopify related variables */
+    --payment-terms-background-color: #ffffff;
+  }
+
+  @media screen and (min-width: 741px) {
+    :root {
+      --container-gutter: 40px;
+      --grid-column-count: 20;
+      --vertical-breather: 48px;
+      --vertical-breather-tight: 48px;
+
+      /* Typography (font size) */
+      --heading-xsmall-font-size: 11px;
+      --heading-small-font-size: 12px;
+      --heading-large-font-size: 48px;
+      --heading-h1-font-size: 48px;
+      --heading-h2-font-size: 36px;
+      --heading-h3-font-size: 30px;
+      --heading-h4-font-size: 22px;
+      --heading-h5-font-size: 18px;
+      --heading-h6-font-size: 16px;
+
+      /* Form related */
+      --form-input-field-height: 52px;
+      --form-submit-margin: 32px;
+
+      /* Button size */
+      --button-height: 52px;
+      --button-small-height: 44px;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    :root {
+      --vertical-breather: 64px;
+      --vertical-breather-tight: 48px;
+      --product-list-block-spacing: 30px;
+
+      /* Typography */
+      --heading-large-font-size: 58px;
+      --heading-h1-font-size: 50px;
+      --heading-h2-font-size: 44px;
+      --heading-h3-font-size: 32px;
+      --heading-h4-font-size: 26px;
+      --heading-h5-font-size: 18px;
+      --heading-h6-font-size: 16px;
+    }
+  }
+
+  @media screen and (min-width: 1600px) {
+    :root {
+      --vertical-breather: 64px;
+      --vertical-breather-tight: 48px;
+    }
+  }
+
+/* ---- live-page inline head style block 5 ---- */
+/* Prevent FOUC - Hide drawers until page is ready (Safari compatible) */
+/* Only hide when loading AND not open - this preserves functionality */
+html.loading .mobile-menu:not([open]):not(.is-open),
+html.loading [id*="drawer"]:not([open]):not(.is-open),
+html.loading .drawer:not([open]):not(.is-open),
+html.loading .mini-cart:not([open]):not(.is-open),
+html.loading #mini-cart-drawer:not([open]):not(.is-open),
+html.loading [aria-modal="true"]:not([open]):not(.is-open),
+html.loading .popup-container:not([open]):not(.is-open),
+html.loading drawer-content:not([open]):not(.is-open),
+html.loading popover-content:not([open]):not(.is-open) {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateX(-100%) !important;
+}
+
+/* Removed fadeIn animation - it can delay LCP measurement */
+
+/* ---- live-page inline head style block 6 ---- */
+#shopify-buyer-consent {
+  margin-top: 1em;
+  display: inline-block;
+  width: 100%;
+}
+
+#shopify-buyer-consent.hidden {
+  display: none;
+}
+
+#shopify-subscription-policy-button {
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+#shopify-subscription-policy-button::before {
+  box-shadow: none;
+}
+
+/* ---- live-page inline head style block 7 ---- */
+.ig-hidden { display: none !important; }
+
+/* ---- live-page inline head style block 8 ---- */
+.igsf{box-sizing:border-box;align-items:center;gap:10px;}.igsf__icon{display:block;width:30.247px;height:17.733px;flex:0 0 auto;}.igsf__text{margin:0;color:#05AC2E;text-align:center;font-family:'Pangram',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:16px;font-style:normal;font-weight:500;line-height:18px;letter-spacing:1.4px;text-transform:uppercase;}.igsf--m,.igsf--d{display:none;}@media screen and (max-width:767.98px){.igsf--m{display:flex;padding:5px 10px;border-radius:58px;background:#E3FCE2;width:-moz-max-content;width:max-content;max-width:100%;margin-top:-5px;margin-bottom:-3px;}}@media screen and (min-width:768px){.igsf--d{display:flex;padding:6px 11px;justify-content:center;border-radius:58px;background:#E3FCE2;width:-moz-max-content;width:max-content;max-width:100%;}}.s-featured-product__product-icon-wrapper.igsf-usp-hidden{display:none;}.s-featured-product__product-icons.igsf-icons--trimmed{justify-content:center;}.s-featured-product__product-icons.igsf-icons--trimmed .s-featured-product__product-icon-wrapper{width:210px;}@media screen and (min-width:768px){.s-featured-product__product-icons.igsf-icons--trimmed{column-gap:25px;}}
+
+/* ---- live-page inline head style block 9 ---- */
+.igcp-on .js-subscribtion__price-wrapper{gap:11px;}.igcp{display:inline;font:inherit;font-size:calc(1em - 2px);color:#FFD0BC;text-decoration-line:line-through;white-space:nowrap;}.igcp[hidden]{display:none !important;}
+
+/* ---- live-page inline head style block 10 ---- */
+[data-ig-discount]:not([data-ig-discount="0"]) {
+          display: none;
+      }
+
+/* ---- live-page inline head style block 13 ---- */
+
+@font-face {
+        font-family: 'Apercu'; 
+        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/ApercuMonoProBold.woff2?v=1713282759);
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+@font-face {
+        font-family: 'Apercu'; 
+        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/ApercuMonoProLight.woff2?v=1713282759);
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+      }
+@font-face {
+        font-family: 'Apercu'; 
+        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/ApercuMonoProRegular.woff2?v=1713282759);
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+@font-face {
+        font-family: 'PP Pangram Sans'; 
+        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PPPangramSans-Bold_745f4534-2286-4aad-82a3-6426792f67c7.woff2?v=1718640639);
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+      }
+@font-face {
+        font-family: 'PP Pangram Sans'; 
+        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PPPangramSans-Light.woff2?v=1718639257);
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+@font-face {
+        font-family: 'PP Pangram Sans'; 
+        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PPPangramSans-Medium_12609bed-341f-4767-a67c-ba219cb66cba.woff2?v=1718639737);
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }

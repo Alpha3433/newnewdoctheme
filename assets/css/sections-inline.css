@@ -1,0 +1,585 @@
+/* Verbatim per-section inline CSS captured from the live page. Section ids are preserved in index.html so these rules apply unchanged. */
+
+/* ---- announcement-bar ---- */
+:root {
+    --enable-sticky-announcement-bar: 0;
+  }
+
+  #shopify-section-sections--26717504897391__announcement-bar {
+    --heading-color: 255, 255, 255;
+    --text-color: 255, 255, 255;
+    --primary-button-background: 255, 255, 255;
+    --primary-button-text-color: 255, 255, 255;
+    --section-background: 166, 130, 145;
+    z-index: 5; /* Make sure it goes over header */position: relative;top: 0;
+  }
+
+  @media screen and (min-width: 741px) {
+    :root {
+      --enable-sticky-announcement-bar: 0;
+    }
+
+    #shopify-section-sections--26717504897391__announcement-bar {position: relative;}
+  }
+
+  .announcement-bar__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  /* The display:flex above (and the mobile display:grid !important below) beat
+     the global [hidden] { display: none } rule in the cascade, so before the
+     announcement-bar JS boots, ALL items render stacked and the whole page
+     jumps up when they collapse to one. Re-hide by attribute — the rotation JS
+     toggles the hidden attribute itself (theme.js AnnouncementBarItem
+     select/deselect), so this rule self-neutralizes for the active item. */
+  .announcement-bar__item[hidden] {
+    display: none !important;
+  }
+
+  .announcement-bar__countdown {
+    display: flex;
+    align-items: flex-start;
+    border-radius: 5.739px;
+    padding: 0.25rem;
+    white-space: nowrap;
+    margin: 5px 0;
+  }
+
+  .announcement-bar__countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 35px;
+  }
+
+  .announcement-bar__countdown-number {
+    color: var(--White, #F7F7F7);
+    text-align: center;
+    -webkit-text-stroke-width: 0.18px;
+    -webkit-text-stroke-color: var(--White, #F7F7F7);
+    font-family: "PP Pangram Sans", sans-serif;
+    font-size: 24.524px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 108%;
+    letter-spacing: 0.981px;
+  }
+
+  .announcement-bar__countdown-label {
+    color: var(--White, #F7F7F7);
+    text-align: center;
+    -webkit-text-stroke-width: 0.04px;
+    -webkit-text-stroke-color: var(--White, #F7F7F7);
+    font-family: "PP Pangram Sans", sans-serif;
+    font-size: 5.86px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+    letter-spacing: 0.234px;
+    text-transform: uppercase;
+  }
+
+  .announcement-bar__message .announcement-bar__highlight {
+    background: transparent;
+  }
+
+  .announcement-bar__link-wrapper {
+    display: contents;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .announcement-bar__link-wrapper:focus-visible .announcement-bar__message,
+  .announcement-bar__link-wrapper:focus-visible .announcement-bar__countdown {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  .announcement-bar__countdown-separator {
+    color: var(--White, #F7F7F7);
+    font-family: "PP Pangram Sans", sans-serif;
+    font-size: 24.524px;
+    font-weight: 400;
+    line-height: 21px
+    letter-spacing: 0.981px;
+  }
+
+  @media screen and (min-width: 741px) {
+    .announcement-bar__item {
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+
+    .announcement-bar__message {
+      flex: 1;
+      text-align: left;
+    }
+
+    .announcement-bar__countdown {
+      margin-left: auto;
+    }
+  }
+
+  @media screen and (max-width: 740px) {
+    #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item.has-countdown {
+      display: grid !important;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__message {
+      width: 100%;
+      text-align: center;
+    }
+
+    #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item.has-countdown .announcement-bar__message {
+      text-align: left;
+      width: 100%;
+    }
+
+    #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__countdown {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+/* ---- announcement-bar ---- */
+#shopify-section-sections--26717504897391__announcement-bar .announcement-bar__message p {font-size: 13.1px !important;}
+
+/* ---- froya-nav-variant ---- */
+/* Logo max-width: matches legacy header's logo_max_width: 100 setting. */
+  #shopify-section-froya-nav-variant .header__logo-image {
+    max-width: 100px;
+    height: auto;
+  }
+
+  /* DEFAULT state — variant nav is sticky at top: 0 so it stays at the
+     top of the viewport after the user scrolls past the announcement bar. */
+  html.ig-nav-b #shopify-section-froya-nav-variant {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+/* ---- hero ---- */
+/* base — position:relative + z-index:1 + isolation:isolate locks stacking
+     so adjacent sections can't render inside this hero's painted area
+     regardless of their CSS (negative margins, absolute children, etc.) */
+  .s-hero-aging-lp{contain:layout style;isolation:isolate;position:relative;z-index:1;}
+  .s-hero-aging-lp__container{position:relative;width:100%;overflow:hidden;}
+  .s-hero-aging-lp__content{display:flex;flex-direction:column;row-gap:12px;align-items:center;text-align:center;min-width:80%;color:var(--mobile-text-color,#fff);}
+  .s-hero-aging-lp__highlight-label{display:inline-flex;align-items:center;gap:6px;width:fit-content;font-family:"PP Pangram Sans",sans-serif;font-style:normal;font-weight:500;font-size:15px;line-height:21px;padding:8px 14px;}
+  @media(max-width:768px){.s-hero-aging-lp__highlight-label{font-size:13px;}}
+  .s-hero-aging-lp__review{display:flex;align-items:center;justify-content:center;gap:8px;}
+  .s-hero-aging-lp__stars{max-width:130px;display:flex;align-items:center;justify-content:center;}
+  .s-hero-aging-lp__stars picture{display:flex;}
+  .s-hero-aging-lp__stars img{max-width:100%;width:auto;height:auto;display:block;}
+  .s-hero-aging-lp__review-text{color:var(--mobile-text-color,#fff);font-family:"Apercu Mono Pro",monospace;font-size:11px;font-weight:400;line-height:12px;text-transform:uppercase;flex-shrink:0;}
+  .s-hero-aging-lp__title{margin:0;max-width:340px;}
+  .s-hero-aging-lp__title p{margin:0;color:var(--mobile-text-color,#fff);font-family:var(--font-heading);font-size:30px;font-weight:400;line-height:110%;letter-spacing:-.6px;}
+  .s-hero-aging-lp__title em{font-style:italic;}
+  .s-hero-aging-lp__subtitle{margin:0;color:var(--mobile-text-color,#fff);font-family:"PP Pangram Sans",sans-serif;font-size:12px;font-weight:500;line-height:21px;text-align:center;}
+  .s-hero-aging-lp__button{width:100%;padding:13px;font-size:16px;font-weight:700;line-height:16px;position:relative;z-index:1;}
+  .s-hero-aging-lp__stats p{margin:0;color:var(--mobile-text-color,#fff);font-family:"Apercu Mono Pro",monospace;font-size:14px;font-weight:400;line-height:normal;text-transform:uppercase;text-align:center;}
+  .s-hero-aging-lp__stats p+p{margin-top:11px;}
+  .s-hero-aging-lp__text--mobile{display:block;}
+  .s-hero-aging-lp__text--desktop{display:none;}
+
+  /* mobile: full-bleed background-image; content sits at the top of
+     the hero with a fixed 11px row gap between elements */
+  @media(max-width:767px){
+    .s-hero-aging-lp__container{
+      min-height:var(--ig-aging-lp-mobile-min-height,550px);
+      display:flex;flex-direction:column;justify-content:flex-start;
+      background-image:var(--hero-aging-lp-mobile-bg);
+      background-size:cover;background-repeat:no-repeat;
+      /* Exists for the promo pill (hero_pill_text / snippets/hero-promo-pill.liquid):
+         the pill adds a row to the content column, so the mobile composition
+         needs headroom above it.
+
+         `cover` trims the overflow evenly top and bottom at 50%. A positive
+         offset moves the image DOWN, so that many more px are cropped off the
+         bottom and the same amount of the (empty) top is revealed. Negative
+         reverses it. Default 0 = unchanged, so the other templates using this
+         hero (lp-duo-2-1-hyper, test-page-for-reddit-new) do not move. */
+      background-position:center calc(50% + var(--hero-aging-lp-mobile-offset, 0px));
+    }
+    .s-hero-aging-lp__image-desktop{display:none;}
+    .s-hero-aging-lp__content-wrapper{position:relative;background:transparent;padding:20px 15px;width:100%;}
+    .s-hero-aging-lp__content{row-gap:11px;}
+  }
+
+  /* desktop: split image (left) + content (right) */
+  @media(min-width:768px){
+    .s-hero-aging-lp__container{display:flex;flex-direction:row;}
+    .s-hero-aging-lp__image-desktop{display:block;width:50%;flex-shrink:0;}
+    .s-hero-aging-lp__image-desktop picture{display:block;height:100%;}
+    .s-hero-aging-lp__image-desktop img{display:block;width:100%;height:100%;object-fit:cover;}
+    .s-hero-aging-lp__content-wrapper{width:50%;display:flex;align-items:center;padding:15px 15px 15px 60px;background:transparent;}
+    .s-hero-aging-lp__content{max-width:490px;row-gap:18px;align-items:flex-start;text-align:left;color:#1F1F1F;}
+    .s-hero-aging-lp__title{max-width:440px;}
+    .s-hero-aging-lp__title p{color:#1F1F1F;font-size:40px;letter-spacing:-.8px;}
+    .s-hero-aging-lp__subtitle{color:rgba(31,31,31,0.80);font-family:"PP Pangram Sans",sans-serif;font-size:16px;line-height:24px;text-align:left;}
+    .s-hero-aging-lp__review-text{color:#1F1F1F;font-size:15px;}
+    .s-hero-aging-lp__button{width:100%;max-width:var(--ig-aging-lp-cta-max-width,550px);padding:16px;font-size:18px;font-weight:500;}
+    .s-hero-aging-lp__stats p{color:#1F1F1F;line-height:12px;text-align:left;}
+    .s-hero-aging-lp__stats p+p{margin-top:18px;}
+    .s-hero-aging-lp__text--mobile{display:none;}
+    .s-hero-aging-lp__text--desktop{display:block;}
+  }
+
+/* ---- icons-with-text-benefits ---- */
+#section-template--26717513089391__icons_with_text_hPpB9d {
+    background-image: none;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;background-color: #e4dade;background-color: #E4DADE66;--icon-size: 30px;
+    --small-icon-font-size: 13px;
+    --small-icon-text-max-width: 200px;}#section-template--26717513089391__icons_with_text_hPpB9d {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }#section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__bottom {
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }#section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__small-icon-item {
+    gap: 8px !important;
+  }@media screen and (min-width: 768px) {#section-template--26717513089391__icons_with_text_hPpB9d {
+      padding-top: 0px !important;
+      padding-bottom: 0px !important;
+      padding-left: 0px !important;
+      padding-right: 0px !important;
+    }#section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__bottom {
+      padding-top: 15px !important;
+      padding-bottom: 15px !important;
+      padding-left: 0px !important;
+      padding-right: 0px !important;
+    }#section-template--26717513089391__icons_with_text_hPpB9d {
+      --icon-size: 50px;
+      --small-icon-font-size: 16px;
+      --small-icon-text-max-width: 152px;
+    }#section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__small-icon-item {
+      gap: 12px !important;
+    }}
+
+/* ---- icons-with-text-benefits ---- */
+#shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__bottom {display: grid; grid-template-columns: repeat(2, 1fr); padding: 12px; gap: 12px;} #shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__small-icon-item {display: flex; flex-direction: row; align-items: center; text-align: left; gap: 12px;} #shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__small-icon {flex-shrink: 0;} #shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__small-icon-text p {margin: 0; text-align: left;} #shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom {padding: 12px 0;} @media (min-width: 768px) {#shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__bottom {grid-template-columns: repeat(4, 1fr); }}
+
+/* ---- icons-slider-press ---- */
+.s-icons-slider {
+    --slider-title-color: #050505;
+    --slider-text-color: #1f1f1f;
+    --slider-dot-color: #1f1f1f;
+    background-color: #faf7f0;
+  }
+
+/* ---- backed-by-science ---- */
+/* Scoped to the section root via .s-backed-by-science.
+     Variables on the root let the schema feed accent/card colors in. */
+  .s-backed-by-science{
+    --bbs-font-sans:'Pangram','Objectivity',sans-serif;
+    --bbs-font-serif:'Libre Baskerville',Georgia,serif;
+    --bbs-purple:#af8998;
+    --bbs-line-color:rgba(175, 137, 152, 0.25);
+    --bbs-card-bg:#fcfaf6;
+    --bbs-card-border:#f2f1f0;
+    --bbs-circle-size:24px;
+    --bbs-line-gap:20px;
+    --bbs-item-gap:10px;
+    --bbs-num-top:14px;
+    padding:60px 16px;background:#fff;
+  }
+  .s-backed-by-science__container{max-width:1200px;margin:0 auto;}
+  .s-backed-by-science__header{text-align:center;margin:0 auto 40px;display:flex;flex-direction:column;gap:16px;align-items:center;}
+  .s-backed-by-science__eyebrow{margin:0;color:var(--bbs-purple);font-family:var(--bbs-font-sans);font-size:25px;font-weight:700;line-height:14px;letter-spacing:0.5px;text-transform:uppercase;padding:6px 0;}
+  .s-backed-by-science__title{margin:0;color:#000;font-family:var(--bbs-font-serif);font-size:32px;font-weight:500;line-height:normal;text-transform:capitalize;max-width:900px;}
+  .s-backed-by-science__title p{margin:0;}
+  .s-backed-by-science__subtitle{margin:0;color:#1F1F1F;font-family:var(--bbs-font-sans);font-size:22px;font-weight:500;line-height:38px;max-width:1036px;}
+  .s-backed-by-science__body{display:flex;flex-direction:column;gap:32px;align-items:stretch;}
+  .s-backed-by-science__images{display:flex;justify-content:center;align-items:flex-start;width:100%;}
+  .s-backed-by-science__image{display:block;max-width:100%;height:auto;}
+  .s-backed-by-science__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--bbs-item-gap);position:relative;}
+  .s-backed-by-science__item{position:relative;display:flex;align-items:stretch;padding-left:calc(var(--bbs-circle-size) + var(--bbs-line-gap));}
+
+  /* Connecting line between circles: each item draws a segment from its top
+     into the gap below; segments butt together. First/last segments stop
+     at their respective circle centres. */
+  .s-backed-by-science__item::before{content:'';position:absolute;left:calc(var(--bbs-circle-size) / 2 - 1px);top:0;bottom:calc(var(--bbs-item-gap) * -1);width:2px;background:var(--bbs-line-color);z-index:0;}
+  .s-backed-by-science__item:first-child::before{top:calc(var(--bbs-num-top) + var(--bbs-circle-size) / 2);}
+  .s-backed-by-science__item:last-child::before{bottom:auto;height:calc(var(--bbs-num-top) + var(--bbs-circle-size) / 2);}
+
+  .s-backed-by-science__num{position:absolute;left:0;top:var(--bbs-num-top);width:var(--bbs-circle-size);height:var(--bbs-circle-size);border-radius:100px;border:2px solid var(--bbs-line-color);background:#FFF;color:var(--bbs-line-color);font-family:var(--bbs-font-sans);font-size:14px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;text-align:center;z-index:2;transition:background-color 320ms cubic-bezier(0.4,0,0.2,1),border-color 320ms cubic-bezier(0.4,0,0.2,1),color 180ms cubic-bezier(0.4,0,0.2,1);}
+  .s-backed-by-science__item.is-active .s-backed-by-science__num{border-color:var(--bbs-purple);background:var(--bbs-purple);color:#FFF;}
+
+  /* is-passed = full segment filled; is-active fills top-to-circle-centre. */
+  .s-backed-by-science__item.is-passed::before{background:var(--bbs-purple);}
+  .s-backed-by-science__item.is-active:not(:first-child)::before{
+    background:linear-gradient(to bottom,var(--bbs-purple) 0,var(--bbs-purple) calc(var(--bbs-num-top) + var(--bbs-circle-size) / 2),var(--bbs-line-color) calc(var(--bbs-num-top) + var(--bbs-circle-size) / 2));
+  }
+
+  .s-backed-by-science__card{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;flex:1;padding:10px 16px;align-self:stretch;border-radius:15px;border:2px solid var(--bbs-card-border);background:var(--bbs-card-bg);}
+
+  /* Icon PNGs already bake in the mauve circle — wrapper is plain sizing. */
+  .s-backed-by-science__icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 36px;width:36px;height:36px;}
+  .s-backed-by-science__icon img{width:100%;height:100%;object-fit:contain;display:block;}
+
+  .s-backed-by-science__card-title{margin:10px 0 0;color:#000;font-family:var(--bbs-font-sans);font-size:18px;font-weight:600;line-height:22.8px;text-transform:capitalize;}
+  .s-backed-by-science__card-text{margin:8px 0 0;color:#000;font-family:var(--bbs-font-sans);font-size:16px;font-weight:500;line-height:20px;}
+
+  @media screen and (min-width:768px){
+    .s-backed-by-science{--bbs-item-gap:20px;--bbs-num-top:16px;padding:48px 40px 80px;}
+    .s-backed-by-science__header{margin-bottom:56px;gap:20px;}
+    .s-backed-by-science__body{flex-direction:row;gap:48px;align-items:flex-start;}
+    .s-backed-by-science__images{flex:1 1 0;max-width:590px;}
+    .s-backed-by-science__image{width:100%;}
+    .s-backed-by-science__list{flex:1 1 0;}
+  }
+  @media screen and (max-width:767.98px){
+    .s-backed-by-science{padding:40px 16px;}
+    .s-backed-by-science__header{margin-bottom:28px;gap:10px;}
+    .s-backed-by-science__eyebrow{font-size:16px;line-height:14px;letter-spacing:0.5px;padding:4px 0;}
+    .s-backed-by-science__title{font-size:26px;}
+    .s-backed-by-science__subtitle{font-size:16px;line-height:20px;}
+    .s-backed-by-science__image{width:100%;}
+    .s-backed-by-science__card-text{font-size:14px;}
+  }
+
+/* ---- image-and-text-story ---- */
+#shopify-section-template--26717513089391__custom_image_and_text_hqnCVC.custom-image-and-text {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-color: ;
+  }
+
+  @media screen and (min-width: 768px) {
+    #shopify-section-template--26717513089391__custom_image_and_text_hqnCVC.custom-image-and-text {
+      padding-top: 50px;
+      padding-bottom: 50px;
+    }
+  }
+
+/* ---- image-and-text-story ---- */
+.block-subtitle_gDAiGX.s-image-text-section__subtitle {
+                color: #1f1f1f;
+              }
+              @media screen and (min-width: 768px) {
+                .block-subtitle_gDAiGX.s-image-text-section__subtitle {
+                  color: #1f1f1f;
+                }
+              }
+
+/* ---- image-and-text-story ---- */
+.block-heading_bGXJ83.s-image-text-section__title {
+                max-width: 560px;
+              }
+
+/* ---- icons-with-text-arctic ---- */
+#section-template--26717513089391__icons_with_text_HTCEin {
+    /* Initially no background - will be loaded lazily */
+    background-image: none;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;}
+  
+  /* Store URLs for lazy loading - set as CSS variables */
+  #section-template--26717513089391__icons_with_text_HTCEin {
+    --mb-desktop-bg-url: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/icons-with-text-mobile-bg.png?v=1732742485');
+    --bg-desktop-bg-url: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/icons-with-text-desktop-bg.png?v=1732742590');
+  }
+  
+  /* Apply background when loaded */
+  #section-template--26717513089391__icons_with_text_HTCEin[data-bg-loaded="true"] {
+    background-image: var(--mb-desktop-bg-url);
+  }
+  
+  @media screen and (min-width: 768px) {
+    #section-template--26717513089391__icons_with_text_HTCEin[data-bg-loaded="true"] {
+      background-image: var(--bg-desktop-bg-url);
+    }
+  }
+
+/* ---- raw-reviews ---- */
+#shopify-section-template--26717513089391__custom_liquid_rgXzGz {--heading-color: 31, 31, 31;
+    --text-color: 31, 31, 31;
+
+    --section-background: 255, 255, 255;
+  }
+
+  #shopify-section-template--26717513089391__custom_liquid_rgXzGz .liquid--desktop-image > img{
+    display: none;
+  }
+
+  #shopify-section-template--26717513089391__custom_liquid_rgXzGz .liquid--mobile-image > img{
+    display: block;
+    width: 100%;
+  }
+
+  @media screen and (min-width:768px) {
+    #shopify-section-template--26717513089391__custom_liquid_rgXzGz .liquid--desktop-image > img{
+      display: block;
+      width: 100%;
+    }
+
+    #shopify-section-template--26717513089391__custom_liquid_rgXzGz .liquid--mobile-image > img{
+      display: none;
+    }
+  }
+
+/* ---- raw-reviews ---- */
+#shopify-section-template--26717513089391__custom_liquid_rgXzGz img {margin: auto;}
+
+/* ---- image-and-text-arctic ---- */
+#shopify-section-template--26717513089391__custom_image_and_text_HqBW3P.custom-image-and-text {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-color: ;
+  }
+
+  @media screen and (min-width: 768px) {
+    #shopify-section-template--26717513089391__custom_image_and_text_HqBW3P.custom-image-and-text {
+      padding-top: 50px;
+      padding-bottom: 50px;
+    }
+  }
+
+/* ---- image-and-text-arctic ---- */
+.block-subtitle_mrgLBL.s-image-text-section__subtitle {
+                color: #e98044;
+              }
+              @media screen and (min-width: 768px) {
+                .block-subtitle_mrgLBL.s-image-text-section__subtitle {
+                  color: #e98044;
+                }
+              }
+
+/* ---- image-and-text-arctic ---- */
+.block-heading_JCJD7P.s-image-text-section__title {
+                max-width: 560px;
+              }
+
+/* ---- footer ---- */
+#shopify-section-footer .footer {
+    --background: 175, 137, 152;
+    --heading-color: 31, 31, 31;
+    --text-color: 31, 31, 31;
+    --border-color: 153, 121, 134;
+  }
+
+  #shopify-section-footer .footer-headline,
+  #shopify-section-footer p,
+  #shopify-section-footer .footer__item-title,
+  #shopify-section-footer .linklist__item a,
+  #shopify-section-footer .footer__item-content p,
+  #shopify-section-footer .social-media__link {
+    color: #ffffff !important;
+  }
+
+  #shopify-section-footer .footer__aside {
+    border-color: #ffffff !important;
+  }
+
+/* ---- footer ---- */
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .payment-methods__label {
+    font-size: 0.75rem;
+    color: var(--text-color, inherit);
+    opacity: 0.7;
+  }
+
+  .payment-methods__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .payment-methods__icon {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .payment-methods__icon svg {
+    width: 40px;
+    height: 22px;
+  }
+
+  .payment-methods__content {
+    margin-top: 12px;
+    text-align: center;
+    color: var(--Black, #1F1F1F);
+    font-family: "PP Pangram Sans";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 130%;
+    text-transform: uppercase;
+  }
+
+  .payment-methods__content p {
+    margin: 0;
+  }
+
+  .payment-methods__content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .payment-methods__content li {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .payment-methods__content li::before {
+    content: '';
+    flex-shrink: 0;
+    width: 9px;
+    height: 11px;
+    margin-top: 4px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='11' viewBox='0 0 9 11' fill='none'%3E%3Cpath d='M1.00098 6.57812L3.50098 9.57812L8 0.578125' stroke='%231F1F1F' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  @media (max-width: 768px) {
+    .payment-methods__content {
+      font-size: 12px;
+    }
+
+    .payment-methods__content li::before {
+      margin-top: 2px;
+    }
+  }
