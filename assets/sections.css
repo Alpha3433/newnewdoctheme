@@ -252,23 +252,29 @@
 .s-backed-by-science__images source { display: none; }
 
 /* --------------------------------------------------------------------------
-   Clinical trial (image content grid, full width)
+   Research results (image content grid). The image and the text sit side by
+   side instead of the text being overlaid on the image, so any image works.
    -------------------------------------------------------------------------- */
 .s-image-content-grid { display: block; padding: 0; }
 .s-image-content-grid--full_width .s-image-content-grid__container { max-width: none; padding: 0; }
-.s-image-content-grid__wrapper--full-width { position: relative; }
-.s-image-content-grid__image-wrapper--full-width { position: relative; width: 100%; }
-.s-image-content-grid__image-full { width: 100%; height: auto; max-height: var(--image-max-height, none); object-fit: cover; }
+.s-image-content-grid__wrapper--full-width {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+  background: var(--brand-cream);
+}
+.s-image-content-grid__image-wrapper--full-width { position: relative; width: 100%; min-height: 100%; }
+.s-image-content-grid__image-full { display: block; width: 100%; height: 100%; object-fit: cover; }
 .s-image-content-grid__content-wrapper {
-  position: absolute;
-  inset: 0;
+  position: static;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding: 48px 7vw;
+  justify-content: center;
+  padding: 56px 6vw;
 }
 .s-image-content-grid__content {
-  width: 46%;
+  width: 100%;
   max-width: 560px;
   display: flex;
   flex-direction: column;
@@ -306,6 +312,7 @@
 }
 .s-image-content-grid__progress-fill {
   height: 100%;
+  min-width: 96px;
   border-radius: 999px;
   background: var(--brand-mauve);
   display: flex;
@@ -314,7 +321,7 @@
   padding-right: 12px;
   transition: width 1.2s cubic-bezier(.4, 0, .2, 1);
 }
-.s-image-content-grid__progress-text { color: #fff; font-size: 13px; font-weight: 700; }
+.s-image-content-grid__progress-text { color: #fff; font-size: 13px; font-weight: 700; white-space: nowrap; }
 .s-image-content-grid__progress-title {
   grid-area: title;
   font-family: var(--font-mono);
@@ -327,13 +334,16 @@
 .s-image-content-grid__block--note { font-size: 11px; line-height: 1.45; color: var(--brand-muted); }
 @media screen and (max-width: 999px) {
   .s-image-content-grid__content-wrapper { padding: 32px 4vw; }
-  .s-image-content-grid__content { width: 52%; gap: 14px; }
+  .s-image-content-grid__content { gap: 14px; }
   .s-image-content-grid__title { font-size: 28px; }
   .s-image-content-grid__image-text-content { font-size: 13px; }
 }
 @media screen and (max-width: 740px) {
-  .s-image-content-grid__content-wrapper { position: static; padding: 28px 20px 36px; }
-  .s-image-content-grid__content { width: 100%; max-width: none; gap: 18px; }
+  .s-image-content-grid__wrapper--full-width { grid-template-columns: 1fr; }
+  .s-image-content-grid__image-wrapper--full-width { min-height: 0; }
+  .s-image-content-grid__image-full { height: auto; aspect-ratio: 780 / 540; }
+  .s-image-content-grid__content-wrapper { padding: 28px 20px 36px; }
+  .s-image-content-grid__content { max-width: none; gap: 18px; }
   .s-image-content-grid__title { font-size: 28px; }
   .s-image-content-grid__block--progress { grid-template-columns: 120px 1fr; }
 }

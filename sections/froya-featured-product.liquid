@@ -1,1066 +1,464 @@
 {% comment %}
-  Frøya featured product – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  Featured product / buy box. Pick the product in the theme editor: the gallery, prices, subscription
+  plan (subscribe & save), variant and add-to-cart form all come from that product. Every piece of copy
+  around it is an editable setting or block. Adding to cart is done in-page and opens the cart drawer.
+  The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
+{%- liquid
+  assign product = section.settings.product
+  assign ingredients = section.blocks | where: 'type', 'ingredient'
+  assign legend = section.blocks | where: 'type', 'legend'
+  assign actives = section.blocks | where: 'type', 'active'
+  assign tags = section.blocks | where: 'type', 'tag'
+  assign usps = section.blocks | where: 'type', 'usp'
+
+  assign fallback_images = 'IMG_1_8c681b46-2a29-4394-8f0b-a4d7759e9a48.jpg,IMG_2.png,nikki-reed-desktop_2x_2970174c-c49b-4943-8807-ab853fe8e55c.png,IMG_3.png,IMG_4_51e90354-5a8f-4469-9287-d1746d6736e0.png,IMG_5.png,IMG_6_corrected.png,IMG_7.png,IMG_8.png,IMG_9.png,IMG_10.png' | split: ','
+  assign fallback_alts = 'Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex bottle|Woman applying Elaren Pumpkin Seed Regrowth Oil to her scalp along her part|Pumpkin Seed Regrowth Oil|Elaren Pumpkin Seed Regrowth Oil held in hand with key benefit callouts|Grid of customer before and after photos showing fuller parts, crowns and edges|Star rating and two verified customer reviews|Published research results for pumpkin seed oil and caffeine|Cold-pressed pumpkin seed oil and Caffeine Complex ingredients|Regrowth timeline at 2 weeks, 30 days and 90 days|Nightly two-minute scalp routine guide|Woman holding Elaren Pumpkin Seed Regrowth Oil with the 90-day money-back promise' | split: '|'
+
+  if product != blank
+    assign variant = product.selected_or_first_available_variant
+    assign product_title = section.settings.product_title | default: product.title
+    assign otp_price = variant.price
+    assign otp_compare = variant.compare_at_price
+    assign plan = blank
+    assign plan_group = product.selling_plan_groups | first
+    if product.selling_plan_groups.size > 0
+      assign plan = plan_group.selling_plans | first
+    endif
+    assign sub_price = otp_price
+    assign sub_percent = 0
+    if plan != blank
+      for allocation in variant.selling_plan_allocations
+        if allocation.selling_plan.id == plan.id
+          assign sub_price = allocation.price
+          break
+        endif
+      endfor
+      assign adjustment = plan.price_adjustments | first
+      if adjustment.value_type == 'percentage'
+        assign sub_percent = adjustment.value
+      elsif otp_price > 0
+        assign sub_percent = otp_price | minus: sub_price | times: 100 | divided_by: otp_price
+      endif
+    endif
+    assign saving = otp_price | minus: sub_price
+    assign media_count = product.media.size
+  endif
+-%}
 <div class="shopify-section" id="shopify-section-template--26717513089391__custom_featured_product_m69X4b">
-
-
-
-
-
-
-<s-featured-product class="s-featured-product custom-section s-featured-product--badge-title s-featured-product--mobile-head">
+{%- if product == blank -%}
+  {%- if request.design_mode -%}
+    <div style="max-width:720px;margin:48px auto;padding:24px;border:1px dashed #af8998;text-align:center;font-family:sans-serif;">
+      <strong>Featured product:</strong> select a product in the section settings to render the buy box.
+    </div>
+  {%- endif -%}
+{%- else -%}
+<s-featured-product class="s-featured-product custom-section s-featured-product--badge-title s-featured-product--mobile-head" data-section-id="{{ section.id }}">
   <div class="s-featured-product__container" id="product-section" style="scroll-margin-top: calc(var(--header-height, 0px) * var(--enable-sticky-header) + var(--announcement-bar-height, 0px) * var(--enable-sticky-announcement-bar) + 10px)">
-    
-      
-      <h2 class="s-featured-product__title s-featured-product__title--badge section-title" style="--badge-bg: #e5f3fa; --badge-text-color: #54585a;">
-        <p class="s-featured-product__badge-text"><span aria-hidden="true">✨ </span>Formulated for women’s hair loss, <span class="s-featured-product__badge-underline">not adapted from men’s</span></p>
-      </h2>
-    
-    <div class="s-featured-product__content"><div class="s-featured-product__mobile-head">
+    {%- if section.settings.badge_text != blank -%}
+    <h2 class="s-featured-product__title s-featured-product__title--badge section-title" style="--badge-bg: {{ section.settings.badge_bg }}; --badge-text-color: {{ section.settings.badge_color }};">
+      <p class="s-featured-product__badge-text"><span aria-hidden="true">✨ </span>{{ section.settings.badge_text }}{% if section.settings.badge_underline != blank %} <span class="s-featured-product__badge-underline">{{ section.settings.badge_underline }}</span>{% endif %}</p>
+    </h2>
+    {%- endif -%}
 
-                <div class="s-featured-product__product-info-labels">
-                  
-                  
-                    <span>Pumpkin Seed Oil + Caffeine Complex</span>
-                    
-                      <span>·</span>
-                    
-                  
-                    <span>30-day supply</span>
-                    
-                  
-                </div>
-              
-
-
-                <h3 class="s-featured-product__product-name">Pumpkin Seed Regrowth Oil</h3>
-              
-
-<div class="custom_loox_star_rating">
-                  
-                    <a data-scroll-to="reviews-section" href="#reviews-section">
-                  
-                    <div aria-label="43 reviews" class="loox-rating" data-id="8329639985301" data-raters="43" data-rating="4.8" data-rating-upgraded="1" role="figure" title="43 reviews"><div class="loox-rating-content"><svg aria-hidden="true" class="loox-icon" data-lx-fill="full" role="presentation" viewBox="0 0 24 24"><title>43 reviews</title><use href="#looxicons-rating-icon"></use></svg><svg aria-hidden="true" class="loox-icon" data-lx-fill="full" viewBox="0 0 24 24"><use href="#looxicons-rating-icon"></use></svg><svg aria-hidden="true" class="loox-icon" data-lx-fill="full" viewBox="0 0 24 24"><use href="#looxicons-rating-icon"></use></svg><svg aria-hidden="true" class="loox-icon" data-lx-fill="full" viewBox="0 0 24 24"><use href="#looxicons-rating-icon"></use></svg><svg aria-hidden="true" class="loox-icon" data-lx-fill="full" viewBox="0 0 24 24"><use href="#looxicons-rating-icon"></use></svg><span aria-hidden="true" class="loox-rating-label"> (43)</span></div></div>
-                    
-                      <div class="loox-rating__text">
-                        4.77/5 FROM VERIFIED BUYERS
-                      </div>
-                    
-                  
-                    </a>
-                  
-                </div></div><div class="s-featured-product__gallery-wrapper">
-        
-          <div class="s-featured-product__gallery js-featured-product__gallery s-featured-product__gallery--stage s-featured-product__gallery--video-crop-up">
-            <div class="s-featured-product__gallery-arrow s-featured-product__gallery-arrow--prev js-arrow-prev">
-              <svg aria-hidden="true" fill="none" height="21" viewBox="0 0 17 21" width="17" xmlns="http://www.w3.org/2000/svg">
-  <path clip-rule="evenodd" d="M4.39538 0.229918C4.46901 0.157038 4.55648 0.0992146 4.65278 0.0597614C4.74908 0.0203083 4.85232 0 4.95658 0C5.06084 0 5.16408 0.0203083 5.26038 0.0597614C5.35668 0.0992146 5.44415 0.157038 5.51778 0.229918L15.0296 9.62112C15.1035 9.69382 15.162 9.78018 15.202 9.87526C15.2419 9.97034 15.2625 10.0723 15.2625 10.1752C15.2625 10.2781 15.2419 10.3801 15.202 10.4752C15.162 10.5702 15.1035 10.6566 15.0296 10.7293L5.51778 20.1205C5.36894 20.2674 5.16707 20.35 4.95658 20.35C4.74609 20.35 4.54422 20.2674 4.39538 20.1205C4.24654 19.9735 4.16292 19.7742 4.16292 19.5664C4.16292 19.3586 4.24654 19.1593 4.39538 19.0123L13.3476 10.1752L4.39538 1.33808C4.32156 1.26538 4.26299 1.17902 4.22303 1.08394C4.18307 0.988866 4.16251 0.886939 4.16251 0.784C4.16251 0.68106 4.18307 0.579133 4.22303 0.484054C4.26299 0.388976 4.32156 0.302615 4.39538 0.229918Z" fill="white" fill-rule="evenodd"></path>
-</svg>
-
-            </div>
-            
-            <div class="s-featured-product__gallery-tags">
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-              
-                <span class="s-featured-product__gallery-tag s-featured-product__gallery-tag--type-3 js-gallery-save-tag">Save 10%</span>
-              
-            </div>
-            
-            
-              
-                <div class="s-featured-product__slide is-active">
-                  
-
-<picture>
-  
-  <img alt="Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex bottle" decoding="async" fetchpriority="high" height="600" loading="eager" src="https://froyaorganics.com/cdn/shop/files/IMG_1_8c681b46-2a29-4394-8f0b-a4d7759e9a48.jpg" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__slide">
-                  
-
-<picture>
-  
-  <img alt="Woman applying Elaren Pumpkin Seed Regrowth Oil to her scalp along her part" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_2.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__slide">
-                  
-
-<picture>
-  
-  <img alt="Pumpkin Seed Regrowth Oil" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/nikki-reed-desktop_2x_2970174c-c49b-4943-8807-ab853fe8e55c.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__slide">
-                  
-
-<picture>
-  
-  <img alt="Elaren Pumpkin Seed Regrowth Oil held in hand with key benefit callouts" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_3.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__slide">
-                  
-
-<picture>
-  
-  <img alt="Grid of customer before and after photos showing fuller parts, crowns and edges" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_4_51e90354-5a8f-4469-9287-d1746d6736e0.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__slide">
-                  
-
-<picture>
-  
-  <img alt="Star rating and two verified customer reviews" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_5.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__slide">
-                  
-
-<picture>
-  
-  <img alt="Published research results for pumpkin seed oil and caffeine" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_6_corrected.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__slide">
-                  
-
-<picture>
-  
-  <img alt="Cold-pressed pumpkin seed oil and Caffeine Complex ingredients" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_7.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__slide">
-                  
-
-<picture>
-  
-  <img alt="Regrowth timeline at 2 weeks, 30 days and 90 days" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_8.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__slide">
-                  
-
-<picture>
-  
-  <img alt="Nightly two-minute scalp routine guide" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_9.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__slide">
-                  
-
-<picture>
-  
-  <img alt="Woman holding Elaren Pumpkin Seed Regrowth Oil with the 90-day money-back promise" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_10.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                  <div class="s-featured-product__slide">
-                    <video aria-label="Elaren Pumpkin Seed Regrowth Oil - Product video" controls="" data-sources="https://froyaorganics.com/cdn/shop/videos/c/vp/544fd91b776740009a0ea9840bce6aeb/544fd91b776740009a0ea9840bce6aeb.HD-1080p-4.8Mbps-87471603.mp4?v=0" data-types="video/mp4" poster="https://froyaorganics.com/cdn/shop/files/preview_images/VIDEO_THUMBNAIL.png?v=1785489315&amp;width=600" preload="none">
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
-              
-            
-            <div class="s-featured-product__gallery-arrow s-featured-product__gallery-arrow--next js-arrow-next">
-              <svg aria-hidden="true" fill="none" height="21" viewBox="0 0 17 21" width="17" xmlns="http://www.w3.org/2000/svg">
-  <path clip-rule="evenodd" d="M4.39538 0.229918C4.46901 0.157038 4.55648 0.0992146 4.65278 0.0597614C4.74908 0.0203083 4.85232 0 4.95658 0C5.06084 0 5.16408 0.0203083 5.26038 0.0597614C5.35668 0.0992146 5.44415 0.157038 5.51778 0.229918L15.0296 9.62112C15.1035 9.69382 15.162 9.78018 15.202 9.87526C15.2419 9.97034 15.2625 10.0723 15.2625 10.1752C15.2625 10.2781 15.2419 10.3801 15.202 10.4752C15.162 10.5702 15.1035 10.6566 15.0296 10.7293L5.51778 20.1205C5.36894 20.2674 5.16707 20.35 4.95658 20.35C4.74609 20.35 4.54422 20.2674 4.39538 20.1205C4.24654 19.9735 4.16292 19.7742 4.16292 19.5664C4.16292 19.3586 4.24654 19.1593 4.39538 19.0123L13.3476 10.1752L4.39538 1.33808C4.32156 1.26538 4.26299 1.17902 4.22303 1.08394C4.18307 0.988866 4.16251 0.886939 4.16251 0.784C4.16251 0.68106 4.18307 0.579133 4.22303 0.484054C4.26299 0.388976 4.32156 0.302615 4.39538 0.229918Z" fill="white" fill-rule="evenodd"></path>
-</svg>
-
-            </div>
-          </div>
-        
-        
-          <div class="s-featured-product__thumbnails s-featured-product__thumbnails--strip js-featured-product__thumbnails is-stage-ready">
-            
-              
-                <div class="s-featured-product__thumbnail is-active">
-<picture>
-  
-  <img alt="Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex bottle" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_1_8c681b46-2a29-4394-8f0b-a4d7759e9a48.jpg" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__thumbnail">
-<picture>
-  
-  <img alt="Woman applying Elaren Pumpkin Seed Regrowth Oil to her scalp along her part" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_2.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__thumbnail">
-<picture>
-  
-  <img alt="Pumpkin Seed Regrowth Oil" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/nikki-reed-desktop_2x_2970174c-c49b-4943-8807-ab853fe8e55c.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__thumbnail">
-<picture>
-  
-  <img alt="Elaren Pumpkin Seed Regrowth Oil held in hand with key benefit callouts" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_3.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__thumbnail">
-<picture>
-  
-  <img alt="Grid of customer before and after photos showing fuller parts, crowns and edges" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_4_51e90354-5a8f-4469-9287-d1746d6736e0.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__thumbnail">
-<picture>
-  
-  <img alt="Star rating and two verified customer reviews" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_5.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__thumbnail">
-<picture>
-  
-  <img alt="Published research results for pumpkin seed oil and caffeine" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_6_corrected.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__thumbnail">
-<picture>
-  
-  <img alt="Cold-pressed pumpkin seed oil and Caffeine Complex ingredients" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_7.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__thumbnail">
-<picture>
-  
-  <img alt="Regrowth timeline at 2 weeks, 30 days and 90 days" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_8.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__thumbnail">
-<picture>
-  
-  <img alt="Nightly two-minute scalp routine guide" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_9.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                <div class="s-featured-product__thumbnail">
-<picture>
-  
-  <img alt="Woman holding Elaren Pumpkin Seed Regrowth Oil with the 90-day money-back promise" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/IMG_10.png" width="600"/>
-</picture>
-</div>
-              
-            
-              
-                  <div class="s-featured-product__thumbnail">
-                    
-<picture>
-  
-  <img alt="" decoding="async" fetchpriority="auto" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/VIDEO_THUMBNAIL.png" width="600"/>
-</picture>
-                  </div>
-              
-            
-          </div>
-        
-
-        
-          
-
-          
-
-          
-
-          
-
-          
-
-          
-
-          
-
-          
-              <button aria-controls="ingredients-modal" aria-haspopup="dialog" class="s-main-product__view-ingredients js-view-ingredients" type="button">
-                View Ingredients
-              </button>
-
-              <div aria-labelledby="ingredients-modal-title" aria-modal="true" class="s-main-product__modal" hidden="" id="ingredients-modal" role="dialog">
-
-                <div class="s-main-product__modal-overlay"></div>
-                  <div class="s-main-product__modal-container">
-                    <button aria-label="Close ingredients modal" class="s-main-product__modal-close" type="button">
-                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                  </button>
-
-                  <div class="s-main-product__modal-wrapper">
-                    <div class="s-main-product__modal-ingredients product-ingredients">
-                    <div class="s-main-product__modal-content-title section-title">
-                      
-                        <p></p><p>6 Key Actives, Chosen to Work Together</p><p></p>
-                      
-                    </div>
-                    
-
-                    
-                      <ul class="product-ingredients__list" role="list">
-                        
-                          <li class="product-ingredients__item" role="listitem">
-                            
-                              <div class="product-ingredients__media"><img alt="Pumpkin seed phytosterols" class="product-ingredients__icon" height="240" loading="lazy" sizes="(min-width: 990px) 180px, 120px" src="https://froyaorganics.com/cdn/shop/files/s1.svg?v=1734379965" srcset="https://froyaorganics.com/cdn/shop/files/s1.svg?crop=center&amp;height=120&amp;v=1734379965&amp;width=120 120w, https://froyaorganics.com/cdn/shop/files/s1.svg?crop=center&amp;height=180&amp;v=1734379965&amp;width=180 180w, https://froyaorganics.com/cdn/shop/files/s1.svg?crop=center&amp;height=240&amp;v=1734379965&amp;width=240 240w" width="240"/>
-                              </div>
-                            
-
-                            <div class="product-ingredients__body">
-                              
-                                <span class="product-ingredients__tag">Blocks DHT</span>
-                              
-
-                              
-                                <h3 class="product-ingredients__title">Pumpkin seed phytosterols</h3>
-                              
-                              
-<div class="product-ingredients__text">
-                                  <span class="metafield-multi_line_text_field">Beta-sitosterol and delta-7-sterine, the plant sterols in pumpkin seed oil, help inhibit 5-alpha-reductase so less testosterone becomes follicle-shrinking DHT.</span>
-                                </div>
-                              
-                            </div>
-                          </li>
-                        
-                          <li class="product-ingredients__item" role="listitem">
-                            
-                              <div class="product-ingredients__media"><img alt="Caffeine Complex" class="product-ingredients__icon" height="240" loading="lazy" sizes="(min-width: 990px) 180px, 120px" src="https://froyaorganics.com/cdn/shop/files/sunflower.png?v=1755540611" srcset="https://froyaorganics.com/cdn/shop/files/sunflower.png?crop=center&amp;height=120&amp;v=1755540611&amp;width=120 120w, https://froyaorganics.com/cdn/shop/files/sunflower.png?crop=center&amp;height=180&amp;v=1755540611&amp;width=180 180w, https://froyaorganics.com/cdn/shop/files/sunflower.png?crop=center&amp;height=240&amp;v=1755540611&amp;width=240 240w" width="240"/>
-                              </div>
-                            
-
-                            <div class="product-ingredients__body">
-                              
-                                <span class="product-ingredients__tag">Wakes follicles</span>
-                              
-
-                              
-                                <h3 class="product-ingredients__title">Caffeine Complex</h3>
-                              
-                              
-<div class="product-ingredients__text">
-                                  <span class="metafield-multi_line_text_field">Counteracts DHT’s effect on the follicle and helps extend the growth phase, so more of your hairs are growing and fewer are shedding.</span>
-                                </div>
-                              
-                            </div>
-                          </li>
-                        
-                          <li class="product-ingredients__item" role="listitem">
-                            
-                              <div class="product-ingredients__media"><img alt="Omega-3, 6 &amp; 9 fatty acids" class="product-ingredients__icon" height="240" loading="lazy" sizes="(min-width: 990px) 180px, 120px" src="https://froyaorganics.com/cdn/shop/files/beeswax.svg?v=1734705438" srcset="https://froyaorganics.com/cdn/shop/files/beeswax.svg?crop=center&amp;height=120&amp;v=1734705438&amp;width=120 120w, https://froyaorganics.com/cdn/shop/files/beeswax.svg?crop=center&amp;height=180&amp;v=1734705438&amp;width=180 180w, https://froyaorganics.com/cdn/shop/files/beeswax.svg?crop=center&amp;height=240&amp;v=1734705438&amp;width=240 240w" width="240"/>
-                              </div>
-                            
-
-                            <div class="product-ingredients__body">
-                              
-                                <span class="product-ingredients__tag">Feeds the root</span>
-                              
-
-                              
-                                <h3 class="product-ingredients__title">Omega-3, 6 &amp; 9 fatty acids</h3>
-                              
-                              
-<div class="product-ingredients__text">
-                                  <span class="metafield-multi_line_text_field">Linoleic, oleic and alpha-linolenic acids nourish the follicle, condition the scalp and reduce the dryness that leads to breakage.</span>
-                                </div>
-                              
-                            </div>
-                          </li>
-                        
-                          <li class="product-ingredients__item" role="listitem">
-                            
-                              <div class="product-ingredients__media"><img alt="Zinc &amp; magnesium" class="product-ingredients__icon" height="240" loading="lazy" sizes="(min-width: 990px) 180px, 120px" src="https://froyaorganics.com/cdn/shop/files/calendula.svg?v=1734705438" srcset="https://froyaorganics.com/cdn/shop/files/calendula.svg?crop=center&amp;height=120&amp;v=1734705438&amp;width=120 120w, https://froyaorganics.com/cdn/shop/files/calendula.svg?crop=center&amp;height=180&amp;v=1734705438&amp;width=180 180w, https://froyaorganics.com/cdn/shop/files/calendula.svg?crop=center&amp;height=240&amp;v=1734705438&amp;width=240 240w" width="240"/>
-                              </div>
-                            
-
-                            <div class="product-ingredients__body">
-                              
-                                <span class="product-ingredients__tag">Supports growth</span>
-                              
-
-                              
-                                <h3 class="product-ingredients__title">Zinc &amp; magnesium</h3>
-                              
-                              
-<div class="product-ingredients__text">
-                                  <span class="metafield-multi_line_text_field">Minerals naturally present in pumpkin seed oil that support keratin production and healthy follicle cycling.</span>
-                                </div>
-                              
-                            </div>
-                          </li>
-                        
-                          <li class="product-ingredients__item" role="listitem">
-                            
-                              <div class="product-ingredients__media"><img alt="Vitamin E (tocopherols)" class="product-ingredients__icon" height="240" loading="lazy" sizes="(min-width: 990px) 180px, 120px" src="https://froyaorganics.com/cdn/shop/files/arnica.svg?v=1734966132" srcset="https://froyaorganics.com/cdn/shop/files/arnica.svg?crop=center&amp;height=120&amp;v=1734966132&amp;width=120 120w, https://froyaorganics.com/cdn/shop/files/arnica.svg?crop=center&amp;height=180&amp;v=1734966132&amp;width=180 180w, https://froyaorganics.com/cdn/shop/files/arnica.svg?crop=center&amp;height=240&amp;v=1734966132&amp;width=240 240w" width="240"/>
-                              </div>
-                            
-
-                            <div class="product-ingredients__body">
-                              
-                                <span class="product-ingredients__tag">Protects the follicle</span>
-                              
-
-                              
-                                <h3 class="product-ingredients__title">Vitamin E (tocopherols)</h3>
-                              
-                              
-<div class="product-ingredients__text">
-                                  <span class="metafield-multi_line_text_field">A powerful antioxidant that neutralises the oxidative stress linked to premature follicle ageing and thinning.</span>
-                                </div>
-                              
-                            </div>
-                          </li>
-                        
-                          <li class="product-ingredients__item" role="listitem">
-                            
-                              <div class="product-ingredients__media"><img alt="Carotenoids" class="product-ingredients__icon" height="240" loading="lazy" sizes="(min-width: 990px) 180px, 120px" src="https://froyaorganics.com/cdn/shop/files/sea_buckthorn_smaller.svg?v=1755736503" srcset="https://froyaorganics.com/cdn/shop/files/sea_buckthorn_smaller.svg?crop=center&amp;height=120&amp;v=1755736503&amp;width=120 120w, https://froyaorganics.com/cdn/shop/files/sea_buckthorn_smaller.svg?crop=center&amp;height=180&amp;v=1755736503&amp;width=180 180w, https://froyaorganics.com/cdn/shop/files/sea_buckthorn_smaller.svg?crop=center&amp;height=240&amp;v=1755736503&amp;width=240 240w" width="240"/>
-                              </div>
-                            
-
-                            <div class="product-ingredients__body">
-                              
-                                <span class="product-ingredients__tag">Calms the scalp</span>
-                              
-
-                              
-                                <h3 class="product-ingredients__title">Carotenoids</h3>
-                              
-                              
-<div class="product-ingredients__text">
-                                  <span class="metafield-multi_line_text_field">The pigments that give pumpkin seed oil its deep green-gold colour are anti-inflammatory, soothing the itchy, irritated scalp that so often comes with hair loss.</span>
-                                </div>
-                              
-                            </div>
-                          </li>
-                        
-                      </ul>
-                    
-                    </div>
-                    <div class="product-content__tags tags-mobile">
-                        <div class="product-content__tags-items">
-                          <div class="product-content__tags-item">
-                            <svg fill="none" height="26" viewBox="0 0 26 26" width="26" xmlns="http://www.w3.org/2000/svg">
-                              <g clip-path="url(#clip0_4655_19579)">
-                                <path d="M12.8664 24.7308C19.5689 24.7308 25.0023 19.2974 25.0023 12.5949C25.0023 5.89242 19.5689 0.458984 12.8664 0.458984C6.16391 0.458984 0.730469 5.89242 0.730469 12.5949C0.730469 19.2974 6.16391 24.7308 12.8664 24.7308Z" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M21.4377 4.02344L4.29688 21.1642" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M13.9472 8.38867H12.5879H11.2312L8.84766 12.0028V16.2358V20.4688H12.5879H16.3307V16.2358V12.0028L13.9472 8.38867Z" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                                <path d="M12.5859 15.7406V8.38867" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                                <path d="M11.7539 6.67188V8.39032" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                                <path d="M13.4219 6.67188V8.39032" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                                <path d="M10.1289 5.71739L12.0367 4.23438H16.1143V5.21496L13.8643 6.4868H10.1289V5.71739Z" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                                <path d="M17.375 4.23438V5.10331" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                              </g>
-                              <defs>
-                                <clipPath id="clip0_4655_19579">
-                                  <rect fill="white" height="25" transform="translate(0.367188 0.09375)" width="25"></rect>
-                                </clipPath>
-                              </defs>
-                            </svg>
-                            <p> 0 minoxidil</p>
-                          </div>
-                          <div class="product-content__tags-item">
-                            <svg fill="none" height="26" viewBox="0 0 25 26" width="25" xmlns="http://www.w3.org/2000/svg">
-                              <g clip-path="url(#clip0_4655_19850)">
-                                <path d="M12.4992 24.7308C19.2017 24.7308 24.6351 19.2974 24.6351 12.5949C24.6351 5.89242 19.2017 0.458984 12.4992 0.458984C5.79672 0.458984 0.363281 5.89242 0.363281 12.5949C0.363281 19.2974 5.79672 24.7308 12.4992 24.7308Z" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M21.0705 4.02344L3.92969 21.1642" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M18.8658 16.2701C18.3711 15.3977 17.2759 15.0408 16.2731 15.0314C15.2704 15.0219 14.2791 15.2788 13.2764 15.2939C12.2737 15.309 11.3219 14.8916 10.6119 14.1816C9.90192 13.4716 9.4846 12.5218 9.4997 11.5172C9.51481 10.5126 9.77351 9.52312 9.76218 8.52041C9.75085 7.51771 9.39585 6.42248 8.52344 5.92773" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M15.6471 19.2604C14.7747 18.7656 14.4178 17.6704 14.4083 16.6677C14.3989 15.665 14.6557 14.6736 14.6708 13.6709C14.6859 12.6682 14.2686 11.7165 13.5586 11.0065C12.8486 10.2965 11.8987 9.87913 10.8941 9.89424C9.88956 9.90934 8.90007 10.168 7.89737 10.1567C6.89466 10.1454 5.79943 9.79038 5.30469 8.91797" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M17.7136 15.3047L14.7188 18.2996" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M9.24691 6.8418L6.25391 9.8348" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                              </g>
-                              <defs>
-                                <clipPath id="clip0_4655_19850">
-                                  <rect fill="white" height="25" transform="translate(0 0.09375)" width="25"></rect>
-                                </clipPath>
-                              </defs>
-                            </svg>
-                            <p> 0 hormones</p>
-                          </div>
-                          <div class="product-content__tags-item">
-                            <svg fill="none" height="27" viewBox="0 0 27 27" width="27" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M13.8625 26.0937H12.9433C12.8929 26.0025 12.7945 26.0145 12.7176 25.9929C11.3495 25.5849 10.5071 24.3488 10.6535 22.9327C10.7447 22.0591 10.8575 21.1854 11.0327 20.3237C11.1311 19.8341 11.2319 19.3421 11.3399 18.8212C11.2055 18.91 11.1671 19.0204 11.1095 19.1164C10.4279 20.2157 9.67663 21.267 8.84377 22.2535C8.09971 23.1343 7.12044 23.4512 6.00436 23.1871C4.88588 22.9207 4.15623 22.1887 3.89701 21.0678C3.63779 19.9493 3.96181 18.9748 4.84508 18.2308C5.84835 17.3883 6.91883 16.6275 8.03251 15.9338C8.09731 15.893 8.19812 15.8786 8.20772 15.7466C6.90443 16.0538 5.59393 16.2482 4.27864 16.4211C2.85773 16.6059 1.51364 15.7754 1.10561 14.4001C1.07921 14.3137 1.08881 14.2057 1 14.1433V13.0512C1.08641 12.9984 1.07441 12.9 1.09841 12.8208C1.49924 11.4575 2.74973 10.6078 4.16103 10.759C5.1403 10.8647 6.11717 10.9943 7.08204 11.1983C7.46607 11.2799 7.85009 11.3591 8.23412 11.4383C8.19572 11.3567 8.14532 11.3159 8.09011 11.2823C6.96203 10.591 5.88915 9.82058 4.87148 8.97812C3.98342 8.24126 3.64259 7.27159 3.89221 6.15071C4.14423 5.01543 4.87388 4.27138 6.00676 4.00256C7.13724 3.73374 8.11891 4.06256 8.86777 4.95543C9.66222 5.90109 10.3799 6.90677 11.0399 7.95324C11.1239 8.08765 11.2103 8.22446 11.3327 8.41888C11.3327 8.30847 11.3399 8.27006 11.3327 8.23886C11.0159 6.95477 10.8311 5.64908 10.6655 4.33858C10.4615 2.72806 11.6328 1.22556 13.2097 1.10315C14.933 0.971137 16.3635 2.24563 16.3323 3.94015C16.3131 5.00343 16.1067 6.0499 15.9075 7.09158C15.8307 7.49481 15.7395 7.89804 15.6531 8.31327C15.7563 8.29647 15.7731 8.23406 15.8019 8.18846C16.4859 7.07958 17.2468 6.0235 18.0724 5.01543C18.8189 4.10096 19.791 3.73854 20.9358 3.99296C22.0711 4.24257 22.8152 4.97223 23.084 6.10751C23.3528 7.23799 23.0216 8.21486 22.1311 8.96851C21.4447 9.54936 20.7222 10.087 19.9734 10.5862C19.5629 10.8623 19.1477 11.1311 18.6893 11.4311C18.7805 11.4311 18.8165 11.4383 18.8501 11.4311C20.1342 11.1167 21.4399 10.9319 22.7504 10.7638C24.3777 10.5574 25.8778 11.7503 25.9882 13.368C26.1034 15.0482 24.8145 16.4715 23.144 16.4307C21.8983 16.3995 20.6766 16.1498 19.4573 15.9002C19.2245 15.8522 18.9989 15.761 18.6965 15.7634C18.7853 15.8258 18.8213 15.8522 18.8597 15.8762C19.995 16.5723 21.0775 17.3475 22.1023 18.1948C22.9928 18.9292 23.3408 19.8941 23.096 21.0174C22.844 22.1767 22.0999 22.9303 20.9382 23.1895C19.8174 23.4416 18.8477 23.1031 18.1084 22.2175C17.2636 21.2022 16.4931 20.1269 15.7995 19.0012C15.7659 18.946 15.7491 18.8644 15.6339 18.85C15.9411 20.1629 16.1451 21.471 16.3107 22.7911C16.4763 24.0968 15.8283 25.3305 14.633 25.8585C14.3858 25.9689 14.1193 26.0049 13.8649 26.0913L13.8625 26.0937ZM10.8191 13.56C10.8167 15.0866 11.9832 16.2698 13.4953 16.2698C14.9546 16.2698 16.1571 15.0794 16.1619 13.6321C16.1667 12.1199 15.0002 10.9295 13.5097 10.9271C12.0144 10.9271 10.8215 12.0911 10.8191 13.56Z" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                            </svg>
-                            <p> 100% natural</p>
-                          </div>
-                          <div class="product-content__tags-item">
-                            <svg fill="none" height="26" viewBox="0 0 26 26" width="26" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M3.13628 8.70942L8.6936 3.1521L21.9334 16.3919C23.4657 17.9242 23.4692 20.4169 21.9334 21.9527C20.4011 23.485 17.9084 23.4885 16.3726 21.9527L3.13281 8.71289L3.13628 8.70942Z" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.766667"></path>
-                              <path d="M2.03516 9.80664L9.79391 2.04788" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.766667"></path>
-                              <path d="M10.2338 15.8041C9.67563 15.1835 9.58203 14.2024 10.0223 13.5749C10.7677 12.5037 12.5982 12.6354 13.3089 11.5364C13.8428 10.7113 13.5723 9.40087 14.335 8.78378" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.766667"></path>
-                            </svg>
-                            <p> 3rd party tested</p>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="product-content__info">
-                      <div class="product-content__info-content">
-                        <div class="product-content__info-content-text">
-                          <div class="s-main-product__info-content-text-faq">
-                            <div>
-                              <div>
-                                <h3 class="product-content__info-content-text-faq-title">INGREDIENT LEVELS</h3><div>
-        <svg fill="none" height="7" viewBox="0 0 14 14" width="7" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="7.47363" cy="7.33203" fill="#4A90E2" r="6.5"></circle>
-        </svg>
-        <span>CAFFEINE COMPLEX</span>
-      </div><div>
-        <svg fill="none" height="7" viewBox="0 0 14 14" width="7" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="7.47363" cy="7.33203" fill="#B8E77F" r="6.5"></circle>
-        </svg>
-        <span>NATURAL</span>
-      </div><div>
-        <svg fill="none" height="7" viewBox="0 0 14 14" width="7" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="7.47363" cy="7.33203" fill="#5A9512" r="6.5"></circle>
-        </svg>
-        <span>COLD-PRESSED</span>
-      </div><h3 class="product-content__info-content-text-faq-title">KEY ACTIVES – PUMPKIN SEED REGROWTH OIL</h3><div>
-      <svg fill="none" height="7" viewBox="0 0 14 14" width="7" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="7.47363" cy="7.33203" fill="#5A9512" r="6.5"></circle>
-      </svg>
-      <span>COLD-PRESSED CUCURBITA PEPO (PUMPKIN) SEED OIL</span>
-    </div><div>
-      <svg fill="none" height="7" viewBox="0 0 14 14" width="7" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="7.47363" cy="7.33203" fill="#4A90E2" r="6.5"></circle>
-      </svg>
-      <span>CAFFEINE COMPLEX</span>
-    </div><div>
-      <svg fill="none" height="7" viewBox="0 0 14 14" width="7" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="7.47363" cy="7.33203" fill="#B8E77F" r="6.5"></circle>
-      </svg>
-      <span>NATURALLY OCCURRING PHYTOSTEROLS, ZINC, OMEGA-3/6/9 &amp; VITAMIN E</span>
-    </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="product-content__tags-button-wrapper">
-                          <button class="product-content__tags-button js-close-ingredients-modal">
-                            <p> Close </p>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="product-content__tags tags-desktop">
-                        <div class="product-content__tags-items">
-                          <div class="product-content__tags-item">
-                            <svg fill="none" height="26" viewBox="0 0 26 26" width="26" xmlns="http://www.w3.org/2000/svg">
-                              <g clip-path="url(#clip0_4655_19579)">
-                                <path d="M12.8664 24.7308C19.5689 24.7308 25.0023 19.2974 25.0023 12.5949C25.0023 5.89242 19.5689 0.458984 12.8664 0.458984C6.16391 0.458984 0.730469 5.89242 0.730469 12.5949C0.730469 19.2974 6.16391 24.7308 12.8664 24.7308Z" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M21.4377 4.02344L4.29688 21.1642" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M13.9472 8.38867H12.5879H11.2312L8.84766 12.0028V16.2358V20.4688H12.5879H16.3307V16.2358V12.0028L13.9472 8.38867Z" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                                <path d="M12.5859 15.7406V8.38867" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                                <path d="M11.7539 6.67188V8.39032" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                                <path d="M13.4219 6.67188V8.39032" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                                <path d="M10.1289 5.71739L12.0367 4.23438H16.1143V5.21496L13.8643 6.4868H10.1289V5.71739Z" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                                <path d="M17.375 4.23438V5.10331" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                              </g>
-                              <defs>
-                                <clipPath id="clip0_4655_19579">
-                                  <rect fill="white" height="25" transform="translate(0.367188 0.09375)" width="25"></rect>
-                                </clipPath>
-                              </defs>
-                            </svg>
-                            <p> 0 minoxidil</p>
-                          </div>
-                          <div class="product-content__tags-item">
-                            <svg fill="none" height="26" viewBox="0 0 25 26" width="25" xmlns="http://www.w3.org/2000/svg">
-                              <g clip-path="url(#clip0_4655_19850)">
-                                <path d="M12.4992 24.7308C19.2017 24.7308 24.6351 19.2974 24.6351 12.5949C24.6351 5.89242 19.2017 0.458984 12.4992 0.458984C5.79672 0.458984 0.363281 5.89242 0.363281 12.5949C0.363281 19.2974 5.79672 24.7308 12.4992 24.7308Z" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M21.0705 4.02344L3.92969 21.1642" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M18.8658 16.2701C18.3711 15.3977 17.2759 15.0408 16.2731 15.0314C15.2704 15.0219 14.2791 15.2788 13.2764 15.2939C12.2737 15.309 11.3219 14.8916 10.6119 14.1816C9.90192 13.4716 9.4846 12.5218 9.4997 11.5172C9.51481 10.5126 9.77351 9.52312 9.76218 8.52041C9.75085 7.51771 9.39585 6.42248 8.52344 5.92773" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M15.6471 19.2604C14.7747 18.7656 14.4178 17.6704 14.4083 16.6677C14.3989 15.665 14.6557 14.6736 14.6708 13.6709C14.6859 12.6682 14.2686 11.7165 13.5586 11.0065C12.8486 10.2965 11.8987 9.87913 10.8941 9.89424C9.88956 9.90934 8.90007 10.168 7.89737 10.1567C6.89466 10.1454 5.79943 9.79038 5.30469 8.91797" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M17.7136 15.3047L14.7188 18.2996" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                                <path d="M9.24691 6.8418L6.25391 9.8348" stroke="#1F1F1F" stroke-miterlimit="10" stroke-width="0.75"></path>
-                              </g>
-                              <defs>
-                                <clipPath id="clip0_4655_19850">
-                                  <rect fill="white" height="25" transform="translate(0 0.09375)" width="25"></rect>
-                                </clipPath>
-                              </defs>
-                            </svg>
-                            <p> 0 hormones</p>
-                          </div>
-                          <div class="product-content__tags-item">
-                            <svg fill="none" height="27" viewBox="0 0 27 27" width="27" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M13.8625 26.0937H12.9433C12.8929 26.0025 12.7945 26.0145 12.7176 25.9929C11.3495 25.5849 10.5071 24.3488 10.6535 22.9327C10.7447 22.0591 10.8575 21.1854 11.0327 20.3237C11.1311 19.8341 11.2319 19.3421 11.3399 18.8212C11.2055 18.91 11.1671 19.0204 11.1095 19.1164C10.4279 20.2157 9.67663 21.267 8.84377 22.2535C8.09971 23.1343 7.12044 23.4512 6.00436 23.1871C4.88588 22.9207 4.15623 22.1887 3.89701 21.0678C3.63779 19.9493 3.96181 18.9748 4.84508 18.2308C5.84835 17.3883 6.91883 16.6275 8.03251 15.9338C8.09731 15.893 8.19812 15.8786 8.20772 15.7466C6.90443 16.0538 5.59393 16.2482 4.27864 16.4211C2.85773 16.6059 1.51364 15.7754 1.10561 14.4001C1.07921 14.3137 1.08881 14.2057 1 14.1433V13.0512C1.08641 12.9984 1.07441 12.9 1.09841 12.8208C1.49924 11.4575 2.74973 10.6078 4.16103 10.759C5.1403 10.8647 6.11717 10.9943 7.08204 11.1983C7.46607 11.2799 7.85009 11.3591 8.23412 11.4383C8.19572 11.3567 8.14532 11.3159 8.09011 11.2823C6.96203 10.591 5.88915 9.82058 4.87148 8.97812C3.98342 8.24126 3.64259 7.27159 3.89221 6.15071C4.14423 5.01543 4.87388 4.27138 6.00676 4.00256C7.13724 3.73374 8.11891 4.06256 8.86777 4.95543C9.66222 5.90109 10.3799 6.90677 11.0399 7.95324C11.1239 8.08765 11.2103 8.22446 11.3327 8.41888C11.3327 8.30847 11.3399 8.27006 11.3327 8.23886C11.0159 6.95477 10.8311 5.64908 10.6655 4.33858C10.4615 2.72806 11.6328 1.22556 13.2097 1.10315C14.933 0.971137 16.3635 2.24563 16.3323 3.94015C16.3131 5.00343 16.1067 6.0499 15.9075 7.09158C15.8307 7.49481 15.7395 7.89804 15.6531 8.31327C15.7563 8.29647 15.7731 8.23406 15.8019 8.18846C16.4859 7.07958 17.2468 6.0235 18.0724 5.01543C18.8189 4.10096 19.791 3.73854 20.9358 3.99296C22.0711 4.24257 22.8152 4.97223 23.084 6.10751C23.3528 7.23799 23.0216 8.21486 22.1311 8.96851C21.4447 9.54936 20.7222 10.087 19.9734 10.5862C19.5629 10.8623 19.1477 11.1311 18.6893 11.4311C18.7805 11.4311 18.8165 11.4383 18.8501 11.4311C20.1342 11.1167 21.4399 10.9319 22.7504 10.7638C24.3777 10.5574 25.8778 11.7503 25.9882 13.368C26.1034 15.0482 24.8145 16.4715 23.144 16.4307C21.8983 16.3995 20.6766 16.1498 19.4573 15.9002C19.2245 15.8522 18.9989 15.761 18.6965 15.7634C18.7853 15.8258 18.8213 15.8522 18.8597 15.8762C19.995 16.5723 21.0775 17.3475 22.1023 18.1948C22.9928 18.9292 23.3408 19.8941 23.096 21.0174C22.844 22.1767 22.0999 22.9303 20.9382 23.1895C19.8174 23.4416 18.8477 23.1031 18.1084 22.2175C17.2636 21.2022 16.4931 20.1269 15.7995 19.0012C15.7659 18.946 15.7491 18.8644 15.6339 18.85C15.9411 20.1629 16.1451 21.471 16.3107 22.7911C16.4763 24.0968 15.8283 25.3305 14.633 25.8585C14.3858 25.9689 14.1193 26.0049 13.8649 26.0913L13.8625 26.0937ZM10.8191 13.56C10.8167 15.0866 11.9832 16.2698 13.4953 16.2698C14.9546 16.2698 16.1571 15.0794 16.1619 13.6321C16.1667 12.1199 15.0002 10.9295 13.5097 10.9271C12.0144 10.9271 10.8215 12.0911 10.8191 13.56Z" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"></path>
-                            </svg>
-                            <p> 100% natural</p>
-                          </div>
-                          <div class="product-content__tags-item">
-                            <svg fill="none" height="26" viewBox="0 0 26 26" width="26" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M3.13628 8.70942L8.6936 3.1521L21.9334 16.3919C23.4657 17.9242 23.4692 20.4169 21.9334 21.9527C20.4011 23.485 17.9084 23.4885 16.3726 21.9527L3.13281 8.71289L3.13628 8.70942Z" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.766667"></path>
-                              <path d="M2.03516 9.80664L9.79391 2.04788" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.766667"></path>
-                              <path d="M10.2338 15.8041C9.67563 15.1835 9.58203 14.2024 10.0223 13.5749C10.7677 12.5037 12.5982 12.6354 13.3089 11.5364C13.8428 10.7113 13.5723 9.40087 14.335 8.78378" stroke="#1F1F1F" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.766667"></path>
-                            </svg>
-                            <p> 3rd party tested</p>
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-            
-
+    {%- capture product_head -%}
+      <div class="s-featured-product__product-info-labels">
+        {%- if section.settings.label_1 != blank -%}<span>{{ section.settings.label_1 }}</span>{%- endif -%}
+        {%- if section.settings.label_1 != blank and section.settings.label_2 != blank -%}<span>·</span>{%- endif -%}
+        {%- if section.settings.label_2 != blank -%}<span>{{ section.settings.label_2 }}</span>{%- endif -%}
       </div>
-      <div class="s-featured-product__info" id="ProductInfo-template--26717513089391__custom_featured_product_m69X4b-8329639985301"><div class="igsf igsf--m" data-igsf="m"><svg aria-hidden="true" class="igsf__icon" fill="none" focusable="false" height="20" viewBox="0 0 32 20" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M22.1092 15.7512V1.75614C22.1092 1.20015 21.6591 0.75 21.1031 0.75H6.32548C5.7695 0.75 5.31934 1.20015 5.31934 1.75614V14.7451C5.31934 15.301 5.7695 15.7512 6.32548 15.7512H8.20956" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M13.7139 15.749H22.1088" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M27.5734 15.7496H29.9911C30.5471 15.7496 30.9972 15.2995 30.9972 14.7435V9.74559C30.9972 9.3998 30.8199 9.07785 30.5262 8.89445L27.9639 7.28317C27.782 7.16839 27.6404 6.99847 27.5629 6.79724L26.1573 3.20196C26.0067 2.81589 25.6341 2.5625 25.2197 2.5625H22.1089" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M10.9817 18.483C12.4907 18.483 13.7139 17.2597 13.7139 15.7508C13.7139 14.2418 12.4907 13.0186 10.9817 13.0186C9.47278 13.0186 8.24951 14.2418 8.24951 15.7508C8.24951 17.2597 9.47278 18.483 10.9817 18.483Z" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M24.842 18.483C26.351 18.483 27.5743 17.2597 27.5743 15.7508C27.5743 14.2418 26.351 13.0186 24.842 13.0186C23.3331 13.0186 22.1099 14.2418 22.1099 15.7508C22.1099 17.2597 23.3331 18.483 24.842 18.483Z" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M1.9917 4.28906H8.87816" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M1.9917 10.3145H8.87816" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M0.75 7.30322H7.63499" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg><p class="igsf__text">THIS ORDER SHIPS FREE</p></div><div class="s-featured-product__desktop-head">
-<div class="custom_loox_star_rating">
-                  
-                    <a data-scroll-to="reviews-section" href="#reviews-section">
-                  
-                    <div aria-label="43 reviews" class="loox-rating" data-id="8329639985301" data-raters="43" data-rating="4.8" data-rating-upgraded="1" role="figure" title="43 reviews"><div class="loox-rating-content"><svg aria-hidden="true" class="loox-icon" data-lx-fill="full" role="presentation" viewBox="0 0 24 24"><title>43 reviews</title><use href="#looxicons-rating-icon"></use></svg><svg aria-hidden="true" class="loox-icon" data-lx-fill="full" viewBox="0 0 24 24"><use href="#looxicons-rating-icon"></use></svg><svg aria-hidden="true" class="loox-icon" data-lx-fill="full" viewBox="0 0 24 24"><use href="#looxicons-rating-icon"></use></svg><svg aria-hidden="true" class="loox-icon" data-lx-fill="full" viewBox="0 0 24 24"><use href="#looxicons-rating-icon"></use></svg><svg aria-hidden="true" class="loox-icon" data-lx-fill="full" viewBox="0 0 24 24"><use href="#looxicons-rating-icon"></use></svg><span aria-hidden="true" class="loox-rating-label"> (43)</span></div></div>
-                    
-                      <div class="loox-rating__text">
-                        4.77/5 FROM VERIFIED BUYERS
+      <h3 class="s-featured-product__product-name">{{ product_title }}</h3>
+      {%- if section.settings.reviews_count > 0 -%}
+      <div class="custom_loox_star_rating">
+        <a data-scroll-to="reviews-section" href="#reviews-section">
+          <div aria-label="{{ section.settings.reviews_count }} reviews" class="loox-rating" data-raters="{{ section.settings.reviews_count }}" data-rating="{{ section.settings.rating }}" role="figure" title="{{ section.settings.reviews_count }} reviews"><div class="loox-rating-content">
+            {%- for i in (1..5) -%}<svg aria-hidden="true" class="loox-icon" data-lx-fill="full" viewBox="0 0 24 24"><use href="#looxicons-rating-icon"></use></svg>{%- endfor -%}
+            <span aria-hidden="true" class="loox-rating-label">&nbsp;({{ section.settings.reviews_count }})</span>
+          </div></div>
+          {%- if section.settings.rating_text != blank -%}<div class="loox-rating__text">{{ section.settings.rating_text }}</div>{%- endif -%}
+        </a>
+      </div>
+      {%- endif -%}
+    {%- endcapture -%}
+
+    <div class="s-featured-product__content"><div class="s-featured-product__mobile-head">{{ product_head }}</div><div class="s-featured-product__gallery-wrapper">
+        <div class="s-featured-product__gallery js-featured-product__gallery s-featured-product__gallery--stage s-featured-product__gallery--video-crop-up">
+          <div class="s-featured-product__gallery-arrow s-featured-product__gallery-arrow--prev js-arrow-prev">
+            <svg aria-hidden="true" fill="none" height="21" viewBox="0 0 17 21" width="17" xmlns="http://www.w3.org/2000/svg"><path d="M12.6 0.23a.77.77 0 0 1 1.12 0l.03.03a.8.8 0 0 1 0 1.1L4.9 10.17l8.85 8.84a.8.8 0 0 1 0 1.11.77.77 0 0 1-1.12 0L3.2 10.72a.8.8 0 0 1 0-1.1L12.6.23z" fill="currentColor"/></svg>
+          </div>
+          <div class="s-featured-product__gallery-tags">
+            {%- if section.settings.save_tag != blank -%}<span class="s-featured-product__gallery-tag s-featured-product__gallery-tag--type-3 js-gallery-save-tag">{{ section.settings.save_tag | replace: '{percent}', sub_percent }}</span>{%- endif -%}
+          </div>
+          {%- if media_count > 0 -%}
+            {%- for media in product.media -%}
+              <div class="s-featured-product__slide{% if forloop.first %} is-active{% endif %}" data-media-type="{{ media.media_type }}">
+                {%- case media.media_type -%}
+                  {%- when 'video' -%}
+                    {{ media | video_tag: controls: true, preload: 'none', loop: false, muted: false, class: 's-featured-product__video' }}
+                  {%- when 'external_video' -%}
+                    {{ media | external_video_tag: class: 's-featured-product__video' }}
+                  {%- when 'model' -%}
+                    {{ media | model_viewer_tag }}
+                  {%- else -%}
+                    {%- if forloop.first -%}
+                      <picture>{{ media | image_url: width: 1200 | image_tag: alt: media.alt, loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 990px) 50vw, 100vw', widths: '600, 900, 1200' }}</picture>
+                    {%- else -%}
+                      <picture>{{ media | image_url: width: 1200 | image_tag: alt: media.alt, loading: 'lazy', sizes: '(min-width: 990px) 50vw, 100vw', widths: '600, 900, 1200' }}</picture>
+                    {%- endif -%}
+                {%- endcase -%}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for src in fallback_images -%}
+              <div class="s-featured-product__slide{% if forloop.first %} is-active{% endif %}">
+                <picture><img alt="{{ fallback_alts[forloop.index0] | escape }}" decoding="async" height="600" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" src="https://froyaorganics.com/cdn/shop/files/{{ src }}" width="600"></picture>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+          <div class="s-featured-product__gallery-arrow s-featured-product__gallery-arrow--next js-arrow-next">
+            <svg aria-hidden="true" fill="none" height="21" viewBox="0 0 17 21" width="17" xmlns="http://www.w3.org/2000/svg"><path d="M4.4.23a.77.77 0 0 1 1.12 0l9.51 9.39a.8.8 0 0 1 0 1.1l-9.51 9.4a.77.77 0 0 1-1.12 0 .8.8 0 0 1 0-1.11l8.95-8.84L4.4 1.34a.8.8 0 0 1 0-1.1z" fill="currentColor"/></svg>
+          </div>
+        </div>
+
+        <div class="s-featured-product__thumbnails s-featured-product__thumbnails--strip js-featured-product__thumbnails is-stage-ready">
+          {%- if media_count > 0 -%}
+            {%- for media in product.media -%}
+              <div class="s-featured-product__thumbnail{% if forloop.first %} is-active{% endif %}">
+                <picture>{{ media.preview_image | image_url: width: 240, height: 240, crop: 'center' | image_tag: alt: media.alt, loading: 'lazy' }}</picture>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for src in fallback_images -%}
+              <div class="s-featured-product__thumbnail{% if forloop.first %} is-active{% endif %}">
+                <picture><img alt="" decoding="async" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/{{ src }}" width="600"></picture>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+
+        {%- if ingredients.size > 0 -%}
+        <button aria-controls="ingredients-modal" aria-haspopup="dialog" class="s-main-product__view-ingredients js-view-ingredients" type="button">{{ section.settings.ingredients_button }}</button>
+
+        <div aria-labelledby="ingredients-modal-title" aria-modal="true" class="s-main-product__modal" hidden id="ingredients-modal" role="dialog">
+          <div class="s-main-product__modal-overlay"></div>
+          <div class="s-main-product__modal-container">
+            <button aria-label="Close ingredients modal" class="s-main-product__modal-close" type="button">
+              <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            </button>
+            <div class="s-main-product__modal-wrapper">
+              <div class="s-main-product__modal-ingredients product-ingredients">
+                <div class="s-main-product__modal-content-title section-title" id="ingredients-modal-title"><p></p><p>{{ section.settings.ingredients_title }}</p><p></p></div>
+                <ul class="product-ingredients__list" role="list">
+                  {%- for block in ingredients -%}
+                    <li class="product-ingredients__item" role="listitem" {{ block.shopify_attributes }}>
+                      <div class="product-ingredients__media">
+                        {%- render 'froya-image', image: block.settings.icon, fallback: block.settings.icon_fallback, alt: block.settings.title, class: 'product-ingredients__icon', width: 240, height: 240 -%}
                       </div>
-                    
-                  
-                    </a>
-                  
-                </div>
-
-                <div class="s-featured-product__product-info-labels">
-                  
-                  
-                    <span>Pumpkin Seed Oil + Caffeine Complex</span>
-                    
-                      <span>·</span>
-                    
-                  
-                    <span>30-day supply</span>
-                    
-                  
-                </div>
-              
-
-
-                <h3 class="s-featured-product__product-name">Pumpkin Seed Regrowth Oil</h3>
-              
-</div>
-          
-
-        
-          
-
-        
-          
-
-        
-          
-
-                <div class="igsf igsf--d" data-igsf="d"><svg aria-hidden="true" class="igsf__icon" fill="none" focusable="false" height="20" viewBox="0 0 32 20" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M22.1092 15.7512V1.75614C22.1092 1.20015 21.6591 0.75 21.1031 0.75H6.32548C5.7695 0.75 5.31934 1.20015 5.31934 1.75614V14.7451C5.31934 15.301 5.7695 15.7512 6.32548 15.7512H8.20956" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M13.7139 15.749H22.1088" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M27.5734 15.7496H29.9911C30.5471 15.7496 30.9972 15.2995 30.9972 14.7435V9.74559C30.9972 9.3998 30.8199 9.07785 30.5262 8.89445L27.9639 7.28317C27.782 7.16839 27.6404 6.99847 27.5629 6.79724L26.1573 3.20196C26.0067 2.81589 25.6341 2.5625 25.2197 2.5625H22.1089" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M10.9817 18.483C12.4907 18.483 13.7139 17.2597 13.7139 15.7508C13.7139 14.2418 12.4907 13.0186 10.9817 13.0186C9.47278 13.0186 8.24951 14.2418 8.24951 15.7508C8.24951 17.2597 9.47278 18.483 10.9817 18.483Z" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M24.842 18.483C26.351 18.483 27.5743 17.2597 27.5743 15.7508C27.5743 14.2418 26.351 13.0186 24.842 13.0186C23.3331 13.0186 22.1099 14.2418 22.1099 15.7508C22.1099 17.2597 23.3331 18.483 24.842 18.483Z" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M1.9917 4.28906H8.87816" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M1.9917 10.3145H8.87816" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path><path d="M0.75 7.30322H7.63499" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg><p class="igsf__text">THIS ORDER SHIPS FREE</p></div><div class="s-featured-product__product-description"><p class="p1"><span></span><span></span><span>What you get (30-day supply):</span><br/><span>· Pumpkin Seed Regrowth Oil with Caffeine Complex</span><br/><span>· Precision applicator for scalp-only, no-waste application</span><br/><span>· Scalp massager to boost circulation at the root</span><br/><span>· Free insured shipping and a 90-day money-back guarantee</span></p>
-<!----></div>
-              
-            
-        
-          
-              <div class="s-featured-product__product-tags">
-                
-                
-                
-                  
-                    <div class="s-featured-product__product-tag">
-                      
-                        <img alt="reduce shedding" class="product-tag__icon" height="24" src="https://froyaorganics.com/cdn/shop/files/tag_icon_1.svg" width="24"/>
-                      
-                      <span>reduce shedding</span>
-                    </div>
-                  
-                    <div class="s-featured-product__product-tag">
-                      
-                        <img alt="block DHT naturally" class="product-tag__icon" height="24" src="https://froyaorganics.com/cdn/shop/files/tag_icon_4.svg" width="24"/>
-                      
-                      <span>block DHT naturally</span>
-                    </div>
-                  
-                    <div class="s-featured-product__product-tag">
-                      
-                        <img alt="regrow thin areas" class="product-tag__icon" height="24" src="https://froyaorganics.com/cdn/shop/files/tag_icon_3.svg" width="24"/>
-                      
-                      <span>regrow thin areas</span>
-                    </div>
-                  
-                    <div class="s-featured-product__product-tag">
-                      
-                        <img alt="thicken strands" class="product-tag__icon" height="24" src="https://froyaorganics.com/cdn/shop/files/glow.svg" width="24"/>
-                      
-                      <span>thicken strands</span>
-                    </div>
-                  
-                    <div class="s-featured-product__product-tag">
-                      
-                        <img alt="strengthen edges" class="product-tag__icon" height="24" src="https://froyaorganics.com/cdn/shop/files/tag_icon_6.svg" width="24"/>
-                      
-                      <span>strengthen edges</span>
-                    </div>
-                  
-                    <div class="s-featured-product__product-tag">
-                      
-                        <img alt="calm the scalp" class="product-tag__icon" height="24" src="https://froyaorganics.com/cdn/shop/files/moisturise.svg" width="24"/>
-                      
-                      <span>calm the scalp</span>
-                    </div>
-                  
-                
+                      <div class="product-ingredients__body">
+                        {%- if block.settings.tag != blank -%}<span class="product-ingredients__tag">{{ block.settings.tag }}</span>{%- endif -%}
+                        <h3 class="product-ingredients__title">{{ block.settings.title }}</h3>
+                        <div class="product-ingredients__text"><span class="metafield-multi_line_text_field">{{ block.settings.text }}</span></div>
+                      </div>
+                    </li>
+                  {%- endfor -%}
+                </ul>
               </div>
-            
-        
-          
-              <div class="c-product-form js-product-form">
-  
-
-    
-    
-    
-
-    
-<c-subscription class="c-subscribtion c-subscribtion--buybox-toggle igcp-on" data-compare-at-price="34.99" data-compare-at-price-cents="3499" data-default-selling-plan="1039991141" data-froya-template="" data-one-time-discounts="0" data-one-time-price-cents="3499" data-one-time-quantities="1" data-price="34.99" data-product-handle="elaren-pumpkin-seed-oil-regrowth-serum" data-product-type="serum" data-show-compare-at-price-in-button="false" data-show-subscription-option="false" data-subscription-discounts="10,10,10" data-subscription-price-cents="3149" data-subscription-quantities="1,2,3" data-use-variant-quantities="false">
-      
-  
-      <form class="c-subscribtion__subscription-form js-subscribtion__subscription-form" data-variants='[{"id": 50251934007653, "title": "Monthly", "option1": "Monthly", "option2": null, "option3": null, "sku": null, "requires_shipping": true, "taxable": true, "featured_image": null, "available": true, "name": "Elaren Pumpkin Seed Oil Serum - Monthly", "public_title": "Monthly", "options": ["Monthly"], "price": 3499, "weight": 0, "compare_at_price": null, "inventory_management": "shopify", "barcode": null, "requires_selling_plan": false, "selling_plan_allocations": [{"price_adjustments": [{"position": 1, "price": 3149}], "price": 3149, "compare_at_price": 3499, "per_delivery_price": 3149, "selling_plan_id": 1039991141, "selling_plan_group_id": "479363429"}]}]' id="selling-plan-form" method="post">
-<div class="c-buybox-toggle__priceline">
-    <span class="c-buybox-toggle__price c-buybox-toggle__price--sub">
-      <span class="c-buybox-toggle__price-main">
-
-
-
-
-<span class="product_price">$31.49</span></span><span class="c-buybox-toggle__price-compare">
-
-
-
-
-<span class="product_price">$34.99</span></span></span>
-    <span class="c-buybox-toggle__price c-buybox-toggle__price--otp">
-      <span class="c-buybox-toggle__price-main">
-
-
-
-
-<span class="product_price">$34.99</span></span></span></div><input name="id" type="hidden" value="50251934007653"/>
-<div class="c-buybox-toggle__box">
-    <button aria-checked="true" class="c-buybox-toggle__head js-bbt-toggle" role="switch" type="button">
-      <span aria-hidden="true" class="c-buybox-toggle__switch"><span class="c-buybox-toggle__knob"></span></span>
-      <span class="c-buybox-toggle__head-text">
-        <span class="c-buybox-toggle__head-title">Save 10% with our flexible plan</span>
-        <span class="c-buybox-toggle__head-sub">No contracts. Cancel with ease.</span>
-      </span>
-    </button>
-    <div class="c-buybox-toggle__benefits"><div class="c-buybox-toggle__col"><div class="c-buybox-toggle__row">
-                <span aria-hidden="true" class="c-buybox-toggle__check"><svg fill="none" viewBox="0 0 11.5 10.5" xmlns="http://www.w3.org/2000/svg"><path d="M10.25 1.25L4.0625 9.25L1.25 6.368" stroke="#E98044" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg></span>
-                <p><b>Free Insured Shipping</b> Every Order</p>
-              </div><div class="c-buybox-toggle__row">
-                <span aria-hidden="true" class="c-buybox-toggle__check"><svg fill="none" viewBox="0 0 11.5 10.5" xmlns="http://www.w3.org/2000/svg"><path d="M10.25 1.25L4.0625 9.25L1.25 6.368" stroke="#E98044" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg></span>
-                <p><b>10% Off</b> Every Order</p>
-              </div><div class="c-buybox-toggle__row">
-                <span aria-hidden="true" class="c-buybox-toggle__check"><svg fill="none" viewBox="0 0 11.5 10.5" xmlns="http://www.w3.org/2000/svg"><path d="M10.25 1.25L4.0625 9.25L1.25 6.368" stroke="#E98044" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg></span>
-                <p>90-Day <b>Money-Back Guarantee</b></p>
-              </div></div><div class="c-buybox-toggle__col"><div class="c-buybox-toggle__row">
-                <span aria-hidden="true" class="c-buybox-toggle__check"><svg fill="none" viewBox="0 0 11.5 10.5" xmlns="http://www.w3.org/2000/svg"><path d="M10.25 1.25L4.0625 9.25L1.25 6.368" stroke="#E98044" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg></span>
-                <p><b>Skip</b>, <b>Pause</b> or <b>Cancel</b> Anytime</p>
-              </div><div class="c-buybox-toggle__row">
-                <span aria-hidden="true" class="c-buybox-toggle__check"><svg fill="none" viewBox="0 0 11.5 10.5" xmlns="http://www.w3.org/2000/svg"><path d="M10.25 1.25L4.0625 9.25L1.25 6.368" stroke="#E98044" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg></span>
-                <p>Consistency Is <b>What Regrows Hair</b></p>
-              </div><div class="c-buybox-toggle__row">
-                <span aria-hidden="true" class="c-buybox-toggle__check"><svg fill="none" viewBox="0 0 11.5 10.5" xmlns="http://www.w3.org/2000/svg"><path d="M10.25 1.25L4.0625 9.25L1.25 6.368" stroke="#E98044" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg></span>
-                <p><b>Never Miss</b> a Night of Regrowth</p>
-              </div></div></div></div><div class="c-buybox-toggle__congrats" data-bbt-congrats-template="Congrats! You’re saving {amount}">
-      <span aria-hidden="true">🎉</span><span>Congrats! You’re saving 
-
-
-
-
-<span class="product_price">$3.50</span></span>
-    </div><fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--column" id="purchase-type-fieldset"><label>
-              <input checked="" name="purchase_type" type="radio" value="subscription"/>
-              
-              
-                
-                <span class="c-subscribtion__discount-label c-subscribtion__discount-label--orange">SAVE 10% ON EVERY ORDER</span>
-              
-
-              <span class="c-subscribtion__option-name">Subscribe &amp; save
-</span>
-
-              
-
-              <div class="c-subscribtion__option-price js-subscribtion__option-price">
-                
-                  <span class="js-subscribtion__main-price">
-                    
-                    
-
-
-
-
-<span class="product_price">$31.49</span>
-                    </span>
-                  <span class="js-subscribtion__compare-at-price">
-                    
-
-
-
-
-<span class="product_price">$34.99</span>
-                    </span>
-              </div>
-
-              
-                
-                  <div class="c-subscribtion__button-info-wrapper">
-                    
-                    <div>
-                      <div class="metafield-rich_text_field"><ul><li><strong>LOWEST PRICE</strong> every month</li><li><strong>10% OFF</strong> every order</li><li><strong>FREE INSURED SHIPPING</strong> always</li><li><strong>CANCEL, PAUSE, EDIT</strong> anytime</li><li><strong>RESERVED</strong> stock</li><li><strong>LONG-TERM</strong> fuller hair</li></ul></div>
+              {%- capture badge_row -%}
+                <div class="product-content__tags-items">
+                  {%- for i in (1..4) -%}
+                    {%- assign key = 'badge_' | append: i -%}
+                    {%- if section.settings[key] != blank -%}
+                    <div class="product-content__tags-item">
+                      <svg fill="none" height="26" viewBox="0 0 26 26" width="26" xmlns="http://www.w3.org/2000/svg"><circle cx="13" cy="13" r="11.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 13.5l3.2 3.2L18 10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>
+                      <p> {{ section.settings[key] }}</p>
+                    </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- endcapture -%}
+              <div class="product-content__tags tags-mobile">{{ badge_row }}</div>
+              <div class="product-content__info">
+                <div class="product-content__info-content">
+                  <div class="product-content__info-content-text">
+                    <div class="s-main-product__info-content-text-faq">
+                      <div>
+                        <div>
+                          {%- if legend.size > 0 -%}
+                          <h3 class="product-content__info-content-text-faq-title">{{ section.settings.legend_title }}</h3>
+                          {%- for block in legend -%}
+                            <div {{ block.shopify_attributes }}><svg fill="none" height="7" viewBox="0 0 14 14" width="7" xmlns="http://www.w3.org/2000/svg"><circle cx="7.47363" cy="7.33203" fill="{{ block.settings.color }}" r="6.5"></circle></svg><span>{{ block.settings.label }}</span></div>
+                          {%- endfor -%}
+                          {%- endif -%}
+                          {%- if actives.size > 0 -%}
+                          <h3 class="product-content__info-content-text-faq-title">{{ section.settings.actives_title }}</h3>
+                          {%- for block in actives -%}
+                            <div {{ block.shopify_attributes }}><svg fill="none" height="7" viewBox="0 0 14 14" width="7" xmlns="http://www.w3.org/2000/svg"><circle cx="7.47363" cy="7.33203" fill="{{ block.settings.color }}" r="6.5"></circle></svg><span>{{ block.settings.label }}</span></div>
+                          {%- endfor -%}
+                          {%- endif -%}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                
-                
-            </label>
-            <label>
-              <input name="purchase_type" type="radio" value="one_time"/>
-            
-            
-              
-              <span class="c-subscribtion__discount-label">NO COMMITMENT</span>
-            
+                  <div class="product-content__tags-button-wrapper">
+                    <button class="product-content__tags-button js-close-ingredients-modal" type="button"><p> {{ section.settings.ingredients_close }} </p></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="product-content__tags tags-desktop">{{ badge_row }}</div>
+        {%- endif -%}
+      </div>
 
-            <span class="c-subscribtion__option-name">One-Time Purchase
-</span>
+      <div class="s-featured-product__info" id="ProductInfo-{{ section.id }}">
+        {%- capture ships_free -%}
+          {%- if section.settings.ships_free_text != blank -%}
+          <div class="igsf igsf--d" data-igsf="d"><svg aria-hidden="true" class="igsf__icon" fill="none" focusable="false" height="20" viewBox="0 0 32 20" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M22.1 15.75V1.76c0-.56-.45-1.01-1-1.01H6.33c-.56 0-1.01.45-1.01 1.01v12.99c0 .56.45 1 1.01 1h1.88" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M13.71 15.75h8.4" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path d="M27.57 15.75h2.42c.56 0 1.01-.45 1.01-1.01v-5c0-.35-.18-.67-.47-.85l-2.56-1.61a1 1 0 0 1-.4-.49l-1.41-3.6a1.01 1.01 0 0 0-.94-.64h-3.11" stroke="#05AC2E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><circle cx="10.96" cy="15.75" r="2.75" stroke="#05AC2E" stroke-width="1.5"/><circle cx="24.84" cy="15.75" r="2.75" stroke="#05AC2E" stroke-width="1.5"/><path d="M1 5.5h6M2.5 9h4.5" stroke="#05AC2E" stroke-linecap="round" stroke-width="1.5"/></svg><p class="igsf__text">{{ section.settings.ships_free_text }}</p></div>
+          {%- endif -%}
+        {%- endcapture -%}
+        {{ ships_free | replace: 'igsf--d', 'igsf--m' | replace: 'data-igsf="d"', 'data-igsf="m"' }}
+        <div class="s-featured-product__desktop-head">{{ product_head }}</div>
+        {{ ships_free }}
+        {%- if section.settings.includes != blank -%}<div class="s-featured-product__product-description">{{ section.settings.includes }}</div>{%- endif -%}
 
-            
+        {%- if tags.size > 0 -%}
+        <div class="s-featured-product__product-tags">
+          {%- for block in tags -%}
+            <div class="s-featured-product__product-tag" {{ block.shopify_attributes }}>
+              {%- render 'froya-image', image: block.settings.icon, fallback: block.settings.icon_fallback, alt: block.settings.text, class: 'product-tag__icon', width: 24, height: 24 -%}
+              <span>{{ block.settings.text }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+        {%- endif -%}
 
-            <div class="c-subscribtion__option-price js-subscribtion__option-price">
-              
-                <span class="js-subscribtion__main-price">
-                  
+        <div class="c-product-form js-product-form">
+          <c-subscription class="c-subscribtion c-subscribtion--buybox-toggle igcp-on{% if plan == blank %} c-subscribtion--no-plan{% endif %}" data-default-selling-plan="{{ plan.id }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
+            {%- form 'product', product, class: 'c-subscribtion__subscription-form js-subscribtion__subscription-form js-ajax-add', id: 'featured-product-form' -%}
+              <div class="c-buybox-toggle__priceline">
+                <span class="c-buybox-toggle__price c-buybox-toggle__price--sub">
+                  <span class="c-buybox-toggle__price-main"><span class="product_price">{{ sub_price | money }}</span></span>{% if saving > 0 %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{{ otp_price | money }}</span></span>{% endif %}</span>
+                <span class="c-buybox-toggle__price c-buybox-toggle__price--otp">
+                  <span class="c-buybox-toggle__price-main"><span class="product_price">{{ otp_price | money }}</span></span>{% if otp_compare > otp_price %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{{ otp_compare | money }}</span></span>{% endif %}</span>
+              </div>
+              <input name="id" type="hidden" value="{{ variant.id }}">
+              <input name="quantity" type="hidden" value="1">
 
-
-
-
-<span class="product_price">$34.99</span>
+              {%- if plan != blank -%}
+              <div class="c-buybox-toggle__box">
+                <button aria-checked="true" class="c-buybox-toggle__head js-bbt-toggle" role="switch" type="button">
+                  <span aria-hidden="true" class="c-buybox-toggle__switch"><span class="c-buybox-toggle__knob"></span></span>
+                  <span class="c-buybox-toggle__head-text">
+                    <span class="c-buybox-toggle__head-title">{{ section.settings.toggle_title | replace: '{percent}', sub_percent }}</span>
+                    <span class="c-buybox-toggle__head-sub">{{ section.settings.toggle_sub }}</span>
                   </span>
-                
-
-            </div>
-
-            
-          </label>
-<fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--no-marign c-subscribtion__buttons-wrapper--fixed-plan" id="selling-plan-fieldset"><div class="c-subscribtion__fixed-plan-label">Delivered every 30 days</div>
-              <input class="js-default-selling-plan" name="selling_plan" type="hidden" value="1039991141"/>
-              <div class="c-subscribtion__subscription-info-wrapper">
-                <div class="s-main-product__subscription-info">
-              <svg fill="none" height="11" viewBox="0 0 9 11" width="9" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.00049 6.8125L3.50049 9.8125L7.99951 0.8125" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg>
-              <span>FREE insured shipping on every order</span>
-            </div>
-  
-            <div class="s-main-product__subscription-info">
-              <svg fill="none" height="11" viewBox="0 0 9 11" width="9" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.00049 6.8125L3.50049 9.8125L7.99951 0.8125" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg>
-              <span>Cancel online anytime</span>
-            </div>
+                </button>
+                <div class="c-buybox-toggle__benefits">
+                  {%- for col in (1..2) -%}
+                    <div class="c-buybox-toggle__col">
+                      {%- for row in (1..3) -%}
+                        {%- liquid
+                          assign n = col | minus: 1 | times: 3 | plus: row
+                          assign key = 'benefit_' | append: n
+                        -%}
+                        {%- if section.settings[key] != blank -%}
+                        <div class="c-buybox-toggle__row">
+                          <span aria-hidden="true" class="c-buybox-toggle__check"><svg fill="none" viewBox="0 0 11.5 10.5" xmlns="http://www.w3.org/2000/svg"><path d="M10.25 1.25L4.0625 9.25L1.25 6.368" stroke="#E98044" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg></span>
+                          <p>{{ section.settings[key] | replace: '{percent}', sub_percent }}</p>
+                        </div>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
               </div>
-            
-
-          </fieldset></fieldset>
-
-        
-        
-<button class="c-subscribtion__add-to-cart js-subscribtion__add-to-cart custom-button" data-gift-trigger="elaren-pumpkin-seed-oil-regrowth-serum" data-redirect-to-checkout="false" is="loader-button" type="submit">
-<span class="loader-button__text">
-          
-            <span class="c-subscribtion__button-text js-subscribtion__button-text">
-              
-                Add to Cart -
-              
-            </span>
-            <span class="js-subscribtion__price-wrapper">
-              
-              <span class="c-subscribtion__price-original js-subscribtion__compare-at-price-wrapper is-hidden">
-                <s class="js-subscribtion__compare-at-price is-hidden">
-                  
-
-
-
-
-<span class="product_price">$34.99</span>
-                </s>
-              </span>
-              <span class="c-subscribtion__price js-subscribtion__main-price">
-                
-
-
-
-
-<span class="product_price">$31.49</span>
-              </span><s class="igcp">$34.99</s>
-            </span>
-          
-        </span>
-<span class="loader-button__loader" hidden="">
-  <div class="spinner">
-    <svg class="icon icon--spinner" focusable="false" height="24" viewBox="25 25 50 50" width="24">
-      <circle cx="50" cy="50" fill="none" r="20" stroke="currentColor" stroke-width="5"></circle>
-    </svg>
-  </div>
-</span>
-</button>
-      </form>
-      
-    </c-subscription>
-  
-</div>
-
-              
-            
-        
-          
-              <div class="s-featured-product__product-icons igsf-icons--trimmed">
-                
-                  <div class="s-featured-product__product-icon-wrapper">
-                    <div class="s-featured-product__product-icon">
-                      
-<picture>
-  
-  <img alt="" decoding="async" fetchpriority="auto" height="28" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/product_icon_1.svg" width="32"/>
-</picture>
-                    </div>
-                    <div class="s-featured-product__product-icon-text">10% of every order<br/>funds hair-loss research</div>
-                  </div>
-                
-                
-                  <div class="s-featured-product__product-icon-wrapper">
-                    <div class="s-featured-product__product-icon">
-                      
-<picture>
-  
-  <img alt="" decoding="async" fetchpriority="auto" height="27" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/product_icon_2.svg" width="26"/>
-</picture>
-                    </div>
-                    <div class="s-featured-product__product-icon-text">
-                      fuller hair in 90 days or your money back
-                    </div>
-                  </div>
-                
-                
-                  <div class="s-featured-product__product-icon-wrapper igsf-usp-hidden">
-                    <div class="s-featured-product__product-icon">
-                      
-<picture>
-  
-  <img alt="" decoding="async" fetchpriority="auto" height="26" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/product_icon_3.svg" width="44"/>
-</picture>
-                    </div>
-                    <div class="s-featured-product__product-icon-text">
-                      free insured shipping on every order
-                    </div>
-                  </div>
-                
+              {%- if saving > 0 and section.settings.congrats_text != blank -%}
+              <div class="c-buybox-toggle__congrats">
+                <span aria-hidden="true">🎉</span><span>{{ section.settings.congrats_text }} <span class="product_price">{{ saving | money }}</span></span>
               </div>
-              
-                
-<div class="c-low-stock" role="status">
-    <div class="c-low-stock__inner">
-      <span aria-hidden="true" class="c-low-stock__flame">🔥</span>
-      <span class="c-low-stock__text">Low Stock: only <span class="c-low-stock__count">149</span> left</span>
-    </div>
-  </div>
-              
-          
-        
-          
-        
+              {%- endif -%}
+              <fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--column" id="purchase-type-fieldset">
+                <label>
+                  <input checked name="purchase_type" type="radio" value="subscription">
+                  {%- if section.settings.sub_badge != blank -%}<span class="c-subscribtion__discount-label c-subscribtion__discount-label--orange">{{ section.settings.sub_badge | replace: '{percent}', sub_percent }}</span>{%- endif -%}
+                  <span class="c-subscribtion__option-name">{{ section.settings.sub_name }}</span>
+                  <div class="c-subscribtion__option-price js-subscribtion__option-price">
+                    <span class="js-subscribtion__main-price"><span class="product_price">{{ sub_price | money }}</span></span>
+                    {%- if saving > 0 -%}<span class="js-subscribtion__compare-at-price"><span class="product_price">{{ otp_price | money }}</span></span>{%- endif -%}
+                  </div>
+                  {%- if section.settings.sub_perks != blank -%}
+                  <div class="c-subscribtion__button-info-wrapper"><div><div class="metafield-rich_text_field">{{ section.settings.sub_perks | replace: '{percent}', sub_percent }}</div></div></div>
+                  {%- endif -%}
+                </label>
+                <label>
+                  <input name="purchase_type" type="radio" value="one_time">
+                  {%- if section.settings.otp_badge != blank -%}<span class="c-subscribtion__discount-label">{{ section.settings.otp_badge }}</span>{%- endif -%}
+                  <span class="c-subscribtion__option-name">{{ section.settings.otp_name }}</span>
+                  <div class="c-subscribtion__option-price js-subscribtion__option-price">
+                    <span class="js-subscribtion__main-price"><span class="product_price">{{ otp_price | money }}</span></span>
+                    {%- if otp_compare > otp_price -%}<span class="js-subscribtion__compare-at-price"><span class="product_price">{{ otp_compare | money }}</span></span>{%- endif -%}
+                  </div>
+                </label>
+                <fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--no-marign c-subscribtion__buttons-wrapper--fixed-plan" id="selling-plan-fieldset">
+                  {%- if section.settings.delivery_label != blank -%}<div class="c-subscribtion__fixed-plan-label">{{ section.settings.delivery_label }}</div>{%- endif -%}
+                  <input class="js-default-selling-plan" name="selling_plan" type="hidden" value="{{ plan.id }}">
+                  <div class="c-subscribtion__subscription-info-wrapper">
+                    {%- if section.settings.info_1 != blank -%}<div class="s-main-product__subscription-info"><svg fill="none" height="11" viewBox="0 0 9 11" width="9" xmlns="http://www.w3.org/2000/svg"><path d="M1.00049 6.8125L3.50049 9.8125L7.99951 0.8125" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>{{ section.settings.info_1 }}</span></div>{%- endif -%}
+                    {%- if section.settings.info_2 != blank -%}<div class="s-main-product__subscription-info"><svg fill="none" height="11" viewBox="0 0 9 11" width="9" xmlns="http://www.w3.org/2000/svg"><path d="M1.00049 6.8125L3.50049 9.8125L7.99951 0.8125" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>{{ section.settings.info_2 }}</span></div>{%- endif -%}
+                  </div>
+                </fieldset>
+              </fieldset>
+              {%- endif -%}
+
+              <button class="c-subscribtion__add-to-cart js-subscribtion__add-to-cart custom-button" data-redirect-to-checkout="false" is="loader-button" type="submit"{% unless variant.available %} disabled{% endunless %}>
+                <span class="loader-button__text">
+                  <span class="c-subscribtion__button-text js-subscribtion__button-text">{% if variant.available %}{{ section.settings.button_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</span>
+                  {%- if variant.available -%}
+                  <span class="js-subscribtion__price-wrapper">
+                    <span class="c-subscribtion__price js-subscribtion__main-price"><span class="product_price">{% if plan != blank %}{{ sub_price | money }}{% else %}{{ otp_price | money }}{% endif %}</span></span>{% if saving > 0 %}<s class="igcp">{{ otp_price | money }}</s>{% endif %}
+                  </span>
+                  {%- endif -%}
+                </span>
+                <span class="loader-button__loader" hidden>
+                  <div class="spinner"><svg class="icon icon--spinner" focusable="false" height="24" viewBox="25 25 50 50" width="24"><circle cx="50" cy="50" fill="none" r="20" stroke="currentColor" stroke-width="5"></circle></svg></div>
+                </span>
+              </button>
+              <p class="c-subscribtion__error" data-form-error hidden></p>
+            {%- endform -%}
+          </c-subscription>
+        </div>
+
+        {%- if usps.size > 0 -%}
+        <div class="s-featured-product__product-icons igsf-icons--trimmed">
+          {%- for block in usps -%}
+            <div class="s-featured-product__product-icon-wrapper" {{ block.shopify_attributes }}>
+              <div class="s-featured-product__product-icon"><picture>{%- render 'froya-image', image: block.settings.icon, fallback: block.settings.icon_fallback, alt: '', width: 32, height: 28 -%}</picture></div>
+              <div class="s-featured-product__product-icon-text">{{ block.settings.text }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_low_stock and variant.inventory_management == 'shopify' and variant.inventory_quantity > 0 and variant.inventory_quantity <= section.settings.low_stock_threshold -%}
+        <div class="c-low-stock"><div class="c-low-stock__inner">
+          <span aria-hidden="true" class="c-low-stock__flame">🔥</span>
+          <span class="c-low-stock__text">{{ section.settings.low_stock_text | replace: '{count}', variant.inventory_quantity }}</span>
+        </div></div>
+        {%- endif -%}
       </div>
     </div>
   </div>
 </s-featured-product>
-
-
-
+{%- endif -%}
 </div>
 
 {% schema %}
 {
-  "name": "Frøya featured product",
-  "settings": [],
-  "presets": [
+  "name": "Featured product",
+  "tag": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product", "info": "Gallery, prices, subscription plan and the add-to-cart form come from this product. Edit its images in Products." },
+    { "type": "text", "id": "product_title", "label": "Displayed name", "info": "Leave empty to use the product title.", "default": "Pumpkin Seed Regrowth Oil" },
+    { "type": "header", "content": "Badge above the product" },
+    { "type": "text", "id": "badge_text", "label": "Badge text", "default": "Formulated for women’s hair loss," },
+    { "type": "text", "id": "badge_underline", "label": "Underlined part", "default": "not adapted from men’s" },
+    { "type": "color", "id": "badge_bg", "label": "Badge background", "default": "#e5f3fa" },
+    { "type": "color", "id": "badge_color", "label": "Badge text colour", "default": "#54585a" },
+    { "type": "header", "content": "Labels & rating" },
+    { "type": "text", "id": "label_1", "label": "Label 1", "default": "Pumpkin Seed Oil + Caffeine Complex" },
+    { "type": "text", "id": "label_2", "label": "Label 2", "default": "30-day supply" },
+    { "type": "number", "id": "reviews_count", "label": "Review count", "default": 43 },
+    { "type": "range", "id": "rating", "label": "Star rating", "min": 0, "max": 5, "step": 0.1, "default": 4.8 },
+    { "type": "text", "id": "rating_text", "label": "Rating text", "default": "4.77/5 FROM VERIFIED BUYERS" },
+    { "type": "text", "id": "save_tag", "label": "Gallery save tag", "default": "Save {percent}%", "info": "{percent} is replaced with the subscription discount." },
+    { "type": "text", "id": "ships_free_text", "label": "Shipping banner", "default": "THIS ORDER SHIPS FREE" },
+    { "type": "richtext", "id": "includes", "label": "What you get", "default": "<p>What you get (30-day supply):<br>· Pumpkin Seed Regrowth Oil with Caffeine Complex<br>· Precision applicator for scalp-only, no-waste application<br>· Scalp massager to boost circulation at the root<br>· Free insured shipping and a 90-day money-back guarantee</p>" },
+    { "type": "header", "content": "Ingredients modal" },
+    { "type": "text", "id": "ingredients_button", "label": "Open button label", "default": "View Ingredients" },
+    { "type": "text", "id": "ingredients_title", "label": "Modal heading", "default": "6 Key Actives, Chosen to Work Together" },
+    { "type": "text", "id": "ingredients_close", "label": "Close button label", "default": "Close" },
+    { "type": "text", "id": "badge_1", "label": "Badge 1", "default": "0 minoxidil" },
+    { "type": "text", "id": "badge_2", "label": "Badge 2", "default": "0 hormones" },
+    { "type": "text", "id": "badge_3", "label": "Badge 3", "default": "100% natural" },
+    { "type": "text", "id": "badge_4", "label": "Badge 4", "default": "3rd party tested" },
+    { "type": "text", "id": "legend_title", "label": "Legend heading", "default": "INGREDIENT LEVELS" },
+    { "type": "text", "id": "actives_title", "label": "Actives heading", "default": "KEY ACTIVES – PUMPKIN SEED REGROWTH OIL" },
+    { "type": "header", "content": "Subscribe & save" },
+    { "type": "text", "id": "toggle_title", "label": "Toggle title", "default": "Save {percent}% with our flexible plan" },
+    { "type": "text", "id": "toggle_sub", "label": "Toggle subtitle", "default": "No contracts. Cancel with ease." },
+    { "type": "inline_richtext", "id": "benefit_1", "label": "Benefit 1", "default": "<strong>Free Insured Shipping</strong> Every Order" },
+    { "type": "inline_richtext", "id": "benefit_2", "label": "Benefit 2", "default": "<strong>{percent}% Off</strong> Every Order" },
+    { "type": "inline_richtext", "id": "benefit_3", "label": "Benefit 3", "default": "90-Day <strong>Money-Back Guarantee</strong>" },
+    { "type": "inline_richtext", "id": "benefit_4", "label": "Benefit 4", "default": "<strong>Skip</strong>, <strong>Pause</strong> or <strong>Cancel</strong> Anytime" },
+    { "type": "inline_richtext", "id": "benefit_5", "label": "Benefit 5", "default": "Consistency Is <strong>What Regrows Hair</strong>" },
+    { "type": "inline_richtext", "id": "benefit_6", "label": "Benefit 6", "default": "<strong>Never Miss</strong> a Night of Regrowth" },
+    { "type": "text", "id": "congrats_text", "label": "Savings line", "default": "Congrats! You’re saving" },
+    { "type": "text", "id": "sub_badge", "label": "Subscription badge", "default": "SAVE {percent}% ON EVERY ORDER" },
+    { "type": "text", "id": "sub_name", "label": "Subscription option name", "default": "Subscribe & save" },
+    { "type": "richtext", "id": "sub_perks", "label": "Subscription perks", "default": "<ul><li><strong>LOWEST PRICE</strong> every month</li><li><strong>{percent}% OFF</strong> every order</li><li><strong>FREE INSURED SHIPPING</strong> always</li><li><strong>CANCEL, PAUSE, EDIT</strong> anytime</li><li><strong>RESERVED</strong> stock</li><li><strong>LONG-TERM</strong> fuller hair</li></ul>" },
+    { "type": "text", "id": "otp_badge", "label": "One-time badge", "default": "NO COMMITMENT" },
+    { "type": "text", "id": "otp_name", "label": "One-time option name", "default": "One-Time Purchase" },
+    { "type": "text", "id": "delivery_label", "label": "Delivery frequency label", "default": "Delivered every 30 days" },
+    { "type": "text", "id": "info_1", "label": "Info line 1", "default": "FREE insured shipping on every order" },
+    { "type": "text", "id": "info_2", "label": "Info line 2", "default": "Cancel online anytime" },
+    { "type": "header", "content": "Button & stock" },
+    { "type": "text", "id": "button_label", "label": "Add to cart label", "default": "Add to Cart -" },
+    { "type": "text", "id": "sold_out_label", "label": "Sold out label", "default": "Sold out" },
+    { "type": "checkbox", "id": "show_low_stock", "label": "Show low-stock notice", "default": true, "info": "Uses the variant's tracked inventory." },
+    { "type": "range", "id": "low_stock_threshold", "label": "Low-stock threshold", "min": 5, "max": 500, "step": 5, "default": 150 },
+    { "type": "text", "id": "low_stock_text", "label": "Low-stock text", "default": "Low Stock: only {count} left" }
+  ],
+  "blocks": [
     {
-      "name": "Frøya featured product"
+      "type": "ingredient",
+      "name": "Ingredient (modal)",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon", "info": "Square, about 240 × 240 px." },
+        { "type": "text", "id": "tag", "label": "Tag", "default": "Blocks DHT" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Pumpkin seed phytosterols" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Beta-sitosterol and delta-7-sterine, the plant sterols in pumpkin seed oil, help inhibit 5-alpha-reductase so less testosterone becomes follicle-shrinking DHT." },
+        { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
+      ]
+    },
+    {
+      "type": "legend",
+      "name": "Legend row (modal)",
+      "settings": [
+        { "type": "color", "id": "color", "label": "Dot colour", "default": "#4A90E2" },
+        { "type": "text", "id": "label", "label": "Label", "default": "CAFFEINE COMPLEX" }
+      ]
+    },
+    {
+      "type": "active",
+      "name": "Key active (modal)",
+      "settings": [
+        { "type": "color", "id": "color", "label": "Dot colour", "default": "#5A9512" },
+        { "type": "text", "id": "label", "label": "Label", "default": "COLD-PRESSED CUCURBITA PEPO (PUMPKIN) SEED OIL" }
+      ]
+    },
+    {
+      "type": "tag",
+      "name": "Benefit tag",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon", "info": "About 24 × 24 px." },
+        { "type": "text", "id": "text", "label": "Text", "default": "reduce shedding" },
+        { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
+      ]
+    },
+    {
+      "type": "usp",
+      "name": "USP under the button",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon", "info": "About 32 × 28 px." },
+        { "type": "inline_richtext", "id": "text", "label": "Text", "default": "fuller hair in 90 days or your money back" },
+        { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
+      ]
     }
+  ],
+  "max_blocks": 30,
+  "presets": [
+    { "name": "Featured product", "blocks": [ { "type": "tag" }, { "type": "tag" }, { "type": "tag" }, { "type": "usp" }, { "type": "usp" }, { "type": "usp" } ] }
   ]
 }
 {% endschema %}

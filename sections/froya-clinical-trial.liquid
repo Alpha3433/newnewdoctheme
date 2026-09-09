@@ -1,78 +1,112 @@
 {% comment %}
-  Frøya clinical trial – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  Research / results panel – image on the left, stats on the right. Everything is editable in the theme editor.
+  The layout no longer overlays the text on the image (see assets/sections.css), so any image works here.
 {% endcomment %}
-<div class="shopify-section shopify-section--image-content-grid" id="shopify-section-template--26717513089391__image_content_grid_XgREqy">
-
-<section class="s-image-content-grid custom-section s-image-content-grid--full_width" id="shopify-section-template--26717513089391__image_content_grid_XgREqy"><div class="s-image-content-grid__container custom-container">
+{%- liquid
+  assign sid = 'template--26717513089391__image_content_grid_XgREqy'
+  assign desktop_fallback = 'https://froyaorganics.com/cdn/shop/files/clinical_trial_-_desktop.jpg?v=1769695904'
+  assign mobile_fallback = 'https://froyaorganics.com/cdn/shop/files/clinical_trial_-_mobile.jpg?v=1769695926'
+-%}
+<div class="shopify-section shopify-section--image-content-grid" id="shopify-section-{{ sid }}">
+<section class="s-image-content-grid custom-section s-image-content-grid--full_width" id="{{ sid }}-section"><div class="s-image-content-grid__container custom-container">
   <div class="s-image-content-grid__inner-wrapper">
     <div class="s-image-content-grid__wrapper s-image-content-grid__wrapper--full-width">
-      
-      <div class="s-image-content-grid__image-wrapper s-image-content-grid__image-wrapper--full-width" style="--image-aspect-ratio: 0.994475138121547; --image-max-height: 1448px"><img alt="" class="s-image-content-grid__image-full hidden-pocket" height="1448" loading="lazy" sizes="(max-width: 740px) calc(100vw - 96px), (max-width: 999px) calc(100vw - 160px), 600px" src="https://froyaorganics.com/cdn/shop/files/clinical_trial_-_desktop.jpg?v=1769695904" srcset="https://froyaorganics.com/cdn/shop/files/clinical_trial_-_desktop.jpg?v=1769695904&amp;width=600 600w, https://froyaorganics.com/cdn/shop/files/clinical_trial_-_desktop.jpg?v=1769695904&amp;width=700 700w, https://froyaorganics.com/cdn/shop/files/clinical_trial_-_desktop.jpg?v=1769695904&amp;width=800 800w, https://froyaorganics.com/cdn/shop/files/clinical_trial_-_desktop.jpg?v=1769695904&amp;width=1000 1000w, https://froyaorganics.com/cdn/shop/files/clinical_trial_-_desktop.jpg?v=1769695904&amp;width=1200 1200w, https://froyaorganics.com/cdn/shop/files/clinical_trial_-_desktop.jpg?v=1769695904&amp;width=1400 1400w" style="aspect-ratio: 0.994475138121547;" width="1440"/><img alt="" class="s-image-content-grid__image-full hidden-lap-and-up" height="540" loading="lazy" sizes="(max-width: 740px) calc(100vw - 96px), (max-width: 999px) calc(100vw - 160px), 600px" src="https://froyaorganics.com/cdn/shop/files/clinical_trial_-_mobile.jpg?v=1769695926" srcset="https://froyaorganics.com/cdn/shop/files/clinical_trial_-_mobile.jpg?v=1769695926&amp;width=600 600w, https://froyaorganics.com/cdn/shop/files/clinical_trial_-_mobile.jpg?v=1769695926&amp;width=700 700w, https://froyaorganics.com/cdn/shop/files/clinical_trial_-_mobile.jpg?v=1769695926&amp;width=780 780w" style="position: static; aspect-ratio: 1.4444444444444444;" width="780"/></div>
+
+      <div class="s-image-content-grid__image-wrapper s-image-content-grid__image-wrapper--full-width">
+        {%- render 'froya-image', image: section.settings.image, fallback: desktop_fallback, alt: section.settings.image_alt, class: 's-image-content-grid__image-full hidden-pocket', width: 1440, height: 1448, sizes: '(min-width: 741px) 50vw, 100vw' -%}
+        {%- if section.settings.image_mobile != blank -%}
+          {%- render 'froya-image', image: section.settings.image_mobile, alt: section.settings.image_alt, class: 's-image-content-grid__image-full hidden-lap-and-up', width: 780, height: 540, sizes: '100vw' -%}
+        {%- elsif section.settings.image != blank -%}
+          {%- render 'froya-image', image: section.settings.image, alt: section.settings.image_alt, class: 's-image-content-grid__image-full hidden-lap-and-up', width: 780, height: 540, sizes: '100vw' -%}
+        {%- else -%}
+          <img alt="{{ section.settings.image_alt | escape }}" class="s-image-content-grid__image-full hidden-lap-and-up" height="540" loading="lazy" src="{{ mobile_fallback }}" width="780">
+        {%- endif -%}
+      </div>
 
       <div class="s-image-content-grid__content-wrapper">
-        <div class="s-image-content-grid__content"><div class="s-image-content-grid__label">
-              Peer-reviewed. Placebo-controlled.
-            </div><div class="s-image-content-grid__title section-title">
-              <p>Two Ingredients With<br/><em>Published Clinical</em> Results</p>
-            </div><div class="s-image-content-grid__blocks"><div class="s-image-content-grid__block s-image-content-grid__block--image-text">
-          <div class="s-image-content-grid__image-text-wrapper"><div class="s-image-content-grid__image-text-icon">
-                <img alt="" height="50" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Screenshot_2025-12-18_at_1.11.35_PM_1.png" width="50"/>
-              </div><div class="s-image-content-grid__image-text-content">
-                Elaren is built on the two most-studied natural hair growth actives. Here is what independent, peer-reviewed research found:
-              </div></div>
-        </div><div class="s-image-content-grid__block s-image-content-grid__block--progress">
-          <div class="s-image-content-grid__progress-bar">
-            <div class="s-image-content-grid__progress-fill" style="width: 40%;">
-              <span class="s-image-content-grid__progress-text">
-                +40%
-              </span>
-            </div>
-          </div><div class="s-image-content-grid__progress-title">
-              HAIR COUNT
-            </div><div class="s-image-content-grid__progress-description">
-              Pumpkin seed oil increased hair count by 40% over 24 weeks in a randomised, placebo-controlled trial.
-            </div></div><div class="s-image-content-grid__block s-image-content-grid__block--progress">
-          <div class="s-image-content-grid__progress-bar">
-            <div class="s-image-content-grid__progress-fill" style="width: 90%;">
-              <span class="s-image-content-grid__progress-text">
-                ≈ 5% MINOXIDIL
-              </span>
-            </div>
-          </div><div class="s-image-content-grid__progress-title">
-              CAFFEINE VS MINOXIDIL
-            </div><div class="s-image-content-grid__progress-description">
-              In a 6-month clinical study, a topical caffeine liquid was statistically non-inferior to 5% minoxidil at increasing growth-phase hairs.
-            </div></div><div class="s-image-content-grid__block s-image-content-grid__block--progress">
-          <div class="s-image-content-grid__progress-bar">
-            <div class="s-image-content-grid__progress-fill" style="width: 100%;">
-              <span class="s-image-content-grid__progress-text">
-                5 MINUTES
-              </span>
-            </div>
-          </div><div class="s-image-content-grid__progress-title">
-              FOLLICLE PENETRATION
-            </div><div class="s-image-content-grid__progress-description">
-              Caffeine applied to the scalp was detected in the bloodstream within 5 minutes, showing it is absorbed straight through the hair follicle.
-            </div></div><div class="s-image-content-grid__block s-image-content-grid__block--note">
-          *Studies cited were conducted on the ingredients (oral pumpkin seed oil supplementation, Cho et al. 2014; topical caffeine, Dhurat et al. 2017 and Otberg et al. 2008), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, with visible density changes typically taking 3–6 months of consistent use. Not seeing progress? Contact us within 90 days for a full refund.
-        </div></div></div>
+        <div class="s-image-content-grid__content">
+          {%- if section.settings.label != blank -%}<div class="s-image-content-grid__label">{{ section.settings.label }}</div>{%- endif -%}
+          <div class="s-image-content-grid__title section-title"><p>{{ section.settings.title }}</p></div>
+          <div class="s-image-content-grid__blocks">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'intro' -%}
+                  <div class="s-image-content-grid__block s-image-content-grid__block--image-text" {{ block.shopify_attributes }}>
+                    <div class="s-image-content-grid__image-text-wrapper">
+                      {%- if block.settings.icon != blank or block.settings.icon_fallback != blank -%}
+                      <div class="s-image-content-grid__image-text-icon">
+                        {%- render 'froya-image', image: block.settings.icon, fallback: block.settings.icon_fallback, alt: '', width: 50, height: 50 -%}
+                      </div>
+                      {%- endif -%}
+                      <div class="s-image-content-grid__image-text-content">{{ block.settings.text }}</div>
+                    </div>
+                  </div>
+                {%- when 'stat' -%}
+                  <div class="s-image-content-grid__block s-image-content-grid__block--progress" {{ block.shopify_attributes }}>
+                    <div class="s-image-content-grid__progress-bar">
+                      <div class="s-image-content-grid__progress-fill" style="width: {{ block.settings.width }}%;">
+                        <span class="s-image-content-grid__progress-text">{{ block.settings.value }}</span>
+                      </div>
+                    </div>
+                    <div class="s-image-content-grid__progress-title">{{ block.settings.title }}</div>
+                    <div class="s-image-content-grid__progress-description">{{ block.settings.text }}</div>
+                  </div>
+                {%- when 'note' -%}
+                  <div class="s-image-content-grid__block s-image-content-grid__block--note" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div></section>
-
-
 </div>
 
 {% schema %}
 {
-  "name": "Frøya clinical trial",
-  "settings": [],
-  "presets": [
+  "name": "Research results",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Portrait or square image, about 1440 × 1440 px. Shown on the left of the text." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile)", "info": "Optional landscape crop for phones, about 780 × 540 px." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Published research results for pumpkin seed oil and caffeine" },
+    { "type": "text", "id": "label", "label": "Eyebrow", "default": "Peer-reviewed. Placebo-controlled." },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Two Ingredients With<br><em>Published Clinical</em> Results" }
+  ],
+  "blocks": [
     {
-      "name": "Frøya clinical trial"
+      "type": "intro",
+      "name": "Intro text",
+      "limit": 1,
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon", "info": "Round icon, about 50 × 50 px." },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Elaren is built on the two most-studied natural hair growth actives. Here is what independent, peer-reviewed research found:" },
+        { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
+      ]
+    },
+    {
+      "type": "stat",
+      "name": "Result bar",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value shown in the bar", "default": "+40%" },
+        { "type": "range", "id": "width", "label": "Bar fill", "min": 10, "max": 100, "step": 5, "unit": "%", "default": 40 },
+        { "type": "text", "id": "title", "label": "Title", "default": "HAIR COUNT" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Pumpkin seed oil increased hair count by 40% over 24 weeks in a randomised, placebo-controlled trial." }
+      ]
+    },
+    {
+      "type": "note",
+      "name": "Footnote",
+      "limit": 1,
+      "settings": [
+        { "type": "textarea", "id": "text", "label": "Footnote", "default": "*Individual results vary." }
+      ]
     }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    { "name": "Research results", "blocks": [ { "type": "intro" }, { "type": "stat" }, { "type": "stat" }, { "type": "stat" }, { "type": "note" } ] }
   ]
 }
 {% endschema %}

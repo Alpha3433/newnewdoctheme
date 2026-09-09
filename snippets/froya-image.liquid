@@ -1,0 +1,29 @@
+{%- comment -%}
+  Renders an image chosen in the theme editor, or the built-in fallback when none is set.
+
+  {% render 'froya-image',
+    image: section.settings.image,   image_picker setting (may be blank)
+    fallback: 'https://…',           URL used until an image is uploaded
+    alt: 'Alt text',
+    class: 'css-class',
+    width: 600, height: 400,         intrinsic size of the fallback (also caps the CDN width)
+    loading: 'lazy' | 'eager',
+    sizes: '(min-width: 990px) 600px, 100vw'
+  %}
+{%- endcomment -%}
+{%- liquid
+  assign load = loading | default: 'lazy'
+  assign max_width = width | default: 1600
+  if max_width < 320
+    assign max_width = 320
+  endif
+-%}
+{%- if image != blank -%}
+  {%- if max_width > 400 -%}
+    {{- image | image_url: width: max_width | image_tag: class: class, alt: alt, loading: load, sizes: sizes, widths: '320, 480, 640, 800, 1000, 1200, 1600' -}}
+  {%- else -%}
+    {{- image | image_url: width: max_width | image_tag: class: class, alt: alt, loading: load -}}
+  {%- endif -%}
+{%- elsif fallback != blank -%}
+  <img src="{{ fallback }}" alt="{{ alt | escape }}"{% if class != blank %} class="{{ class }}"{% endif %} loading="{{ load }}" decoding="async" width="{{ width | default: 600 }}" height="{{ height | default: 600 }}">
+{%- endif -%}

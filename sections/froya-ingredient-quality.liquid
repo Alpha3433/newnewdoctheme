@@ -1,179 +1,95 @@
 {% comment %}
-  Frøya ingredient quality – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  "Why women are switching" – images, heading, text blocks and the ingredient-level legend, all editable.
+  The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
+{%- liquid
+  assign texts = section.blocks | where: 'type', 'text'
+  assign levels = section.blocks | where: 'type', 'level'
+-%}
 <div class="shopify-section" id="shopify-section-template--26717513089391__custom_image_with_text_blocks_bwNcEH"><section class="s-image-with-text-blocks custom-section">
   <div class="s-image-with-text-blocks__container">
-    
+
     <div class="s-image-with-text-blocks__images">
-      
-        
-<picture>
-  
-  <img alt="" class="s-image-with-text-blocks__image--desktop" decoding="async" fetchpriority="auto" height="1058" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/snoesea_buckthorn_at_winter_jaak_nilson_1_06ae5332-18b6-4521-be5c-dc1008d3a728.jpg" width="600"/>
-</picture>
-      
-      
-        
-<picture>
-  
-  <img alt="" class="s-image-with-text-blocks__image--desktop-small" decoding="async" fetchpriority="auto" height="299" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/desktop-small-image.png" width="299"/>
-</picture>
-      
+      <picture>
+        {%- render 'froya-image', image: section.settings.image, fallback: 'https://froyaorganics.com/cdn/shop/files/snoesea_buckthorn_at_winter_jaak_nilson_1_06ae5332-18b6-4521-be5c-dc1008d3a728.jpg', alt: section.settings.image_alt, class: 's-image-with-text-blocks__image--desktop', width: 600, height: 1058, sizes: '(min-width: 990px) 40vw, 100vw' -%}
+      </picture>
+      <picture>
+        {%- render 'froya-image', image: section.settings.image_small, fallback: 'https://froyaorganics.com/cdn/shop/files/desktop-small-image.png', alt: section.settings.image_alt, class: 's-image-with-text-blocks__image--desktop-small', width: 299, height: 299 -%}
+      </picture>
     </div>
 
-    
     <div class="s-image-with-text-blocks__content">
-      
-      
-        
-          <h2 class="s-image-with-text-blocks__title"><p>Why women are <br/><em>switching</em> to Elaren</p></h2>
-        
-      
-        
-      
-        
-      
-        
-      
+      <h2 class="s-image-with-text-blocks__title"><p>{{ section.settings.title }}</p></h2>
 
-      
-      
-        <div class="s-image-with-text-blocks__top-image">
-          
-<picture>
-  
-  <img alt="" decoding="async" fetchpriority="auto" height="271" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/mobile-top-image.png" width="390"/>
-</picture>
+      <div class="s-image-with-text-blocks__top-image">
+        <picture>
+          {%- render 'froya-image', image: section.settings.image_mobile_top, fallback: 'https://froyaorganics.com/cdn/shop/files/mobile-top-image.png', alt: section.settings.image_alt, width: 390, height: 271, sizes: '100vw' -%}
+        </picture>
+      </div>
+
+      {%- for block in texts -%}
+        <div class="s-image-with-text-blocks__text-block" {{ block.shopify_attributes }}>
+          <h3 class="s-image-with-text-blocks__text-title"><p><em>{{ block.settings.title }}</em></p></h3>
+          <div class="s-image-with-text-blocks__text">{{ block.settings.text }}</div>
+          {%- if forloop.first and levels.size > 0 -%}
+            <div class="s-image-with-text-blocks__html">
+              <div>
+                {%- for level in levels -%}
+                  <div {{ level.shopify_attributes }}>
+                    <svg fill="none" height="14" viewBox="0 0 14 14" width="14" xmlns="http://www.w3.org/2000/svg"><circle cx="7.47363" cy="7.33203" fill="{{ level.settings.color }}" r="6.5"></circle></svg>
+                    <span>{{ level.settings.label }}</span>
+                  </div>
+                {%- endfor -%}
+              </div>
+              {%- if section.settings.link_label != blank -%}<a href="{{ section.settings.link_url | default: '#product-section' }}">{{ section.settings.link_label }}</a>{%- endif -%}
+            </div>
+          {%- endif -%}
         </div>
-      
+      {%- endfor -%}
 
-      
-      
-        
-      
-        
-          <div class="s-image-with-text-blocks__text-block">
-            
-              <h3 class="s-image-with-text-blocks__text-title">
-                <p><em>Ingredients</em></p>
-              </h3>
-            
-
-            
-              <div class="s-image-with-text-blocks__text">
-                <p>The <em><strong>ingredients</strong></em> make the product. Most “hair oils” are refined, heat-treated or diluted with mineral oil and fragrance (levels 1 to 3), which strips out the very sterols and vitamins that matter. We use cold-pressed pumpkin seed oil, so its DHT-blocking phytosterols, zinc and vitamin E reach your scalp intact, and we power it with a Caffeine Complex that research shows can rival minoxidil. </p>
-              </div>
-            
-
-            
-              <div class="s-image-with-text-blocks__html">
-                <div>
-    <div>
-        <svg fill="none" height="14" viewBox="0 0 14 14" width="14" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="7.47363" cy="7.33203" fill="#FB541C" r="6.5"></circle>
-        </svg>
-        <span>level 1 - synthetic drugs</span>
-    </div>
-    <div>
-        <svg fill="none" height="14" viewBox="0 0 14 14" width="14" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="7.47363" cy="7.33203" fill="#FB541C" r="6.5"></circle>
-        </svg>
-        <span>level 2 - mineral-oil “hair oils”</span>
-    </div>
-    <div>
-        <svg fill="none" height="14" viewBox="0 0 14 14" width="14" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="7.47363" cy="7.33203" fill="#D8AA20" r="6.5"></circle>
-        </svg>
-        <span>level 3 - refined seed oils</span>
-    </div>
-    <div>
-        <svg fill="none" height="14" viewBox="0 0 14 14" width="14" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="7.47363" cy="7.33203" fill="#BCC722" r="6.5"></circle>
-        </svg>
-        <span>level 4 - natural</span>
-    </div>
-    <div>
-        <svg fill="none" height="14" viewBox="0 0 14 14" width="14" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="7.47363" cy="7.33203" fill="#7DC722" r="6.5"></circle>
-        </svg>
-        <span>level 5 - cold-pressed</span>
-    </div>
-    <div>
-        <svg fill="none" height="14" viewBox="0 0 14 14" width="14" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="7.47363" cy="7.33203" fill="#4A91E2" r="6.5"></circle>
-        </svg>
-        <span>level 6 - cold-pressed + caffeine complex</span>
-    </div>
-</div>
-<a href="/products/elaren-pumpkin-seed-oil-regrowth-serum">LEARN MORE</a>
-              </div>
-            
-          </div>
-        
-      
-        
-          <div class="s-image-with-text-blocks__text-block">
-            
-              <h3 class="s-image-with-text-blocks__text-title">
-                <p><em>Cold-Pressed</em></p>
-              </h3>
-            
-
-            
-              <div class="s-image-with-text-blocks__text">
-                <p>Heat and solvents destroy the delicate phytosterols and tocopherols in pumpkin seed oil. Cold-pressing keeps them exactly as nature made them, which is why our oil has the deep green-gold colour that cheaper oils can’t match. </p>
-              </div>
-            
-
-            
-          </div>
-        
-      
-        
-          <div class="s-image-with-text-blocks__text-block">
-            
-              <h3 class="s-image-with-text-blocks__text-title">
-                <p><em>The Caffeine Complex</em></p>
-              </h3>
-            
-
-            
-              <div class="s-image-with-text-blocks__text">
-                <p>Caffeine is one of the most-studied topical hair-growth actives, but only when it reaches the follicle. Our Caffeine Complex is blended into the oil so it is delivered to the scalp where you apply it, then left to work overnight. Nothing in the bottle is filler: no water, no mineral oil, no silicones.</p>
-              </div>
-            
-
-            
-          </div>
-        
-      
-
-      
-      
-        <div class="s-image-with-text-blocks__bottom-image">
-          
-<picture>
-  
-  <img alt="" decoding="async" fetchpriority="auto" height="417" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/image9_b22bd9ba-198e-45fc-b3e7-dc5dbb7e9c81.jpg" width="600"/>
-</picture>
-        </div>
-      
+      <div class="s-image-with-text-blocks__bottom-image">
+        <picture>
+          {%- render 'froya-image', image: section.settings.image_bottom, fallback: 'https://froyaorganics.com/cdn/shop/files/image9_b22bd9ba-198e-45fc-b3e7-dc5dbb7e9c81.jpg', alt: section.settings.image_alt, width: 600, height: 417, sizes: '(min-width: 990px) 40vw, 100vw' -%}
+        </picture>
+      </div>
     </div>
   </div>
 </section>
-
-
 </div>
 
 {% schema %}
 {
-  "name": "Frøya ingredient quality",
-  "settings": [],
-  "presets": [
+  "name": "Ingredient quality",
+  "tag": "section",
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Why women are <br><em>switching</em> to Elaren" },
+    { "type": "image_picker", "id": "image", "label": "Main image (desktop)", "info": "Tall portrait, about 600 × 1060 px." },
+    { "type": "image_picker", "id": "image_small", "label": "Small overlay image (desktop)", "info": "Square, about 300 × 300 px." },
+    { "type": "image_picker", "id": "image_mobile_top", "label": "Top image (mobile)", "info": "About 390 × 270 px." },
+    { "type": "image_picker", "id": "image_bottom", "label": "Bottom image", "info": "About 600 × 420 px." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Cold-pressed pumpkin seed oil" },
+    { "type": "text", "id": "link_label", "label": "Link label under the legend", "default": "LEARN MORE" },
+    { "type": "url", "id": "link_url", "label": "Link" }
+  ],
+  "blocks": [
     {
-      "name": "Frøya ingredient quality"
+      "type": "text",
+      "name": "Text block",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Ingredients" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>The <em><strong>ingredients</strong></em> make the product.</p>" }
+      ]
+    },
+    {
+      "type": "level",
+      "name": "Legend row",
+      "settings": [
+        { "type": "color", "id": "color", "label": "Dot colour", "default": "#7DC722" },
+        { "type": "text", "id": "label", "label": "Label", "default": "level 5 - cold-pressed" }
+      ]
     }
-  ]
+  ],
+  "max_blocks": 12,
+  "presets": [ { "name": "Ingredient quality", "blocks": [ { "type": "text" }, { "type": "text" }, { "type": "text" } ] } ]
 }
 {% endschema %}

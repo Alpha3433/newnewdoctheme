@@ -1,0 +1,65 @@
+{%- comment -%}
+  Bestseller card used in the header mega menu (vertical) and the mobile drawer (horizontal).
+  {% render 'froya-nav-card', block: block, layout: 'vertical' | 'horizontal' %}
+{%- endcomment -%}
+{%- liquid
+  assign product = block.settings.product
+  assign variant = product.selected_or_first_available_variant
+  assign title = block.settings.title | default: product.title
+  assign rating = block.settings.rating | default: 0
+  assign full_stars = rating | floor
+  assign next_star = full_stars | plus: 1
+  assign remainder = rating | minus: full_stars
+  assign form_id = 'froya-nav-cta-' | append: product.id | append: '-' | append: block.id
+  if layout == 'horizontal'
+    assign img_size = 250
+  else
+    assign img_size = 530
+  endif
+-%}
+{%- if product != blank -%}
+<div class="froya-nav-card froya-nav-card--{{ layout }}" data-product-id="{{ product.id }}" {{ block.shopify_attributes }}>
+  <a aria-label="{{ title | escape }}" class="froya-nav-card__image" href="{{ product.url }}">
+    {%- if block.settings.badge != blank -%}<span class="froya-nav-card__badge">{{ block.settings.badge }}</span>{%- endif -%}
+    {%- if block.settings.image != blank -%}
+      {{ block.settings.image | image_url: width: img_size, height: img_size, crop: 'center' | image_tag: class: 'froya-nav-card__img', alt: title, loading: 'lazy' }}
+    {%- elsif product.featured_image != blank -%}
+      {{ product.featured_image | image_url: width: img_size, height: img_size, crop: 'center' | image_tag: class: 'froya-nav-card__img', alt: title, loading: 'lazy' }}
+    {%- endif -%}
+  </a>
+  <div class="froya-nav-card__content">
+    {%- if rating > 0 -%}
+    <span aria-label="Rated {{ rating }} out of 5 stars" class="froya-nav-stars">
+      <span aria-hidden="true" class="froya-nav-stars__row">
+        {%- for i in (1..5) -%}
+          {%- if i <= full_stars -%}
+            <span class="froya-nav-stars__star froya-nav-stars__star--full"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2.5l2.83 6.05 6.63.72-4.9 4.53 1.32 6.55L12 17.06l-5.88 3.29 1.32-6.55-4.9-4.53 6.63-.72L12 2.5z"/></svg></span>
+          {%- elsif i == next_star and remainder >= 0.25 -%}
+            <span class="froya-nav-stars__star froya-nav-stars__star--partial"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 2.5l2.83 6.05 6.63.72-4.9 4.53 1.32 6.55L12 17.06l-5.88 3.29 1.32-6.55-4.9-4.53 6.63-.72L12 2.5z" fill="url(#rating-star-gradient-half)"/></svg></span>
+          {%- else -%}
+            <span class="froya-nav-stars__star froya-nav-stars__star--empty"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2.5l2.83 6.05 6.63.72-4.9 4.53 1.32 6.55L12 17.06l-5.88 3.29 1.32-6.55-4.9-4.53 6.63-.72L12 2.5z"/></svg></span>
+          {%- endif -%}
+        {%- endfor -%}
+      </span>
+      {%- if block.settings.reviews_text != blank -%}<span class="froya-nav-stars__count">{{ block.settings.reviews_text }}</span>{%- endif -%}
+    </span>
+    {%- endif -%}
+    <a class="froya-nav-card__title-link" href="{{ product.url }}"><p class="froya-nav-card__title">{{ title }}</p></a>
+    {%- if block.settings.subtitle != blank -%}<p class="froya-nav-card__copy">{{ block.settings.subtitle }}</p>{%- endif -%}
+    <p class="froya-nav-card__price">from <span class="product_price">{{ product.price_min | money }}</span></p>
+    {%- if layout == 'horizontal' -%}
+      <a class="froya-nav-card__cta" href="{{ product.url }}">SHOP NOW</a>
+    {%- else -%}
+      <product-payment-container class="froya-nav-card__payment-container">
+        {%- form 'product', product, class: 'froya-nav-card__form js-ajax-add', id: form_id -%}
+          <input name="id" type="hidden" value="{{ variant.id }}">
+          <input name="quantity" type="hidden" value="1">
+          <button class="froya-nav-card__cta" type="submit" data-product-handle="{{ product.handle }}"{% unless variant.available %} disabled{% endunless %}>
+            {%- if variant.available -%}{{ block.settings.button_label | default: 'ADD TO CART' }}{%- else -%}SOLD OUT{%- endif -%}
+          </button>
+        {%- endform -%}
+      </product-payment-container>
+    {%- endif -%}
+  </div>
+</div>
+{%- endif -%}

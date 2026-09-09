@@ -1,74 +1,72 @@
 {% comment %}
-  Frøya backed by science – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  "Backed by science" timeline – heading, image and each numbered step editable in the theme editor.
+  The wrapper ids are kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
-<div class="shopify-section shopify-section-backed-by-science" id="shopify-section-template--26717513089391__backed_by_science_VNNFmb">
-
-
-
-
-
-<section aria-labelledby="s-backed-by-science-title-template--26717513089391__backed_by_science_VNNFmb" class="s-backed-by-science" data-section-id="template--26717513089391__backed_by_science_VNNFmb" id="s-backed-by-science-template--26717513089391__backed_by_science_VNNFmb">
+{%- liquid
+  assign sid = 'template--26717513089391__backed_by_science_VNNFmb'
+  assign desktop_fallback = 'https://froyaorganics.com/cdn/shop/files/Frame_104.png'
+  assign mobile_fallback = 'https://cdn.shopify.com/s/files/1/0473/9999/3493/files/Frame_1484582070.png?v=1776953442&width=700&format=webp'
+-%}
+<div class="shopify-section shopify-section-backed-by-science" id="shopify-section-{{ sid }}">
+<section aria-labelledby="s-backed-by-science-title-{{ sid }}" class="s-backed-by-science" data-section-id="{{ sid }}" id="s-backed-by-science-{{ sid }}">
   <div class="s-backed-by-science__container">
-    <header class="s-backed-by-science__header"><p class="s-backed-by-science__eyebrow">Backed By Science</p><h2 class="s-backed-by-science__title" id="s-backed-by-science-title-template--26717513089391__backed_by_science_VNNFmb"><p>How Pumpkin Seed Regrowth Oil Works</p></h2><p class="s-backed-by-science__subtitle">5 research-backed ways it targets why women’s hair thins after 35. No drugs, no hormones, just pumpkin seed oil and caffeine.</p></header>
+    <header class="s-backed-by-science__header">
+      {%- if section.settings.eyebrow != blank -%}<p class="s-backed-by-science__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="s-backed-by-science__title" id="s-backed-by-science-title-{{ sid }}"><p>{{ section.settings.title }}</p></h2>
+      {%- if section.settings.subtitle != blank -%}<p class="s-backed-by-science__subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+    </header>
 
     <div class="s-backed-by-science__body"><picture aria-hidden="true" class="s-backed-by-science__images">
-        <source height="225" media="(max-width: 767.98px)" srcset="https://cdn.shopify.com/s/files/1/0473/9999/3493/files/Frame_1484582070.png?v=1776953442&amp;width=700&amp;format=webp" width="350"/>
-        <img alt="" class="s-backed-by-science__image" decoding="async" height="805" loading="lazy" sizes="(min-width: 768px) 590px, 100vw" src="https://froyaorganics.com/cdn/shop/files/Frame_104.png" srcset="https://cdn.shopify.com/s/files/1/0473/9999/3493/files/Frame_104.png?v=1776953448&amp;width=800&amp;format=webp 800w, https://cdn.shopify.com/s/files/1/0473/9999/3493/files/Frame_104.png?v=1776953448&amp;width=1200&amp;format=webp 1200w" width="590"/>
-      </picture><ol class="s-backed-by-science__list"><li class="s-backed-by-science__item">
-              <span aria-hidden="true" class="s-backed-by-science__num">1</span>
-              <article class="s-backed-by-science__card">
-                <picture class="s-backed-by-science__icon">
-                  <source media="(max-width: 767.98px)" srcset="https://cdn.shopify.com/s/files/1/0473/9999/3493/files/Frame_41_2x_a1754f28-b6a2-4e98-b12c-c6525d643a78.svg_5.png?v=1776935871"/>
-                  <img alt="" decoding="async" height="36" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Frame_41_2x_a1754f28-b6a2-4e98-b12c-c6525d643a78_svg.png" width="36"/>
-                </picture><h3 class="s-backed-by-science__card-title">Blocks DHT At The Follicle</h3><p class="s-backed-by-science__card-text">Pumpkin seed oil is rich in phytosterols shown to inhibit 5-alpha-reductase, the enzyme that turns testosterone into DHT: the hormone that shrinks follicles in female pattern hair loss.</p></article>
-            </li><li class="s-backed-by-science__item">
-              <span aria-hidden="true" class="s-backed-by-science__num">2</span>
-              <article class="s-backed-by-science__card">
-                <picture class="s-backed-by-science__icon">
-                  <source media="(max-width: 767.98px)" srcset="https://cdn.shopify.com/s/files/1/0473/9999/3493/files/Frame_41_2x_a1754f28-b6a2-4e98-b12c-c6525d643a78.svg_6.png?v=1776935871"/>
-                  <img alt="" decoding="async" height="36" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Frame_41_2x_a1754f28-b6a2-4e98-b12c-c6525d643a78.svg_6.png" width="36"/>
-                </picture><h3 class="s-backed-by-science__card-title">Wakes Up Dormant Follicles</h3><p class="s-backed-by-science__card-text">Our Caffeine Complex counteracts DHT’s suppression of follicle growth and has been shown to prolong the anagen (growth) phase in female hair follicles.</p></article>
-            </li><li class="s-backed-by-science__item">
-              <span aria-hidden="true" class="s-backed-by-science__num">3</span>
-              <article class="s-backed-by-science__card">
-                <picture class="s-backed-by-science__icon">
-                  <source media="(max-width: 767.98px)" srcset="https://cdn.shopify.com/s/files/1/0473/9999/3493/files/Frame_41_2x_a1754f28-b6a2-4e98-b12c-c6525d643a78.svg_7.png?v=1776935871"/>
-                  <img alt="" decoding="async" height="36" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Frame_41_2x_a1754f28-b6a2-4e98-b12c-c6525d643a78.svg_7.png" width="36"/>
-                </picture><h3 class="s-backed-by-science__card-title">Boosts Blood Flow To The Root</h3><p class="s-backed-by-science__card-text">Caffeine plus a 60-second scalp massage stimulates microcirculation, so oxygen and nutrients reach the follicles that have been starved of them.</p></article>
-            </li><li class="s-backed-by-science__item">
-              <span aria-hidden="true" class="s-backed-by-science__num">4</span>
-              <article class="s-backed-by-science__card">
-                <picture class="s-backed-by-science__icon">
-                  <source media="(max-width: 767.98px)" srcset="https://cdn.shopify.com/s/files/1/0473/9999/3493/files/Frame_41_2x_a1754f28-b6a2-4e98-b12c-c6525d643a78.svg_8.png?v=1776935871"/>
-                  <img alt="" decoding="async" height="36" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Frame_41_2x_a1754f28-b6a2-4e98-b12c-c6525d643a78.svg_3.png" width="36"/>
-                </picture><h3 class="s-backed-by-science__card-title">Strengthens Every Strand</h3><p class="s-backed-by-science__card-text">Omega-3, 6 and 9 fatty acids, zinc and vitamin E nourish the hair shaft and cut breakage, so the hair you grow is hair you keep.</p></article>
-            </li><li class="s-backed-by-science__item">
-              <span aria-hidden="true" class="s-backed-by-science__num">5</span>
-              <article class="s-backed-by-science__card">
-                <picture class="s-backed-by-science__icon">
-                  <source media="(max-width: 767.98px)" srcset="https://cdn.shopify.com/s/files/1/0473/9999/3493/files/Frame_41_2x_a1754f28-b6a2-4e98-b12c-c6525d643a78.svg_9.png?v=1776935871"/>
-                  <img alt="" decoding="async" height="36" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Frame_41_2x_a1754f28-b6a2-4e98-b12c-c6525d643a78.svg_4.png" width="36"/>
-                </picture><h3 class="s-backed-by-science__card-title">Calms An Irritated Scalp</h3><p class="s-backed-by-science__card-text">Anti-inflammatory tocopherols and carotenoids soothe itching, dryness and inflammation, giving follicles the healthy environment they need to grow.</p></article>
-            </li></ol></div>
+        {%- if section.settings.image_mobile != blank -%}
+          <source media="(max-width: 767.98px)" srcset="{{ section.settings.image_mobile | image_url: width: 700 }}">
+        {%- elsif section.settings.image == blank -%}
+          <source media="(max-width: 767.98px)" srcset="{{ mobile_fallback }}">
+        {%- endif -%}
+        {%- render 'froya-image', image: section.settings.image, fallback: desktop_fallback, alt: '', class: 's-backed-by-science__image', width: 1200, height: 1637, sizes: '(min-width: 768px) 590px, 100vw' -%}
+      </picture><ol class="s-backed-by-science__list">
+        {%- for block in section.blocks -%}
+          <li class="s-backed-by-science__item" {{ block.shopify_attributes }}>
+            <span aria-hidden="true" class="s-backed-by-science__num">{{ forloop.index }}</span>
+            <article class="s-backed-by-science__card">
+              <picture class="s-backed-by-science__icon">
+                {%- render 'froya-image', image: block.settings.icon, fallback: block.settings.icon_fallback, alt: '', width: 36, height: 36 -%}
+              </picture>
+              <h3 class="s-backed-by-science__card-title">{{ block.settings.title }}</h3>
+              <p class="s-backed-by-science__card-text">{{ block.settings.text }}</p>
+            </article>
+          </li>
+        {%- endfor -%}
+      </ol></div>
   </div>
 </section>
-
-
-
-
-
-
 </div>
 
 {% schema %}
 {
-  "name": "Frøya backed by science",
-  "settings": [],
-  "presets": [
+  "name": "Backed by science",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Backed By Science" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "How Pumpkin Seed Regrowth Oil Works" },
+    { "type": "textarea", "id": "subtitle", "label": "Subheading", "default": "5 research-backed ways it targets why women’s hair thins after 35. No drugs, no hormones, just pumpkin seed oil and caffeine." },
+    { "type": "image_picker", "id": "image", "label": "Image (desktop)", "info": "Tall portrait image, about 590 × 805 px." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile)", "info": "Optional landscape crop for phones, about 700 × 450 px." }
+  ],
+  "blocks": [
     {
-      "name": "Frøya backed by science"
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon", "info": "About 36 × 36 px." },
+        { "type": "text", "id": "title", "label": "Title", "default": "Blocks DHT At The Follicle" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Pumpkin seed oil is rich in phytosterols shown to inhibit 5-alpha-reductase, the enzyme that turns testosterone into DHT: the hormone that shrinks follicles in female pattern hair loss." },
+        { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
+      ]
     }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    { "name": "Backed by science", "blocks": [ { "type": "step" }, { "type": "step" }, { "type": "step" } ] }
   ]
 }
 {% endschema %}

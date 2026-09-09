@@ -1,114 +1,67 @@
 {% comment %}
-  Frøya how to use – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  How to use – heading, image and a list of routine steps (each an editable block).
+  The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
-<div class="shopify-section" id="shopify-section-template--26717513089391__how_to_use_Qx9RrL">
-
-
-
-<section class="s-how-to-use custom-section" data-section-id="template--26717513089391__how_to_use_Qx9RrL">
-  
-    <h2 class="s-how-to-use__title s-how-to-use__title--mobile section-title">
-      <p></p><p><em>Two minutes a night.</em><br/>Because regrowth shouldn’t be complicated.</p><p></p>
-    </h2>
-  
+{%- liquid
+  assign sid = 'template--26717513089391__how_to_use_Qx9RrL'
+-%}
+<div class="shopify-section" id="shopify-section-{{ sid }}">
+<section class="s-how-to-use custom-section" data-section-id="{{ sid }}">
+  <h2 class="s-how-to-use__title s-how-to-use__title--mobile section-title">
+    <p></p><p>{{ section.settings.title }}</p><p></p>
+  </h2>
 
   <div class="s-how-to-use__content-wrapper">
-    
-  <div class="s-how-to-use__image-wrapper">
-    
-<picture>
-  
-  <img alt="" decoding="async" fetchpriority="auto" height="416" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Hero_9653fcf2-b13b-4472-9891-476cc9621d68.png" width="600"/>
-</picture>
-  </div>
-
+    <div class="s-how-to-use__image-wrapper">
+      <picture>
+        {%- render 'froya-image', image: section.settings.image, fallback: 'https://froyaorganics.com/cdn/shop/files/Hero_9653fcf2-b13b-4472-9891-476cc9621d68.png', alt: section.settings.image_alt, width: 600, height: 416, sizes: '(min-width: 990px) 45vw, 100vw' -%}
+      </picture>
+    </div>
 
     <div class="s-how-to-use__content">
-      
-        <h2 class="s-how-to-use__title s-how-to-use__title--desktop section-title">
-          <p></p><p><em>Two minutes a night.</em><br/>Because regrowth shouldn’t be complicated.</p><p></p>
-        </h2>
-      
+      <h2 class="s-how-to-use__title s-how-to-use__title--desktop section-title">
+        <p></p><p>{{ section.settings.title }}</p><p></p>
+      </h2>
 
-      
-        
-        
-
-        
-
-<div class="s-how-to-use__text-block s-how-to-use__text-block--line">
-  
-    <h3 class="s-how-to-use__block-title s-how-to-use__block-title--line"><p><em>Every night – The 2-minute scalp ritual</em></p></h3>
-  
-
-  
-    <div class="s-how-to-use__block-text"><h5>REGROWTH OIL</h5><p><strong>Part your hair and apply a few drops directly to the scalp where it’s thinning: your part, crown, temples or edges. Massage in with your fingertips for 60 seconds to get the blood flowing, then leave it in overnight. No rinsing, no greasy residue, and a little goes a long way.</strong></p></div>
-  
-</div>
-      
-        
-        
-
-        
-
-<div class="s-how-to-use__text-block s-how-to-use__text-block--line">
-  
-    <h3 class="s-how-to-use__block-title s-how-to-use__block-title--line"><p><em>Wash days – Wake up the root</em></p></h3>
-  
-
-  
-    <div class="s-how-to-use__block-text"><h5>ROOT REVIVAL SCALP BRUSH</h5><p><strong>Work your shampoo in with the soft silicone bristles for two minutes. It lifts build-up away from the follicle and boosts circulation at the root, so your oil goes to work on a clean, receptive scalp.</strong></p></div>
-  
-</div>
-      
-        
-        
-
-        
-
-<div class="s-how-to-use__text-block s-how-to-use__text-block--line">
-  
-    <h3 class="s-how-to-use__block-title s-how-to-use__block-title--line"><p><em>Go further – Inside and out</em></p></h3>
-  
-
-  
-    <div class="s-how-to-use__block-text"><h5>PUMPKIN SEED OIL CAPSULES</h5><p><strong>Support regrowth from the inside with the same DHT-blocking pumpkin seed oil in a daily softgel. Ideal when your thinning is hormonal: perimenopause, postpartum or PCOS.</strong></p><h5>MICROSTAMP PRO</h5><p><strong>Use two or three times a week before your oil. Its 140 micro-points create tiny channels so the Caffeine Complex reaches the follicle instead of sitting on the surface.</strong></p></div>
-  
-</div>
-      
-        
-        
-
-        
-
-<div class="s-how-to-use__text-block s-how-to-use__text-block--line s-how-to-use__text-block--line--last">
-  
-    <h3 class="s-how-to-use__block-title s-how-to-use__block-title--line"><p>Be patient.<br/>Hair grows in cycles.</p></h3>
-  
-
-  
-    <div class="s-how-to-use__block-text"><p><strong>Most women notice less hair in the brush and the shower drain within the first 2–4 weeks. Fine new baby hairs along the hairline and part usually show up around month 2 or 3. Visible density takes 90 days of nightly use.</strong></p><p><strong>Don’t stop at week three. Consistency is the whole secret, and Elaren does the rest.</strong></p></div>
-  
-</div>
-      
+      {%- for block in section.blocks -%}
+        <div class="s-how-to-use__text-block s-how-to-use__text-block--line{% if forloop.last %} s-how-to-use__text-block--line--last{% endif %}" {{ block.shopify_attributes }}>
+          <h3 class="s-how-to-use__block-title s-how-to-use__block-title--line"><p>{{ block.settings.heading }}</p></h3>
+          <div class="s-how-to-use__block-text">
+            {%- if block.settings.label != blank -%}<h5>{{ block.settings.label }}</h5>{%- endif -%}
+            {{ block.settings.text }}
+            {%- if block.settings.label_2 != blank -%}<h5>{{ block.settings.label_2 }}</h5>{%- endif -%}
+            {{ block.settings.text_2 }}
+          </div>
+        </div>
+      {%- endfor -%}
     </div>
   </div>
 </section>
-
-
-
-
 </div>
 
 {% schema %}
 {
-  "name": "Frøya how to use",
-  "settings": [],
-  "presets": [
+  "name": "How to use",
+  "tag": "section",
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "<em>Two minutes a night.</em><br>Because regrowth shouldn’t be complicated." },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Landscape image, about 600 × 420 px." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Applying Elaren Pumpkin Seed Regrowth Oil to the scalp" }
+  ],
+  "blocks": [
     {
-      "name": "Frøya how to use"
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "inline_richtext", "id": "heading", "label": "Step heading", "default": "<em>Every night – The 2-minute scalp ritual</em>" },
+        { "type": "text", "id": "label", "label": "Product label", "default": "REGROWTH OIL" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p><strong>Part your hair and apply a few drops directly to the scalp where it’s thinning: your part, crown, temples or edges. Massage in with your fingertips for 60 seconds to get the blood flowing, then leave it in overnight. No rinsing, no greasy residue, and a little goes a long way.</strong></p>" },
+        { "type": "text", "id": "label_2", "label": "Second product label (optional)" },
+        { "type": "richtext", "id": "text_2", "label": "Second text (optional)" }
+      ]
     }
-  ]
+  ],
+  "max_blocks": 6,
+  "presets": [ { "name": "How to use", "blocks": [ { "type": "step" }, { "type": "step" }, { "type": "step" } ] } ]
 }
 {% endschema %}

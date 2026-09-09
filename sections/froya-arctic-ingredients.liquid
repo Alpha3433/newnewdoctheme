@@ -1,45 +1,41 @@
 {% comment %}
-  Frøya arctic ingredients – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  "Why pumpkin seed oil" – eyebrow, heading, rich text and image, editable in the theme editor.
+  The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
 <div class="shopify-section custom-image-and-text" id="shopify-section-template--26717513089391__custom_image_and_text_HqBW3P">
-
-
-
-
-
-<section class="s-image-text-section--position--left s-image-text-section">
+<section class="s-image-text-section--position--{{ section.settings.image_position }} s-image-text-section">
   <div class="s-image-text-section__content">
-            <div class="block-subtitle_mrgLBL s-image-text-section__subtitle"><p>THE SCIENCE OF THE SEED</p></div>
-            <h2 class="section-title block-heading_JCJD7P s-image-text-section__title--mobile-alignment--left s-image-text-section__title--desktop-alignment--left s-image-text-section__title">
-              <p></p><p>Why Pumpkin Seed Oil Is <em>Incredibly</em> Powerful For Thinning Hair</p><p></p>
-            </h2><div class="s-image-text-section__rich-content s-image-text-section__rich-content--width--medium s-image-text-section__rich-content--font-weight--bold s-image-text-section__rich-content--font-size--medium">
-            <div class="s-image-text-section__rich-content--desktop">
-              <p>NATURE’S DHT BLOCKER<br/><strong>DHT is the hormone that shrinks follicles in female pattern hair loss, and it gains the upper hand as oestrogen falls after 35. Pumpkin seed oil’s plant sterols help block the enzyme that makes it. In a 24-week placebo-controlled trial, pumpkin seed oil increased hair count by 40%.</strong></p><p>PACKED WITH FOLLICLE NUTRIENTS<br/><strong>Zinc, magnesium, omega-3, 6 and 9 fatty acids and vitamin E: the exact nutrients a starved follicle needs to build strong, thick keratin. Cold-pressing keeps every one of them intact.</strong></p><p>AMPLIFIED BY CAFFEINE<br/><strong>Caffeine wakes up dormant follicles and extends their growth phase, and it has been shown to rival 5% minoxidil in clinical testing. Together, the two actives work on both the hormonal and the cellular causes of thinning.</strong></p>
-            </div>
-            <div class="s-image-text-section__rich-content--mobile">
-              <p>NATURE’S DHT BLOCKER<br/><strong>DHT is the hormone that shrinks follicles in female pattern hair loss, and it gains the upper hand as oestrogen falls after 35. Pumpkin seed oil’s plant sterols help block the enzyme that makes it. In a 24-week placebo-controlled trial, pumpkin seed oil increased hair count by 40%.</strong></p><p>PACKED WITH FOLLICLE NUTRIENTS<br/><strong>Zinc, magnesium, omega-3, 6 and 9 fatty acids and vitamin E: the exact nutrients a starved follicle needs to build strong, thick keratin. Cold-pressing keeps every one of them intact.</strong></p><p>AMPLIFIED BY CAFFEINE<br/><strong>Caffeine wakes up dormant follicles and extends their growth phase, and it has been shown to rival 5% minoxidil in clinical testing. Together, the two actives work on both the hormonal and the cellular causes of thinning.</strong></p>
-            </div>
-          </div></div><div class="s-image-text-section__image s-image-text-section__image--image-size--bigger">
-<picture>
-  
-  <img alt="" decoding="async" fetchpriority="auto" height="417" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/image_5f045aa2-2f90-4335-8fbc-927d8d2eb077.jpg" width="600"/>
-</picture></div></section>
-
-
-
-
-
+    {%- if section.settings.subtitle != blank -%}
+      <div class="block-subtitle_mrgLBL s-image-text-section__subtitle"><p>{{ section.settings.subtitle }}</p></div>
+    {%- endif -%}
+    <h2 class="section-title block-heading_JCJD7P s-image-text-section__title--mobile-alignment--left s-image-text-section__title--desktop-alignment--left s-image-text-section__title">
+      <p></p><p>{{ section.settings.title }}</p><p></p>
+    </h2>
+    <div class="s-image-text-section__rich-content s-image-text-section__rich-content--width--medium s-image-text-section__rich-content--font-weight--bold s-image-text-section__rich-content--font-size--medium">
+      <div class="s-image-text-section__rich-content--desktop">{{ section.settings.text }}</div>
+      <div class="s-image-text-section__rich-content--mobile">{{ section.settings.text }}</div>
+    </div>
+  </div>
+  <div class="s-image-text-section__image s-image-text-section__image--image-size--bigger">
+    <picture>
+      {%- render 'froya-image', image: section.settings.image, fallback: 'https://froyaorganics.com/cdn/shop/files/image_5f045aa2-2f90-4335-8fbc-927d8d2eb077.jpg', alt: section.settings.image_alt, width: 600, height: 417, sizes: '(min-width: 990px) 50vw, 100vw' -%}
+    </picture>
+  </div>
+</section>
 </div>
 
 {% schema %}
 {
-  "name": "Frøya arctic ingredients",
-  "settings": [],
-  "presets": [
-    {
-      "name": "Frøya arctic ingredients"
-    }
-  ]
+  "name": "Ingredient science",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Landscape image, about 600 × 420 px." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Pumpkin seeds and cold-pressed pumpkin seed oil" },
+    { "type": "select", "id": "image_position", "label": "Image position", "options": [ { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" } ], "default": "left" },
+    { "type": "text", "id": "subtitle", "label": "Eyebrow", "default": "THE SCIENCE OF THE SEED" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Why Pumpkin Seed Oil Is <em>Incredibly</em> Powerful For Thinning Hair" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>NATURE’S DHT BLOCKER<br><strong>DHT is the hormone that shrinks follicles in female pattern hair loss, and it gains the upper hand as oestrogen falls after 35. Pumpkin seed oil’s plant sterols help block the enzyme that makes it. In a 24-week placebo-controlled trial, pumpkin seed oil increased hair count by 40%.</strong></p><p>PACKED WITH FOLLICLE NUTRIENTS<br><strong>Zinc, magnesium, omega-3, 6 and 9 fatty acids and vitamin E: the exact nutrients a starved follicle needs to build strong, thick keratin. Cold-pressing keeps every one of them intact.</strong></p><p>AMPLIFIED BY CAFFEINE<br><strong>Caffeine wakes up dormant follicles and extends their growth phase, and it has been shown to rival 5% minoxidil in clinical testing. Together, the two actives work on both the hormonal and the cellular causes of thinning.</strong></p>" }
+  ],
+  "presets": [ { "name": "Ingredient science" } ]
 }
 {% endschema %}

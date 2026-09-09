@@ -1,0 +1,186 @@
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer": {
+      "type": "froya-footer",
+      "settings": {
+        "links_title": "About",
+        "contact_title": "Contact",
+        "social_title": "Follow us",
+        "facebook_url": "https://www.facebook.com/",
+        "instagram_url": "https://www.instagram.com/wellness.weichen/",
+        "tiktok_url": "https://www.tiktok.com/",
+        "show_payment_icons": true,
+        "show_localization": true
+      },
+      "blocks": {
+        "link_1": {
+          "type": "link",
+          "settings": {
+            "label": "Reviews",
+            "url": "/#reviews-section"
+          }
+        },
+        "link_2": {
+          "type": "link",
+          "settings": {
+            "label": "Regrowth Oil",
+            "url": "/products/elaren-pumpkin-seed-oil-regrowth-serum"
+          }
+        },
+        "link_3": {
+          "type": "link",
+          "settings": {
+            "label": "Pumpkin Seed Oil Capsules",
+            "url": "/products/pumpkin-seed-oil-capsules"
+          }
+        },
+        "link_4": {
+          "type": "link",
+          "settings": {
+            "label": "Scalp Tools & Accessories",
+            "url": "/collections/all"
+          }
+        },
+        "link_5": {
+          "type": "link",
+          "settings": {
+            "label": "Subscribe & Save 10%",
+            "url": "/products/elaren-pumpkin-seed-oil-regrowth-serum"
+          }
+        },
+        "link_6": {
+          "type": "link",
+          "settings": {
+            "label": "Shop all",
+            "url": "/collections/all"
+          }
+        },
+        "link_7": {
+          "type": "link",
+          "settings": {
+            "label": "90-Day Guarantee",
+            "url": "/policies/refund-policy"
+          }
+        },
+        "link_8": {
+          "type": "link",
+          "settings": {
+            "label": "Subscription Terms",
+            "url": "/policies/terms-of-service"
+          }
+        },
+        "link_9": {
+          "type": "link",
+          "settings": {
+            "label": "Manage Subscription",
+            "url": "/account"
+          }
+        },
+        "link_10": {
+          "type": "link",
+          "settings": {
+            "label": "FAQ",
+            "url": "/pages/faq"
+          }
+        },
+        "link_11": {
+          "type": "link",
+          "settings": {
+            "label": "Our Story",
+            "url": "/pages/about-us"
+          }
+        },
+        "link_12": {
+          "type": "link",
+          "settings": {
+            "label": "The Science",
+            "url": "/#s-backed-by-science-template--26717513089391__backed_by_science_VNNFmb"
+          }
+        },
+        "link_13": {
+          "type": "link",
+          "settings": {
+            "label": "The Elaren Journal",
+            "url": "/blogs/news"
+          }
+        },
+        "link_14": {
+          "type": "link",
+          "settings": {
+            "label": "How To Use",
+            "url": "/products/elaren-pumpkin-seed-oil-regrowth-serum"
+          }
+        },
+        "link_15": {
+          "type": "link",
+          "settings": {
+            "label": "Ingredients",
+            "url": "/products/elaren-pumpkin-seed-oil-regrowth-serum"
+          }
+        },
+        "link_16": {
+          "type": "link",
+          "settings": {
+            "label": "Hair-Loss Research We Fund",
+            "url": "/pages/about-us"
+          }
+        },
+        "link_17": {
+          "type": "link",
+          "settings": {
+            "label": "Become an Elaren Affiliate",
+            "url": "/pages/contact"
+          }
+        },
+        "link_18": {
+          "type": "link",
+          "settings": {
+            "label": "Terms of Service",
+            "url": "/policies/terms-of-service"
+          }
+        },
+        "link_19": {
+          "type": "link",
+          "settings": {
+            "label": "Privacy Policy",
+            "url": "/policies/privacy-policy"
+          }
+        },
+        "link_20": {
+          "type": "link",
+          "settings": {
+            "label": "Shipping Policy",
+            "url": "/policies/shipping-policy"
+          }
+        }
+      },
+      "block_order": [
+        "link_1",
+        "link_2",
+        "link_3",
+        "link_4",
+        "link_5",
+        "link_6",
+        "link_7",
+        "link_8",
+        "link_9",
+        "link_10",
+        "link_11",
+        "link_12",
+        "link_13",
+        "link_14",
+        "link_15",
+        "link_16",
+        "link_17",
+        "link_18",
+        "link_19",
+        "link_20"
+      ]
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

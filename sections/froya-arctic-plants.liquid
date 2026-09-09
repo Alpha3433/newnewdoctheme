@@ -1,70 +1,73 @@
 {% comment %}
-  Frøya arctic plants – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  "Whatever kind of hair loss" – heading, rich text, three pillars and a row of badges, all editable blocks.
+  The wrapper ids are kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
+{%- liquid
+  assign pillars = section.blocks | where: 'type', 'pillar'
+  assign badges = section.blocks | where: 'type', 'badge'
+-%}
 <section class="shopify-section section" id="shopify-section-template--26717513089391__icons_with_text_HTCEin">
-
-
-<section class="s-icons-with-text custom-section" id="section-template--26717513089391__icons_with_text_HTCEin">
+<section class="s-icons-with-text custom-section" id="section-template--26717513089391__icons_with_text_HTCEin" data-bg-loaded="true">
   <div class="s-icons-with-text__content-wrapper container"><div class="s-icons-with-text__top"><h2 class="s-icons-with-text__title section-title">
-            <p></p><p>Whatever Kind of Hair Loss You’re Facing, <em>Start Here</em></p><p></p>
-          </h2><div class="s-icons-with-text__text"><p><em>1. HORMONAL THINNING (FEMALE PATTERN HAIR LOSS)</em></p><p>Perimenopause, menopause, PCOS, postpartum, coming off the pill: when oestrogen drops, DHT gets the upper hand and the follicles along your part and crown slowly shrink. Pumpkin seed oil’s DHT-blocking sterols target this directly.</p><p><em>2. SHEDDING FROM STRESS, ILLNESS OR RAPID WEIGHT LOSS</em></p><p>Telogen effluvium pushes follicles into their resting phase all at once: handfuls in the shower, a thinner ponytail. Caffeine helps pull follicles back into their growth phase so the shedding slows and regrowth can start.</p><p><em>3. TRACTION, BREAKAGE &amp; ALOPECIA</em></p><p>Years of tight braids, weaves, buns and heat wear down the edges and temples. Autoimmune alopecia leaves patches. Elaren nourishes and calms the scalp so it can support regrowth, and works alongside any treatment your doctor recommends.</p></div><div class="s-icons-with-text__main-icons-wrapper"><div class="s-icons-with-text__main-icon"><div class="s-icons-with-text__main-icon-background">
-<picture>
-  
-  <img alt="Gentle on sensitive scalps" decoding="async" fetchpriority="auto" height="210" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/image_4.png" width="210"/>
-</picture></div><h4 class="s-icons-with-text__main-icon-title">Gentle on sensitive scalps</h4><div class="s-icons-with-text__main-icon-text"><p>No minoxidil, no hormones, no burning or flaking. Just a calming, fast-absorbing oil your scalp will actually enjoy.</p></div></div><div class="s-icons-with-text__main-icon"><div class="s-icons-with-text__main-icon-background">
-<picture>
-  
-  <img alt="Made for every texture" decoding="async" fetchpriority="auto" height="211" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/image_4_1.png" width="210"/>
-</picture></div><h4 class="s-icons-with-text__main-icon-title">Made for every texture</h4><div class="s-icons-with-text__main-icon-text"><p>Coils, curls, waves or straight. Natural, relaxed, locs or under a wig. It sinks into the scalp, not the strand.</p></div></div><div class="s-icons-with-text__main-icon"><div class="s-icons-with-text__main-icon-background">
-<picture>
-  
-  <img alt="Good for you, good for the cause" decoding="async" fetchpriority="auto" height="210" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/image_4_2.png" width="210"/>
-</picture></div><h4 class="s-icons-with-text__main-icon-title">Good for you, good for the cause</h4><div class="s-icons-with-text__main-icon-text"><p>10% of every purchase is donated to hair-loss research, because we know how deeply losing your hair affects your confidence.</p></div></div></div></div><div class="s-icons-with-text__bottom" style="--small-icon-count: 8;"><div class="s-icons-with-text__small-icon-item"><div class="s-icons-with-text__small-icon">
-<picture>
-  
-  <img alt="&lt;p&gt;NO minoxidil, no hormones&lt;/p&gt;" decoding="async" fetchpriority="auto" height="32" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Capa_1_3b214534-18b3-438f-b8a8-17d8e0f6723d.svg" width="31"/>
-</picture></div><div class="s-icons-with-text__small-icon-text"><p>NO minoxidil, no hormones</p></div></div><div class="s-icons-with-text__small-icon-item"><div class="s-icons-with-text__small-icon">
-<picture>
-  
-  <img alt="&lt;p&gt;Cold-pressed pumpkin seed oil&lt;/p&gt;" decoding="async" fetchpriority="auto" height="32" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Capa_1_61a65fd5-b4b7-4397-83c7-414508433d9a.svg" width="24"/>
-</picture></div><div class="s-icons-with-text__small-icon-text"><p>Cold-pressed pumpkin seed oil</p></div></div><div class="s-icons-with-text__small-icon-item"><div class="s-icons-with-text__small-icon">
-<picture>
-  
-  <img alt="&lt;p&gt;NON-GREASY, NO RESIDUE&lt;/p&gt;" decoding="async" fetchpriority="auto" height="32" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Group_239ced3b-e26d-408a-89b3-b4ff3d7e21c7.svg" width="32"/>
-</picture></div><div class="s-icons-with-text__small-icon-text"><p>NON-GREASY, NO RESIDUE</p></div></div><div class="s-icons-with-text__small-icon-item"><div class="s-icons-with-text__small-icon">
-<picture>
-  
-  <img alt="&lt;p&gt;no parabens, no silicones&lt;/p&gt;" decoding="async" fetchpriority="auto" height="32" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Capa_1_1.svg" width="31"/>
-</picture></div><div class="s-icons-with-text__small-icon-text"><p>no parabens, no silicones</p></div></div><div class="s-icons-with-text__small-icon-item"><div class="s-icons-with-text__small-icon">
-<picture>
-  
-  <img alt="&lt;p&gt;WORKS UNDER WIGS &amp; BRAIDS&lt;/p&gt;" decoding="async" fetchpriority="auto" height="32" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Group_1.svg" width="32"/>
-</picture></div><div class="s-icons-with-text__small-icon-text"><p>WORKS UNDER WIGS &amp; BRAIDS</p></div></div><div class="s-icons-with-text__small-icon-item"><div class="s-icons-with-text__small-icon">
-<picture>
-  
-  <img alt="&lt;p&gt;NO PRESCRIPTION NEEDED&lt;/p&gt;" decoding="async" fetchpriority="auto" height="32" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Capa_1_3.svg" width="32"/>
-</picture></div><div class="s-icons-with-text__small-icon-text"><p>NO PRESCRIPTION NEEDED</p></div></div><div class="s-icons-with-text__small-icon-item"><div class="s-icons-with-text__small-icon">
-<picture>
-  
-  <img alt="&lt;p&gt;3RD PARTY TESTED&lt;/p&gt;" decoding="async" fetchpriority="auto" height="32" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Capa_1_4.svg" width="37"/>
-</picture></div><div class="s-icons-with-text__small-icon-text"><p>3RD PARTY TESTED</p></div></div><div class="s-icons-with-text__small-icon-item"><div class="s-icons-with-text__small-icon">
-<picture>
-  
-  <img alt="&lt;p&gt;FOR EVERY &lt;br&gt;TEXTURE&lt;/p&gt;" decoding="async" fetchpriority="auto" height="32" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Capa_1_2.svg" width="31"/>
-</picture></div><div class="s-icons-with-text__small-icon-text"><p>FOR EVERY <br/>TEXTURE</p></div></div></div></div>
+        <p></p><p>{{ section.settings.title }}</p><p></p>
+      </h2><div class="s-icons-with-text__text">{{ section.settings.text }}</div>
+      {%- if pillars.size > 0 -%}
+      <div class="s-icons-with-text__main-icons-wrapper">
+        {%- for block in pillars -%}
+          <div class="s-icons-with-text__main-icon" {{ block.shopify_attributes }}><div class="s-icons-with-text__main-icon-background">
+            <picture>
+              {%- render 'froya-image', image: block.settings.image, fallback: block.settings.image_fallback, alt: block.settings.title, width: 210, height: 210 -%}
+            </picture></div><h4 class="s-icons-with-text__main-icon-title">{{ block.settings.title }}</h4><div class="s-icons-with-text__main-icon-text"><p>{{ block.settings.text }}</p></div></div>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+    </div>
+    {%- if badges.size > 0 -%}
+    <div class="s-icons-with-text__bottom" style="--small-icon-count: {{ badges.size }};">
+      {%- for block in badges -%}
+        <div class="s-icons-with-text__small-icon-item" {{ block.shopify_attributes }}><div class="s-icons-with-text__small-icon">
+          <picture>
+            {%- render 'froya-image', image: block.settings.icon, fallback: block.settings.icon_fallback, alt: block.settings.text, width: 32, height: 32 -%}
+          </picture></div><div class="s-icons-with-text__small-icon-text"><p>{{ block.settings.text }}</p></div></div>
+      {%- endfor -%}
+    </div>
+    {%- endif -%}
+  </div>
 </section>
-
 </section>
 
 {% schema %}
 {
-  "name": "Frøya arctic plants",
-  "settings": [],
-  "presets": [
+  "name": "Hair-loss types & badges",
+  "tag": "section",
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Whatever Kind of Hair Loss You’re Facing, <em>Start Here</em>" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p><em>1. HORMONAL THINNING (FEMALE PATTERN HAIR LOSS)</em></p><p>Perimenopause, menopause, PCOS, postpartum, coming off the pill: when oestrogen drops, DHT gets the upper hand and the follicles along your part and crown slowly shrink. Pumpkin seed oil’s DHT-blocking sterols target this directly.</p><p><em>2. SHEDDING FROM STRESS, ILLNESS OR RAPID WEIGHT LOSS</em></p><p>Telogen effluvium pushes follicles into their resting phase all at once: handfuls in the shower, a thinner ponytail. Caffeine helps pull follicles back into their growth phase so the shedding slows and regrowth can start.</p><p><em>3. TRACTION, BREAKAGE &amp; ALOPECIA</em></p><p>Years of tight braids, weaves, buns and heat wear down the edges and temples. Autoimmune alopecia leaves patches. Elaren nourishes and calms the scalp so it can support regrowth, and works alongside any treatment your doctor recommends.</p>" }
+  ],
+  "blocks": [
     {
-      "name": "Frøya arctic plants"
+      "type": "pillar",
+      "name": "Pillar (image + text)",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Square, about 210 × 210 px." },
+        { "type": "text", "id": "title", "label": "Title", "default": "Gentle on sensitive scalps" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "No minoxidil, no hormones, no burning or flaking. Just a calming, fast-absorbing oil your scalp will actually enjoy." },
+        { "type": "text", "id": "image_fallback", "label": "Fallback image URL", "info": "Used only until an image is uploaded." }
+      ]
+    },
+    {
+      "type": "badge",
+      "name": "Badge (icon + label)",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon", "info": "About 32 × 32 px." },
+        { "type": "inline_richtext", "id": "text", "label": "Label", "default": "NO minoxidil, no hormones" },
+        { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
+      ]
     }
+  ],
+  "max_blocks": 16,
+  "presets": [
+    { "name": "Hair-loss types & badges", "blocks": [ { "type": "pillar" }, { "type": "pillar" }, { "type": "pillar" }, { "type": "badge" }, { "type": "badge" }, { "type": "badge" }, { "type": "badge" } ] }
   ]
 }
 {% endschema %}
