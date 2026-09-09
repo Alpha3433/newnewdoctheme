@@ -67,6 +67,7 @@
         var a = $(sel, d), b = $(sel, fresh);
         if (a && b) {
           a.innerHTML = b.innerHTML;
+          a.className = b.className;
           if (b.hasAttribute('hidden')) a.setAttribute('hidden', ''); else a.removeAttribute('hidden');
         }
       });
