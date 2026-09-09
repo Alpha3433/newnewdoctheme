@@ -11,6 +11,8 @@
   assign actives = section.blocks | where: 'type', 'active'
   assign tags = section.blocks | where: 'type', 'tag'
   assign usps = section.blocks | where: 'type', 'usp'
+  assign percent_placeholder = '{percent}'
+  assign count_placeholder = '{count}'
 
   assign fallback_images = 'IMG_1_8c681b46-2a29-4394-8f0b-a4d7759e9a48.jpg,IMG_2.png,nikki-reed-desktop_2x_2970174c-c49b-4943-8807-ab853fe8e55c.png,IMG_3.png,IMG_4_51e90354-5a8f-4469-9287-d1746d6736e0.png,IMG_5.png,IMG_6_corrected.png,IMG_7.png,IMG_8.png,IMG_9.png,IMG_10.png' | split: ','
   assign fallback_alts = 'Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex bottle|Woman applying Elaren Pumpkin Seed Regrowth Oil to her scalp along her part|Pumpkin Seed Regrowth Oil|Elaren Pumpkin Seed Regrowth Oil held in hand with key benefit callouts|Grid of customer before and after photos showing fuller parts, crowns and edges|Star rating and two verified customer reviews|Published research results for pumpkin seed oil and caffeine|Cold-pressed pumpkin seed oil and Caffeine Complex ingredients|Regrowth timeline at 2 weeks, 30 days and 90 days|Nightly two-minute scalp routine guide|Woman holding Elaren Pumpkin Seed Regrowth Oil with the 90-day money-back promise' | split: '|'
@@ -87,7 +89,7 @@
             <svg aria-hidden="true" fill="none" height="21" viewBox="0 0 17 21" width="17" xmlns="http://www.w3.org/2000/svg"><path d="M12.6 0.23a.77.77 0 0 1 1.12 0l.03.03a.8.8 0 0 1 0 1.1L4.9 10.17l8.85 8.84a.8.8 0 0 1 0 1.11.77.77 0 0 1-1.12 0L3.2 10.72a.8.8 0 0 1 0-1.1L12.6.23z" fill="currentColor"/></svg>
           </div>
           <div class="s-featured-product__gallery-tags">
-            {%- if section.settings.save_tag != blank -%}<span class="s-featured-product__gallery-tag s-featured-product__gallery-tag--type-3 js-gallery-save-tag">{{ section.settings.save_tag | replace: '{percent}', sub_percent }}</span>{%- endif -%}
+            {%- if section.settings.save_tag != blank -%}<span class="s-featured-product__gallery-tag s-featured-product__gallery-tag--type-3 js-gallery-save-tag">{{ section.settings.save_tag | replace: percent_placeholder, sub_percent }}</span>{%- endif -%}
           </div>
           {%- if media_count > 0 -%}
             {%- for media in product.media -%}
@@ -250,7 +252,7 @@
                 <button aria-checked="true" class="c-buybox-toggle__head js-bbt-toggle" role="switch" type="button">
                   <span aria-hidden="true" class="c-buybox-toggle__switch"><span class="c-buybox-toggle__knob"></span></span>
                   <span class="c-buybox-toggle__head-text">
-                    <span class="c-buybox-toggle__head-title">{{ section.settings.toggle_title | replace: '{percent}', sub_percent }}</span>
+                    <span class="c-buybox-toggle__head-title">{{ section.settings.toggle_title | replace: percent_placeholder, sub_percent }}</span>
                     <span class="c-buybox-toggle__head-sub">{{ section.settings.toggle_sub }}</span>
                   </span>
                 </button>
@@ -265,7 +267,7 @@
                         {%- if section.settings[key] != blank -%}
                         <div class="c-buybox-toggle__row">
                           <span aria-hidden="true" class="c-buybox-toggle__check"><svg fill="none" viewBox="0 0 11.5 10.5" xmlns="http://www.w3.org/2000/svg"><path d="M10.25 1.25L4.0625 9.25L1.25 6.368" stroke="#E98044" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg></span>
-                          <p>{{ section.settings[key] | replace: '{percent}', sub_percent }}</p>
+                          <p>{{ section.settings[key] | replace: percent_placeholder, sub_percent }}</p>
                         </div>
                         {%- endif -%}
                       {%- endfor -%}
@@ -281,14 +283,14 @@
               <fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--column" id="purchase-type-fieldset">
                 <label>
                   <input checked name="purchase_type" type="radio" value="subscription">
-                  {%- if section.settings.sub_badge != blank -%}<span class="c-subscribtion__discount-label c-subscribtion__discount-label--orange">{{ section.settings.sub_badge | replace: '{percent}', sub_percent }}</span>{%- endif -%}
+                  {%- if section.settings.sub_badge != blank -%}<span class="c-subscribtion__discount-label c-subscribtion__discount-label--orange">{{ section.settings.sub_badge | replace: percent_placeholder, sub_percent }}</span>{%- endif -%}
                   <span class="c-subscribtion__option-name">{{ section.settings.sub_name }}</span>
                   <div class="c-subscribtion__option-price js-subscribtion__option-price">
                     <span class="js-subscribtion__main-price"><span class="product_price">{{ sub_price | money }}</span></span>
                     {%- if saving > 0 -%}<span class="js-subscribtion__compare-at-price"><span class="product_price">{{ otp_price | money }}</span></span>{%- endif -%}
                   </div>
                   {%- if section.settings.sub_perks != blank -%}
-                  <div class="c-subscribtion__button-info-wrapper"><div><div class="metafield-rich_text_field">{{ section.settings.sub_perks | replace: '{percent}', sub_percent }}</div></div></div>
+                  <div class="c-subscribtion__button-info-wrapper"><div><div class="metafield-rich_text_field">{{ section.settings.sub_perks | replace: percent_placeholder, sub_percent }}</div></div></div>
                   {%- endif -%}
                 </label>
                 <label>
@@ -343,7 +345,7 @@
         {%- if section.settings.show_low_stock and variant.inventory_management == 'shopify' and variant.inventory_quantity > 0 and variant.inventory_quantity <= section.settings.low_stock_threshold -%}
         <div class="c-low-stock"><div class="c-low-stock__inner">
           <span aria-hidden="true" class="c-low-stock__flame">🔥</span>
-          <span class="c-low-stock__text">{{ section.settings.low_stock_text | replace: '{count}', variant.inventory_quantity }}</span>
+          <span class="c-low-stock__text">{{ section.settings.low_stock_text | replace: count_placeholder, variant.inventory_quantity }}</span>
         </div></div>
         {%- endif -%}
       </div>
