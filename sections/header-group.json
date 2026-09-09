@@ -290,21 +290,21 @@
           "type": "badge",
           "settings": {
             "default_icon": "dollar",
-            "text": "90-Day<br>Money-Back"
+            "text": "<p>90-Day<br>Money-Back</p>"
           }
         },
         "badge_2": {
           "type": "badge",
           "settings": {
             "default_icon": "bag",
-            "text": "4.77/5 From<br>Verified Buyers"
+            "text": "<p>4.77/5 From<br>Verified Buyers</p>"
           }
         },
         "badge_3": {
           "type": "badge",
           "settings": {
             "default_icon": "truck",
-            "text": "Free Insured<br>Shipping"
+            "text": "<p>Free Insured<br>Shipping</p>"
           }
         }
       },

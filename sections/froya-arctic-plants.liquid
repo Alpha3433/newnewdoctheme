@@ -28,7 +28,7 @@
         <div class="s-icons-with-text__small-icon-item" {{ block.shopify_attributes }}><div class="s-icons-with-text__small-icon">
           <picture>
             {%- render 'froya-image', image: block.settings.icon, fallback: block.settings.icon_fallback, alt: block.settings.text, width: 32, height: 32 -%}
-          </picture></div><div class="s-icons-with-text__small-icon-text"><p>{{ block.settings.text }}</p></div></div>
+          </picture></div><div class="s-icons-with-text__small-icon-text"><p>{{ block.settings.text | replace: '</p><p>', '<br>' | remove: '<p>' | remove: '</p>' }}</p></div></div>
       {%- endfor -%}
     </div>
     {%- endif -%}
@@ -60,7 +60,7 @@
       "name": "Badge (icon + label)",
       "settings": [
         { "type": "image_picker", "id": "icon", "label": "Icon", "info": "About 32 × 32 px." },
-        { "type": "inline_richtext", "id": "text", "label": "Label", "default": "NO minoxidil, no hormones" },
+        { "type": "richtext", "id": "text", "label": "Label", "default": "<p>NO minoxidil, no hormones</p>" },
         { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
       ]
     }

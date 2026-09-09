@@ -10,7 +10,7 @@
   <div class="container">
     <div class="footer__inner">
       <div class="footer__item-list"><div class="footer__item footer__item--guarantee-poem is-first"><div class="flex h100 column">
-          <h3 class="footer-headline white-text">{{ section.settings.headline }}</h3>
+          <h3 class="footer-headline white-text">{{ section.settings.headline | replace: '</p><p>', '<br>' | remove: '<p>' | remove: '</p>' }}</h3>
           <div class="white-text">{{ section.settings.manifesto }}</div>
         </div></div>
         <div class="footer__item footer__item--links"><p class="footer__item-title">{{ section.settings.links_title }}</p>
@@ -102,7 +102,7 @@
 {
   "name": "Footer",
   "settings": [
-    { "type": "inline_richtext", "id": "headline", "label": "Guarantee headline", "default": "Not satisfied?<br>Get your money<br>back in 90 days" },
+    { "type": "richtext", "id": "headline", "label": "Guarantee headline", "default": "<p>Not satisfied?<br>Get your money<br>back in 90 days</p>" },
     { "type": "richtext", "id": "manifesto", "label": "Manifesto", "default": "<p>Hair loss isn’t just about hair.<br>It’s the photo you didn’t post,<br>the ponytail that keeps getting thinner,<br>the mirror you stopped looking in.<br><br>We’ve been where you are.<br>So we went back to the research,<br>found what actually works,<br>and put it in a bottle made for you.<br><br>Cold-pressed pumpkin seed oil.<br>A Caffeine Complex that wakes the root.<br>Two minutes a night, every night.<br>And 10% of every order to hair-loss research.</p>" },
     { "type": "text", "id": "links_title", "label": "Links column title", "default": "About" },
     { "type": "text", "id": "contact_title", "label": "Contact column title", "default": "Contact" },

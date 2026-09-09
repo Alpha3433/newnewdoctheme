@@ -573,21 +573,21 @@
         "usp_1": {
           "type": "usp",
           "settings": {
-            "text": "10% of every order<br/>funds hair-loss research",
+            "text": "<p>10% of every order<br>funds hair-loss research</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/product_icon_1.svg"
           }
         },
         "usp_2": {
           "type": "usp",
           "settings": {
-            "text": "fuller hair in 90 days or your money back",
+            "text": "<p>fuller hair in 90 days or your money back</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/product_icon_2.svg"
           }
         },
         "usp_3": {
           "type": "usp",
           "settings": {
-            "text": "free insured shipping on every order",
+            "text": "<p>free insured shipping on every order</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/product_icon_3.svg"
           }
         }
@@ -651,56 +651,56 @@
         "badge_4": {
           "type": "badge",
           "settings": {
-            "text": "NO minoxidil, no hormones",
+            "text": "<p>NO minoxidil, no hormones</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/Capa_1_3b214534-18b3-438f-b8a8-17d8e0f6723d.svg"
           }
         },
         "badge_5": {
           "type": "badge",
           "settings": {
-            "text": "Cold-pressed pumpkin seed oil",
+            "text": "<p>Cold-pressed pumpkin seed oil</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/Capa_1_61a65fd5-b4b7-4397-83c7-414508433d9a.svg"
           }
         },
         "badge_6": {
           "type": "badge",
           "settings": {
-            "text": "NON-GREASY, NO RESIDUE",
+            "text": "<p>NON-GREASY, NO RESIDUE</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/Group_239ced3b-e26d-408a-89b3-b4ff3d7e21c7.svg"
           }
         },
         "badge_7": {
           "type": "badge",
           "settings": {
-            "text": "no parabens, no silicones",
+            "text": "<p>no parabens, no silicones</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/Capa_1_1.svg"
           }
         },
         "badge_8": {
           "type": "badge",
           "settings": {
-            "text": "WORKS UNDER WIGS & BRAIDS",
+            "text": "<p>WORKS UNDER WIGS & BRAIDS</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/Group_1.svg"
           }
         },
         "badge_9": {
           "type": "badge",
           "settings": {
-            "text": "NO PRESCRIPTION NEEDED",
+            "text": "<p>NO PRESCRIPTION NEEDED</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/Capa_1_3.svg"
           }
         },
         "badge_10": {
           "type": "badge",
           "settings": {
-            "text": "3RD PARTY TESTED",
+            "text": "<p>3RD PARTY TESTED</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/Capa_1_4.svg"
           }
         },
         "badge_11": {
           "type": "badge",
           "settings": {
-            "text": "FOR EVERY <br>TEXTURE",
+            "text": "<p>FOR EVERY <br>TEXTURE</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/Capa_1_2.svg"
           }
         }
@@ -845,7 +845,7 @@
         "step_6": {
           "type": "step",
           "settings": {
-            "heading": "<em>Every night – The 2-minute scalp ritual</em>",
+            "heading": "<p><em>Every night – The 2-minute scalp ritual</em></p>",
             "label": "REGROWTH OIL",
             "text": "<p><strong>Part your hair and apply a few drops directly to the scalp where it’s thinning: your part, crown, temples or edges. Massage in with your fingertips for 60 seconds to get the blood flowing, then leave it in overnight. No rinsing, no greasy residue, and a little goes a long way.</strong></p>"
           }
@@ -853,7 +853,7 @@
         "step_7": {
           "type": "step",
           "settings": {
-            "heading": "<em>Wash days – Wake up the root</em>",
+            "heading": "<p><em>Wash days – Wake up the root</em></p>",
             "label": "ROOT REVIVAL SCALP BRUSH",
             "text": "<p><strong>Work your shampoo in with the soft silicone bristles for two minutes. It lifts build-up away from the follicle and boosts circulation at the root, so your oil goes to work on a clean, receptive scalp.</strong></p>"
           }
@@ -861,7 +861,7 @@
         "step_8": {
           "type": "step",
           "settings": {
-            "heading": "<em>Go further – Inside and out</em>",
+            "heading": "<p><em>Go further – Inside and out</em></p>",
             "label": "PUMPKIN SEED OIL CAPSULES",
             "text": "<p><strong>Support regrowth from the inside with the same DHT-blocking pumpkin seed oil in a daily softgel. Ideal when your thinning is hormonal: perimenopause, postpartum or PCOS.</strong></p>",
             "label_2": "MICROSTAMP PRO",
@@ -871,7 +871,7 @@
         "step_9": {
           "type": "step",
           "settings": {
-            "heading": "Be patient.<br>Hair grows in cycles.",
+            "heading": "<p>Be patient.<br>Hair grows in cycles.</p>",
             "text": "<p><strong>Most women notice less hair in the brush and the shower drain within the first 2–4 weeks. Fine new baby hairs along the hairline and part usually show up around month 2 or 3. Visible density takes 90 days of nightly use.</strong></p><p><strong>Don’t stop at week three. Consistency is the whole secret, and Elaren does the rest.</strong></p>"
           }
         }

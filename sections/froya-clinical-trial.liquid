@@ -26,7 +26,7 @@
       <div class="s-image-content-grid__content-wrapper">
         <div class="s-image-content-grid__content">
           {%- if section.settings.label != blank -%}<div class="s-image-content-grid__label">{{ section.settings.label }}</div>{%- endif -%}
-          <div class="s-image-content-grid__title section-title"><p>{{ section.settings.title }}</p></div>
+          <div class="s-image-content-grid__title section-title"><p>{{ section.settings.title | replace: '</p><p>', '<br>' | remove: '<p>' | remove: '</p>' }}</p></div>
           <div class="s-image-content-grid__blocks">
             {%- for block in section.blocks -%}
               {%- case block.type -%}
@@ -72,7 +72,7 @@
     { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile)", "info": "Optional landscape crop for phones, about 780 × 540 px." },
     { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Published research results for pumpkin seed oil and caffeine" },
     { "type": "text", "id": "label", "label": "Eyebrow", "default": "Peer-reviewed. Placebo-controlled." },
-    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Two Ingredients With<br><em>Published Clinical</em> Results" }
+    { "type": "richtext", "id": "title", "label": "Heading", "default": "<p>Two Ingredients With<br><em>Published Clinical</em> Results</p>" }
   ],
   "blocks": [
     {
