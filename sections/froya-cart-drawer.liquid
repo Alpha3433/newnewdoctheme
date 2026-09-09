@@ -185,7 +185,7 @@
                   {%- endcase -%}
                 {%- endif -%}
               </div>
-              <span>{{ block.settings.text }}</span>
+              <span>{{ block.settings.text | replace: '</p><p>', '<br>' | remove: '<p>' | remove: '</p>' }}</span>
             </div>
           {%- endfor -%}
         </div>
@@ -223,7 +223,7 @@
       "settings": [
         { "type": "select", "id": "default_icon", "label": "Icon", "options": [ { "value": "dollar", "label": "Money-back" }, { "value": "bag", "label": "Bag" }, { "value": "truck", "label": "Shipping" } ], "default": "dollar" },
         { "type": "image_picker", "id": "icon", "label": "Custom icon", "info": "Optional, about 64 × 64 px. Overrides the icon above." },
-        { "type": "inline_richtext", "id": "text", "label": "Text", "default": "90-Day<br>Money-Back" }
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>90-Day<br>Money-Back</p>" }
       ]
     }
   ],

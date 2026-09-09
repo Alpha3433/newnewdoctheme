@@ -334,7 +334,7 @@
           {%- for block in usps -%}
             <div class="s-featured-product__product-icon-wrapper" {{ block.shopify_attributes }}>
               <div class="s-featured-product__product-icon"><picture>{%- render 'froya-image', image: block.settings.icon, fallback: block.settings.icon_fallback, alt: '', width: 32, height: 28 -%}</picture></div>
-              <div class="s-featured-product__product-icon-text">{{ block.settings.text }}</div>
+              <div class="s-featured-product__product-icon-text">{{ block.settings.text | replace: '</p><p>', '<br>' | remove: '<p>' | remove: '</p>' }}</div>
             </div>
           {%- endfor -%}
         </div>
@@ -396,7 +396,7 @@
     { "type": "text", "id": "congrats_text", "label": "Savings line", "default": "Congrats! You’re saving" },
     { "type": "text", "id": "sub_badge", "label": "Subscription badge", "default": "SAVE {percent}% ON EVERY ORDER" },
     { "type": "text", "id": "sub_name", "label": "Subscription option name", "default": "Subscribe & save" },
-    { "type": "richtext", "id": "sub_perks", "label": "Subscription perks", "default": "<ul><li><strong>LOWEST PRICE</strong> every month</li><li><strong>{percent}% OFF</strong> every order</li><li><strong>FREE INSURED SHIPPING</strong> always</li><li><strong>CANCEL, PAUSE, EDIT</strong> anytime</li><li><strong>RESERVED</strong> stock</li><li><strong>LONG-TERM</strong> fuller hair</li></ul>" },
+    { "type": "richtext", "id": "sub_perks", "label": "Subscription perks", "default": "<p><strong>LOWEST PRICE</strong> every month<br><strong>{percent}% OFF</strong> every order<br><strong>FREE INSURED SHIPPING</strong> always<br><strong>CANCEL, PAUSE, EDIT</strong> anytime<br><strong>RESERVED</strong> stock<br><strong>LONG-TERM</strong> fuller hair</p>" },
     { "type": "text", "id": "otp_badge", "label": "One-time badge", "default": "NO COMMITMENT" },
     { "type": "text", "id": "otp_name", "label": "One-time option name", "default": "One-Time Purchase" },
     { "type": "text", "id": "delivery_label", "label": "Delivery frequency label", "default": "Delivered every 30 days" },
@@ -451,7 +451,7 @@
       "name": "USP under the button",
       "settings": [
         { "type": "image_picker", "id": "icon", "label": "Icon", "info": "About 32 × 28 px." },
-        { "type": "inline_richtext", "id": "text", "label": "Text", "default": "fuller hair in 90 days or your money back" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>fuller hair in 90 days or your money back</p>" },
         { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
       ]
     }

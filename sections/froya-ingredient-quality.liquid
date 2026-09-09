@@ -19,7 +19,7 @@
     </div>
 
     <div class="s-image-with-text-blocks__content">
-      <h2 class="s-image-with-text-blocks__title"><p>{{ section.settings.title }}</p></h2>
+      <h2 class="s-image-with-text-blocks__title"><p>{{ section.settings.title | replace: '</p><p>', '<br>' | remove: '<p>' | remove: '</p>' }}</p></h2>
 
       <div class="s-image-with-text-blocks__top-image">
         <picture>
@@ -62,7 +62,7 @@
   "name": "Ingredient quality",
   "tag": "section",
   "settings": [
-    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Why women are <br><em>switching</em> to Elaren" },
+    { "type": "richtext", "id": "title", "label": "Heading", "default": "<p>Why women are <br><em>switching</em> to Elaren</p>" },
     { "type": "image_picker", "id": "image", "label": "Main image (desktop)", "info": "Tall portrait, about 600 × 1060 px." },
     { "type": "image_picker", "id": "image_small", "label": "Small overlay image (desktop)", "info": "Square, about 300 × 300 px." },
     { "type": "image_picker", "id": "image_mobile_top", "label": "Top image (mobile)", "info": "About 390 × 270 px." },
