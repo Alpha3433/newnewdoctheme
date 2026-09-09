@@ -13,16 +13,82 @@
     <header class="drawer__header">
       <span id="mini-cart-title" class="s-mini-cart__title" data-cart-title>{{ section.settings.title }} · {{ cart.item_count }}</span>
       <button type="button" class="drawer__close-button tap-area" data-cart-close aria-label="Close cart">
-        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5"/></svg>
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.1"/></svg>
       </button>
     </header>
     <div class="visually-hidden" aria-live="polite" data-cart-status></div>
 
-    <div class="drawer__content" data-cart-content>
+    <div class="drawer__content{% if cart.item_count == 0 %} drawer__content--empty{% endif %}" data-cart-content>
       {%- if cart.item_count == 0 -%}
+        {%- liquid
+          assign empty_product = section.settings.empty_product
+          if empty_product == blank
+            assign empty_product = upsells | first
+          endif
+          assign threshold = section.settings.shipping_threshold | default: 0 | times: 100
+          assign remaining = threshold | minus: cart.total_price
+          assign remaining_money = remaining | money_without_trailing_zeros
+          assign amount_placeholder = '{amount}'
+          assign progress = 0
+          if threshold > 0
+            assign progress = cart.total_price | times: 100 | divided_by: threshold | at_most: 100
+          endif
+        -%}
+        {%- if section.settings.show_shipping_bar and threshold > 0 -%}
+        <div class="s-mini-cart__empty-shipping free-shipping">
+          <p class="free-shipping__text">
+            {%- if remaining > 0 -%}
+              {{ section.settings.shipping_text | replace: amount_placeholder, remaining_money }} <span>{{ section.settings.shipping_highlight }}</span>
+            {%- else -%}
+              {{ section.settings.shipping_unlocked }}
+            {%- endif -%}
+          </p>
+          <div class="free-shipping__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}">
+            <div class="free-shipping__progress" style="width: {{ progress }}%;"></div>
+            <span class="free-shipping__dot free-shipping__dot--start" aria-hidden="true"></span>
+            <span class="free-shipping__dot free-shipping__dot--end{% if progress >= 100 %} is-reached{% endif %}" aria-hidden="true"></span>
+          </div>
+          {%- if section.settings.shipping_label != blank -%}<span class="free-shipping__label">{{ section.settings.shipping_label }}</span>{%- endif -%}
+        </div>
+        {%- endif -%}
+        {%- if section.settings.reviews_banner != blank -%}
+        <div class="s-mini-cart__reviews-banner">
+          <span class="s-mini-cart__reviews-stars" aria-hidden="true">{%- for i in (1..5) -%}<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 1.8l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.9l-6.4 3.5L7 14.3l-5.3-5 7.2-.9z"/></svg>{%- endfor -%}</span>
+          <span>{{ section.settings.reviews_banner }}</span>
+        </div>
+        {%- endif -%}
         <div class="s-mini-cart__empty">
           <p class="s-mini-cart__empty-title">{{ section.settings.empty_title }}</p>
           {%- if section.settings.empty_text != blank -%}<p class="s-mini-cart__empty-text">{{ section.settings.empty_text }}</p>{%- endif -%}
+          {%- if empty_product != blank -%}
+            {%- liquid
+              assign empty_variant = empty_product.selected_or_first_available_variant
+              assign empty_plan = blank
+              if empty_product.selling_plan_groups.size > 0
+                assign empty_group = empty_product.selling_plan_groups | first
+                assign empty_plan = empty_group.selling_plans | first
+              endif
+            -%}
+            <div class="drawer__product drawer__product--empty">
+              <div class="drawer__product-image">
+                <a href="{{ empty_product.url }}" class="drawer__product-link">
+                  {%- if empty_product.featured_image != blank -%}
+                    {{ empty_product.featured_image | image_url: width: 320, height: 320, crop: 'center' | image_tag: class: 'drawer__product-image', alt: empty_product.title, loading: 'lazy' }}
+                  {%- endif -%}
+                </a>
+              </div>
+              <div class="drawer__product-content">
+                <a href="{{ empty_product.url }}" class="drawer__product-title">{{ empty_product.title }}</a>
+                <div class="drawer__product-price">{{ section.settings.from_label }} <strong>{{ empty_product.price_min | money_without_trailing_zeros }}</strong></div>
+                {%- form 'product', empty_product, class: 'drawer__product-form js-ajax-add' -%}
+                  <input type="hidden" name="id" value="{{ empty_variant.id }}">
+                  <input type="hidden" name="quantity" value="1">
+                  {%- if empty_plan != blank -%}<input type="hidden" name="selling_plan" value="{{ empty_plan.id }}">{%- endif -%}
+                  <button type="submit" class="drawer__product-button"{% unless empty_variant.available %} disabled{% endunless %}>{% if empty_variant.available %}{{ section.settings.empty_add_label }}{% else %}SOLD OUT{% endif %}</button>
+                {%- endform -%}
+              </div>
+            </div>
+          {%- endif -%}
           <a class="custom-button s-mini-cart__empty-button" href="{{ section.settings.empty_url | default: '/collections/all' }}">{{ section.settings.empty_button }}</a>
         </div>
       {%- else -%}
@@ -64,21 +130,6 @@
                     {%- if item.selling_plan_allocation -%}
                       <span class="product-item-meta__plan text--xsmall text--subdued">{{ item.selling_plan_allocation.selling_plan.name }}</span>
                     {%- endif -%}
-                    <div class="product-item-meta__info">
-                      <div class="product-item-meta__price-list-container text--small"><div class="price-list">
-                        <span class="price price--highlight"><span class="product_price">{{ item.final_price | money }}</span></span>
-                        {%- if item.original_price > item.final_price -%}
-                          <span class="price price--compare"><span class="product_price">{{ item.original_price | money }}</span></span>
-                        {%- elsif item.selling_plan_allocation and item.selling_plan_allocation.compare_at_price > item.final_price -%}
-                          <span class="price price--compare"><span class="product_price">{{ item.selling_plan_allocation.compare_at_price | money }}</span></span>
-                        {%- endif -%}
-                      </div></div>
-                      <line-item-quantity class="line-item__quantity"><div class="custom-quantity-selector custom-quantity-selector--small">
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}" aria-label="Decrease quantity">−</button>
-                        <span class="custom-quantity-selector__text">{{ item.quantity }}</span>
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}" aria-label="Increase quantity">+</button>
-                      </div></line-item-quantity>
-                    </div>
                     {%- if plan_id != blank and section.settings.show_subscribe_toggle -%}
                       <div class="line-item__subscription">
                         <label class="subscription-toggle" role="switch" aria-checked="{% if item.selling_plan_allocation %}true{% else %}false{% endif %}">
@@ -91,6 +142,21 @@
                         </label>
                       </div>
                     {%- endif -%}
+                    <div class="product-item-meta__info">
+                      <line-item-quantity class="line-item__quantity"><div class="custom-quantity-selector custom-quantity-selector--small">
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}" aria-label="Decrease quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7" stroke-linecap="round"/></svg></button>
+                        <span class="custom-quantity-selector__text">{{ item.quantity }}</span>
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}" aria-label="Increase quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7M9 5.5v7" stroke-linecap="round"/></svg></button>
+                      </div></line-item-quantity>
+                      <div class="product-item-meta__price-list-container text--small"><div class="price-list">
+                        <span class="price price--highlight"><span class="product_price">{{ item.final_price | money }}</span></span>
+                        {%- if item.original_price > item.final_price -%}
+                          <span class="price price--compare"><span class="product_price">{{ item.original_price | money }}</span></span>
+                        {%- elsif item.selling_plan_allocation and item.selling_plan_allocation.compare_at_price > item.final_price -%}
+                          <span class="price price--compare"><span class="product_price">{{ item.selling_plan_allocation.compare_at_price | money }}</span></span>
+                        {%- endif -%}
+                      </div></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -200,10 +266,22 @@
   "name": "Cart drawer",
   "settings": [
     { "type": "text", "id": "title", "label": "Title", "default": "Cart" },
+    { "type": "header", "content": "Empty cart" },
+    { "type": "checkbox", "id": "show_shipping_bar", "label": "Show free-shipping progress bar", "default": true },
+    { "type": "number", "id": "shipping_threshold", "label": "Free-shipping threshold (in your store currency)", "default": 40 },
+    { "type": "text", "id": "shipping_text", "label": "Progress text", "default": "Spend {amount} and get", "info": "{amount} is replaced with what is left to spend." },
+    { "type": "text", "id": "shipping_highlight", "label": "Progress text highlight", "default": "FREE SHIPPING" },
+    { "type": "text", "id": "shipping_unlocked", "label": "Text once the threshold is reached", "default": "You’ve unlocked FREE SHIPPING" },
+    { "type": "text", "id": "shipping_label", "label": "Bar label", "default": "Free shipping" },
+    { "type": "text", "id": "reviews_banner", "label": "Reviews banner", "default": "RATED 4.77/5 BY VERIFIED CUSTOMERS", "info": "Shown with five stars under the shipping bar. Leave empty to hide." },
     { "type": "text", "id": "empty_title", "label": "Empty cart title", "default": "Your cart is empty" },
-    { "type": "text", "id": "empty_text", "label": "Empty cart text", "default": "Add the regrowth oil to get started. Free insured shipping on every order." },
-    { "type": "text", "id": "empty_button", "label": "Empty cart button", "default": "SHOP NOW" },
-    { "type": "url", "id": "empty_url", "label": "Empty cart button link" },
+    { "type": "text", "id": "empty_text", "label": "Empty cart text", "info": "Optional line under the title." },
+    { "type": "product", "id": "empty_product", "label": "Bestseller to suggest", "info": "Falls back to the first recommended product below." },
+    { "type": "text", "id": "from_label", "label": "Price prefix", "default": "From" },
+    { "type": "text", "id": "empty_add_label", "label": "Add button label", "default": "+ Add To Cart" },
+    { "type": "text", "id": "empty_button", "label": "Shop all button", "default": "Shop All Products" },
+    { "type": "url", "id": "empty_url", "label": "Shop all button link" },
+    { "type": "header", "content": "Line items" },
     { "type": "checkbox", "id": "show_subscribe_toggle", "label": "Show subscribe & save toggle on line items", "default": true },
     { "type": "text", "id": "subscribe_label", "label": "Subscribe toggle label", "default": "SUBSCRIBE & SAVE" },
     { "type": "header", "content": "Recommendations" },

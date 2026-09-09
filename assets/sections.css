@@ -39,6 +39,8 @@
 .s-hero-aging-lp { display: block; }
 .s-hero-aging-lp__title p em { font-style: italic; }
 .s-hero-aging-lp__button.custom-button { border-radius: 4px; }
+.s-hero-aging-lp__highlight-label { background: var(--hero-pill-bg, #b3173a); color: var(--hero-pill-color, #fff); border-radius: 6px; font-weight: 700; font-size: 17px; line-height: 22px; padding: 7px 12px; }
+@media screen and (max-width: 767px) { .s-hero-aging-lp__highlight-label { font-size: 13px; line-height: 18px; padding: 6px 10px; } }
 @media screen and (min-width: 768px) {
   .s-hero-aging-lp__content-wrapper { padding: 40px 40px 40px 60px; }
   .s-hero-aging-lp__review-text { font-family: var(--font-mono); letter-spacing: 0.02em; }

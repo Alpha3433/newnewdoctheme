@@ -317,8 +317,8 @@
       "settings": {
         "title": "Cart",
         "empty_title": "Your cart is empty",
-        "empty_text": "Add the regrowth oil to get started. Free insured shipping on every order.",
-        "empty_button": "SHOP NOW",
+        "empty_text": "",
+        "empty_button": "Shop All Products",
         "empty_url": "/collections/all",
         "show_subscribe_toggle": true,
         "subscribe_label": "SUBSCRIBE & SAVE",
@@ -333,7 +333,10 @@
         "discount_label": "DISCOUNT",
         "subtotal_label": "SUBTOTAL",
         "checkout_label": "SECURE CHECKOUT",
-        "show_total_on_button": true
+        "show_total_on_button": true,
+        "empty_product": "elaren-pumpkin-seed-oil-regrowth-serum",
+        "reviews_banner": "RATED 4.77/5 BY VERIFIED CUSTOMERS",
+        "shipping_threshold": 40
       }
     }
   },
