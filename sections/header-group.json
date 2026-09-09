@@ -14,40 +14,19 @@
     "announcement-bar": {
       "type": "froya-announcement-bar",
       "settings": {
-        "text": "FREE INSURED SHIPPING 🌱 90-DAY MONEY-BACK GUARANTEE"
+        "text": "FREE INSURED SHIPPING 🌱 90-DAY MONEY-BACK GUARANTEE",
+        "link": ""
       }
     },
     "header": {
       "type": "froya-header",
-      "settings": {
-        "logo_width": 100,
-        "shop_label": "Shop",
-        "bestsellers_label": "Bestsellers",
-        "more_label": "More",
-        "cart_label": "CART",
-        "shop_title": "Shop by Product",
-        "shop_all_label": "Shop All",
-        "shop_all_url": "/collections/all",
-        "drawer_shop_all_label": "SHOP ALL PRODUCTS",
-        "pill_bestseller": "Best Seller",
-        "pill_new": "New",
-        "goals_title": "Shop by Goal",
-        "testimonial_quote": "\"I have alopecia and it didn’t feel greasy once applied. <strong>From the oil to the scalp massager, 10 out of 10!</strong>\"",
-        "testimonial_author": "- Tamara I., verified buyer",
-        "quiz_title": "Not Sure Where To Start?",
-        "quiz_cta": "TALK TO US",
-        "quiz_url": "/pages/contact",
-        "blog_label": "The Elaren Journal · Blog",
-        "blog_limit": 7,
-        "read_more_label": "Read more",
-        "drawer_note": "Women’s hair wellness · Rated 4.77/5 by verified customers"
-      },
       "blocks": {
         "shop_1": {
           "type": "shop_item",
           "settings": {
             "product": "elaren-pumpkin-seed-oil-regrowth-serum",
             "label": "Pumpkin Seed Regrowth Oil with Caffeine Complex",
+            "url": "",
             "pill": "bestseller"
           }
         },
@@ -56,6 +35,7 @@
           "settings": {
             "product": "pumpkin-seed-oil-capsules",
             "label": "Pumpkin Seed Oil Capsules",
+            "url": "",
             "pill": "bestseller"
           }
         },
@@ -64,6 +44,7 @@
           "settings": {
             "product": "elaren-root-revival-scalp-brush",
             "label": "Root Revival Scalp Brush",
+            "url": "",
             "pill": "none"
           }
         },
@@ -72,6 +53,7 @@
           "settings": {
             "product": "elaren-microstamp-pro",
             "label": "MicroStamp Pro",
+            "url": "",
             "pill": "none"
           }
         },
@@ -80,6 +62,7 @@
           "settings": {
             "product": "elaren-sleepsilk-pillowcase",
             "label": "SleepSilk Pillowcase",
+            "url": "",
             "pill": "none"
           }
         },
@@ -88,6 +71,7 @@
           "settings": {
             "product": "elaren-rosemary-scalp-elixir",
             "label": "Rosemary Scalp Elixir",
+            "url": "",
             "pill": "new"
           }
         },
@@ -96,6 +80,7 @@
           "settings": {
             "product": "elaren-gentlehold-satin-set",
             "label": "GentleHold Satin Set",
+            "url": "",
             "pill": "new"
           }
         },
@@ -104,6 +89,7 @@
           "settings": {
             "product": "elaren-instafull-thickening-fibers",
             "label": "InstaFull Thickening Fibers",
+            "url": "",
             "pill": "new"
           }
         },
@@ -139,6 +125,7 @@
           "type": "card",
           "settings": {
             "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "title": "",
             "badge": "SAVE 10% ON SUBSCRIPTION",
             "subtitle": "With Caffeine Complex · 30-day supply",
             "rating": 4.8,
@@ -150,6 +137,7 @@
           "type": "card",
           "settings": {
             "product": "pumpkin-seed-oil-capsules",
+            "title": "",
             "badge": "SAVE 10% ON SUBSCRIPTION",
             "subtitle": "DHT-blocking support from the inside",
             "rating": 4.7,
@@ -269,34 +257,35 @@
         "post_5",
         "post_6",
         "post_7"
-      ]
+      ],
+      "settings": {
+        "logo": "shopify://shop_images/hf_20260509_170327_c83b61e7-455e-4c70-94eb-e812328a9e2a.png",
+        "logo_width": 240,
+        "shop_label": "Shop",
+        "bestsellers_label": "Bestsellers",
+        "more_label": "More",
+        "cart_label": "CART",
+        "shop_title": "Shop by Product",
+        "shop_all_label": "Shop All",
+        "shop_all_url": "/collections/all",
+        "drawer_shop_all_label": "SHOP ALL PRODUCTS",
+        "pill_bestseller": "Best Seller",
+        "pill_new": "New",
+        "goals_title": "Shop by Goal",
+        "testimonial_quote": "\"I have alopecia and it didn’t feel greasy once applied. <strong>From the oil to the scalp massager, 10 out of 10!</strong>\"",
+        "testimonial_author": "- Tamara I., verified buyer",
+        "quiz_title": "Not Sure Where To Start?",
+        "quiz_cta": "TALK TO US",
+        "quiz_url": "/pages/contact",
+        "blog_label": "The Elaren Journal · Blog",
+        "blog": "",
+        "blog_limit": 7,
+        "read_more_label": "Read more",
+        "drawer_note": "Women’s hair wellness · Rated 4.77/5 by verified customers"
+      }
     },
     "cart-drawer": {
       "type": "froya-cart-drawer",
-      "settings": {
-        "title": "Cart",
-        "empty_title": "Your cart is empty",
-        "empty_text": "",
-        "empty_button": "Shop All Products",
-        "empty_url": "/collections/all",
-        "show_subscribe_toggle": true,
-        "subscribe_label": "SUBSCRIBE & SAVE",
-        "upsell_title": "PAIR WITH:",
-        "upsells": [
-          "pumpkin-seed-oil-capsules",
-          "elaren-root-revival-scalp-brush",
-          "elaren-microstamp-pro",
-          "elaren-sleepsilk-pillowcase"
-        ],
-        "upsell_button": "ADD TO CART",
-        "discount_label": "DISCOUNT",
-        "subtotal_label": "SUBTOTAL",
-        "checkout_label": "SECURE CHECKOUT",
-        "show_total_on_button": true,
-        "empty_product": "elaren-pumpkin-seed-oil-regrowth-serum",
-        "reviews_banner": "RATED 4.77/5 BY VERIFIED CUSTOMERS",
-        "shipping_threshold": 40
-      },
       "blocks": {
         "badge_1": {
           "type": "badge",
@@ -324,7 +313,31 @@
         "badge_1",
         "badge_2",
         "badge_3"
-      ]
+      ],
+      "settings": {
+        "title": "Cart",
+        "empty_title": "Your cart is empty",
+        "empty_text": "",
+        "empty_button": "Shop All Products",
+        "empty_url": "/collections/all",
+        "show_subscribe_toggle": true,
+        "subscribe_label": "SUBSCRIBE & SAVE",
+        "upsell_title": "PAIR WITH:",
+        "upsells": [
+          "pumpkin-seed-oil-capsules",
+          "elaren-root-revival-scalp-brush",
+          "elaren-microstamp-pro",
+          "elaren-sleepsilk-pillowcase"
+        ],
+        "upsell_button": "ADD TO CART",
+        "discount_label": "DISCOUNT",
+        "subtotal_label": "SUBTOTAL",
+        "checkout_label": "SECURE CHECKOUT",
+        "show_total_on_button": true,
+        "empty_product": "elaren-pumpkin-seed-oil-regrowth-serum",
+        "reviews_banner": "RATED 4.77/5 BY VERIFIED CUSTOMERS",
+        "shipping_threshold": 40
+      }
     }
   },
   "order": [
