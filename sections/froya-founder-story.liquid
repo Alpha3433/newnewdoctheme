@@ -1,45 +1,41 @@
 {% comment %}
-  Frøya founder story – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  Founder / brand story – image + rich text, editable in the theme editor.
+  The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
 <div class="shopify-section custom-image-and-text" id="shopify-section-template--26717513089391__custom_image_and_text_hqnCVC">
-
-
-
-
-
-<section class="s-image-text-section--position--right s-image-text-section">
+<section class="s-image-text-section--position--{{ section.settings.image_position }} s-image-text-section">
   <div class="s-image-text-section__content">
-            <div class="block-subtitle_gDAiGX s-image-text-section__subtitle"><p><strong>The Story Behind Elaren</strong></p></div>
-            <h2 class="section-title block-heading_bGXJ83 s-image-text-section__title--mobile-alignment--left s-image-text-section__title--desktop-alignment--right s-image-text-section__title">
-              <p></p><p>Why We Started Elaren</p><p></p>
-            </h2><div class="s-image-text-section__rich-content s-image-text-section__rich-content--width--medium s-image-text-section__rich-content--font-weight--bold s-image-text-section__rich-content--font-size--medium">
-            <div class="s-image-text-section__rich-content--desktop">
-              <p><strong>If you’ve tried everything, we understand.<br/>We have too.<br/><br/></strong>Thickening shampoos, biotin gummies, rosemary oil from the internet, a doctor who shrugged and said “it’s just your age”...<strong> only to find more hair in the shower drain, a wider part in every photo, and one more bottle on the shelf that didn’t work.</strong></p><p><strong>Hair loss isn’t just about hair.<br/>It changes how you feel walking into a room, how you look in photos, and how you see yourself in the mirror every morning.</strong></p><p><strong>That’s why we created Elaren.<br/>Our founder started losing his hair at 31 and went to the clinical research instead of the marketing. Pumpkin seed oil kept coming up as a natural DHT blocker. When his partner’s crown thinning started improving on the same routine, we realised the women in our lives were being ignored by an industry built for men and sold to them in prettier packaging. </strong></p><p><strong>So we built the regrowth oil we wished existed: cold-pressed pumpkin seed oil, powered by a Caffeine Complex, made for a woman’s scalp and a woman’s hair loss. No prescriptions. No side effects. No $3,000 clinic visits. </strong>And 10% of every purchase goes to hair-loss research.</p><p><strong>We don’t expect you to take our word for it. That’s why every bottle comes with a </strong>90-day money-back guarantee.<strong><br/>If you don’t see a difference, just let us know. No hassle, no awkward questions.</strong></p><p><strong>If you’re ready to finally see a change, take a photo of your part today. In a few months you might be sending it to us with the message we hear most: “I can’t believe I didn’t start sooner.”</strong></p>
-            </div>
-            <div class="s-image-text-section__rich-content--mobile">
-              <p><strong>If you’ve tried everything, we understand.<br/>We have too.<br/><br/></strong>Thickening shampoos, biotin gummies, rosemary oil from the internet, a doctor who shrugged and said “it’s just your age”...<strong> only to find more hair in the shower drain, a wider part in every photo, and one more bottle on the shelf that didn’t work.</strong></p><p><strong>Hair loss isn’t just about hair.<br/>It changes how you feel walking into a room, how you look in photos, and how you see yourself in the mirror every morning.</strong></p><p><strong>That’s why we created Elaren.<br/>Our founder started losing his hair at 31 and went to the clinical research instead of the marketing. Pumpkin seed oil kept coming up as a natural DHT blocker. When his partner’s crown thinning started improving on the same routine, we realised the women in our lives were being ignored by an industry built for men and sold to them in prettier packaging. </strong></p><p><strong>So we built the regrowth oil we wished existed: cold-pressed pumpkin seed oil, powered by a Caffeine Complex, made for a woman’s scalp and a woman’s hair loss. No prescriptions. No side effects. No $3,000 clinic visits. </strong>And 10% of every purchase goes to hair-loss research.</p><p><strong>We don’t expect you to take our word for it. That’s why every bottle comes with a </strong>90-day money-back guarantee.<strong><br/>If you don’t see a difference, just let us know. No hassle, no awkward questions.</strong></p><p><strong>If you’re ready to finally see a change, take a photo of your part today. In a few months you might be sending it to us with the message we hear most: “I can’t believe I didn’t start sooner.”</strong></p>
-            </div>
-          </div></div><div class="s-image-text-section__image s-image-text-section__image--image-size--smaller">
-<picture>
-  
-  <img alt="" decoding="async" fetchpriority="auto" height="700" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Frame_3960.png" width="600"/>
-</picture></div></section>
-
-
-
-
-
+    {%- if section.settings.subtitle != blank -%}
+      <div class="block-subtitle_gDAiGX s-image-text-section__subtitle"><p><strong>{{ section.settings.subtitle }}</strong></p></div>
+    {%- endif -%}
+    <h2 class="section-title block-heading_bGXJ83 s-image-text-section__title--mobile-alignment--left s-image-text-section__title--desktop-alignment-{{ section.settings.image_position | replace: 'right', '-right' | replace: 'left', '-left' }} s-image-text-section__title">
+      <p></p><p>{{ section.settings.title }}</p><p></p>
+    </h2>
+    <div class="s-image-text-section__rich-content s-image-text-section__rich-content--width--medium s-image-text-section__rich-content--font-weight--bold s-image-text-section__rich-content--font-size--medium">
+      <div class="s-image-text-section__rich-content--desktop">{{ section.settings.text }}</div>
+      <div class="s-image-text-section__rich-content--mobile">{{ section.settings.text }}</div>
+    </div>
+  </div>
+  <div class="s-image-text-section__image s-image-text-section__image--image-size--smaller">
+    <picture>
+      {%- render 'froya-image', image: section.settings.image, fallback: 'https://froyaorganics.com/cdn/shop/files/Frame_3960.png', alt: section.settings.image_alt, width: 600, height: 700, sizes: '(min-width: 990px) 40vw, 100vw' -%}
+    </picture>
+  </div>
+</section>
 </div>
 
 {% schema %}
 {
-  "name": "Frøya founder story",
-  "settings": [],
-  "presets": [
-    {
-      "name": "Frøya founder story"
-    }
-  ]
+  "name": "Founder story",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Portrait image, about 600 × 700 px." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "The Elaren founders" },
+    { "type": "select", "id": "image_position", "label": "Image position", "options": [ { "value": "right", "label": "Right" }, { "value": "left", "label": "Left" } ], "default": "right" },
+    { "type": "text", "id": "subtitle", "label": "Eyebrow", "default": "The Story Behind Elaren" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Why We Started Elaren" },
+    { "type": "richtext", "id": "text", "label": "Story", "default": "<p><strong>If you’ve tried everything, we understand.<br>We have too.<br><br></strong>Thickening shampoos, biotin gummies, rosemary oil from the internet, a doctor who shrugged and said “it’s just your age”...<strong> only to find more hair in the shower drain, a wider part in every photo, and one more bottle on the shelf that didn’t work.</strong></p><p><strong>Hair loss isn’t just about hair.<br>It changes how you feel walking into a room, how you look in photos, and how you see yourself in the mirror every morning.</strong></p><p><strong>That’s why we created Elaren.<br>Our founder started losing his hair at 31 and went to the clinical research instead of the marketing. Pumpkin seed oil kept coming up as a natural DHT blocker. When his partner’s crown thinning started improving on the same routine, we realised the women in our lives were being ignored by an industry built for men and sold to them in prettier packaging.</strong></p><p><strong>So we built the regrowth oil we wished existed: cold-pressed pumpkin seed oil, powered by a Caffeine Complex, made for a woman’s scalp and a woman’s hair loss. No prescriptions. No side effects. No $3,000 clinic visits.</strong> And 10% of every purchase goes to hair-loss research.</p><p><strong>We don’t expect you to take our word for it. That’s why every bottle comes with a </strong>90-day money-back guarantee.<strong><br>If you don’t see a difference, just let us know. No hassle, no awkward questions.</strong></p><p><strong>If you’re ready to finally see a change, take a photo of your part today. In a few months you might be sending it to us with the message we hear most: “I can’t believe I didn’t start sooner.”</strong></p>" }
+  ],
+  "presets": [ { "name": "Founder story" } ]
 }
 {% endschema %}

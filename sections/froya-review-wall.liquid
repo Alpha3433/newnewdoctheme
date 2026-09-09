@@ -1,44 +1,43 @@
 {% comment %}
-  Frøya review wall – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  Review wall – heading plus one tall image for mobile and one for desktop (screenshots of raw reviews).
+  The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
 <div class="shopify-section shopify-section--custom-liquid" id="shopify-section-template--26717513089391__custom_liquid_rgXzGz"><section class="section default-section-class-dev">
   <div>
     <div class="section__color-wrapper">
-      <div class="container"><header class="section__header text-container" id="reviews-section" style="scroll-margin-top: 80px"><h2 class="heading heading--small" style="margin-bottom: 0;">Raw, unedited reviews</h2><h3 class="section-title" style="margin-top: 15px;">
-                <p>Real women, real hair, real reviews</p>
-              </h3></header>
-          
-          <div class="liquid">
-            <div class="liquid--mobile-image">
-              
-<picture>
-  
-  <img alt="" decoding="async" fetchpriority="auto" height="3703" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/raw_reviews-m.jpg" width="600"/>
-</picture>
-            </div>
-            <div class="liquid--desktop-image">
-              
-<picture>
-  
-  <img alt="" decoding="async" fetchpriority="auto" height="910" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/raw_reviews-d.png" width="600"/>
-</picture>
-            </div>
-          </div></div>
+      <div class="container"><header class="section__header text-container" id="reviews-section" style="scroll-margin-top: 80px">
+          {%- if section.settings.eyebrow != blank -%}<h2 class="heading heading--small" style="margin-bottom: 0;">{{ section.settings.eyebrow }}</h2>{%- endif -%}
+          <h3 class="section-title" style="margin-top: 15px;"><p>{{ section.settings.title }}</p></h3>
+        </header>
+
+        <div class="liquid">
+          <div class="liquid--mobile-image">
+            <picture>
+              {%- render 'froya-image', image: section.settings.image_mobile, fallback: 'https://froyaorganics.com/cdn/shop/files/raw_reviews-m.jpg', alt: section.settings.image_alt, width: 600, height: 3703, sizes: '100vw' -%}
+            </picture>
+          </div>
+          <div class="liquid--desktop-image">
+            <picture>
+              {%- render 'froya-image', image: section.settings.image, fallback: 'https://froyaorganics.com/cdn/shop/files/raw_reviews-d.png', alt: section.settings.image_alt, width: 1200, height: 1820, sizes: '(min-width: 990px) 1200px, 100vw' -%}
+            </picture>
+          </div>
+        </div></div>
     </div>
   </div>
 </section>
-
 </div>
 
 {% schema %}
 {
-  "name": "Frøya review wall",
-  "settings": [],
-  "presets": [
-    {
-      "name": "Frøya review wall"
-    }
-  ]
+  "name": "Review wall",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Raw, unedited reviews" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Real women, real hair, real reviews" },
+    { "type": "image_picker", "id": "image", "label": "Desktop image", "info": "Wide collage of review screenshots, about 1200 × 1820 px." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image", "info": "Tall collage for phones, about 600 × 3700 px." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Screenshots of verified customer reviews" }
+  ],
+  "presets": [ { "name": "Review wall" } ]
 }
 {% endschema %}

@@ -1,382 +1,324 @@
 {% comment %}
-  Frøya header – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  Header – sticky bar with mega menus and the mobile drawer. Logo, labels, links, cards, testimonial,
+  quiz panel and blog links are all editable in the theme editor. The cart button opens the cart drawer.
+  The wrapper ids are kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
+{%- liquid
+  assign shop_items = section.blocks | where: 'type', 'shop_item'
+  assign goals = section.blocks | where: 'type', 'goal'
+  assign cards = section.blocks | where: 'type', 'card'
+  assign more_links = section.blocks | where: 'type', 'more_link'
+  assign posts = section.blocks | where: 'type', 'post'
+  assign logo_fallback = 'https://froyaorganics.com/cdn/shop/files/froya-logo-v4.svg'
+  assign quiz_fallback_desktop = 'https://cdn.shopify.com/s/files/1/0473/9999/3493/files/quiz_1.png?v=1778647247'
+  assign quiz_fallback_mobile = 'https://cdn.shopify.com/s/files/1/0473/9999/3493/files/quiz.png?v=1778644514'
+  if section.settings.quiz_image != blank
+    assign quiz_bg_desktop = section.settings.quiz_image | image_url: width: 600
+    assign quiz_bg_mobile = quiz_bg_desktop
+  else
+    assign quiz_bg_desktop = quiz_fallback_desktop
+    assign quiz_bg_mobile = quiz_fallback_mobile
+  endif
+  assign blog_articles = blank
+  if section.settings.blog != blank
+    assign blog_articles = section.settings.blog.articles
+  endif
+-%}
+{%- capture quiz_panel -%}
+  {%- if section.settings.quiz_title != blank -%}
+  <div class="froya-nav__mega-quiz" style="background-image: url('{{ quiz_bg_desktop }}');">
+    <p class="froya-nav__mega-quiz-title">{{ section.settings.quiz_title }}</p>
+    {%- if section.settings.quiz_cta != blank -%}<a class="froya-nav__mega-quiz-cta" href="{{ section.settings.quiz_url | default: '/pages/contact' }}">{{ section.settings.quiz_cta }}</a>{%- endif -%}
+  </div>
+  {%- endif -%}
+{%- endcapture -%}
+{%- capture blog_list -%}
+  {%- if section.settings.blog_label != blank -%}
+    {%- if blog_articles != blank and blog_articles.size > 0 -%}
+      <ul class="froya-nav-blog__list" role="list">
+        {%- for article in blog_articles limit: section.settings.blog_limit -%}
+          <li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="{{ article.url }}">
+            <span class="froya-nav-blog__title">{{ article.title }}</span>
+            <span class="froya-nav-blog__readmore">{{ section.settings.read_more_label }}</span>
+          </a></li>
+        {%- endfor -%}
+      </ul>
+    {%- elsif posts.size > 0 -%}
+      <ul class="froya-nav-blog__list" role="list">
+        {%- for block in posts -%}
+          <li class="froya-nav-blog__item" {{ block.shopify_attributes }}><a class="froya-nav-blog__link" href="{{ block.settings.url | default: '/blogs/news' }}">
+            <span class="froya-nav-blog__title">{{ block.settings.title }}</span>
+            <span class="froya-nav-blog__readmore">{{ section.settings.read_more_label }}</span>
+          </a></li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- capture testimonial -%}
+  {%- if section.settings.testimonial_quote != blank -%}
+    <p class="froya-nav__mega-testimonial-quote">{{ section.settings.testimonial_quote }}</p>
+    <span class="froya-nav__mega-testimonial-meta">
+      <span aria-hidden="true" class="froya-nav-drawer__testimonial-stars">★★★★★</span>
+      {{ section.settings.testimonial_author }}
+    </span>
+  {%- endif -%}
+{%- endcapture -%}
 <div class="shopify-section froya-nav-section" id="shopify-section-froya-nav-variant">
-
 <froya-nav-variant class="froya-nav" data-section-id="froya-nav-variant" role="banner">
   <div class="froya-nav__bar">
     <button aria-controls="froya-nav-drawer-froya-nav-variant" aria-expanded="false" aria-label="Open menu" class="froya-nav__burger" type="button">
-      <svg aria-hidden="true" fill="none" viewBox="0 0 20 14">
-        <path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.5"></path>
-      </svg>
+      <svg aria-hidden="true" fill="none" viewBox="0 0 20 14"><path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.5"></path></svg>
     </button><ul class="froya-nav__desktop-nav froya-nav__desktop-nav--left" role="list"><li class="froya-nav__nav-item">
-          <button aria-controls="froya-nav-mega-default-shop" aria-expanded="false" class="froya-nav__nav-link" data-mega-href="/collections/all" data-mega-kind="shop" data-mega-label="Shop" data-mega-target="default-shop" type="button"><span class="froya-nav__nav-label">Shop</span></button>
+          <button aria-controls="froya-nav-mega-default-shop" aria-expanded="false" class="froya-nav__nav-link" data-mega-href="{{ section.settings.shop_all_url | default: '/collections/all' }}" data-mega-kind="shop" data-mega-label="{{ section.settings.shop_label | escape }}" data-mega-target="default-shop" type="button"><span class="froya-nav__nav-label">{{ section.settings.shop_label }}</span></button>
         </li>
+        {%- if cards.size > 0 -%}
         <li class="froya-nav__nav-item">
-          <button aria-controls="froya-nav-mega-default-bestsellers" aria-expanded="false" class="froya-nav__nav-link" data-mega-kind="best_sellers" data-mega-label="Bestsellers" data-mega-target="default-bestsellers" type="button"><span class="froya-nav__nav-label">Bestsellers</span></button>
-        </li></ul>
+          <button aria-controls="froya-nav-mega-default-bestsellers" aria-expanded="false" class="froya-nav__nav-link" data-mega-kind="best_sellers" data-mega-label="{{ section.settings.bestsellers_label | escape }}" data-mega-target="default-bestsellers" type="button"><span class="froya-nav__nav-label">{{ section.settings.bestsellers_label }}</span></button>
+        </li>
+        {%- endif -%}</ul>
 
     <div class="froya-nav__logo">
-      <a class="header__logo-link" href="/">
-        <span class="visually-hidden">Elaren</span><img alt="" class="header__logo-image" height="69" loading="eager" src="https://froyaorganics.com/cdn/shop/files/froya-logo-v4.svg" width="369"/></a>
+      <a class="header__logo-link" href="{{ routes.root_url }}" style="--logo-width: {{ section.settings.logo_width }}px;">
+        <span class="visually-hidden">{{ shop.name }}</span>
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 800 | image_tag: class: 'header__logo-image', alt: shop.name, loading: 'eager', width: section.settings.logo_width }}
+        {%- else -%}
+          <img alt="{{ shop.name | escape }}" class="header__logo-image" height="69" loading="eager" src="{{ logo_fallback }}" width="369">
+        {%- endif -%}
+      </a>
     </div>
 
     <div class="froya-nav__right header__icon-list"><ul class="froya-nav__desktop-nav froya-nav__desktop-nav--right" role="list"><li class="froya-nav__nav-item">
-            <button aria-controls="froya-nav-mega-default-more" aria-expanded="false" class="froya-nav__nav-link froya-nav__nav-link--more" data-mega-kind="more" data-mega-label="More" data-mega-target="default-more" type="button"><span class="froya-nav__nav-label">More</span></button>
+            <button aria-controls="froya-nav-mega-default-more" aria-expanded="false" class="froya-nav__nav-link froya-nav__nav-link--more" data-mega-kind="more" data-mega-label="{{ section.settings.more_label | escape }}" data-mega-target="default-more" type="button"><span class="froya-nav__nav-label">{{ section.settings.more_label }}</span></button>
           </li></ul>
 
-      <a aria-controls="mini-cart" aria-expanded="false" aria-label="Cart" class="header__icon-wrapper tap-area button header-button cart-button" data-drawer-toggle-bound="true" data-no-instant="" href="/cart" is="toggle-link">
-        CART
-        <cart-count class="header__cart-count header__cart-count--floating bubble-count hidden" data-froya-nav-bubble="">0</cart-count>
+      <a aria-controls="mini-cart" aria-expanded="false" aria-label="Cart" class="header__icon-wrapper tap-area button header-button cart-button js-cart-toggle" href="{{ routes.cart_url }}">
+        {{ section.settings.cart_label }}
+        <cart-count class="header__cart-count header__cart-count--floating bubble-count{% if cart.item_count == 0 %} hidden{% endif %}" data-cart-count-bubble>{{ cart.item_count }}</cart-count>
       </a>
     </div>
   </div><div class="froya-nav__mega froya-nav__mega--shop" data-mega-panel="default-shop" id="froya-nav-mega-default-shop">
   <div class="froya-nav__mega-inner" style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) 254px; gap: 48px; align-items: stretch;"><div>
-        <p class="froya-nav__mega-title">Shop by Product</p>
+        <p class="froya-nav__mega-title">{{ section.settings.shop_title }}</p>
         <ul class="froya-nav__shop-list" role="list">
           <li class="froya-nav__shop-item froya-nav__shop-item--shop-all">
-            <a href="/collections/all"><span data-text="Shop All"><span>Shop All</span></span></a>
-          </li><li class="froya-nav__shop-item froya-nav__shop-item--bestseller">
-                  <a href="/products/elaren-pumpkin-seed-oil-regrowth-serum"><span data-text="Pumpkin Seed Regrowth Oil with Caffeine Complex"><span>Pumpkin Seed Regrowth Oil with Caffeine Complex</span></span><span class="froya-nav__pill">Best Seller</span></a>
-                </li><li class="froya-nav__shop-item froya-nav__shop-item--bestseller">
-                  <a href="/products/pumpkin-seed-oil-capsules"><span data-text="Pumpkin Seed Oil Capsules"><span>Pumpkin Seed Oil Capsules</span></span><span class="froya-nav__pill">Best Seller</span></a>
-                </li><li class="froya-nav__shop-item">
-                  <a href="/products/elaren-root-revival-scalp-brush"><span data-text="Root Revival Scalp Brush"><span>Root Revival Scalp Brush</span></span></a>
-                </li><li class="froya-nav__shop-item">
-                  <a href="/products/elaren-microstamp-pro"><span data-text="MicroStamp Pro"><span>MicroStamp Pro</span></span></a>
-                </li><li class="froya-nav__shop-item">
-                  <a href="/products/elaren-sleepsilk-pillowcase"><span data-text="SleepSilk Pillowcase"><span>SleepSilk Pillowcase</span></span></a>
-                </li><li class="froya-nav__shop-item">
-                  <a href="/products/elaren-rosemary-scalp-elixir"><span data-text="Rosemary Scalp Elixir"><span>Rosemary Scalp Elixir</span></span><span class="froya-nav__pill froya-nav__pill--new">New</span></a>
-                </li><li class="froya-nav__shop-item">
-                  <a href="/products/elaren-gentlehold-satin-set"><span data-text="GentleHold Satin Set"><span>GentleHold Satin Set</span></span><span class="froya-nav__pill froya-nav__pill--new">New</span></a>
-                </li><li class="froya-nav__shop-item">
-                  <a href="/products/elaren-instafull-thickening-fibers"><span data-text="InstaFull Thickening Fibers"><span>InstaFull Thickening Fibers</span></span><span class="froya-nav__pill froya-nav__pill--new">New</span></a>
-                </li></ul>
+            <a href="{{ section.settings.shop_all_url | default: '/collections/all' }}"><span data-text="{{ section.settings.shop_all_label | escape }}"><span>{{ section.settings.shop_all_label }}</span></span></a>
+          </li>
+          {%- for block in shop_items -%}
+            {%- liquid
+              assign item_title = block.settings.label | default: block.settings.product.title
+              assign item_url = block.settings.url | default: block.settings.product.url | default: '/collections/all'
+            -%}
+            {%- if item_title != blank -%}
+            <li class="froya-nav__shop-item{% if block.settings.pill == 'bestseller' %} froya-nav__shop-item--bestseller{% endif %}" {{ block.shopify_attributes }}>
+              <a href="{{ item_url }}"><span data-text="{{ item_title | escape }}"><span>{{ item_title }}</span></span>{% if block.settings.pill == 'bestseller' %}<span class="froya-nav__pill">{{ section.settings.pill_bestseller }}</span>{% elsif block.settings.pill == 'new' %}<span class="froya-nav__pill froya-nav__pill--new">{{ section.settings.pill_new }}</span>{% endif %}</a>
+            </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
       </div>
-
       <div>
-        <p class="froya-nav__mega-title">Shop by Goal</p>
-        <ul class="froya-nav__goal-list" role="list"><li class="froya-nav__goal-item"><a href="/collections/all">Thinning Part &amp; Crown</a></li>
-            <li class="froya-nav__goal-item"><a href="/collections/all">Postpartum &amp; Menopausal Shedding</a></li>
-            <li class="froya-nav__goal-item"><a href="/collections/all">Edges, Traction &amp; Breakage</a></li>
-            <li class="froya-nav__goal-item"><a href="/collections/all">Alopecia &amp; Scalp Health</a></li></ul>
+        <p class="froya-nav__mega-title">{{ section.settings.goals_title }}</p>
+        <ul class="froya-nav__goal-list" role="list">
+          {%- for block in goals -%}
+            <li class="froya-nav__goal-item" {{ block.shopify_attributes }}><a href="{{ block.settings.url | default: '/collections/all' }}">{{ block.settings.label }}</a></li>
+          {%- endfor -%}
+        </ul>
       </div>
-
       <div class="froya-nav__mega-testimonial">
+        {%- if testimonial != blank -%}
         <div class="froya-nav__mega-testimonial-card">
-          <div class="froya-nav__mega-testimonial-image"><img alt="Customer before and after" decoding="async" height="144" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Group_1484582098_1.png" width="240"/></div>
-          <div class="froya-nav__mega-testimonial-content">
-            <p class="froya-nav__mega-testimonial-quote">"I have alopecia and it didn’t feel greasy once applied. <strong>From the oil to the scalp massager, 10 out of 10!</strong>"
-</p>
-            <span class="froya-nav__mega-testimonial-meta">
-              <span aria-hidden="true" class="froya-nav-drawer__testimonial-stars">★★★★★</span>
-              - Tamara I., verified buyer
-            </span>
+          <div class="froya-nav__mega-testimonial-image">
+            {%- render 'froya-image', image: section.settings.testimonial_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Group_1484582098_1.png', alt: 'Customer before and after', width: 240, height: 144 -%}
           </div>
+          <div class="froya-nav__mega-testimonial-content">{{ testimonial }}</div>
         </div>
-      </div></div><div class="froya-nav__mega-quiz" style="background-image: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/quiz_1.png?v=1778647247');">
-      <p class="froya-nav__mega-quiz-title">Not Sure Where To Start?</p>
-      <a class="froya-nav__mega-quiz-cta" href="/pages/contact">TALK TO US</a>
-    </div></div>
+        {%- endif -%}
+      </div></div>{{ quiz_panel }}</div>
+{%- if cards.size > 0 -%}
 <div class="froya-nav__mega froya-nav__mega--best_sellers" data-mega-panel="default-bestsellers" id="froya-nav-mega-default-bestsellers">
-  <div class="froya-nav__mega-inner" style="display: grid; grid-template-columns: repeat(3, 265px); gap: 32px; justify-content: center; align-items: start;"><div class="froya-nav-card froya-nav-card--vertical" data-product-id="9704313225573">
-    <a aria-label="Pumpkin Seed Regrowth Oil" class="froya-nav-card__image" href="/products/elaren-pumpkin-seed-oil-regrowth-serum"><span class="froya-nav-card__badge">SAVE 10% ON SUBSCRIPTION</span><img alt="Pumpkin Seed Regrowth Oil" class="froya-nav-card__img" decoding="async" height="530" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Rectangle_391_3.png" width="530"/></a>
-    <div class="froya-nav-card__content"><span aria-label="Rated 4.8 out of 5 stars" class="froya-nav-stars">
-    <span aria-hidden="true" class="froya-nav-stars__row"><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--partial">
-            <svg class="froya-nav-stars__partial-bg" fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044" fill-opacity="0.2"></path>
-            </svg>
-            <svg class="froya-nav-stars__partial-fg" fill="none" focusable="false" height="9" style="clip-path: inset(0 20% 0 0);" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span></span><span class="froya-nav-stars__count">43 Reviews</span></span><a class="froya-nav-card__title-link" href="/products/elaren-pumpkin-seed-oil-regrowth-serum">
-        <p class="froya-nav-card__title">Pumpkin Seed Regrowth Oil</p>
-      </a><p class="froya-nav-card__copy">With Caffeine Complex · 30-day supply</p><p class="froya-nav-card__price">from
-
-
-
-
-<span class="product_price">$34.99</span></p><product-payment-container class="froya-nav-card__payment-container" form-id="froya-nav-cta-9704313225573">
-          <form class="froya-nav-card__form" id="froya-nav-cta-9704313225573">
-            <input name="id" type="hidden" value="50251934007653"/>
-            <input name="quantity" type="hidden" value="1"/>
-            <button class="froya-nav-card__cta" data-gift-trigger="elaren-pumpkin-seed-oil-regrowth-serum" data-product-handle="elaren-pumpkin-seed-oil-regrowth-serum" data-product-id="50251934007653" type="button">
-              ADD TO CART
-            </button>
-          </form>
-        </product-payment-container></div>
-  </div><div class="froya-nav-card froya-nav-card--vertical" data-product-id="9688912462181">
-    <a aria-label="Pumpkin Seed Oil Capsules" class="froya-nav-card__image" href="/products/pumpkin-seed-oil-capsules"><span class="froya-nav-card__badge">SAVE 10% ON SUBSCRIPTION</span><img alt="Pumpkin Seed Oil Capsules" class="froya-nav-card__img" decoding="async" height="530" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Rectangle_391_4.png" width="530"/></a>
-    <div class="froya-nav-card__content"><span aria-label="Rated 4.7 out of 5 stars" class="froya-nav-stars">
-    <span aria-hidden="true" class="froya-nav-stars__row"><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--partial">
-            <svg class="froya-nav-stars__partial-bg" fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044" fill-opacity="0.2"></path>
-            </svg>
-            <svg class="froya-nav-stars__partial-fg" fill="none" focusable="false" height="9" style="clip-path: inset(0 50% 0 0);" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span></span><span class="froya-nav-stars__count">22 Reviews</span></span><a class="froya-nav-card__title-link" href="/products/pumpkin-seed-oil-capsules">
-        <p class="froya-nav-card__title">Pumpkin Seed Oil Capsules</p>
-      </a><p class="froya-nav-card__copy">DHT-blocking support from the inside</p><p class="froya-nav-card__price">from
-
-
-
-
-<span class="product_price">$49.99</span></p><product-payment-container class="froya-nav-card__payment-container" form-id="froya-nav-cta-9688912462181">
-          <form class="froya-nav-card__form" id="froya-nav-cta-9688912462181">
-            <input name="id" type="hidden" value="50196788117861"/>
-            <input name="quantity" type="hidden" value="1"/>
-            <button class="froya-nav-card__cta" data-gift-trigger="pumpkin-seed-oil-capsules" data-product-handle="pumpkin-seed-oil-capsules" data-product-id="50196788117861" type="button">
-              ADD TO CART
-            </button>
-          </form>
-        </product-payment-container></div>
-  </div></div><div class="froya-nav__mega-quiz" style="background-image: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/quiz_1.png?v=1778647247');">
-      <p class="froya-nav__mega-quiz-title">Not Sure Where To Start?</p>
-      <a class="froya-nav__mega-quiz-cta" href="/pages/contact">TALK TO US</a>
-    </div></div>
+  <div class="froya-nav__mega-inner" style="display: grid; grid-template-columns: repeat({{ cards.size | at_most: 3 }}, 265px); gap: 32px; justify-content: center; align-items: start;">
+    {%- for block in cards -%}{%- render 'froya-nav-card', block: block, layout: 'vertical' -%}{%- endfor -%}
+  </div>{{ quiz_panel }}</div>
+{%- endif -%}
 <div class="froya-nav__mega froya-nav__mega--more" data-mega-panel="default-more" id="froya-nav-mega-default-more">
   <div class="froya-nav__mega-inner"><ul class="froya-nav__goal-list" role="list">
-        <li class="froya-nav__goal-item"><a href="/#reviews-section"><span data-text="Reviews"><span>Reviews</span></span></a></li>
-        <li class="froya-nav__goal-item"><a href="/pages/about-us"><span data-text="Our Story"><span>Our Story</span></span></a></li>
-        <li class="froya-nav__goal-item"><a href="/pages/faq"><span data-text="FAQ"><span>FAQ</span></span></a></li>
-        <li class="froya-nav__goal-item"><a href="/account/login"><span data-text="Log In"><span>Log In</span></span></a></li>
-        <li class="froya-nav__goal-item"><a href="/account"><span data-text="Manage Subscription"><span>Manage Subscription</span></span></a></li>
-        <li class="froya-nav-blog-li"><details class="froya-nav-blog froya-nav-blog--desktop">
-  <summary class="froya-nav-blog__summary">
-    <span class="froya-nav-blog__summary-label">The Elaren Journal · Blog</span>
-  </summary>
-  <ul class="froya-nav-blog__list" role="list"><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">The Hair-Loss Routine for Women Over 35 That Works With Your Hormones, Not Against Them</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">Postpartum Shedding vs. Female Pattern Hair Loss: How to Tell Which One You Have</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">DHT Explained: Why Your Part Keeps Widening After 40</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">Menopause and Hair Loss: What Actually Helps After 45</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">Thinning Edges: Regrowing Traction Alopecia From Braids, Weaves and Tight Styles</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">Pumpkin Seed Oil vs. Rosemary Oil vs. Minoxidil: What the Research Actually Says</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">Alopecia Areata in Women: What a Regrowth Oil Can and Can’t Do</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li></ul>
-</details>
-</li>
-      </ul></div></div>
+      {%- for block in more_links -%}
+        <li class="froya-nav__goal-item" {{ block.shopify_attributes }}><a href="{{ block.settings.url | default: '/' }}"><span data-text="{{ block.settings.label | escape }}"><span>{{ block.settings.label }}</span></span></a></li>
+      {%- endfor -%}
+      {%- if blog_list != blank -%}
+      <li class="froya-nav-blog-li"><details class="froya-nav-blog froya-nav-blog--desktop">
+        <summary class="froya-nav-blog__summary"><span class="froya-nav-blog__summary-label">{{ section.settings.blog_label }}</span></summary>
+        {{ blog_list }}
+      </details></li>
+      {%- endif -%}
+    </ul></div></div>
 </froya-nav-variant><froya-nav-drawer aria-hidden="true" class="froya-nav-drawer" id="froya-nav-drawer-froya-nav-variant">
-  <div class="froya-nav-drawer__overlay" data-drawer-overlay=""></div>
+  <div class="froya-nav-drawer__overlay" data-drawer-overlay></div>
   <div aria-label="Site navigation" aria-modal="true" class="froya-nav-drawer__panel" role="dialog">
     <div class="froya-nav-drawer__header">
-      <span class="froya-nav-drawer__header-logo"><img alt="Elaren" class="header__logo-image" height="69" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/froya-logo-v4.svg" width="369"/></span>
-      <button aria-label="Close menu" class="froya-nav-drawer__header-close" data-drawer-close="" type="button">
-        <svg aria-hidden="true" fill="none" viewBox="0 0 16 18">
-          <path d="M2 2l12 14M14 2L2 16" stroke="currentColor" stroke-width="1.5"></path>
-        </svg>
+      <span class="froya-nav-drawer__header-logo">
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 400 | image_tag: class: 'header__logo-image', alt: shop.name, loading: 'lazy' }}
+        {%- else -%}
+          <img alt="{{ shop.name | escape }}" class="header__logo-image" height="69" loading="lazy" src="{{ logo_fallback }}" width="369">
+        {%- endif -%}
+      </span>
+      <button aria-label="Close menu" class="froya-nav-drawer__header-close" data-drawer-close type="button">
+        <svg aria-hidden="true" fill="none" viewBox="0 0 16 16"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5"></path></svg>
       </button>
     </div>
-
     <div class="froya-nav-drawer__scroll">
-      <div class="froya-nav-drawer__body"><details class="froya-nav-acc" data-acc="">
-          <summary class="froya-nav-acc__summary">Bestsellers</summary>
-          <div class="froya-nav-acc__body"><div class="froya-nav-card froya-nav-card--horizontal" data-product-id="9704313225573">
-    <a aria-label="Pumpkin Seed Regrowth Oil" class="froya-nav-card__image" href="/products/elaren-pumpkin-seed-oil-regrowth-serum"><span class="froya-nav-card__badge">SAVE 10% ON SUBSCRIPTION</span><img alt="Pumpkin Seed Regrowth Oil" class="froya-nav-card__img" decoding="async" height="250" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Rectangle_391.png" width="250"/></a>
-    <div class="froya-nav-card__content"><span aria-label="Rated 4.8 out of 5 stars" class="froya-nav-stars">
-    <span aria-hidden="true" class="froya-nav-stars__row"><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--partial">
-            <svg class="froya-nav-stars__partial-bg" fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044" fill-opacity="0.2"></path>
-            </svg>
-            <svg class="froya-nav-stars__partial-fg" fill="none" focusable="false" height="9" style="clip-path: inset(0 20% 0 0);" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span></span><span class="froya-nav-stars__count">43 Reviews</span></span><a class="froya-nav-card__title-link" href="/products/elaren-pumpkin-seed-oil-regrowth-serum">
-        <p class="froya-nav-card__title">Pumpkin Seed Regrowth Oil</p>
-      </a><p class="froya-nav-card__copy">With Caffeine Complex · 30-day supply</p><p class="froya-nav-card__price">from
-
-
-
-
-<span class="product_price">$34.99</span></p><a class="froya-nav-card__cta" href="/products/elaren-pumpkin-seed-oil-regrowth-serum">SHOP NOW</a></div>
-  </div><div class="froya-nav-card froya-nav-card--horizontal" data-product-id="9688912462181">
-    <a aria-label="Pumpkin Seed Oil Capsules" class="froya-nav-card__image" href="/products/pumpkin-seed-oil-capsules"><span class="froya-nav-card__badge">SAVE 10% ON SUBSCRIPTION</span><img alt="Pumpkin Seed Oil Capsules" class="froya-nav-card__img" decoding="async" height="250" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Rectangle_391_1.png" width="250"/></a>
-    <div class="froya-nav-card__content"><span aria-label="Rated 4.7 out of 5 stars" class="froya-nav-stars">
-    <span aria-hidden="true" class="froya-nav-stars__row"><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--full">
-            <svg fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span><span class="froya-nav-stars__star froya-nav-stars__star--partial">
-            <svg class="froya-nav-stars__partial-bg" fill="none" focusable="false" height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044" fill-opacity="0.2"></path>
-            </svg>
-            <svg class="froya-nav-stars__partial-fg" fill="none" focusable="false" height="9" style="clip-path: inset(0 50% 0 0);" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.05781 8.91021C1.76194 9.10308 1.58936 8.9745 1.66949 8.62735L2.33518 5.69585L0.159347 3.74152C-0.0995336 3.51008 -0.0378953 3.29151 0.307279 3.26579L3.16113 3.02793L4.26446 0.25072C4.38774 -0.0835734 4.60347 -0.0835734 4.73291 0.25072L5.8424 3.02793L8.69009 3.26579C9.03526 3.29794 9.10307 3.50366 8.83802 3.74152L6.66219 5.69585L7.32788 8.62735C7.40801 8.9745 7.24159 9.10308 6.93956 8.91021L4.49868 7.34803L2.05781 8.91021Z" fill="#E98044"></path>
-            </svg>
-          </span></span><span class="froya-nav-stars__count">22 Reviews</span></span><a class="froya-nav-card__title-link" href="/products/pumpkin-seed-oil-capsules">
-        <p class="froya-nav-card__title">Pumpkin Seed Oil Capsules</p>
-      </a><p class="froya-nav-card__copy">DHT-blocking support from the inside</p><p class="froya-nav-card__price">from
-
-
-
-
-<span class="product_price">$49.99</span></p><a class="froya-nav-card__cta" href="/products/pumpkin-seed-oil-capsules">SHOP NOW</a></div>
-  </div></div>
-        </details><details class="froya-nav-acc" data-acc="">
-          <summary class="froya-nav-acc__summary">Shop by Product</summary>
-          <div class="froya-nav-acc__body">
-            <a class="froya-nav-acc__row froya-nav-acc__row--shop-all" href="/collections/all">
-              <span>Shop All</span>
-            </a><a class="froya-nav-acc__row froya-nav-acc__row--bestseller" href="/products/elaren-pumpkin-seed-oil-regrowth-serum">
-                    <span>Pumpkin Seed Regrowth Oil with Caffeine Complex</span><span class="froya-nav__pill">Best Seller</span></a><a class="froya-nav-acc__row froya-nav-acc__row--bestseller" href="/products/pumpkin-seed-oil-capsules">
-                    <span>Pumpkin Seed Oil Capsules</span><span class="froya-nav__pill">Best Seller</span></a><a class="froya-nav-acc__row" href="/products/elaren-root-revival-scalp-brush">
-                    <span>Root Revival Scalp Brush</span></a><a class="froya-nav-acc__row" href="/products/elaren-microstamp-pro">
-                    <span>MicroStamp Pro</span></a><a class="froya-nav-acc__row" href="/products/elaren-sleepsilk-pillowcase">
-                    <span>SleepSilk Pillowcase</span></a><a class="froya-nav-acc__row" href="/products/elaren-rosemary-scalp-elixir">
-                    <span>Rosemary Scalp Elixir</span><span class="froya-nav__pill froya-nav__pill--new">New</span></a><a class="froya-nav-acc__row" href="/products/elaren-gentlehold-satin-set">
-                    <span>GentleHold Satin Set</span><span class="froya-nav__pill froya-nav__pill--new">New</span></a><a class="froya-nav-acc__row" href="/products/elaren-instafull-thickening-fibers">
-                    <span>InstaFull Thickening Fibers</span><span class="froya-nav__pill froya-nav__pill--new">New</span></a></div>
-        </details><details class="froya-nav-acc froya-nav-acc--goals" data-acc="">
-          <summary class="froya-nav-acc__summary">Shop by Goal</summary>
-          <div class="froya-nav-acc__body"><a class="froya-nav-acc__row" href="/collections/all"><span>Thinning Part &amp; Crown</span></a>
-              <a class="froya-nav-acc__row" href="/collections/all"><span>Postpartum &amp; Menopausal Shedding</span></a>
-              <a class="froya-nav-acc__row" href="/collections/all"><span>Edges, Traction &amp; Breakage</span></a>
-              <a class="froya-nav-acc__row" href="/collections/all"><span>Alopecia &amp; Scalp Health</span></a></div>
+      <div class="froya-nav-drawer__body">
+        {%- if cards.size > 0 -%}
+        <details class="froya-nav-acc" data-acc>
+          <summary class="froya-nav-acc__summary">{{ section.settings.bestsellers_label }}</summary>
+          <div class="froya-nav-acc__body">{%- for block in cards -%}{%- render 'froya-nav-card', block: block, layout: 'horizontal' -%}{%- endfor -%}</div>
         </details>
-
-        <a class="froya-nav-drawer__shop-all" href="/collections/all">SHOP ALL PRODUCTS</a><div class="froya-nav-drawer__quiz" style="background-image: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/quiz.png?v=1778644514');">
+        {%- endif -%}
+        <details class="froya-nav-acc" data-acc>
+          <summary class="froya-nav-acc__summary">{{ section.settings.shop_title }}</summary>
+          <div class="froya-nav-acc__body">
+            <a class="froya-nav-acc__row froya-nav-acc__row--shop-all" href="{{ section.settings.shop_all_url | default: '/collections/all' }}"><span>{{ section.settings.shop_all_label }}</span></a>
+            {%- for block in shop_items -%}
+              {%- liquid
+                assign item_title = block.settings.label | default: block.settings.product.title
+                assign item_url = block.settings.url | default: block.settings.product.url | default: '/collections/all'
+              -%}
+              {%- if item_title != blank -%}
+              <a class="froya-nav-acc__row{% if block.settings.pill == 'bestseller' %} froya-nav-acc__row--bestseller{% endif %}" href="{{ item_url }}"><span>{{ item_title }}</span>{% if block.settings.pill == 'bestseller' %}<span class="froya-nav__pill">{{ section.settings.pill_bestseller }}</span>{% elsif block.settings.pill == 'new' %}<span class="froya-nav__pill froya-nav__pill--new">{{ section.settings.pill_new }}</span>{% endif %}</a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </details>
+        {%- if goals.size > 0 -%}
+        <details class="froya-nav-acc froya-nav-acc--goals" data-acc>
+          <summary class="froya-nav-acc__summary">{{ section.settings.goals_title }}</summary>
+          <div class="froya-nav-acc__body">
+            {%- for block in goals -%}<a class="froya-nav-acc__row" href="{{ block.settings.url | default: '/collections/all' }}"><span>{{ block.settings.label }}</span></a>{%- endfor -%}
+          </div>
+        </details>
+        {%- endif -%}
+        <a class="froya-nav-drawer__shop-all" href="{{ section.settings.shop_all_url | default: '/collections/all' }}">{{ section.settings.drawer_shop_all_label }}</a>
+        {%- if section.settings.quiz_title != blank -%}
+        <div class="froya-nav-drawer__quiz" style="background-image: url('{{ quiz_bg_mobile }}');">
           <div class="froya-nav-drawer__quiz-text">
-            <p class="froya-nav-drawer__quiz-title">Not Sure Where To Start?</p>
-            <a class="froya-nav-drawer__quiz-cta" href="/pages/contact">TALK TO US</a>
+            <p class="froya-nav-drawer__quiz-title">{{ section.settings.quiz_title }}</p>
+            {%- if section.settings.quiz_cta != blank -%}<a class="froya-nav-drawer__quiz-cta" href="{{ section.settings.quiz_url | default: '/pages/contact' }}">{{ section.settings.quiz_cta }}</a>{%- endif -%}
           </div>
         </div>
-
+        {%- endif -%}
         <ul class="froya-nav-drawer__footer-links" role="list">
-          <li><a href="/#reviews-section">Reviews</a></li>
-          <li><a href="/pages/about-us">Our Story</a></li>
-          <li><a href="/pages/faq">FAQ</a></li>
-          <li><a href="/account/login">Log In</a></li>
-          <li><a href="/account">Manage Subscription</a></li>
+          {%- for block in more_links -%}<li><a href="{{ block.settings.url | default: '/' }}">{{ block.settings.label }}</a></li>{%- endfor -%}
+          {%- if blog_list != blank -%}
           <li class="froya-nav-blog-li"><details class="froya-nav-blog froya-nav-blog--mobile">
-  <summary class="froya-nav-blog__summary">
-    <span class="froya-nav-blog__summary-label">The Elaren Journal · Blog</span>
-  </summary>
-  <ul class="froya-nav-blog__list" role="list"><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">The Hair-Loss Routine for Women Over 35 That Works With Your Hormones, Not Against Them</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">Postpartum Shedding vs. Female Pattern Hair Loss: How to Tell Which One You Have</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">DHT Explained: Why Your Part Keeps Widening After 40</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">Menopause and Hair Loss: What Actually Helps After 45</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">Thinning Edges: Regrowing Traction Alopecia From Braids, Weaves and Tight Styles</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">Pumpkin Seed Oil vs. Rosemary Oil vs. Minoxidil: What the Research Actually Says</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li><li class="froya-nav-blog__item"><a class="froya-nav-blog__link" href="/blogs/news">
-            <span class="froya-nav-blog__title">Alopecia Areata in Women: What a Regrowth Oil Can and Can’t Do</span>
-            <span class="froya-nav-blog__readmore">Read more</span>
-          </a></li></ul>
-</details>
-</li>
+            <summary class="froya-nav-blog__summary"><span class="froya-nav-blog__summary-label">{{ section.settings.blog_label }}</span></summary>
+            {{ blog_list }}
+          </details></li>
+          {%- endif -%}
         </ul>
-
-        <div class="froya-nav-drawer__social">
-          Women’s hair wellness · Rated 4.77/5 by verified customers
-        </div>
-
+        {%- if section.settings.drawer_note != blank -%}<div class="froya-nav-drawer__social">{{ section.settings.drawer_note }}</div>{%- endif -%}
+        {%- if testimonial != blank -%}
         <div class="froya-nav-drawer__testimonial">
-          <div class="froya-nav-drawer__testimonial-image"><img alt="Customer before and after" decoding="async" height="90" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/Group_1484582098.png" width="150"/></div>
-          <div class="froya-nav-drawer__testimonial-content"><p class="froya-nav-drawer__testimonial-quote">"I have alopecia and it didn’t feel greasy once applied. <strong>From the oil to the scalp massager, 10 out of 10!</strong>"</p><span class="froya-nav-drawer__testimonial-meta">
-              <span aria-hidden="true" class="froya-nav-drawer__testimonial-stars">★★★★★</span>
-              - Tamara I., verified buyer
-            </span>
+          <div class="froya-nav-drawer__testimonial-image">
+            {%- render 'froya-image', image: section.settings.testimonial_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Group_1484582098.png', alt: 'Customer before and after', width: 150, height: 90 -%}
           </div>
+          <div class="froya-nav-drawer__testimonial-content">{{ testimonial | replace: 'froya-nav__mega-testimonial-quote', 'froya-nav-drawer__testimonial-quote' | replace: 'froya-nav__mega-testimonial-meta', 'froya-nav-drawer__testimonial-meta' }}</div>
         </div>
+        {%- endif -%}
       </div>
     </div>
   </div>
 </froya-nav-drawer>
-
-
 </div>
 
 {% schema %}
 {
-  "name": "Frøya header",
-  "settings": []
+  "name": "Header",
+  "settings": [
+    { "type": "header", "content": "Logo" },
+    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "PNG or SVG with a transparent background. Replaces the placeholder logo in the bar and the mobile menu." },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 60, "max": 240, "step": 10, "unit": "px", "default": 100 },
+    { "type": "header", "content": "Navigation labels" },
+    { "type": "text", "id": "shop_label", "label": "Shop menu label", "default": "Shop" },
+    { "type": "text", "id": "bestsellers_label", "label": "Bestsellers menu label", "default": "Bestsellers" },
+    { "type": "text", "id": "more_label", "label": "More menu label", "default": "More" },
+    { "type": "text", "id": "cart_label", "label": "Cart button label", "default": "CART" },
+    { "type": "header", "content": "Shop menu" },
+    { "type": "text", "id": "shop_title", "label": "Products column title", "default": "Shop by Product" },
+    { "type": "text", "id": "shop_all_label", "label": "Shop all label", "default": "Shop All" },
+    { "type": "url", "id": "shop_all_url", "label": "Shop all link" },
+    { "type": "text", "id": "drawer_shop_all_label", "label": "Mobile shop-all button", "default": "SHOP ALL PRODUCTS" },
+    { "type": "text", "id": "pill_bestseller", "label": "Best seller pill text", "default": "Best Seller" },
+    { "type": "text", "id": "pill_new", "label": "New pill text", "default": "New" },
+    { "type": "text", "id": "goals_title", "label": "Goals column title", "default": "Shop by Goal" },
+    { "type": "header", "content": "Testimonial" },
+    { "type": "image_picker", "id": "testimonial_image", "label": "Testimonial image", "info": "Before/after photo, about 240 × 144 px." },
+    { "type": "inline_richtext", "id": "testimonial_quote", "label": "Quote", "default": "\"I have alopecia and it didn’t feel greasy once applied. <strong>From the oil to the scalp massager, 10 out of 10!</strong>\"" },
+    { "type": "text", "id": "testimonial_author", "label": "Author", "default": "- Tamara I., verified buyer" },
+    { "type": "header", "content": "Help panel" },
+    { "type": "image_picker", "id": "quiz_image", "label": "Background image", "info": "About 600 × 300 px." },
+    { "type": "text", "id": "quiz_title", "label": "Title", "default": "Not Sure Where To Start?" },
+    { "type": "text", "id": "quiz_cta", "label": "Button label", "default": "TALK TO US" },
+    { "type": "url", "id": "quiz_url", "label": "Button link" },
+    { "type": "header", "content": "Blog links (More menu)" },
+    { "type": "text", "id": "blog_label", "label": "Blog label", "default": "The Elaren Journal · Blog" },
+    { "type": "blog", "id": "blog", "label": "Blog", "info": "When a blog is selected its latest articles are listed automatically; otherwise the Blog link blocks below are used." },
+    { "type": "range", "id": "blog_limit", "label": "Articles to show", "min": 3, "max": 10, "step": 1, "default": 7 },
+    { "type": "text", "id": "read_more_label", "label": "Read more label", "default": "Read more" },
+    { "type": "header", "content": "Mobile menu" },
+    { "type": "text", "id": "drawer_note", "label": "Note under the links", "default": "Women’s hair wellness · Rated 4.77/5 by verified customers" }
+  ],
+  "blocks": [
+    {
+      "type": "shop_item",
+      "name": "Product link",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "label", "label": "Label override", "info": "Leave empty to use the product title." },
+        { "type": "url", "id": "url", "label": "Link override" },
+        { "type": "select", "id": "pill", "label": "Pill", "options": [ { "value": "none", "label": "None" }, { "value": "bestseller", "label": "Best seller" }, { "value": "new", "label": "New" } ], "default": "none" }
+      ]
+    },
+    {
+      "type": "goal",
+      "name": "Goal link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Thinning Part & Crown" },
+        { "type": "url", "id": "url", "label": "Link" }
+      ]
+    },
+    {
+      "type": "card",
+      "name": "Bestseller card",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "image_picker", "id": "image", "label": "Image override", "info": "Square, about 530 × 530 px. Leave empty to use the product image." },
+        { "type": "text", "id": "title", "label": "Title override" },
+        { "type": "text", "id": "badge", "label": "Badge", "default": "SAVE 10% ON SUBSCRIPTION" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "With Caffeine Complex · 30-day supply" },
+        { "type": "range", "id": "rating", "label": "Star rating", "min": 0, "max": 5, "step": 0.5, "default": 5 },
+        { "type": "text", "id": "reviews_text", "label": "Review count text", "default": "43 Reviews" },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "ADD TO CART" }
+      ]
+    },
+    {
+      "type": "more_link",
+      "name": "More link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Reviews" },
+        { "type": "url", "id": "url", "label": "Link" }
+      ]
+    },
+    {
+      "type": "post",
+      "name": "Blog link",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Article title", "default": "The Hair-Loss Routine for Women Over 35" },
+        { "type": "url", "id": "url", "label": "Link" }
+      ]
+    }
+  ]
 }
 {% endschema %}

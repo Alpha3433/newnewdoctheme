@@ -1,0 +1,323 @@
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement-bar": {
+      "type": "froya-announcement-bar",
+      "settings": {
+        "text": "FREE INSURED SHIPPING 🌱 90-DAY MONEY-BACK GUARANTEE"
+      }
+    },
+    "header": {
+      "type": "froya-header",
+      "settings": {
+        "logo_width": 100,
+        "shop_label": "Shop",
+        "bestsellers_label": "Bestsellers",
+        "more_label": "More",
+        "cart_label": "CART",
+        "shop_title": "Shop by Product",
+        "shop_all_label": "Shop All",
+        "shop_all_url": "/collections/all",
+        "drawer_shop_all_label": "SHOP ALL PRODUCTS",
+        "pill_bestseller": "Best Seller",
+        "pill_new": "New",
+        "goals_title": "Shop by Goal",
+        "testimonial_quote": "\"I have alopecia and it didn’t feel greasy once applied. <strong>From the oil to the scalp massager, 10 out of 10!</strong>\"",
+        "testimonial_author": "- Tamara I., verified buyer",
+        "quiz_title": "Not Sure Where To Start?",
+        "quiz_cta": "TALK TO US",
+        "quiz_url": "/pages/contact",
+        "blog_label": "The Elaren Journal · Blog",
+        "blog_limit": 7,
+        "read_more_label": "Read more",
+        "drawer_note": "Women’s hair wellness · Rated 4.77/5 by verified customers"
+      },
+      "blocks": {
+        "shop_1": {
+          "type": "shop_item",
+          "settings": {
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "label": "Pumpkin Seed Regrowth Oil with Caffeine Complex",
+            "pill": "bestseller"
+          }
+        },
+        "shop_2": {
+          "type": "shop_item",
+          "settings": {
+            "product": "pumpkin-seed-oil-capsules",
+            "label": "Pumpkin Seed Oil Capsules",
+            "pill": "bestseller"
+          }
+        },
+        "shop_3": {
+          "type": "shop_item",
+          "settings": {
+            "product": "elaren-root-revival-scalp-brush",
+            "label": "Root Revival Scalp Brush",
+            "pill": "none"
+          }
+        },
+        "shop_4": {
+          "type": "shop_item",
+          "settings": {
+            "product": "elaren-microstamp-pro",
+            "label": "MicroStamp Pro",
+            "pill": "none"
+          }
+        },
+        "shop_5": {
+          "type": "shop_item",
+          "settings": {
+            "product": "elaren-sleepsilk-pillowcase",
+            "label": "SleepSilk Pillowcase",
+            "pill": "none"
+          }
+        },
+        "shop_6": {
+          "type": "shop_item",
+          "settings": {
+            "product": "elaren-rosemary-scalp-elixir",
+            "label": "Rosemary Scalp Elixir",
+            "pill": "new"
+          }
+        },
+        "shop_7": {
+          "type": "shop_item",
+          "settings": {
+            "product": "elaren-gentlehold-satin-set",
+            "label": "GentleHold Satin Set",
+            "pill": "new"
+          }
+        },
+        "shop_8": {
+          "type": "shop_item",
+          "settings": {
+            "product": "elaren-instafull-thickening-fibers",
+            "label": "InstaFull Thickening Fibers",
+            "pill": "new"
+          }
+        },
+        "goal_1": {
+          "type": "goal",
+          "settings": {
+            "label": "Thinning Part & Crown",
+            "url": "/collections/all"
+          }
+        },
+        "goal_2": {
+          "type": "goal",
+          "settings": {
+            "label": "Postpartum & Menopausal Shedding",
+            "url": "/collections/all"
+          }
+        },
+        "goal_3": {
+          "type": "goal",
+          "settings": {
+            "label": "Edges, Traction & Breakage",
+            "url": "/collections/all"
+          }
+        },
+        "goal_4": {
+          "type": "goal",
+          "settings": {
+            "label": "Alopecia & Scalp Health",
+            "url": "/collections/all"
+          }
+        },
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "badge": "SAVE 10% ON SUBSCRIPTION",
+            "subtitle": "With Caffeine Complex · 30-day supply",
+            "rating": 4.8,
+            "reviews_text": "43 Reviews",
+            "button_label": "ADD TO CART"
+          }
+        },
+        "card_2": {
+          "type": "card",
+          "settings": {
+            "product": "pumpkin-seed-oil-capsules",
+            "badge": "SAVE 10% ON SUBSCRIPTION",
+            "subtitle": "DHT-blocking support from the inside",
+            "rating": 4.7,
+            "reviews_text": "22 Reviews",
+            "button_label": "ADD TO CART"
+          }
+        },
+        "more_1": {
+          "type": "more_link",
+          "settings": {
+            "label": "Reviews",
+            "url": "/#reviews-section"
+          }
+        },
+        "more_2": {
+          "type": "more_link",
+          "settings": {
+            "label": "Our Story",
+            "url": "/pages/about-us"
+          }
+        },
+        "more_3": {
+          "type": "more_link",
+          "settings": {
+            "label": "FAQ",
+            "url": "/pages/faq"
+          }
+        },
+        "more_4": {
+          "type": "more_link",
+          "settings": {
+            "label": "Log In",
+            "url": "/account/login"
+          }
+        },
+        "more_5": {
+          "type": "more_link",
+          "settings": {
+            "label": "Manage Subscription",
+            "url": "/account"
+          }
+        },
+        "post_1": {
+          "type": "post",
+          "settings": {
+            "title": "The Hair-Loss Routine for Women Over 35 That Works With Your Hormones, Not Against Them",
+            "url": "/blogs/news"
+          }
+        },
+        "post_2": {
+          "type": "post",
+          "settings": {
+            "title": "Postpartum Shedding vs. Female Pattern Hair Loss: How to Tell Which One You Have",
+            "url": "/blogs/news"
+          }
+        },
+        "post_3": {
+          "type": "post",
+          "settings": {
+            "title": "DHT Explained: Why Your Part Keeps Widening After 40",
+            "url": "/blogs/news"
+          }
+        },
+        "post_4": {
+          "type": "post",
+          "settings": {
+            "title": "Menopause and Hair Loss: What Actually Helps After 45",
+            "url": "/blogs/news"
+          }
+        },
+        "post_5": {
+          "type": "post",
+          "settings": {
+            "title": "Thinning Edges: Regrowing Traction Alopecia From Braids, Weaves and Tight Styles",
+            "url": "/blogs/news"
+          }
+        },
+        "post_6": {
+          "type": "post",
+          "settings": {
+            "title": "Pumpkin Seed Oil vs. Rosemary Oil vs. Minoxidil: What the Research Actually Says",
+            "url": "/blogs/news"
+          }
+        },
+        "post_7": {
+          "type": "post",
+          "settings": {
+            "title": "Alopecia Areata in Women: What a Regrowth Oil Can and Can’t Do",
+            "url": "/blogs/news"
+          }
+        }
+      },
+      "block_order": [
+        "shop_1",
+        "shop_2",
+        "shop_3",
+        "shop_4",
+        "shop_5",
+        "shop_6",
+        "shop_7",
+        "shop_8",
+        "goal_1",
+        "goal_2",
+        "goal_3",
+        "goal_4",
+        "card_1",
+        "card_2",
+        "more_1",
+        "more_2",
+        "more_3",
+        "more_4",
+        "more_5",
+        "post_1",
+        "post_2",
+        "post_3",
+        "post_4",
+        "post_5",
+        "post_6",
+        "post_7"
+      ]
+    },
+    "cart-drawer": {
+      "type": "froya-cart-drawer",
+      "settings": {
+        "title": "Cart",
+        "empty_title": "Your cart is empty",
+        "empty_text": "Add the regrowth oil to get started. Free insured shipping on every order.",
+        "empty_button": "SHOP NOW",
+        "empty_url": "/collections/all",
+        "show_subscribe_toggle": true,
+        "subscribe_label": "SUBSCRIBE & SAVE",
+        "upsell_title": "PAIR WITH:",
+        "upsells": [
+          "pumpkin-seed-oil-capsules",
+          "elaren-root-revival-scalp-brush",
+          "elaren-microstamp-pro",
+          "elaren-sleepsilk-pillowcase"
+        ],
+        "upsell_button": "ADD TO CART",
+        "discount_label": "DISCOUNT",
+        "subtotal_label": "SUBTOTAL",
+        "checkout_label": "SECURE CHECKOUT",
+        "show_total_on_button": true
+      },
+      "blocks": {
+        "badge_1": {
+          "type": "badge",
+          "settings": {
+            "default_icon": "dollar",
+            "text": "90-Day<br>Money-Back"
+          }
+        },
+        "badge_2": {
+          "type": "badge",
+          "settings": {
+            "default_icon": "bag",
+            "text": "4.77/5 From<br>Verified Buyers"
+          }
+        },
+        "badge_3": {
+          "type": "badge",
+          "settings": {
+            "default_icon": "truck",
+            "text": "Free Insured<br>Shipping"
+          }
+        }
+      },
+      "block_order": [
+        "badge_1",
+        "badge_2",
+        "badge_3"
+      ]
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header",
+    "cart-drawer"
+  ]
+}

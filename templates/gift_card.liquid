@@ -4,14 +4,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>{{ 'gift_cards.issued.title' | t: value: gift_card.initial_value | money_without_trailing_zeros, shop: shop.name }}</title>
+  {%- assign formatted_initial_value = gift_card.initial_value | money_without_trailing_zeros -%}
+  <title>{{ 'gift_cards.issued.title' | t: value: formatted_initial_value, shop: shop.name }}</title>
   {{ 'critical.css' | asset_url | stylesheet_tag }}
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }}
 </head>
 <body class="template-gift-card">
   <main class="gift-card-page">
-    <h1 class="page-title">{{ 'gift_cards.issued.title' | t: value: gift_card.initial_value | money_without_trailing_zeros, shop: shop.name }}</h1>
+    <h1 class="page-title">{{ 'gift_cards.issued.title' | t: value: formatted_initial_value, shop: shop.name }}</h1>
     {%- if gift_card.enabled -%}
       <p class="rte">{{ 'gift_cards.issued.subtext' | t }}</p>
       <div class="gift-card-page__code">{{ gift_card.code | format_code }}</div>

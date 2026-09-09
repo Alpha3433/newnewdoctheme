@@ -1,38 +1,46 @@
 {% comment %}
-  Frøya guarantee – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  Money-back guarantee panel – icon, heading, text, links and the optional tinted background are editable.
+  Used twice on the landing page (with and without the background).
 {% endcomment %}
-<section class="shopify-section section" id="shopify-section-template--26717513089391__guarantee_section_Bmz8mb"><section class="s-guarantee">
-<div class="s-guarantee__top s-guarantee__top--background">
+<section class="shopify-section section" id="shopify-section-{{ section.id }}-guarantee"><section class="s-guarantee">
+<div class="s-guarantee__top{% if section.settings.background %} s-guarantee__top--background{% endif %}">
     <div class="s-guarantee__top s-guarantee__container"><div class="s-guarantee__image">
-<picture>
-  
-  <img alt="&lt;p&gt;Fuller hair in 90 days or your money back&lt;/p&gt;" decoding="async" fetchpriority="auto" height="267" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/guarantee-icon.png" width="247"/>
-</picture></div><div class="s-guarantee__content"><div class="s-guarantee__title">
-              <p>Fuller hair in 90 days or your money back</p>
-            </div><div class="s-guarantee__text">
-              <p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 90 days. Still shedding, still no baby hairs along your part or hairline?<br/>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>
-            </div><a class="s-guarantee__link" href="/policies/refund-policy">
-              Learn More
-            </a></div>
+      <picture>
+        {%- render 'froya-image', image: section.settings.image, fallback: 'https://froyaorganics.com/cdn/shop/files/guarantee-icon.png', alt: section.settings.title, width: 247, height: 267 -%}
+      </picture></div><div class="s-guarantee__content"><div class="s-guarantee__title">
+              <p>{{ section.settings.title }}</p>
+            </div><div class="s-guarantee__text">{{ section.settings.text }}</div>
+            {%- if section.settings.link_label != blank -%}
+            <a class="s-guarantee__link" href="{{ section.settings.link_url | default: '/policies/refund-policy' }}">
+              {{ section.settings.link_label }}
+            </a>
+            {%- endif -%}
+          </div>
     </div>
   </div>
 
-  <div class="s-guarantee__container"><a class="s-guarantee__button custom-button" href="/collections/all">
-      SHOP ALL PRODUCTS
+  {%- if section.settings.button_label != blank -%}
+  <div class="s-guarantee__container"><a class="s-guarantee__button custom-button" href="{{ section.settings.button_url | default: '/collections/all' }}">
+      {{ section.settings.button_label }}
     </a></div>
+  {%- endif -%}
 </section>
-
 </section>
 
 {% schema %}
 {
-  "name": "Frøya guarantee",
-  "settings": [],
-  "presets": [
-    {
-      "name": "Frøya guarantee"
-    }
-  ]
+  "name": "Guarantee",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "background", "label": "Show tinted background", "default": true },
+    { "type": "image_picker", "id": "image", "label": "Badge image", "info": "About 250 × 270 px." },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Fuller hair in 90 days or your money back" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 90 days. Still shedding, still no baby hairs along your part or hairline?<br>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Learn More" },
+    { "type": "url", "id": "link_url", "label": "Link" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "SHOP ALL PRODUCTS" },
+    { "type": "url", "id": "button_url", "label": "Button link" }
+  ],
+  "presets": [ { "name": "Guarantee" } ]
 }
 {% endschema %}

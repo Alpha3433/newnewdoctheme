@@ -30,22 +30,28 @@
   {{ 'sections-inline.css' | asset_url | stylesheet_tag }}
   {{ 'sections.css' | asset_url | stylesheet_tag }}
 
+  <script>
+    window.Shopify = window.Shopify || {};
+    window.Shopify.routes = window.Shopify.routes || {};
+    window.Shopify.routes.root = '{{ routes.root_url }}';
+    window.theme = { moneyFormat: {{ shop.money_format | json }} };
+  </script>
+
   {{ content_for_header }}
 </head>
 
 <body class="no-focus-outline features--image-zoom template-{{ request.page_type | handle }}{% if template.suffix %} template-{{ request.page_type | handle }}--{{ template.suffix | handle }}{% endif %}">
   {% render 'froya-svg-defs' %}
 
-  {% section 'froya-announcement-bar' %}
-  {% section 'froya-header' %}
+  {% sections 'header-group' %}
 
   <div id="main" class="anchor" role="main">
     {{ content_for_layout }}
   </div>
 
-  {% section 'froya-footer' %}
+  {% sections 'footer-group' %}
 
-  <script src="{{ 'blaze-slider.min.js' | asset_url }}"></script>
+  <script src="{{ 'blaze-slider.min.js' | asset_url }}" defer></script>
   <script src="{{ 'main.js' | asset_url }}" defer></script>
 </body>
 </html>

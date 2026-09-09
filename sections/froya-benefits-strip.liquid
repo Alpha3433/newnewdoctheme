@@ -1,37 +1,47 @@
 {% comment %}
-  Frøya benefits strip – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  Benefits strip – four icon + text items, each an editable block.
+  The wrapper ids are kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
 <section class="shopify-section section" id="shopify-section-template--26717513089391__icons_with_text_hPpB9d">
 <section class="s-icons-with-text-custom custom-section" id="section-template--26717513089391__icons_with_text_hPpB9d">
-  <div class="s-icons-with-text-custom__content-wrapper container"><div class="s-icons-with-text-custom__bottom" style="--small-icon-count: 4;"><div class="s-icons-with-text-custom__small-icon-item"><div class="s-icons-with-text-custom__small-icon">
-<picture>
-  
-  <img alt="&lt;h5&gt;Shedding visibly reduced&lt;/h5&gt;" decoding="async" fetchpriority="auto" height="38" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/icon_2_be662c74-b13b-4948-9df1-3687d4b5ac68.svg" width="38"/>
-</picture></div><div class="s-icons-with-text-custom__small-icon-text" style="--small-icon-text-color: #1f1f1f;--small-icon-font-weight: 500;--small-icon-line-height: 1.2;"><h5>Shedding visibly reduced</h5></div></div><div class="s-icons-with-text-custom__small-icon-item"><div class="s-icons-with-text-custom__small-icon">
-<picture>
-  
-  <img alt="&lt;h5&gt;Follicles fed &amp; reawakened&lt;/h5&gt;" decoding="async" fetchpriority="auto" height="38" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/icon_2_1_b5d8000f-8c23-48d2-9393-4055415cff3f.svg" width="38"/>
-</picture></div><div class="s-icons-with-text-custom__small-icon-text" style="--small-icon-text-color: #1f1f1f;--small-icon-font-weight: 500;--small-icon-line-height: 1.2;"><h5>Follicles fed &amp; reawakened</h5></div></div><div class="s-icons-with-text-custom__small-icon-item"><div class="s-icons-with-text-custom__small-icon">
-<picture>
-  
-  <img alt="&lt;h5&gt;Part, crown &amp; edges look fuller&lt;/h5&gt;" decoding="async" fetchpriority="auto" height="38" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/icon_3_442fdc63-0b6e-4ff3-9179-bdfe17c902b0.svg" width="38"/>
-</picture></div><div class="s-icons-with-text-custom__small-icon-text" style="--small-icon-text-color: #1f1f1f;--small-icon-font-weight: 500;--small-icon-line-height: 1.2;"><h5>Part, crown &amp; edges look fuller</h5></div></div><div class="s-icons-with-text-custom__small-icon-item"><div class="s-icons-with-text-custom__small-icon">
-<picture>
-  
-  <img alt="&lt;h5&gt;Confidence back in the mirror&lt;/h5&gt;" decoding="async" fetchpriority="auto" height="38" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/icon_5.svg" width="38"/>
-</picture></div><div class="s-icons-with-text-custom__small-icon-text" style="--small-icon-text-color: #1f1f1f;--small-icon-font-weight: 500;--small-icon-line-height: 1.2;"><h5>Confidence back in the mirror</h5></div></div></div></div></section>
-
-
+  <div class="s-icons-with-text-custom__content-wrapper container"><div class="s-icons-with-text-custom__bottom" style="--small-icon-count: {{ section.blocks.size | at_least: 1 }};">
+    {%- for block in section.blocks -%}
+      <div class="s-icons-with-text-custom__small-icon-item" {{ block.shopify_attributes }}><div class="s-icons-with-text-custom__small-icon">
+        <picture>
+          {%- render 'froya-image', image: block.settings.icon, fallback: block.settings.icon_fallback, alt: block.settings.text, width: 38, height: 38 -%}
+        </picture></div><div class="s-icons-with-text-custom__small-icon-text" style="--small-icon-text-color: {{ section.settings.text_color }};--small-icon-font-weight: 500;--small-icon-line-height: 1.2;"><h5>{{ block.settings.text }}</h5></div></div>
+    {%- endfor -%}
+  </div></div></section>
 </section>
 
 {% schema %}
 {
-  "name": "Frøya benefits strip",
-  "settings": [],
+  "name": "Benefits strip",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#1f1f1f" }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon", "info": "Square icon, about 38 × 38 px." },
+        { "type": "text", "id": "text", "label": "Text", "default": "Shedding visibly reduced" },
+        { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
+      ]
+    }
+  ],
+  "max_blocks": 6,
   "presets": [
     {
-      "name": "Frøya benefits strip"
+      "name": "Benefits strip",
+      "blocks": [
+        { "type": "benefit", "settings": { "text": "Shedding visibly reduced" } },
+        { "type": "benefit", "settings": { "text": "Follicles fed & reawakened" } },
+        { "type": "benefit", "settings": { "text": "Part, crown & edges look fuller" } },
+        { "type": "benefit", "settings": { "text": "Confidence back in the mirror" } }
+      ]
     }
   ]
 }

@@ -3,8 +3,8 @@
 Shopify `assets/` folder and rewrite the references:
 
   sections/*.liquid, snippets/*.liquid  ->  {{ 'file.ext' | asset_url }}
+  templates/*.json, sections/*-group.json (fallback image URLs in block settings) -> {{ 'file.ext' | asset_url }}
   assets/*.css                          ->  url(file.ext)            (relative, same folder)
-  index.html (standalone preview)       ->  assets/file.ext
 
 The recreation ships with assets hot-linked to the Frøya Organics CDN because the
 environment it was built in could not reach that CDN. Run this once from a machine
@@ -25,10 +25,11 @@ import urllib.request
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 ASSETS = ROOT / 'assets'
 TARGETS = (
-    [ROOT / 'index.html']
-    + sorted((ROOT / 'assets').glob('*.css'))
+    sorted((ROOT / 'assets').glob('*.css'))
     + sorted((ROOT / 'sections').glob('froya-*.liquid'))
     + sorted((ROOT / 'snippets').glob('froya-*.liquid'))
+    + sorted((ROOT / 'templates').glob('*.json'))
+    + sorted((ROOT / 'sections').glob('*-group.json'))
 )
 URL_RE = re.compile(r'(?:https?:)?//(?:froyaorganics\.com|cdn\.shopify\.com)/[^\s"\'()<>,]+')
 DRY = '--dry-run' in sys.argv
@@ -77,7 +78,7 @@ def fetch(url: str, dest: pathlib.Path) -> bool:
 
 
 def reference(target: pathlib.Path, name: str) -> str:
-    if target.suffix == '.liquid':
+    if target.suffix in ('.liquid', '.json'):
         return "{{ '" + name + "' | asset_url }}"
     if target.parent == ASSETS:
         return name

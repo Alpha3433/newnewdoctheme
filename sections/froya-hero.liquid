@@ -1,45 +1,73 @@
 {% comment %}
-  Frøya hero – markup recreated from the live Frøya Organics landing page.
-  Styles: assets/sections-inline.css (verbatim) + assets/sections.css / theme.css.
+  Hero – layout recreated from the Frøya Organics landing page, copy and images editable in the theme editor.
+  The inner wrapper keeps the captured section id so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
+{%- liquid
+  assign desktop_fallback = 'https://froyaorganics.com/cdn/shop/files/AUS.jpg?v=1778793714'
+  assign mobile_fallback = 'https://froyaorganics.com/cdn/shop/files/AUS_-_mobile.jpg?format=webp&v=1778793710&width=820'
+  if section.settings.image_mobile != blank
+    assign mobile_bg = section.settings.image_mobile | image_url: width: 820
+  elsif section.settings.image != blank
+    assign mobile_bg = section.settings.image | image_url: width: 820
+  else
+    assign mobile_bg = mobile_fallback
+  endif
+-%}
 <div class="shopify-section" id="shopify-section-template--26717513089391__hero_banner_BnFCDE">
-
-
-
-
-
-<section aria-label="Hero banner" class="s-hero-aging-lp" role="region" style="--mobile-text-color:#ffffff;--ig-aging-lp-mobile-min-height:550px;--ig-aging-lp-cta-max-width:550px;--hero-aging-lp-mobile-bg:url('https://froyaorganics.com/cdn/shop/files/AUS_-_mobile.jpg?format=webp&amp;v=1778793710&amp;width=820');--hero-aging-lp-mobile-offset:0px;">
-  <div class="s-hero-aging-lp__container" data-hero-link="#product-section"><div class="s-hero-aging-lp__image-desktop"><picture>
-          <source sizes="(min-width: 1920px) 960px, (min-width: 1200px) 600px, 50vw" srcset="https://froyaorganics.com/cdn/shop/files/AUS.jpg?format=webp&amp;v=1778793714&amp;width=800 800w, https://froyaorganics.com/cdn/shop/files/AUS.jpg?format=webp&amp;v=1778793714&amp;width=1200 1200w, https://froyaorganics.com/cdn/shop/files/AUS.jpg?format=webp&amp;v=1778793714&amp;width=1600 1600w" type="image/webp"/>
-          <img alt="Woman over 35 parting her hair to show fuller regrowth along her part after using Elaren Pumpkin Seed Regrowth Oil" decoding="async" fetchpriority="high" height="1179" loading="eager" sizes="(min-width: 1920px) 960px, (min-width: 1200px) 600px, 50vw" src="https://froyaorganics.com/cdn/shop/files/AUS.jpg?v=1778793714" srcset="https://froyaorganics.com/cdn/shop/files/AUS.jpg?v=1778793714&amp;width=800 800w, https://froyaorganics.com/cdn/shop/files/AUS.jpg?v=1778793714&amp;width=1200 1200w, https://froyaorganics.com/cdn/shop/files/AUS.jpg?v=1778793714&amp;width=1600 1600w" style="aspect-ratio:1.3571428571428572;" width="1600"/>
-        </picture></div>
+<section aria-label="Hero banner" class="s-hero-aging-lp" role="region" style="--mobile-text-color:{{ section.settings.mobile_text_color }};--ig-aging-lp-mobile-min-height:550px;--ig-aging-lp-cta-max-width:550px;--hero-aging-lp-mobile-bg:url('{{ mobile_bg }}');--hero-aging-lp-mobile-offset:0px;">
+  <div class="s-hero-aging-lp__container" data-hero-link="{{ section.settings.button_link | default: '#product-section' }}"><div class="s-hero-aging-lp__image-desktop">
+      {%- render 'froya-image', image: section.settings.image, fallback: desktop_fallback, alt: section.settings.image_alt, width: 1600, height: 1179, loading: 'eager', sizes: '(min-width: 1920px) 960px, (min-width: 1200px) 600px, 50vw' -%}
+    </div>
 
     <div class="s-hero-aging-lp__content-wrapper">
       <div class="s-hero-aging-lp__content">
-<div class="s-hero-aging-lp__review"><div class="s-hero-aging-lp__stars">
-                
-<picture><source sizes="(max-width: 68px) 100vw, 68px" srcset="https://froyaorganics.com/cdn/shop/files/Frame_3202_8b62166a-5f2f-4223-9107-a3d1271e7343.png?format=webp&amp;v=1732651187&amp;width=62 62w, https://froyaorganics.com/cdn/shop/files/Frame_3202_8b62166a-5f2f-4223-9107-a3d1271e7343.png?format=webp&amp;v=1732651187&amp;width=68 68w," type="image/webp"/><img alt="Image" decoding="async" fetchpriority="high" height="14" loading="eager" sizes="(max-width: 68px) 100vw, 68px" src="https://froyaorganics.com/cdn/shop/files/Frame_3202_8b62166a-5f2f-4223-9107-a3d1271e7343.png?v=1732651187" srcset="https://froyaorganics.com/cdn/shop/files/Frame_3202_8b62166a-5f2f-4223-9107-a3d1271e7343.png?v=1732651187&amp;width=62 62w, https://froyaorganics.com/cdn/shop/files/Frame_3202_8b62166a-5f2f-4223-9107-a3d1271e7343.png?v=1732651187&amp;width=68 68w," width="68"/>
-  </picture>
-              </div><div class="s-hero-aging-lp__review-text">Rated 4.77/5 by verified customers · Made for women 35+</div></div><h1 class="s-hero-aging-lp__title" id="main-heading"><p>Less Shedding in 2 Weeks. <em>Fuller Hair in 90 Days.</em></p></h1><p class="s-hero-aging-lp__subtitle">Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex feeds tired follicles, calms shedding and helps your hair grow back thicker. For the widening part, the thinning crown, the edges that never recovered, postpartum and menopausal shedding, and alopecia. No prescriptions, no harsh chemicals. Just a two-minute scalp ritual, every night.</p><a class="s-hero-aging-lp__button custom-button" data-scroll-to="product-section" href="#product-section">
-            START MY REGROWTH – RISK-FREE
-          </a><div class="s-hero-aging-lp__stats s-hero-aging-lp__text--desktop"><p>LESS SHEDDING IN AS LITTLE AS 2 WEEKS</p><p>FULLER HAIR IN 90 DAYS OR YOUR MONEY BACK</p><p>FOR EVERY TEXTURE &amp; EVERY TYPE OF HAIR LOSS</p></div><div class="s-hero-aging-lp__stats s-hero-aging-lp__text--mobile"><p>LESS SHEDDING IN AS LITTLE AS 2 WEEKS</p><p>FULLER HAIR IN 90 DAYS OR YOUR MONEY BACK</p><p>FOR EVERY TEXTURE &amp; EVERY TYPE OF HAIR LOSS</p></div></div>
+        {%- if section.settings.review_text != blank -%}
+        <div class="s-hero-aging-lp__review"><div class="s-hero-aging-lp__stars">
+            {%- render 'froya-image', image: section.settings.stars_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Frame_3202_8b62166a-5f2f-4223-9107-a3d1271e7343.png?v=1732651187', alt: 'Five star rating', width: 68, height: 14, loading: 'eager' -%}
+          </div><div class="s-hero-aging-lp__review-text">{{ section.settings.review_text }}</div></div>
+        {%- endif -%}
+        <h1 class="s-hero-aging-lp__title" id="main-heading"><p>{{ section.settings.title }}</p></h1>
+        {%- if section.settings.subtitle != blank -%}<p class="s-hero-aging-lp__subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+        <a class="s-hero-aging-lp__button custom-button" data-scroll-to="{{ section.settings.button_link | remove: '#' }}" href="{{ section.settings.button_link | default: '#product-section' }}">
+            {{ section.settings.button_label }}
+          </a>
+        {%- endif -%}
+        {%- capture stats -%}
+          {%- if section.settings.stat_1 != blank -%}<p>{{ section.settings.stat_1 }}</p>{%- endif -%}
+          {%- if section.settings.stat_2 != blank -%}<p>{{ section.settings.stat_2 }}</p>{%- endif -%}
+          {%- if section.settings.stat_3 != blank -%}<p>{{ section.settings.stat_3 }}</p>{%- endif -%}
+        {%- endcapture -%}
+        {%- if stats != blank -%}
+        <div class="s-hero-aging-lp__stats s-hero-aging-lp__text--desktop">{{ stats }}</div><div class="s-hero-aging-lp__stats s-hero-aging-lp__text--mobile">{{ stats }}</div>
+        {%- endif -%}
+      </div>
     </div>
   </div>
 </section>
-
-
-
-
 </div>
 
 {% schema %}
 {
-  "name": "Frøya hero",
-  "settings": [],
-  "presets": [
-    {
-      "name": "Frøya hero"
-    }
-  ]
+  "name": "Hero",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Images" },
+    { "type": "image_picker", "id": "image", "label": "Desktop image", "info": "Shown on the right on desktop. Recommended 1600 × 1180 px." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile background image", "info": "Falls back to the desktop image. Recommended 820 × 1100 px." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Woman over 35 parting her hair to show fuller regrowth along her part after using Elaren Pumpkin Seed Regrowth Oil" },
+    { "type": "image_picker", "id": "stars_image", "label": "Star rating image", "info": "Small 68 × 14 px graphic shown before the review line." },
+    { "type": "color", "id": "mobile_text_color", "label": "Mobile text colour", "default": "#ffffff" },
+    { "type": "header", "content": "Copy" },
+    { "type": "text", "id": "review_text", "label": "Review line", "default": "Rated 4.77/5 by verified customers · Made for women 35+" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Less Shedding in 2 Weeks. <em>Fuller Hair in 90 Days.</em>" },
+    { "type": "textarea", "id": "subtitle", "label": "Subheading", "default": "Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex feeds tired follicles, calms shedding and helps your hair grow back thicker. For the widening part, the thinning crown, the edges that never recovered, postpartum and menopausal shedding, and alopecia. No prescriptions, no harsh chemicals. Just a two-minute scalp ritual, every night." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "START MY REGROWTH – RISK-FREE" },
+    { "type": "text", "id": "button_link", "label": "Button link", "default": "#product-section", "info": "Use #product-section to scroll to the buy box." },
+    { "type": "text", "id": "stat_1", "label": "Proof point 1", "default": "LESS SHEDDING IN AS LITTLE AS 2 WEEKS" },
+    { "type": "text", "id": "stat_2", "label": "Proof point 2", "default": "FULLER HAIR IN 90 DAYS OR YOUR MONEY BACK" },
+    { "type": "text", "id": "stat_3", "label": "Proof point 3", "default": "FOR EVERY TEXTURE & EVERY TYPE OF HAIR LOSS" }
+  ],
+  "presets": [ { "name": "Hero" } ]
 }
 {% endschema %}
