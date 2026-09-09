@@ -294,7 +294,7 @@
 /* Scoped to the section root via .s-backed-by-science.
      Variables on the root let the schema feed accent/card colors in. */
   .s-backed-by-science{
-    --bbs-font-sans:'Pangram','Objectivity',sans-serif;
+    --bbs-font-sans:'PP Pangram Sans','Pangram','Objectivity',sans-serif; /* same Pangram face the hero uses; the bare 'Pangram' alias only exists in Frøya's own stylesheet */
     --bbs-font-serif:'Libre Baskerville',Georgia,serif;
     --bbs-purple:#af8998;
     --bbs-line-color:rgba(175, 137, 152, 0.25);
