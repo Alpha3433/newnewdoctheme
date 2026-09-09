@@ -8,7 +8,7 @@
 <div class="shopify-section" id="shopify-section-{{ sid }}">
 <section class="s-how-to-use custom-section" data-section-id="{{ sid }}">
   <h2 class="s-how-to-use__title s-how-to-use__title--mobile section-title">
-    <p></p><p>{{ section.settings.title }}</p><p></p>
+    <p></p><p>{{ section.settings.title | replace: '</p><p>', '<br>' | remove: '<p>' | remove: '</p>' }}</p><p></p>
   </h2>
 
   <div class="s-how-to-use__content-wrapper">
@@ -20,12 +20,12 @@
 
     <div class="s-how-to-use__content">
       <h2 class="s-how-to-use__title s-how-to-use__title--desktop section-title">
-        <p></p><p>{{ section.settings.title }}</p><p></p>
+        <p></p><p>{{ section.settings.title | replace: '</p><p>', '<br>' | remove: '<p>' | remove: '</p>' }}</p><p></p>
       </h2>
 
       {%- for block in section.blocks -%}
         <div class="s-how-to-use__text-block s-how-to-use__text-block--line{% if forloop.last %} s-how-to-use__text-block--line--last{% endif %}" {{ block.shopify_attributes }}>
-          <h3 class="s-how-to-use__block-title s-how-to-use__block-title--line"><p>{{ block.settings.heading }}</p></h3>
+          <h3 class="s-how-to-use__block-title s-how-to-use__block-title--line"><p>{{ block.settings.heading | replace: '</p><p>', '<br>' | remove: '<p>' | remove: '</p>' }}</p></h3>
           <div class="s-how-to-use__block-text">
             {%- if block.settings.label != blank -%}<h5>{{ block.settings.label }}</h5>{%- endif -%}
             {{ block.settings.text }}
@@ -44,7 +44,7 @@
   "name": "How to use",
   "tag": "section",
   "settings": [
-    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "<em>Two minutes a night.</em><br>Because regrowth shouldn’t be complicated." },
+    { "type": "richtext", "id": "title", "label": "Heading", "default": "<p><em>Two minutes a night.</em><br>Because regrowth shouldn’t be complicated.</p>" },
     { "type": "image_picker", "id": "image", "label": "Image", "info": "Landscape image, about 600 × 420 px." },
     { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Applying Elaren Pumpkin Seed Regrowth Oil to the scalp" }
   ],
@@ -53,7 +53,7 @@
       "type": "step",
       "name": "Step",
       "settings": [
-        { "type": "inline_richtext", "id": "heading", "label": "Step heading", "default": "<em>Every night – The 2-minute scalp ritual</em>" },
+        { "type": "richtext", "id": "heading", "label": "Step heading", "default": "<p><em>Every night – The 2-minute scalp ritual</em></p>" },
         { "type": "text", "id": "label", "label": "Product label", "default": "REGROWTH OIL" },
         { "type": "richtext", "id": "text", "label": "Text", "default": "<p><strong>Part your hair and apply a few drops directly to the scalp where it’s thinning: your part, crown, temples or edges. Massage in with your fingertips for 60 seconds to get the blood flowing, then leave it in overnight. No rinsing, no greasy residue, and a little goes a long way.</strong></p>" },
         { "type": "text", "id": "label_2", "label": "Second product label (optional)" },
