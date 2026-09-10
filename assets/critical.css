@@ -392,34 +392,13 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
 /* ---- live-page inline head style block 4 ---- */
 /* Typography - using local fonts only, no Google Fonts */
 
-  @font-face {
-    font-family: 'Libre Baskerville';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/LibreBaskerville-Regular.woff2?v=37369604778581562331777467258) format('woff2');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
 
-  @font-face {
-    font-family: 'Libre Baskerville';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/LibreBaskerville-Bold.woff2?v=6890962853957226821777467257) format('woff2');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-  }
 
-  @font-face {
-    font-family: 'Libre Baskerville';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/LibreBaskerville-Italic.woff2?v=64609648977462219181777467257) format('woff2');
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-  }
 
   /* OPTIMIZED: Load only essential font weights to reduce font errors */
   @font-face {
     font-family: 'PP Pangram Sans';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Regular.otf?v=11778403425827296001775650487) format('opentype');
+    src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Compact_Regular_400.woff2?v=1778696600) format('woff2');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -427,7 +406,7 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
 
   @font-face {
     font-family: 'PP Pangram Sans';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Medium.otf?v=144727013393520700831775650487) format('opentype');
+    src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Medium_400.woff2?v=1778696600) format('woff2');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -436,7 +415,7 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
   /* Use font-synthesis for bold weights to reduce font file loading */
   @font-face {
     font-family: 'PP Pangram Sans';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Medium.otf?v=144727013393520700831775650487) format('opentype');
+    src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Medium_400.woff2?v=1778696600) format('woff2');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -444,7 +423,7 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
   
   @font-face {
     font-family: 'PP Pangram Sans';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Medium.otf?v=144727013393520700831775650487) format('opentype');
+    src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Medium_400.woff2?v=1778696600) format('woff2');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -721,3 +700,16 @@ html.loading popover-content:not([open]):not(.is-open) {
         font-style: normal;
         font-display: swap;
       }
+
+/* ---- font aliases (added) ----
+   The captured stylesheets refer to "Pangram" and "Apercu Mono Pro", which Frøya's own theme.css
+   defines and this theme never received. Map them to the same PP Pangram Sans / Apercu Mono files
+   so every section resolves to the source fonts instead of a system fallback. */
+@font-face { font-family: 'Pangram'; src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Light_400.woff2?v=1778696600) format('woff2'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Pangram'; src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Compact_Regular_400.woff2?v=1778696600) format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Pangram'; src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Medium_400.woff2?v=1778696600) format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Pangram'; src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Medium_400.woff2?v=1778696600) format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Pangram'; src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Bold_400.woff2?v=1778696599) format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Apercu Mono Pro'; src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/ApercuMonoProLight.woff2?v=1713282759) format('woff2'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Apercu Mono Pro'; src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/ApercuMonoProRegular.woff2?v=1713282759) format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Apercu Mono Pro'; src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/ApercuMonoProBold.woff2?v=1713282759) format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
