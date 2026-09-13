@@ -62,12 +62,12 @@
           {%- if section.settings.empty_text != blank -%}<p class="s-mini-cart__empty-text">{{ section.settings.empty_text }}</p>{%- endif -%}
           {%- if empty_product != blank -%}
             {%- liquid
+              comment
+                A plain "+ Add To Cart" adds a plain one-time line. This card used to attach the
+                product's first selling plan, which enrolled the shopper in a recurring order they
+                were never shown - they opt in afterwards with the line's subscribe & save toggle.
+              endcomment
               assign empty_variant = empty_product.selected_or_first_available_variant
-              assign empty_plan = blank
-              if empty_product.selling_plan_groups.size > 0
-                assign empty_group = empty_product.selling_plan_groups | first
-                assign empty_plan = empty_group.selling_plans | first
-              endif
             -%}
             <div class="drawer__product drawer__product--empty">
               <div class="drawer__product-image">
@@ -83,7 +83,6 @@
                 {%- form 'product', empty_product, class: 'drawer__product-form js-ajax-add' -%}
                   <input type="hidden" name="id" value="{{ empty_variant.id }}">
                   <input type="hidden" name="quantity" value="1">
-                  {%- if empty_plan != blank -%}<input type="hidden" name="selling_plan" value="{{ empty_plan.id }}">{%- endif -%}
                   <button type="submit" class="drawer__product-button"{% unless empty_variant.available %} disabled{% endunless %}>{% if empty_variant.available %}{{ section.settings.empty_add_label }}{% else %}SOLD OUT{% endif %}</button>
                 {%- endform -%}
               </div>
@@ -97,18 +96,38 @@
           {%- for item in cart.items -%}
             {%- liquid
               assign line = forloop.index
+              comment
+                Offer the cheapest plan the VARIANT itself allocates, the same way the buy box does.
+                A product's selling plan groups are one-per-cadence in an order Liquid does not
+                define, so the product's first group is often a plan this variant cannot use - the
+                toggle would then hand the cart a selling plan it rejects.
+              endcomment
               assign plan_id = blank
+              assign plan_price = item.variant.price
               assign plan_saving = 0
-              assign first_group = item.product.selling_plan_groups | first
-              if first_group and item.product.selling_plan_groups.size > 0
-                assign first_plan = first_group.selling_plans | first
-                assign plan_id = first_plan.id
-                for allocation in item.variant.selling_plan_allocations
-                  if allocation.selling_plan.id == plan_id
-                    assign plan_saving = item.variant.price | minus: allocation.price
-                    break
-                  endif
-                endfor
+              for allocation in item.variant.selling_plan_allocations
+                if plan_id == blank or allocation.price < plan_price
+                  assign plan_id = allocation.selling_plan.id
+                  assign plan_price = allocation.price
+                endif
+              endfor
+              if plan_id != blank
+                assign plan_saving = item.variant.price | minus: plan_price
+              endif
+              comment
+                The cadence variants (Monthly / Quarterly / Biannual) exist only to hang a
+                subscription plan on, and the buy box pins one, so the shopper never chooses
+                between them. Printed under the line that title reads as a delivery promise -
+                "Monthly" sitting under a one-time purchase - so only show a variant title the
+                shopper could have picked: one that prices differently, or one with no plan of its
+                own. What the shopper actually committed to comes from the plan name below.
+              endcomment
+              assign show_variant_title = false
+              if item.product.has_only_default_variant == false and item.variant.title != 'Default Title'
+                assign show_variant_title = true
+                if plan_id != blank and item.product.price_min == item.product.price_max
+                  assign show_variant_title = false
+                endif
               endif
             -%}
             <line-item class="line-item" data-line="{{ line }}" data-key="{{ item.key }}">
@@ -124,7 +143,7 @@
                 <div class="line-item__info">
                   <div class="product-item-meta">
                     <a href="{{ item.url }}" class="product-item-meta__title text--small">{{ item.product.title }}</a>
-                    {%- if item.variant.title != 'Default Title' and item.product.has_only_default_variant == false -%}
+                    {%- if show_variant_title -%}
                       <span class="product-item-meta__variant text--xsmall text--subdued">{{ item.variant.title }}</span>
                     {%- endif -%}
                     {%- if item.selling_plan_allocation -%}
@@ -217,6 +236,34 @@
 
     <footer class="mini-cart__drawer-footer drawer__footer drawer__footer--tight drawer__footer--bordered" data-cart-footer{% if cart.item_count == 0 %} hidden{% endif %}>
       <div class="drawer__footer__content">
+        {%- liquid
+          comment
+            Currency follows the market Shopify picks for the shopper, and the cart carries that
+            currency through to checkout. Shopify reads it from the IP, which is wrong often enough
+            - a VPN, a corporate proxy, a trip - and the totals below are where the theme first
+            spells the currency out, so offer the correction here instead of making the shopper
+            hunt for the selector at the bottom of the footer. Submitting reloads the page, which
+            is what /localization needs to re-price the cart.
+          endcomment
+          assign show_market_picker = false
+          if section.settings.show_country_selector and localization.available_countries.size > 1
+            assign show_market_picker = true
+          endif
+        -%}
+        {%- if show_market_picker -%}
+        <div class="s-mini-cart__market">
+          {%- form 'localization', id: 'localization_form_cart', class: 's-mini-cart__market-form' -%}
+            <label class="s-mini-cart__market-label" for="cart-country-selector">{{ section.settings.country_label }}</label>
+            <div class="custom-select">
+              <select id="cart-country-selector" class="custom-select__select" name="country_code" onchange="this.form.submit()">
+                {%- for country in localization.available_countries -%}
+                  <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }})</option>
+                {%- endfor -%}
+              </select>
+            </div>
+          {%- endform -%}
+        </div>
+        {%- endif -%}
         <div class="drawer__footer-total-info">
           {%- if cart.total_discount > 0 -%}
           <div class="total-info__row total-info__row--savings">
@@ -289,6 +336,8 @@
     { "type": "product_list", "id": "upsells", "label": "Products to recommend", "limit": 6 },
     { "type": "text", "id": "upsell_button", "label": "Add button label", "default": "ADD TO CART" },
     { "type": "header", "content": "Footer" },
+    { "type": "checkbox", "id": "show_country_selector", "label": "Show country / currency selector", "default": true, "info": "Lets a shopper whose country Shopify guessed from their IP switch before checkout - the cart keeps its currency all the way through. Only appears when more than one market is enabled." },
+    { "type": "text", "id": "country_label", "label": "Country selector label", "default": "Ship to" },
     { "type": "text", "id": "discount_label", "label": "Discount row label", "default": "DISCOUNT" },
     { "type": "text", "id": "subtotal_label", "label": "Subtotal row label", "default": "SUBTOTAL" },
     { "type": "text", "id": "checkout_label", "label": "Checkout button label", "default": "SECURE CHECKOUT" },

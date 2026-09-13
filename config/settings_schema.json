@@ -23,7 +23,7 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "This store sells in USD and converts to the visitor's local currency through Shopify Markets. Many of those currencies share the $ symbol (USD, AUD, CAD, NZD, SGD), so the currency code is shown next to the totals a shopper commits to. Cart and checkout totals always show the currency code."
+        "content": "This store sells in USD and converts to the visitor's local currency through Shopify Markets. Many of those currencies share the $ symbol (USD, AUD, CAD, NZD, SGD), so the currency code is shown next to the cart totals a shopper commits to. Which currency that is comes from the market Shopify picks from the shopper's IP address, not from the theme, and the cart keeps it through to Shopify's checkout - if it looks wrong, switch country with the selector in the cart drawer or the footer."
       },
       {
         "type": "checkbox",

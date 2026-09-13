@@ -35,8 +35,8 @@ template (`templates/page.froya-landing.json`).
 * **Lists** – benefits, science steps, research bars, hair-loss pillars/badges, how-to steps,
   ingredient legend, footer links, menu links and blog links are all blocks (add/remove/reorder).
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
-  "Pair with" products, checkout label and trust badges. The header CART button opens it and every
-  add-to-cart button adds in place and opens it.
+  "Pair with" products, checkout label, country/currency selector and trust badges. The header
+  CART button opens it and every add-to-cart button adds in place and opens it.
 
 ## Before you publish
 
@@ -52,6 +52,20 @@ template (`templates/page.froya-landing.json`).
 * **Guarantee:** the copy promises a 30-day money-back guarantee and fuller hair in 30 days, which
   matches the 30-day return window on the store's refund policy page. The "Our Elaren Story" page
   still says 90 days – update it, or change the guarantee copy back in the theme editor.
+* **Currency and country are Shopify's call, not the theme's.** Shopify puts each visitor in a
+  market based on their IP address, and that market's currency is the one the cart keeps all the
+  way through checkout — which is also where Shopify pre-fills the address country. A VPN does not
+  reliably change it: VPN exit IPs are often registered to the provider's home country, so a UK
+  exit node can still read as the US. To test another market, switch country with the selector in
+  the cart drawer or the footer (or use Shopify's own market preview), not a VPN. The currency code
+  next to the cart totals is on by default in Theme settings → Currency format, because most of the
+  store's markets use the `$` symbol.
+* **Subscription cadence lives on the variant, not the variant name.** The serum's variants
+  (Monthly / Quarterly / Biannual) exist only to hang selling plans on; the buy box pins one plan
+  with "Subscription plan ID" and never shows a variant picker. Cart lines therefore print the
+  plan's own name and suppress a variant title the shopper never chose. Shopify's checkout has no
+  such setting: it always prints the variant title, so a line still reads "… - Monthly" there until
+  the product is restructured to a single default variant carrying all three plans.
 * Links point at the connected store (`/products/...`, `/collections/all`, `/pages/about-us`,
   `/pages/contact`, `/policies/...`). `/pages/faq` and `/blogs/news` articles do not exist yet;
   select a blog in Header → Blog links once you publish articles.

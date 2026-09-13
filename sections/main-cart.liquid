@@ -8,13 +8,29 @@
         </thead>
         <tbody>
           {%- for item in cart.items -%}
+            {%- liquid
+              comment
+                Only show a variant title the shopper could have chosen. A variant that carries a
+                subscription plan and prices the same as its siblings is a delivery cadence the buy
+                box pinned (Monthly / Quarterly / Biannual), not a choice - printed here it reads as
+                a delivery promise under a one-time purchase. The plan name below says what the
+                shopper actually committed to. Mirrors the cart drawer.
+              endcomment
+              assign show_variant_title = false
+              if item.product.has_only_default_variant == false and item.variant.title != 'Default Title'
+                assign show_variant_title = true
+                if item.variant.selling_plan_allocations.size > 0 and item.product.price_min == item.product.price_max
+                  assign show_variant_title = false
+                endif
+              endif
+            -%}
             <tr>
               <td>
                 <div class="cart-table__item">
                   {%- if item.image -%}{{ item.image | image_url: width: 160 | image_tag: loading: 'lazy' }}{%- endif -%}
                   <div>
                     <a class="product-card__title" href="{{ item.url }}">{{ item.product.title }}</a>
-                    {%- unless item.product.has_only_default_variant -%}<div class="cart-footer__note">{{ item.variant.title }}</div>{%- endunless -%}
+                    {%- if show_variant_title -%}<div class="cart-footer__note">{{ item.variant.title }}</div>{%- endif -%}
                     {%- if item.selling_plan_allocation -%}<div class="cart-footer__note">{{ item.selling_plan_allocation.selling_plan.name }}</div>{%- endif -%}
                     <a class="cart-footer__note link-underline" href="{{ item.url_to_remove }}">{{ 'cart.general.remove' | t }}</a>
                   </div>
