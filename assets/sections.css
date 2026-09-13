@@ -840,6 +840,52 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-bundle__gift { font-weight: 600; color: var(--brand-green); }
 .c-bundle__perks { color: var(--brand-muted); }
 
+/* "Choose your plan" layout: tier total on the right with the regular price struck through,
+   supply as a pill next to the name, badge as a corner tab, free-gift line as a full-width band */
+.c-bundle--plan { gap: 12px; }
+.c-bundle--plan .c-bundle__legend { text-align: center; font-size: 15px; color: var(--brand-ink); }
+.c-bundle--plan .c-bundle__card { --bundle-pad: 16px; padding: var(--bundle-pad); gap: 0; border-radius: 12px; overflow: hidden; }
+.c-bundle--plan .c-bundle__card--highlight { border-color: var(--brand-cta); }
+.c-bundle--plan .c-bundle__card.is-selected { background: #fff; box-shadow: inset 0 0 0 1px var(--brand-cta), 0 6px 18px rgba(233, 128, 68, .18); }
+.c-bundle--plan .c-bundle__main { align-items: center; gap: 14px; }
+.c-bundle--plan .c-bundle__dot { flex-basis: 24px; width: 24px; height: 24px; }
+.c-bundle--plan .c-bundle__text { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.c-bundle--plan .c-bundle__badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 6px 14px;
+  border-radius: 0 0 0 10px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.c-bundle--plan .c-bundle__name { font-size: 18px; }
+.c-bundle--plan .c-bundle__sub {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: #fff4e0;
+  color: var(--brand-ink);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.c-bundle--plan .c-bundle__pricing { flex-direction: column; align-items: flex-end; gap: 0; }
+.c-bundle--plan .c-bundle__unit { font-size: 22px; }
+.c-bundle--plan .c-bundle__unit-compare { font-size: 14px; }
+.c-bundle--plan .c-bundle__card:has(.c-bundle__badge) .c-bundle__main { padding-top: 14px; }
+.c-bundle--plan .c-bundle__gift {
+  display: block;
+  margin: var(--bundle-pad) calc(-1 * var(--bundle-pad)) calc(-1 * var(--bundle-pad));
+  padding: 12px var(--bundle-pad);
+  background: var(--brand-cta);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+}
+.c-bundle--plan .c-bundle__perks { margin-top: 8px; padding-left: 38px; }
+
 /* One-time / subscription prices swap with the Subscribe & save switch */
 .c-subscribtion:not(.is-one-time) .c-bundle__unit--otp,
 .c-subscribtion:not(.is-one-time) .c-bundle__unit-compare--otp,

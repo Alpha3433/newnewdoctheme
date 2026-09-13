@@ -127,8 +127,8 @@
             "product": "elaren-pumpkin-seed-oil-regrowth-serum",
             "title": "",
             "badge": "SAVE 10% ON SUBSCRIPTION",
-            "subtitle": "With Caffeine Complex · 30-day supply",
-            "rating": 4.8,
+            "subtitle": "With Caffeine Complex · 1-month supply per bottle",
+            "rating": "4.77",
             "reviews_text": "43 Reviews",
             "button_label": "ADD TO CART"
           }
@@ -140,7 +140,7 @@
             "title": "",
             "badge": "SAVE 10% ON SUBSCRIPTION",
             "subtitle": "DHT-blocking support from the inside",
-            "rating": 4.7,
+            "rating": "4.7",
             "reviews_text": "22 Reviews",
             "button_label": "ADD TO CART"
           }
@@ -317,7 +317,7 @@
       "settings": {
         "title": "Cart",
         "show_shipping_bar": true,
-        "shipping_threshold": 40,
+        "shipping_threshold": 30,
         "shipping_text": "Spend {amount} and get",
         "shipping_highlight": "FREE SHIPPING",
         "shipping_unlocked": "You’ve unlocked FREE SHIPPING",

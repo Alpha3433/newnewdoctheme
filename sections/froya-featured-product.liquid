@@ -100,13 +100,26 @@
           break
         endif
       endfor
-      assign default_qty = default_bundle.settings.quantity | at_least: 1
+      comment
+        A tier is "quantity" paid bottles plus "free_quantity" free ones (Buy 2, Get 2 Free). The
+        shopper pays for the paid bottles at the tier's per-bottle price; all of them go in the cart.
+        With free bottles the strike-through is what every bottle would cost at the regular price,
+        because that is the saving the tier name promises.
+      endcomment
+      assign default_paid = default_bundle.settings.quantity | at_least: 1
+      assign default_free = default_bundle.settings.free_quantity | default: 0
+      assign default_qty = default_paid | plus: default_free
       assign default_keep = 100 | minus: default_bundle.settings.discount
-      assign display_unit_sub = sub_price | times: default_keep | divided_by: 100
-      assign display_unit_otp = otp_price | times: default_keep | divided_by: 100
-      assign display_total_sub = display_unit_sub | times: default_qty
-      assign display_total_otp = display_unit_otp | times: default_qty
-      assign display_compare_total = base_compare | times: default_qty
+      assign display_total_sub = sub_price | times: default_keep | divided_by: 100 | times: default_paid
+      assign display_total_otp = otp_price | times: default_keep | divided_by: 100 | times: default_paid
+      assign display_unit_sub = display_total_sub | divided_by: default_qty
+      assign display_unit_otp = display_total_otp | divided_by: default_qty
+      assign default_compare_basis = base_compare
+      if default_free > 0
+        assign default_compare_basis = otp_price
+      endif
+      assign display_compare_unit = default_compare_basis
+      assign display_compare_total = default_compare_basis | times: default_qty
       assign display_save = display_compare_total | minus: display_total_sub
       if plan == blank
         assign display_save = display_compare_total | minus: display_total_otp
@@ -365,20 +378,37 @@
               {%- endif -%}
 
               {%- if bundles.size > 0 -%}
-              <fieldset class="c-bundle" id="bundle-fieldset-{{ section.id }}">
+              <fieldset class="c-bundle{% if section.settings.price_style == 'total' %} c-bundle--plan{% endif %}" id="bundle-fieldset-{{ section.id }}">
                 {%- if section.settings.bundle_title != blank -%}<legend class="c-bundle__legend">{{ section.settings.bundle_title }}</legend>{%- endif -%}
                 {%- for block in bundles -%}
                   {%- liquid
-                    assign qty = block.settings.quantity | at_least: 1
+                    assign paid = block.settings.quantity | at_least: 1
+                    assign free = block.settings.free_quantity | default: 0
+                    assign qty = paid | plus: free
                     assign keep = 100 | minus: block.settings.discount
-                    assign unit_otp = otp_price | times: keep | divided_by: 100
-                    assign unit_sub = sub_price | times: keep | divided_by: 100
-                    assign total_otp = unit_otp | times: qty
-                    assign total_sub = unit_sub | times: qty
-                    assign tier_compare = base_compare | times: qty
+                    assign total_otp = otp_price | times: keep | divided_by: 100 | times: paid
+                    assign total_sub = sub_price | times: keep | divided_by: 100 | times: paid
+                    assign unit_otp = total_otp | divided_by: qty
+                    assign unit_sub = total_sub | divided_by: qty
+                    assign compare_basis = base_compare
+                    if free > 0
+                      assign compare_basis = otp_price
+                    endif
+                    assign tier_compare = compare_basis | times: qty
                     assign tier_save_otp = tier_compare | minus: total_otp
                     assign tier_save_sub = tier_compare | minus: total_sub
-                    assign tier_name = block.settings.title | default: qty
+                    assign tier_name = block.settings.title
+                    if tier_name == blank
+                      if free > 0
+                        assign tier_name = 'Buy ' | append: paid | append: ', Get ' | append: free | append: ' Free'
+                      else
+                        assign tier_name = qty
+                      endif
+                    endif
+                    assign plan_style = false
+                    if section.settings.price_style == 'total'
+                      assign plan_style = true
+                    endif
                     comment
                       Two forms of the tier total. The card's own "{total} total" line stays plain -
                       three stacked cards each repeating the currency code is noise. The value the
@@ -416,13 +446,21 @@
                         {%- if block.settings.subtitle != blank -%}<span class="c-bundle__sub">{{ block.settings.subtitle }}</span>{%- endif -%}
                       </span>
                       <span class="c-bundle__pricing">
+                        {%- if plan_style -%}
+                        <span class="c-bundle__unit c-bundle__unit--sub"><span class="product_price">{{ total_sub | money }}</span></span>
+                        <span class="c-bundle__unit c-bundle__unit--otp"><span class="product_price">{{ total_otp | money }}</span></span>
+                        {%- if tier_compare > total_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{{ tier_compare | money }}</span></span>{%- endif -%}
+                        {%- if tier_compare > total_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{{ tier_compare | money }}</span></span>{%- endif -%}
+                        {%- else -%}
                         <span class="c-bundle__unit c-bundle__unit--sub"><span class="product_price">{{ unit_sub | money }}</span></span>
                         <span class="c-bundle__unit c-bundle__unit--otp"><span class="product_price">{{ unit_otp | money }}</span></span>
-                        {%- if base_compare > unit_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{{ base_compare | money }}</span></span>{%- endif -%}
-                        {%- if base_compare > unit_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{{ base_compare | money }}</span></span>{%- endif -%}
+                        {%- if compare_basis > unit_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{{ compare_basis | money }}</span></span>{%- endif -%}
+                        {%- if compare_basis > unit_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{{ compare_basis | money }}</span></span>{%- endif -%}
                         {%- if section.settings.unit_suffix != blank -%}<span class="c-bundle__unit-label">{{ section.settings.unit_suffix }}</span>{%- endif -%}
+                        {%- endif -%}
                       </span>
                     </span>
+                    {%- unless plan_style -%}
                     <span class="c-bundle__meta">
                       {%- if section.settings.total_text != blank -%}
                       <span class="c-bundle__total c-bundle__total--sub">{{ section.settings.total_text | replace: total_placeholder, total_sub_money }}</span>
@@ -433,6 +471,7 @@
                       <span class="c-bundle__save c-bundle__save--otp">{{ section.settings.save_text | replace: amount_placeholder, save_otp_money | replace: percent_placeholder, tier_pct_otp }}</span>
                       {%- endif -%}
                     </span>
+                    {%- endunless -%}
                     {%- if block.settings.gift != blank -%}<span class="c-bundle__gift">{{ block.settings.gift }}</span>{%- endif -%}
                     {%- if block.settings.perks != blank -%}<span class="c-bundle__perks">{{ block.settings.perks }}</span>{%- endif -%}
                   </label>
@@ -555,7 +594,7 @@
     { "type": "text", "id": "label_1", "label": "Label 1", "default": "Pumpkin Seed Oil + Caffeine Complex" },
     { "type": "text", "id": "label_2", "label": "Label 2", "default": "30-day supply" },
     { "type": "number", "id": "reviews_count", "label": "Review count", "default": 43 },
-    { "type": "range", "id": "rating", "label": "Star rating", "min": 0, "max": 5, "step": 0.1, "default": 4.8 },
+    { "type": "text", "id": "rating", "label": "Star rating (out of 5)", "default": "4.77", "info": "Keep it equal to the rating quoted in the text below." },
     { "type": "text", "id": "rating_text", "label": "Rating text", "default": "4.77/5 FROM VERIFIED BUYERS" },
     { "type": "text", "id": "save_tag", "label": "Gallery save tag", "default": "Save {percent}%", "info": "{percent} is replaced with the subscription discount." },
     { "type": "text", "id": "ships_free_text", "label": "Shipping banner", "default": "THIS ORDER SHIPS FREE" },
@@ -571,7 +610,8 @@
     { "type": "text", "id": "legend_title", "label": "Legend heading", "default": "INGREDIENT LEVELS" },
     { "type": "text", "id": "actives_title", "label": "Actives heading", "default": "KEY ACTIVES – PUMPKIN SEED REGROWTH OIL" },
     { "type": "header", "content": "Bundles" },
-    { "type": "text", "id": "bundle_title", "label": "Bundle heading", "default": "Choose your bundle", "info": "Add \"Bundle tier\" blocks below. The tier discount comes off the price per bottle; the quantity is what is added to cart, so the Kaching Bundles quantity break applies the same discount at checkout. Keep the tiers and discounts identical to the ones set in Kaching Bundles." },
+    { "type": "text", "id": "bundle_title", "label": "Bundle heading", "default": "Choose your plan", "info": "Add \"Bundle tier\" blocks below. A tier is a number of paid bottles, optional free bottles (Buy 2, Get 2 Free) and an optional discount off the price per bottle. Every bottle is added to cart; the theme only displays the price, so the matching quantity break or Buy X Get Y discount must exist in Kaching Bundles or Shopify Discounts for checkout to charge the same amount." },
+    { "type": "select", "id": "price_style", "label": "Tier price shown on each card", "options": [ { "value": "unit", "label": "Price per bottle, total underneath" }, { "value": "total", "label": "Bundle total with the regular price struck through" } ], "default": "total" },
     { "type": "text", "id": "unit_suffix", "label": "Per-unit label", "default": "per bottle" },
     { "type": "text", "id": "total_text", "label": "Total line", "default": "{total} total", "info": "{total} is replaced with the bundle total." },
     { "type": "text", "id": "save_text", "label": "Savings line", "default": "Save {amount} ({percent}% off)", "info": "{amount} is the money saved, {percent} the tier discount." },
@@ -605,9 +645,10 @@
       "type": "bundle",
       "name": "Bundle tier",
       "settings": [
-        { "type": "range", "id": "quantity", "label": "Bottles in this bundle", "min": 1, "max": 6, "step": 1, "default": 1, "info": "Added to cart as this quantity." },
-        { "type": "range", "id": "discount", "label": "Discount off the price per bottle", "min": 0, "max": 60, "step": 1, "unit": "%", "default": 0, "info": "Must match the quantity break configured in Kaching Bundles, which applies the real discount at checkout." },
-        { "type": "text", "id": "title", "label": "Tier name", "default": "1 Bottle" },
+        { "type": "range", "id": "quantity", "label": "Bottles the shopper pays for", "min": 1, "max": 6, "step": 1, "default": 1 },
+        { "type": "range", "id": "free_quantity", "label": "Free bottles", "min": 0, "max": 6, "step": 1, "default": 0, "info": "Buy 2, Get 2 Free = 2 paid + 2 free. All bottles are added to cart; the struck-through price is every bottle at the regular price." },
+        { "type": "range", "id": "discount", "label": "Discount off the price per paid bottle", "min": 0, "max": 60, "step": 1, "unit": "%", "default": 0, "info": "Must match the quantity break configured in Kaching Bundles, which applies the real discount at checkout." },
+        { "type": "text", "id": "title", "label": "Tier name", "info": "Leave empty for \"Buy 2, Get 2 Free\" (or the bottle count when nothing is free)." },
         { "type": "text", "id": "subtitle", "label": "Tier subtitle", "default": "30-day supply" },
         { "type": "text", "id": "badge", "label": "Badge", "info": "For example MOST POPULAR or BEST VALUE. Leave empty for no badge." },
         { "type": "text", "id": "gift", "label": "Free gift line", "info": "For example + FREE Scalp Massager. Leave empty to hide." },

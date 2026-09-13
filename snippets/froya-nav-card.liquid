@@ -6,7 +6,7 @@
   assign product = block.settings.product
   assign variant = product.selected_or_first_available_variant
   assign title = block.settings.title | default: product.title
-  assign rating = block.settings.rating | default: 0
+  assign rating = block.settings.rating | default: 0 | plus: 0
   assign full_stars = rating | floor
   assign next_star = full_stars | plus: 1
   assign remainder = rating | minus: full_stars
