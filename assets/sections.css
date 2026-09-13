@@ -1253,3 +1253,70 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .s-newsletter__input-row { flex-direction: column; }
   .s-newsletter__button { width: 100%; }
 }
+
+/* --------------------------------------------------------------------------
+   Phone and small-laptop refinements
+   Appended last so these win over the rules above without editing them.
+   -------------------------------------------------------------------------- */
+
+/* The hero rating line sized itself to max-content, so it ran past the hero's
+   own overflow:hidden and lost its tail at 768px and below 340px. */
+.s-hero-aging-lp__content > * { max-width: 100%; }
+.s-hero-aging-lp__review-text {
+  max-width: 100%;
+  flex-shrink: 1;
+  text-wrap: pretty;
+}
+/* Both carried a 12px line-height meant for a single line; once they wrap at
+   narrower widths the lines sat on top of each other. */
+.s-hero-aging-lp__review-text,
+.s-hero-aging-lp__stats p { line-height: 1.35; }
+
+/* A long stat label is wider than the bar's 96px floor, so it was clipped by the
+   bar's overflow:hidden until the fill animation caught up with it. */
+.s-image-content-grid__progress-fill { min-width: max-content; }
+
+/* Hair-loss pillars and trust badges kept desktop column counts on phones:
+   3 pillars across a 390px screen is a 110px column, and 4 badges is 83px. */
+@media screen and (max-width: 539px) {
+  .s-icons-with-text__main-icons-wrapper { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .s-icons-with-text__main-icon {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    grid-template-areas: "icon title" "icon text";
+    align-items: center;
+    column-gap: 14px;
+    row-gap: 4px;
+    text-align: left;
+  }
+  .s-icons-with-text__main-icon-background { grid-area: icon; width: 72px; height: 72px; align-self: start; }
+  .s-icons-with-text__main-icon-title { grid-area: title; font-size: 13px; align-self: end; }
+  .s-icons-with-text__main-icon-text { grid-area: text; align-self: start; }
+  .s-icons-with-text__main-icon-text p { font-size: 13px; }
+  .s-icons-with-text__bottom { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px; }
+  .s-icons-with-text__small-icon-text p { font-size: 11px; max-width: none; }
+}
+
+/* Carousel dots were a 13px tap target. Keep the dot small, grow the hit area. */
+@media screen and (max-width: 767px) {
+  .blaze-pagination { gap: 0; flex-wrap: wrap; }
+  .blaze-pagination button {
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    min-height: 26px !important;
+    padding: 7px !important;
+  }
+  /* Product tile CTA inside review and video cards. */
+  .c-review-card__product-button.custom-button,
+  .s-videos-slider__product-button.custom-button { min-height: 36px; padding: 10px 16px; }
+  /* 9px was below the readable floor once the badge shrank on small phones. */
+  .c-bundle__badge { font-size: 10px; }
+  /* Inline text CTAs were 15-21px tall, too shallow to hit reliably on a phone. */
+  .s-guarantee__link,
+  .s-image-with-text-blocks__html > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+  }
+}
