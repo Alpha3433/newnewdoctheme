@@ -453,7 +453,7 @@
     var priceOtp = $('.c-buybox-toggle__price--otp .product_price', sub);
     var buttonPrice = $('.c-subscribtion__add-to-cart .js-subscribtion__main-price .product_price', sub);
     var buttonCompare = $('.c-subscribtion__add-to-cart .igcp', sub);
-    var compareText = buttonCompare ? buttonCompare.textContent : '';
+    var compareText = buttonCompare ? buttonCompare.innerHTML : '';
 
     // Bundle tiers (quantity breaks). The selected tier drives the quantity added to cart and every
     // price in the buy box: the big price is per bottle, the button shows the bundle total.
@@ -470,11 +470,15 @@
       var total = d(isSubscription ? 'data-total-sub' : 'data-total-otp');
       var save = d(isSubscription ? 'data-save-sub' : 'data-save-otp');
       var saveCents = parseInt(d(isSubscription ? 'data-save-sub-cents' : 'data-save-otp-cents'), 10) || 0;
-      if (priceMain) priceMain.textContent = d('data-unit-sub');
-      if (priceOtp) priceOtp.textContent = d('data-unit-otp');
-      if (buttonPrice) buttonPrice.textContent = total;
-      if (buttonCompare) buttonCompare.textContent = saveCents > 0 ? d('data-compare-total') : '';
-      if (congratsPrice) congratsPrice.textContent = save;
+      // The data-* attributes hold the output of the `money` filter, which carries the shop's
+      // money format verbatim - and that format may contain markup (a currency-converter app
+      // typically wraps it in <span class=money>). Writing it with textContent would print that
+      // markup as visible text, so render it as HTML, exactly as the server does on first paint.
+      if (priceMain) priceMain.innerHTML = d('data-unit-sub');
+      if (priceOtp) priceOtp.innerHTML = d('data-unit-otp');
+      if (buttonPrice) buttonPrice.innerHTML = total;
+      if (buttonCompare) buttonCompare.innerHTML = saveCents > 0 ? d('data-compare-total') : '';
+      if (congratsPrice) congratsPrice.innerHTML = save;
       if (congrats) {
         if (saveCents > 0) congrats.removeAttribute('hidden');
         else congrats.setAttribute('hidden', '');
@@ -505,9 +509,9 @@
       radios.forEach(function (r) { r.checked = (r.value === 'subscription') === subscription; });
       if (sellingPlan) sellingPlan.value = subscription ? defaultPlan : '';
       if (tiers.length) { renderTier(); return; }
-      if (buttonPrice) buttonPrice.textContent = ((subscription ? priceMain : priceOtp) || priceMain || { textContent: '' }).textContent.trim();
+      if (buttonPrice) buttonPrice.innerHTML = ((subscription ? priceMain : priceOtp) || priceMain || { innerHTML: '' }).innerHTML.trim();
       // The one-time price has no compare-at price, so only show the strike-through on the subscription price.
-      if (buttonCompare) buttonCompare.textContent = subscription ? compareText : '';
+      if (buttonCompare) buttonCompare.innerHTML = subscription ? compareText : '';
     };
     if (toggle) toggle.addEventListener('click', function () { setMode(toggle.getAttribute('aria-checked') !== 'true'); });
     radios.forEach(function (r) { r.addEventListener('change', function () { setMode(r.value === 'subscription'); }); });

@@ -16,6 +16,7 @@
   assign count_placeholder = '{count}'
   assign amount_placeholder = '{amount}'
   assign total_placeholder = '{total}'
+  assign show_currency_code = settings.currency_code_enable
 
   assign fallback_images = 'IMG_1_8c681b46-2a29-4394-8f0b-a4d7759e9a48.jpg,IMG_2.png,nikki-reed-desktop_2x_2970174c-c49b-4943-8807-ab853fe8e55c.png,IMG_3.png,IMG_4_51e90354-5a8f-4469-9287-d1746d6736e0.png,IMG_5.png,IMG_6_corrected.png,IMG_7.png,IMG_8.png,IMG_9.png,IMG_10.png' | split: ','
   assign fallback_alts = 'Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex bottle|Woman applying Elaren Pumpkin Seed Regrowth Oil to her scalp along her part|Pumpkin Seed Regrowth Oil|Elaren Pumpkin Seed Regrowth Oil held in hand with key benefit callouts|Grid of customer before and after photos showing fuller parts, crowns and edges|Star rating and two verified customer reviews|Published research results for pumpkin seed oil and caffeine|Cold-pressed pumpkin seed oil and Caffeine Complex ingredients|Regrowth timeline at 2 weeks, 30 days and 30 days|Nightly two-minute scalp routine guide|Woman holding Elaren Pumpkin Seed Regrowth Oil with the 30-day money-back promise' | split: '|'
@@ -25,20 +26,36 @@
     assign product_title = section.settings.product_title | default: product.title
     assign otp_price = variant.price
     assign otp_compare = variant.compare_at_price
+    comment
+      Pick the subscription plan from the VARIANT's own allocations rather than from the product's
+      selling plan groups. Only an allocation is guaranteed to be valid for the variant this form
+      adds to cart, and a product that offers several cadences (monthly / quarterly / biannual)
+      exposes one group per cadence in an order Liquid does not define - taking the first group
+      could enrol the shopper in a six-monthly subscription while the page promised a monthly one.
+      Default to the cheapest allocation so "Subscribe & save" always shows the best price; the
+      merchant can pin an exact cadence with the "Subscription plan ID" setting.
+    endcomment
     assign plan = blank
-    assign plan_group = product.selling_plan_groups | first
-    if product.selling_plan_groups.size > 0
-      assign plan = plan_group.selling_plans | first
-    endif
     assign sub_price = otp_price
     assign sub_percent = 0
-    if plan != blank
+    for allocation in variant.selling_plan_allocations
+      if plan == blank or allocation.price < sub_price
+        assign plan = allocation.selling_plan
+        assign sub_price = allocation.price
+      endif
+    endfor
+    assign pinned_plan_id = section.settings.selling_plan_id | default: '' | strip
+    if pinned_plan_id != blank
       for allocation in variant.selling_plan_allocations
-        if allocation.selling_plan.id == plan.id
+        assign candidate_id = allocation.selling_plan.id | append: ''
+        if candidate_id == pinned_plan_id
+          assign plan = allocation.selling_plan
           assign sub_price = allocation.price
           break
         endif
       endfor
+    endif
+    if plan != blank
       assign adjustment = plan.price_adjustments | first
       if adjustment.value_type == 'percentage'
         assign sub_percent = adjustment.value
@@ -355,12 +372,34 @@
                     assign tier_save_otp = tier_compare | minus: total_otp
                     assign tier_save_sub = tier_compare | minus: total_sub
                     assign tier_name = block.settings.title | default: qty
+                    comment
+                      Two forms of the tier total. The card's own "{total} total" line stays plain -
+                      three stacked cards each repeating the currency code is noise. The value the
+                      add-to-cart button shows (data-total-*) carries the code, because that is the
+                      figure the shopper commits to and $ alone is ambiguous across USD/AUD/CAD/NZD.
+                    endcomment
                     assign total_sub_money = total_sub | money
                     assign total_otp_money = total_otp | money
+                    assign total_sub_button = total_sub_money
+                    assign total_otp_button = total_otp_money
+                    if show_currency_code
+                      assign total_sub_button = total_sub | money_with_currency
+                      assign total_otp_button = total_otp | money_with_currency
+                    endif
                     assign save_sub_money = tier_save_sub | money
                     assign save_otp_money = tier_save_otp | money
+                    comment
+                      {amount} is measured against the compare-at total, so {percent} must be too -
+                      using the tier's own discount here made the two halves of the sentence disagree.
+                    endcomment
+                    assign tier_pct_sub = 0
+                    assign tier_pct_otp = 0
+                    if tier_compare > 0
+                      assign tier_pct_sub = tier_save_sub | times: 100 | divided_by: tier_compare
+                      assign tier_pct_otp = tier_save_otp | times: 100 | divided_by: tier_compare
+                    endif
                   -%}
-                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare | money }}" data-compare-total-cents="{{ tier_compare }}" data-qty="{{ qty }}" data-save-otp="{{ tier_save_otp | money }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ tier_save_sub | money }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp | money }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub | money }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp | money }}" data-unit-sub="{{ unit_sub | money }}" {{ block.shopify_attributes }}>
+                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare | money | escape }}" data-compare-total-cents="{{ tier_compare }}" data-qty="{{ qty }}" data-save-otp="{{ tier_save_otp | money | escape }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ tier_save_sub | money | escape }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp_button | escape }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub_button | escape }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp | money | escape }}" data-unit-sub="{{ unit_sub | money | escape }}" {{ block.shopify_attributes }}>
                     <input class="c-bundle__radio" name="bundle_tier" type="radio" value="{{ qty }}"{% if block.id == default_bundle.id %} checked{% endif %}>
                     <span class="c-bundle__main">
                       <span aria-hidden="true" class="c-bundle__dot"></span>
@@ -382,9 +421,9 @@
                       <span class="c-bundle__total c-bundle__total--sub">{{ section.settings.total_text | replace: total_placeholder, total_sub_money }}</span>
                       <span class="c-bundle__total c-bundle__total--otp">{{ section.settings.total_text | replace: total_placeholder, total_otp_money }}</span>
                       {%- endif -%}
-                      {%- if block.settings.discount > 0 and section.settings.save_text != blank -%}
-                      <span class="c-bundle__save c-bundle__save--sub">{{ section.settings.save_text | replace: amount_placeholder, save_sub_money | replace: percent_placeholder, block.settings.discount }}</span>
-                      <span class="c-bundle__save c-bundle__save--otp">{{ section.settings.save_text | replace: amount_placeholder, save_otp_money | replace: percent_placeholder, block.settings.discount }}</span>
+                      {%- if section.settings.save_text != blank and tier_save_sub > 0 -%}
+                      <span class="c-bundle__save c-bundle__save--sub">{{ section.settings.save_text | replace: amount_placeholder, save_sub_money | replace: percent_placeholder, tier_pct_sub }}</span>
+                      <span class="c-bundle__save c-bundle__save--otp">{{ section.settings.save_text | replace: amount_placeholder, save_otp_money | replace: percent_placeholder, tier_pct_otp }}</span>
                       {%- endif -%}
                     </span>
                     {%- if block.settings.gift != blank -%}<span class="c-bundle__gift">{{ block.settings.gift }}</span>{%- endif -%}
@@ -424,7 +463,13 @@
                   </div>
                 </label>
                 <fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--no-marign c-subscribtion__buttons-wrapper--fixed-plan" id="selling-plan-fieldset">
-                  {%- if section.settings.delivery_label != blank -%}<div class="c-subscribtion__fixed-plan-label">{{ section.settings.delivery_label }}</div>{%- endif -%}
+                  {%- liquid
+                    assign delivery_label = section.settings.delivery_label
+                    if delivery_label == blank
+                      assign delivery_label = plan.name
+                    endif
+                  -%}
+                  {%- if delivery_label != blank -%}<div class="c-subscribtion__fixed-plan-label">{{ delivery_label }}</div>{%- endif -%}
                   <input class="js-default-selling-plan" name="selling_plan" type="hidden" value="{{ plan.id }}">
                   <div class="c-subscribtion__subscription-info-wrapper">
                     {%- if section.settings.info_1 != blank -%}<div class="s-main-product__subscription-info"><svg fill="none" height="11" viewBox="0 0 9 11" width="9" xmlns="http://www.w3.org/2000/svg"><path d="M1.00049 6.8125L3.50049 9.8125L7.99951 0.8125" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>{{ section.settings.info_1 }}</span></div>{%- endif -%}
@@ -439,7 +484,17 @@
                   <span class="c-subscribtion__button-text js-subscribtion__button-text">{% if variant.available %}{{ section.settings.button_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</span>
                   {%- if variant.available -%}
                   <span class="js-subscribtion__price-wrapper">
-                    <span class="c-subscribtion__price js-subscribtion__main-price"><span class="product_price">{% if plan != blank %}{{ display_total_sub | money }}{% else %}{{ display_total_otp | money }}{% endif %}</span></span>{% if show_button_compare %}<s class="igcp">{{ display_compare_total | money }}</s>{% endif %}
+                    <span class="c-subscribtion__price js-subscribtion__main-price"><span class="product_price">{% liquid
+                      assign button_total = display_total_otp
+                      if plan != blank
+                        assign button_total = display_total_sub
+                      endif
+                      if show_currency_code
+                        echo button_total | money_with_currency
+                      else
+                        echo button_total | money
+                      endif
+                    %}</span></span>{% if show_button_compare %}<s class="igcp">{{ display_compare_total | money }}</s>{% endif %}
                   </span>
                   {%- endif -%}
                 </span>
@@ -482,6 +537,7 @@
   "tag": "section",
   "settings": [
     { "type": "product", "id": "product", "label": "Product", "info": "Gallery, prices, subscription plan and the add-to-cart form come from this product. Edit its images in Products." },
+    { "type": "text", "id": "selling_plan_id", "label": "Subscription plan ID", "info": "Optional. When the product offers several subscribe & save cadences (monthly, quarterly, biannual) this pins the one the buy box uses, so the delivery label below always matches what is added to cart. Leave blank to use the cheapest plan. Find the ID in the plan URL in the subscriptions app." },
     { "type": "text", "id": "product_title", "label": "Displayed name", "info": "Leave empty to use the product title.", "default": "Pumpkin Seed Regrowth Oil" },
     { "type": "header", "content": "Badge above the product" },
     { "type": "text", "id": "badge_text", "label": "Badge text", "default": "Formulated for women’s hair loss," },
