@@ -77,6 +77,7 @@
       assign base_compare = otp_compare
     endif
     assign default_bundle = blank
+    assign default_plan = plan
     assign default_qty = 1
     assign display_unit_sub = sub_price
     assign display_unit_otp = otp_price
@@ -95,7 +96,26 @@
       endfor
       assign default_qty = default_bundle.settings.quantity | at_least: 1
       assign default_keep = 100 | minus: default_bundle.settings.discount
-      assign display_unit_sub = sub_price | times: default_keep | divided_by: 100
+      comment
+        A tier can bill on its own cadence - 1 bottle monthly, 2 quarterly, 3 biannually - because
+        all three plans hang off the one variant. Resolve the default tier's plan the same way the
+        card loop below does: match the id against the VARIANT's allocations, and fall back to the
+        section's plan if it matches none, so a stale id cannot enrol the shopper in a cadence the
+        page never showed. Liquid has no functions, hence the twin of this loop further down.
+      endcomment
+      assign default_plan_price = sub_price
+      assign default_plan_id = default_bundle.settings.selling_plan_id | default: '' | strip
+      if default_plan_id != blank
+        for allocation in variant.selling_plan_allocations
+          assign candidate_id = allocation.selling_plan.id | append: ''
+          if candidate_id == default_plan_id
+            assign default_plan = allocation.selling_plan
+            assign default_plan_price = allocation.price
+            break
+          endif
+        endfor
+      endif
+      assign display_unit_sub = default_plan_price | times: default_keep | divided_by: 100
       assign display_unit_otp = otp_price | times: default_keep | divided_by: 100
       assign display_total_sub = display_unit_sub | times: default_qty
       assign display_total_otp = display_unit_otp | times: default_qty
@@ -321,7 +341,7 @@
         {%- endif -%}
 
         <div class="c-product-form js-product-form">
-          <c-subscription class="c-subscribtion c-subscribtion--buybox-toggle igcp-on{% if plan == blank %} c-subscribtion--no-plan{% endif %}{% if bundles.size > 0 %} c-subscribtion--bundles{% endif %}" data-default-selling-plan="{{ plan.id }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
+          <c-subscription class="c-subscribtion c-subscribtion--buybox-toggle igcp-on{% if plan == blank %} c-subscribtion--no-plan{% endif %}{% if bundles.size > 0 %} c-subscribtion--bundles{% endif %}" data-default-selling-plan="{{ default_plan.id }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
             {%- form 'product', product, class: 'c-subscribtion__subscription-form js-subscribtion__subscription-form js-ajax-add', id: 'featured-product-form' -%}
               <div class="c-buybox-toggle__priceline">
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--sub">
@@ -370,8 +390,61 @@
                   {%- liquid
                     assign qty = block.settings.quantity | at_least: 1
                     assign keep = 100 | minus: block.settings.discount
+                    comment
+                      This tier's cadence, resolved against the VARIANT's allocations - the twin of
+                      the default-tier loop above. An id that is not allocated falls back to the
+                      section's plan rather than posting a selling plan the cart would reject, and
+                      the price comes from the matched allocation so a cadence priced differently
+                      from the section default still shows its own price.
+                    endcomment
+                    assign tier_plan = plan
+                    assign tier_plan_price = sub_price
+                    assign tier_plan_matched = false
+                    assign tier_plan_id = block.settings.selling_plan_id | default: '' | strip
+                    if tier_plan_id != blank
+                      for allocation in variant.selling_plan_allocations
+                        assign candidate_id = allocation.selling_plan.id | append: ''
+                        if candidate_id == tier_plan_id
+                          assign tier_plan = allocation.selling_plan
+                          assign tier_plan_price = allocation.price
+                          assign tier_plan_matched = true
+                          break
+                        endif
+                      endfor
+                    endif
+                    comment
+                      The label has to describe the plan that was RESOLVED, never the one the tier
+                      asked for: a tier whose id no longer resolves falls back to the section's plan
+                      and must drop its own label with it, or the card would advertise a cadence that
+                      is not the one being bought. The section's label only describes the section's
+                      plan, so it is used only when that is what this tier ended up on. Whitespace-
+                      only values are stripped so they cannot defeat the fallbacks.
+                    endcomment
+                    assign tier_delivery = blank
+                    if tier_plan_matched
+                      assign tier_delivery = block.settings.delivery_label | default: '' | strip
+                    endif
+                    if tier_delivery == blank
+                      assign resolved_plan_id = tier_plan.id | append: ''
+                      assign section_plan_id = plan.id | append: ''
+                      if resolved_plan_id == section_plan_id
+                        assign tier_delivery = section.settings.delivery_label | default: '' | strip
+                      endif
+                    endif
+                    if tier_delivery == blank
+                      assign tier_delivery = tier_plan.name
+                    endif
+                    comment
+                      Carry the default tier's resolved plan and label out of the loop. The markup
+                      further down renders both, and taking them from here rather than recomputing
+                      makes it impossible for first paint to disagree with the card JS reads.
+                    endcomment
+                    if block.id == default_bundle.id
+                      assign default_form_plan = tier_plan
+                      assign default_delivery = tier_delivery
+                    endif
                     assign unit_otp = otp_price | times: keep | divided_by: 100
-                    assign unit_sub = sub_price | times: keep | divided_by: 100
+                    assign unit_sub = tier_plan_price | times: keep | divided_by: 100
                     assign total_otp = unit_otp | times: qty
                     assign total_sub = unit_sub | times: qty
                     assign tier_compare = base_compare | times: qty
@@ -405,7 +478,7 @@
                       assign tier_pct_otp = tier_save_otp | times: 100 | divided_by: tier_compare
                     endif
                   -%}
-                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare | money | escape }}" data-compare-total-cents="{{ tier_compare }}" data-qty="{{ qty }}" data-save-otp="{{ tier_save_otp | money | escape }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ tier_save_sub | money | escape }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp_button | escape }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub_button | escape }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp | money | escape }}" data-unit-sub="{{ unit_sub | money | escape }}" {{ block.shopify_attributes }}>
+                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare | money | escape }}" data-compare-total-cents="{{ tier_compare }}" data-delivery-label="{{ tier_delivery | escape }}" data-qty="{{ qty }}" data-save-otp="{{ tier_save_otp | money | escape }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ tier_save_sub | money | escape }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp_button | escape }}" data-total-otp-cents="{{ total_otp }}" data-selling-plan="{{ tier_plan.id }}" data-total-sub="{{ total_sub_button | escape }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp | money | escape }}" data-unit-sub="{{ unit_sub | money | escape }}" {{ block.shopify_attributes }}>
                     <input class="c-bundle__radio" name="bundle_tier" type="radio" value="{{ qty }}"{% if block.id == default_bundle.id %} checked{% endif %}>
                     <span class="c-bundle__main">
                       <span aria-hidden="true" class="c-bundle__dot"></span>
@@ -470,13 +543,24 @@
                 </label>
                 <fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--no-marign c-subscribtion__buttons-wrapper--fixed-plan" id="selling-plan-fieldset">
                   {%- liquid
-                    assign delivery_label = section.settings.delivery_label
+                    comment
+                      With bundle tiers the cadence belongs to the tier, so both the delivery line
+                      and the posted plan start on the default tier's and are re-pointed by
+                      assets/main.js whenever the shopper picks another tier. Without tiers they
+                      stay on the section's plan, as before.
+                    endcomment
+                    assign form_plan = plan
+                    assign delivery_label = section.settings.delivery_label | default: '' | strip
+                    if bundles.size > 0
+                      assign form_plan = default_form_plan
+                      assign delivery_label = default_delivery
+                    endif
                     if delivery_label == blank
-                      assign delivery_label = plan.name
+                      assign delivery_label = form_plan.name
                     endif
                   -%}
-                  {%- if delivery_label != blank -%}<div class="c-subscribtion__fixed-plan-label">{{ delivery_label }}</div>{%- endif -%}
-                  <input class="js-default-selling-plan" name="selling_plan" type="hidden" value="{{ plan.id }}">
+                  {%- if delivery_label != blank -%}<div class="c-subscribtion__fixed-plan-label js-plan-label">{{ delivery_label }}</div>{%- endif -%}
+                  <input class="js-default-selling-plan" name="selling_plan" type="hidden" value="{{ form_plan.id }}">
                   <div class="c-subscribtion__subscription-info-wrapper">
                     {%- if section.settings.info_1 != blank -%}<div class="s-main-product__subscription-info"><svg fill="none" height="11" viewBox="0 0 9 11" width="9" xmlns="http://www.w3.org/2000/svg"><path d="M1.00049 6.8125L3.50049 9.8125L7.99951 0.8125" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>{{ section.settings.info_1 }}</span></div>{%- endif -%}
                     {%- if section.settings.info_2 != blank -%}<div class="s-main-product__subscription-info"><svg fill="none" height="11" viewBox="0 0 9 11" width="9" xmlns="http://www.w3.org/2000/svg"><path d="M1.00049 6.8125L3.50049 9.8125L7.99951 0.8125" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>{{ section.settings.info_2 }}</span></div>{%- endif -%}
@@ -543,7 +627,7 @@
   "tag": "section",
   "settings": [
     { "type": "product", "id": "product", "label": "Product", "info": "Gallery, prices, subscription plan and the add-to-cart form come from this product. Edit its images in Products." },
-    { "type": "text", "id": "selling_plan_id", "label": "Subscription plan ID", "info": "Optional. When the product offers several subscribe & save cadences (monthly, quarterly, biannual) this pins the one the buy box uses, so the delivery label below always matches what is added to cart. Leave blank to use the cheapest plan. Find the ID in the plan URL in the subscriptions app." },
+    { "type": "text", "id": "selling_plan_id", "label": "Subscription plan ID", "info": "Optional. When the product offers several subscribe & save cadences (monthly, quarterly, biannual) this pins the one the buy box uses, so the delivery label below always matches what is added to cart. Bundle tiers can override it with a cadence of their own. Leave blank to use the cheapest plan. Find the ID in the plan URL in the subscriptions app." },
     { "type": "text", "id": "product_title", "label": "Displayed name", "info": "Leave empty to use the product title.", "default": "Pumpkin Seed Regrowth Oil" },
     { "type": "header", "content": "Badge above the product" },
     { "type": "text", "id": "badge_text", "label": "Badge text", "default": "Formulated for women’s hair loss," },
@@ -608,6 +692,8 @@
         { "type": "range", "id": "discount", "label": "Discount off the price per bottle", "min": 0, "max": 60, "step": 1, "unit": "%", "default": 0, "info": "Must match the quantity break configured in Kaching Bundles, which applies the real discount at checkout." },
         { "type": "text", "id": "title", "label": "Tier name", "default": "1 Bottle" },
         { "type": "text", "id": "subtitle", "label": "Tier subtitle", "default": "30-day supply" },
+    { "type": "text", "id": "selling_plan_id", "label": "Subscription plan ID for this tier", "info": "Optional. Bills this tier on its own cadence - a 2-bottle tier can ship quarterly while 1 bottle ships monthly. Must be a plan the product actually offers or it falls back to the section's plan. Keep the delivery label below in step with it, and with the supply this tier covers." },
+    { "type": "text", "id": "delivery_label", "label": "Delivery frequency label for this tier", "info": "Shown under Subscribe & save while this tier is selected. Used only when the plan ID above resolves; otherwise the tier falls back to the section's plan and to its label, so a stale ID can never leave a cadence on screen that is not the one being bought. With no label here, the plan's own name is shown." },
         { "type": "text", "id": "badge", "label": "Badge", "info": "For example MOST POPULAR or BEST VALUE. Leave empty for no badge." },
         { "type": "text", "id": "gift", "label": "Free gift line", "info": "For example + FREE Scalp Massager. Leave empty to hide." },
         { "type": "inline_richtext", "id": "perks", "label": "Perks line" },

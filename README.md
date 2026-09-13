@@ -66,6 +66,17 @@ template (`templates/page.froya-landing.json`).
   the cart drawer or the footer (or use Shopify's own market preview), not a VPN. The currency code
   next to the cart totals is on by default in Theme settings → Currency format, because most of the
   store's markets use the `$` symbol.
+* **Each bundle tier can bill on its own cadence.** A "Bundle tier" block takes a "Subscription
+  plan ID for this tier" and a matching "Delivery frequency label", so 1 bottle can ship monthly
+  while 2 ship quarterly and 3 ship biannually. The tier drives the quantity, the price, the plan
+  the form posts and the delivery line under Subscribe & save, all together - never set the plan id
+  without setting the label, or the page will promise one cadence and bill another. A tier with no
+  plan id falls back to the section's "Subscription plan ID". An id the product does not offer falls
+  back too rather than posting a plan the cart would reject. **Keep each tier's cadence and the
+  supply it ships in step:** a 2-bottle tier subtitled "60-day supply" that ships every 3 months
+  leaves the customer a month short every cycle. Note too that the box headline's {percent} comes
+  from the section's plan, so if the cadences ever carry different discounts that headline will only
+  be right for one of them.
 * **Subscription cadence belongs on the selling plan, never on a variant.** The serum used to
   carry three variants (Monthly / Quarterly / Biannualy) that existed only to hang plans on, so
   every cart line and checkout line read "… - Monthly" even on a one-time purchase. It is now a

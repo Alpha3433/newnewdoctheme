@@ -921,6 +921,8 @@ body.cart-open { overflow: hidden; }
 /* Footer */
 .mini-cart .drawer__footer { flex: 0 0 auto; padding: 14px 20px 20px; background: #fff; box-shadow: 0 -8px 24px rgba(31, 31, 31, 0.08); }
 .mini-cart .drawer__footer[hidden] { display: none; }
+/* The cadence the subscribe toggle will put the line on, shown before the shopper opts in. */
+.mini-cart .subscription-cadence { display: block; width: 100%; font-family: var(--font-sans); font-size: 11px; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--brand-muted); }
 .mini-cart .drawer__footer-total-info { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
 /* Country / currency picker. The shared .custom-select is drawn for the dark site footer, so
    repaint it for the drawer's white footer. */

@@ -467,6 +467,7 @@
     // price in the buy box: the big price is per bottle, the button shows the bundle total.
     var tiers = $$('.js-bundle-card', sub);
     var quantityInput = $('.js-bundle-quantity', sub);
+    var planLabel = $('.js-plan-label', sub);
     var congrats = $('.c-buybox-toggle__congrats', sub);
     var congratsPrice = congrats ? $('.product_price', congrats) : null;
     var tier = tiers.filter(function (c) { return $('input', c).checked; })[0] || tiers[0];
@@ -493,6 +494,28 @@
       }
     };
 
+    // A tier can carry its own subscription cadence - 1 bottle monthly, 2 quarterly, 3 biannually -
+    // so the plan the form posts and the delivery line the shopper reads both follow the tier. Any
+    // tier without one falls back to the section's plan.
+    var tierPlan = function () {
+      return (tier && tier.getAttribute('data-selling-plan')) || defaultPlan;
+    };
+
+    var applyPlan = function () {
+      if (sellingPlan) {
+        sellingPlan.value = isSubscription ? tierPlan() : '';
+        // A disabled input is left out of FormData altogether, so a one-time purchase posts no
+        // selling_plan key at all rather than an empty one - nothing for the cart to interpret.
+        sellingPlan.disabled = !isSubscription;
+      }
+      // Never leave a cadence on screen that the form is not about to post: with tiers the label
+      // is rewritten on every change, and a tier with nothing to say clears it rather than letting
+      // the previous tier's cadence stand. Without tiers the server-rendered label is left alone.
+      if (planLabel && tiers.length) {
+        planLabel.textContent = (tier && tier.getAttribute('data-delivery-label')) || '';
+      }
+    };
+
     var selectTier = function (card) {
       if (!card) return;
       tier = card;
@@ -503,6 +526,7 @@
         if (input) input.checked = on;
       });
       if (quantityInput) quantityInput.value = card.getAttribute('data-qty') || '1';
+      applyPlan();
       renderTier();
     };
 
@@ -515,12 +539,7 @@
       sub.classList.toggle('is-one-time', !subscription);
       if (toggle) toggle.setAttribute('aria-checked', subscription ? 'true' : 'false');
       radios.forEach(function (r) { r.checked = (r.value === 'subscription') === subscription; });
-      if (sellingPlan) {
-        sellingPlan.value = subscription ? defaultPlan : '';
-        // A disabled input is left out of FormData altogether, so a one-time purchase posts no
-        // selling_plan key at all rather than an empty one - nothing for the cart to interpret.
-        sellingPlan.disabled = !subscription;
-      }
+      applyPlan();
       if (tiers.length) { renderTier(); return; }
       if (buttonPrice) buttonPrice.innerHTML = ((subscription ? priceMain : priceOtp) || priceMain || { innerHTML: '' }).innerHTML.trim();
       // The one-time price has no compare-at price, so only show the strike-through on the subscription price.

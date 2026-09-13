@@ -97,22 +97,63 @@
             {%- liquid
               assign line = forloop.index
               comment
-                Offer the cheapest plan the VARIANT itself allocates, the same way the buy box does.
-                A product's selling plan groups are one-per-cadence in an order Liquid does not
-                define, so the product's first group is often a plan this variant cannot use - the
-                toggle would then hand the cart a selling plan it rejects.
+                Which cadence this toggle offers. Resolve it from the VARIANT's own allocations, not
+                the product's selling plan groups: only an allocation is guaranteed valid for the
+                variant, and the groups come back in an order Liquid does not define.
+
+                A line already on a plan keeps that plan, so switching the toggle off and back on
+                returns the shopper to the cadence they chose rather than re-cadencing them. For a
+                one-time line the merchant pins the cadence with "Subscribe toggle plan"; without
+                that pin, several equally priced cadences make "cheapest" a coin toss decided by
+                allocation order, which is how a shopper ends up billed every 6 months by a control
+                labelled only "SUBSCRIBE & SAVE". Whatever is offered, plan_name is rendered beside
+                the toggle so the cadence is on screen BEFORE the shopper opts in.
               endcomment
               assign plan_id = blank
+              assign plan_name = blank
               assign plan_price = item.variant.price
               assign plan_saving = 0
-              for allocation in item.variant.selling_plan_allocations
-                if plan_id == blank or allocation.price < plan_price
-                  assign plan_id = allocation.selling_plan.id
-                  assign plan_price = allocation.price
+              if item.selling_plan_allocation
+                assign plan_id = item.selling_plan_allocation.selling_plan.id
+                assign plan_name = item.selling_plan_allocation.selling_plan.name
+                assign plan_price = item.selling_plan_allocation.price
+              else
+                assign pinned_toggle_id = section.settings.toggle_plan_id | default: '' | strip
+                for allocation in item.variant.selling_plan_allocations
+                  assign candidate_id = allocation.selling_plan.id | append: ''
+                  if pinned_toggle_id != blank and candidate_id == pinned_toggle_id
+                    assign plan_id = allocation.selling_plan.id
+                    assign plan_name = allocation.selling_plan.name
+                    assign plan_price = allocation.price
+                    break
+                  endif
+                  if pinned_toggle_id == blank
+                    if plan_id == blank or allocation.price < plan_price
+                      assign plan_id = allocation.selling_plan.id
+                      assign plan_name = allocation.selling_plan.name
+                      assign plan_price = allocation.price
+                    endif
+                  endif
+                endfor
+                comment
+                  A pin that no longer resolves must not silently offer some other cadence.
+                endcomment
+                if pinned_toggle_id != blank and plan_id == blank
+                  for allocation in item.variant.selling_plan_allocations
+                    if plan_id == blank or allocation.price < plan_price
+                      assign plan_id = allocation.selling_plan.id
+                      assign plan_name = allocation.selling_plan.name
+                      assign plan_price = allocation.price
+                    endif
+                  endfor
                 endif
-              endfor
+              endif
               if plan_id != blank
-                assign plan_saving = item.variant.price | minus: plan_price
+                comment
+                  The saving is shown against the whole line, so it has to be the whole line's -
+                  a per-unit figure understates a 2- or 3-bottle bundle by the quantity.
+                endcomment
+                assign plan_saving = item.variant.price | minus: plan_price | times: item.quantity
               endif
               comment
                 A subscription app will happily put each delivery cadence on its own variant
@@ -156,6 +197,7 @@
                           <span class="subscription-text">
                             {{ section.settings.subscribe_label }}
                             {%- if item.selling_plan_allocation == blank and plan_saving > 0 %} <span class="product_price">{{ plan_saving | money }}</span>{%- endif -%}
+                            {%- if plan_name != blank -%}<span class="subscription-cadence">{{ plan_name }}</span>{%- endif -%}
                           </span>
                           <span class="subscription-toggle-switch" aria-hidden="true"><span class="subscription-toggle-knob"></span></span>
                         </label>
@@ -331,6 +373,7 @@
     { "type": "header", "content": "Line items" },
     { "type": "checkbox", "id": "show_subscribe_toggle", "label": "Show subscribe & save toggle on line items", "default": true },
     { "type": "text", "id": "subscribe_label", "label": "Subscribe toggle label", "default": "SUBSCRIBE & SAVE" },
+    { "type": "text", "id": "toggle_plan_id", "label": "Subscribe toggle plan ID", "info": "Which cadence this toggle puts a one-time line on. Leave blank and it offers the cheapest plan the product has - a coin toss when several cadences cost the same, so pin one if the product sells more than one. A line already on a plan always keeps its own. The cadence is shown on the toggle either way." },
     { "type": "header", "content": "Recommendations" },
     { "type": "text", "id": "upsell_title", "label": "Heading", "default": "PAIR WITH:" },
     { "type": "product_list", "id": "upsells", "label": "Products to recommend", "limit": 6 },
