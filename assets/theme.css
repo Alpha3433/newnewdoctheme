@@ -920,6 +920,16 @@ body.cart-open { overflow: hidden; }
 .mini-cart .drawer__footer { flex: 0 0 auto; padding: 14px 20px 20px; background: #fff; box-shadow: 0 -8px 24px rgba(31, 31, 31, 0.08); }
 .mini-cart .drawer__footer[hidden] { display: none; }
 .mini-cart .drawer__footer-total-info { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
+/* Country / currency picker. The shared .custom-select is drawn for the dark site footer, so
+   repaint it for the drawer's white footer. */
+.s-mini-cart__market { margin-bottom: 12px; }
+.s-mini-cart__market-form { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.s-mini-cart__market-label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--brand-muted); }
+.s-mini-cart__market .custom-select__select {
+  min-width: 0; max-width: 62vw; height: 34px; padding: 0 30px 0 10px;
+  border-color: var(--brand-line); background: #fff; color: var(--brand-ink); font-size: 12px;
+}
+.s-mini-cart__market .custom-select::after { right: 11px; border-right-color: var(--brand-ink); border-bottom-color: var(--brand-ink); }
 .mini-cart .total-info__row { display: flex; justify-content: space-between; align-items: baseline; }
 .mini-cart .total-info__row--savings { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--brand-muted); }
 .mini-cart .total-info__row--estimated .total-info__label { font-size: 15px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; }

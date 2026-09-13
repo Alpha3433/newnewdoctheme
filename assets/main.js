@@ -507,7 +507,12 @@
       sub.classList.toggle('is-one-time', !subscription);
       if (toggle) toggle.setAttribute('aria-checked', subscription ? 'true' : 'false');
       radios.forEach(function (r) { r.checked = (r.value === 'subscription') === subscription; });
-      if (sellingPlan) sellingPlan.value = subscription ? defaultPlan : '';
+      if (sellingPlan) {
+        sellingPlan.value = subscription ? defaultPlan : '';
+        // A disabled input is left out of FormData altogether, so a one-time purchase posts no
+        // selling_plan key at all rather than an empty one - nothing for the cart to interpret.
+        sellingPlan.disabled = !subscription;
+      }
       if (tiers.length) { renderTier(); return; }
       if (buttonPrice) buttonPrice.innerHTML = ((subscription ? priceMain : priceOtp) || priceMain || { innerHTML: '' }).innerHTML.trim();
       // The one-time price has no compare-at price, so only show the strike-through on the subscription price.
