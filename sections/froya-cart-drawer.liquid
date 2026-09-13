@@ -115,12 +115,12 @@
                 assign plan_saving = item.variant.price | minus: plan_price
               endif
               comment
-                The cadence variants (Monthly / Quarterly / Biannual) exist only to hang a
-                subscription plan on, and the buy box pins one, so the shopper never chooses
-                between them. Printed under the line that title reads as a delivery promise -
-                "Monthly" sitting under a one-time purchase - so only show a variant title the
-                shopper could have picked: one that prices differently, or one with no plan of its
-                own. What the shopper actually committed to comes from the plan name below.
+                A subscription app will happily put each delivery cadence on its own variant
+                (Monthly / Quarterly / Biannual) at one price, and the buy box pins one, so the
+                shopper never chooses between them. Printed under the line that title reads as a
+                delivery promise - "Monthly" sitting under a one-time purchase - so only show a
+                variant title the shopper could have picked: one that prices differently, or one
+                with no plan of its own. What the shopper committed to comes from the plan below.
               endcomment
               assign show_variant_title = false
               if item.product.has_only_default_variant == false and item.variant.title != 'Default Title'

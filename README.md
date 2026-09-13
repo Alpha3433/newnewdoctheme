@@ -66,12 +66,15 @@ template (`templates/page.froya-landing.json`).
   the cart drawer or the footer (or use Shopify's own market preview), not a VPN. The currency code
   next to the cart totals is on by default in Theme settings → Currency format, because most of the
   store's markets use the `$` symbol.
-* **Subscription cadence lives on the variant, not the variant name.** The serum's variants
-  (Monthly / Quarterly / Biannual) exist only to hang selling plans on; the buy box pins one plan
-  with "Subscription plan ID" and never shows a variant picker. Cart lines therefore print the
-  plan's own name and suppress a variant title the shopper never chose. Shopify's checkout has no
-  such setting: it always prints the variant title, so a line still reads "… - Monthly" there until
-  the product is restructured to a single default variant carrying all three plans.
+* **Subscription cadence belongs on the selling plan, never on a variant.** The serum used to
+  carry three variants (Monthly / Quarterly / Biannualy) that existed only to hang plans on, so
+  every cart line and checkout line read "… - Monthly" even on a one-time purchase. It is now a
+  single default variant with all three plans attached to it, which is what the buy box always
+  assumed - it pins one plan with "Subscription plan ID" and never shows a variant picker. If the
+  subscriptions app ever adds cadence variants again, expect that label back: Shopify's checkout
+  always prints the variant title and no theme setting changes that. The cart drawer and cart page
+  defend themselves, suppressing a variant title that is really a plan cadence, but the checkout
+  cannot.
 * Links point at the connected store (`/products/...`, `/collections/all`, `/pages/about-us`,
   `/pages/contact`, `/policies/...`). `/pages/faq` and `/blogs/news` articles do not exist yet;
   select a blog in Header → Blog links once you publish articles.
