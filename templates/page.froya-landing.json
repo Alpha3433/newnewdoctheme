@@ -15,12 +15,12 @@
         "image_alt": "Woman over 35 parting her hair to show fuller regrowth along her part after using Elaren Pumpkin Seed Regrowth Oil",
         "mobile_text_color": "#ffffff",
         "review_text": "Rated 4.77/5 by verified customers · Made for women 35+",
-        "title": "Visibility Fuller Hair in as little as <em>30 Days.</em>",
-        "subtitle": "Elaren Pumpkin Seed Regrowth Oil feeds-tired follicles, calms shedding and helps your hair grow back thicker. For the widening part, the thinning crown, the edges that never recovered, postpartum and menopausal shedding, and alopecia.",
-        "button_label": "TRY IT RISK-FREE - SAVE 40%",
+        "title": "Less Shedding in <em>Weeks.</em> Real Regrowth in Months.",
+        "subtitle": "A cold-pressed pumpkin seed oil you massage into your scalp for two minutes before bed. Not a pill, not a prescription. For the widening part, the thinning crown, the edges that never recovered, postpartum and menopausal shedding, and alopecia.",
+        "button_label": "SEE HOW IT WORKS",
         "button_link": "#product-section",
-        "stat_1": "LESS SHEDDING IN AS LITTLE AS 2 WEEKS",
-        "stat_2": "FULLER HAIR IN 30 DAYS OR YOUR MONEY BACK",
+        "stat_1": "APPLY TO THE SCALP - 2 MINUTES A NIGHT",
+        "stat_2": "LESS SHEDDING IN AS LITTLE AS 2 WEEKS",
         "stat_3": "10k+ UNITS SOLD WORLDWIDE"
       }
     },
@@ -129,7 +129,7 @@
           "type": "slide",
           "settings": {
             "logo_alt": "",
-            "quote": "\"Less shedding in as little as 2 weeks. Fuller-looking hair in 30 days.\"",
+            "quote": "\"Less shedding in as little as 2 weeks. Real density over 3-6 months.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/ELLE_Magazine_Logo.svg?v=1732863266"
           }
         },
@@ -248,20 +248,6 @@
             "image_fallback": "https://froyaorganics.com/cdn/shop/files/Sarah_Jane_Frantz.png"
           }
         },
-        "review_6": {
-          "type": "review",
-          "settings": {
-            "image_alt": "",
-            "name": "Verified buyer (US)",
-            "tag_1": "wider part",
-            "tag_2": "baby hairs",
-            "quote": "\"I’ve stopped shedding as much, and I’m seeing fine baby hairs growing in at a decent rate.\"",
-            "text": "<p>My hairdresser told me all about pumpkin seed oil to help with DHT issues. I’ve been on a GLP1 and lost a lot of weight, and she’s had success with a number of her clients who’ve shed hair due to rapid weight loss. My hair still looks normal to everyone else, but I can feel a difference and my part is a bit wider. I love the idea of taking a vitamin rather than slathering product on my scalp, so I was happy to try these. I have been taking them for two months now. (I couldn’t reorder these because they were unavailable, so month two I was using another product.)</p><p>I can definitely see a benefit to these. I’ve stopped shedding as much, and I’m seeing fine baby hairs growing in at a decent rate, so I’d rate these capsules as very effective. The quality of the bottle and the capsules themselves are topnotch and came well secured and safe. There is no aftertaste, and I am enjoying the health benefits of these vitamins. I notice no difference in my energy level, in case that matters.</p>",
-            "product": "pumpkin-seed-oil-capsules",
-            "product_title": "",
-            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Iriel_G.jpg"
-          }
-        },
         "review_7": {
           "type": "review",
           "settings": {
@@ -276,20 +262,6 @@
             "image_fallback": "https://froyaorganics.com/cdn/shop/files/Sarah_M.png"
           }
         },
-        "review_8": {
-          "type": "review",
-          "settings": {
-            "image_alt": "",
-            "name": "Andrea · Verified buyer",
-            "tag_1": "thicker feel",
-            "tag_2": "less dry scalp",
-            "quote": "\"My hair already feels a bit thicker and looks healthier, and my scalp doesn’t feel as dry.\"",
-            "text": "<p>I’ve been using this for a little while and I’m really happy with it so far. The softgels are easy to take and don’t have any weird taste or aftertaste. I like that it’s made with clean, plant-based ingredients like pumpkin seed oil, and that it’s cold-pressed and third-party tested.</p><p>My hair already feels a bit thicker and looks healthier, and my scalp doesn’t feel as dry. It’s nice to find something simple and natural that actually seems to help. Definitely planning to keep this as part of my routine.</p>",
-            "product": "pumpkin-seed-oil-capsules",
-            "product_title": "",
-            "image_fallback": "https://froyaorganics.com/cdn/shop/files/image3.png"
-          }
-        },
         "review_9": {
           "type": "review",
           "settings": {
@@ -302,20 +274,6 @@
             "product": "elaren-pumpkin-seed-oil-regrowth-serum",
             "product_title": "",
             "image_fallback": "https://froyaorganics.com/cdn/shop/files/Traci_R.png"
-          }
-        },
-        "review_10": {
-          "type": "review",
-          "settings": {
-            "image_alt": "",
-            "name": "Danielle M. · Verified buyer",
-            "tag_1": "hair quality",
-            "tag_2": "visible difference",
-            "quote": "\"I have already seen a difference in the quality of my hair.\"",
-            "text": "",
-            "product": "pumpkin-seed-oil-capsules",
-            "product_title": "",
-            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Jennifer_M.png"
           }
         },
         "video_1": {
@@ -358,11 +316,8 @@
         "review_3",
         "review_4",
         "review_5",
-        "review_6",
         "review_7",
-        "review_8",
         "review_9",
-        "review_10",
         "video_1",
         "video_2",
         "video_3"
@@ -472,7 +427,7 @@
         "note_1": {
           "type": "note",
           "settings": {
-            "text": "*Studies cited were conducted on the ingredients (oral pumpkin seed oil supplementation, Cho et al. 2014; topical caffeine, Dhurat et al. 2017 and Otberg et al. 2008), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, with visible density changes typically taking 3–6 months of consistent use. Not seeing progress? Contact us within 30 days for a full refund."
+            "text": "*Studies cited were conducted on the ingredients (oral pumpkin seed oil supplementation, Cho et al. 2014; topical caffeine, Dhurat et al. 2017 and Otberg et al. 2008), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, with visible density changes typically taking 3–6 months of consistent use. Not seeing less shedding after 30 nights? Contact us for a full refund."
           }
         }
       },
@@ -682,7 +637,7 @@
         "usp_2": {
           "type": "usp",
           "settings": {
-            "text": "<p>fuller hair in 30 days or your money back</p>",
+            "text": "<p>less shedding in 30 days or your money back</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/product_icon_2.svg"
           }
         },
@@ -734,7 +689,7 @@
         "rating_text": "4.77/5 FROM VERIFIED BUYERS",
         "save_tag": "Save {percent}%",
         "ships_free_text": "THIS ORDER SHIPS FREE",
-        "includes": "<p>What you get (30-day supply):<br>· Pumpkin Seed Regrowth Oil with Caffeine Complex<br>· Precision applicator for scalp-only, no-waste application<br>· Scalp massager to boost circulation at the root<br>· Free insured shipping and a 30-day money-back guarantee</p>",
+        "includes": "<p>What you get (30-day supply):<br>· Pumpkin Seed Regrowth Oil with Caffeine Complex - applied to the scalp, not swallowed<br>· Precision applicator for scalp-only, no-waste application<br>· Scalp massager to boost circulation at the root<br>· Free insured shipping and a 30-day money-back guarantee</p>",
         "ingredients_button": "View Ingredients",
         "ingredients_title": "6 Key Actives, Chosen to Work Together",
         "ingredients_close": "Close",
@@ -896,8 +851,8 @@
       "type": "froya-guarantee",
       "settings": {
         "background": true,
-        "title": "Fuller hair in 30 days or your money back",
-        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
+        "title": "Less shedding in 30 days, or your money back",
+        "text": "<p>Hair grows in cycles. In the first month what changes is how much you lose, not how much you have: less hair in the brush, less in the drain. Use Elaren nightly for 30 days and if nothing has changed, tell us and we'll refund every cent. No photos, no awkward questions. Regrowth itself takes longer, and we'd rather tell you that now than have you give up at week three.</p>",
         "link_label": "Learn More",
         "link_url": "/policies/refund-policy",
         "button_label": "SHOP ALL PRODUCTS",
@@ -1030,9 +985,9 @@
         "step_6": {
           "type": "step",
           "settings": {
-            "heading": "<p><em>Every night – The 2-minute scalp ritual</em></p>",
+            "heading": "<p><em>It goes on your scalp. You don't drink it.</em></p>",
             "label": "REGROWTH OIL",
-            "text": "<p><strong>Part your hair and apply a few drops directly to the scalp where it’s thinning: your part, crown, temples or edges. Massage in with your fingertips for 60 seconds to get the blood flowing, then leave it in overnight. No rinsing, no greasy residue, and a little goes a long way.</strong></p>",
+            "text": "<p><strong>Part your hair and squeeze a few drops straight onto the skin where it's thinning - part, crown, temples or edges. Massage in with your fingertips for 60 seconds. Leave it in overnight and wash as normal on your next wash day. No rinsing, no residue, and a little goes a long way.</strong></p>",
             "label_2": "",
             "text_2": ""
           }
@@ -1040,9 +995,9 @@
         "step_7": {
           "type": "step",
           "settings": {
-            "heading": "<p><em>Wash days – Wake up the root</em></p>",
+            "heading": "<p><em>Every night. Not once a week.</em></p>",
             "label": "ROOT REVIVAL SCALP BRUSH",
-            "text": "<p><strong>Work your shampoo in with the soft silicone bristles for two minutes. It lifts build-up away from the follicle and boosts circulation at the root, so your oil goes to work on a clean, receptive scalp.</strong></p>",
+            "text": "<p><strong>Nightly is what makes the difference - consistency matters more than quantity. Roughly 8-10 drops covers a full part and crown, so one bottle lasts about 30 nights.</strong></p>",
             "label_2": "",
             "text_2": ""
           }
@@ -1050,9 +1005,9 @@
         "step_8": {
           "type": "step",
           "settings": {
-            "heading": "<p><em>Go further – Inside and out</em></p>",
+            "heading": "<p><em>Yes, you can use it alongside minoxidil.</em></p>",
             "label": "PUMPKIN SEED OIL CAPSULES",
-            "text": "<p><strong>Support regrowth from the inside with the same DHT-blocking pumpkin seed oil in a daily softgel. Ideal when your thinning is hormonal: perimenopause, postpartum or PCOS.</strong></p>",
+            "text": "<p><strong>Elaren has no minoxidil and no hormones in it, so it doesn't compete with anything your doctor has prescribed. Many women use it as a gentler alternative; others layer it over an existing routine. If you're already on a topical treatment, apply that first and let it dry.</strong></p>",
             "label_2": "MICROSTAMP PRO",
             "text_2": "<p><strong>Use two or three times a week before your oil. Its 140 micro-points create tiny channels so the Caffeine Complex reaches the follicle instead of sitting on the surface.</strong></p>"
           }
@@ -1060,9 +1015,9 @@
         "step_9": {
           "type": "step",
           "settings": {
-            "heading": "<p>Be patient.<br>Hair grows in cycles.</p>",
+            "heading": "<p>How long until I see something?</p>",
             "label": "REGROWTH OIL",
-            "text": "<p><strong>Most women notice less hair in the brush and the shower drain within the first 2–4 weeks. Fine new baby hairs along the hairline and part usually show up around month 2 or 3. Visible density takes 30 days of nightly use.</strong></p><p><strong>Don’t stop at week three. Consistency is the whole secret, and Elaren does the rest.</strong></p>",
+            "text": "<p><strong>Weeks 2-4: less hair in the brush and the shower drain. Month 2-3: fine baby hairs along the hairline and part. Month 4-6: visible density. That's the real curve, and anyone promising faster is guessing.</strong></p><p><strong>Don't stop at week three. Consistency is the whole secret, and Elaren does the rest.</strong></p>",
             "label_2": "",
             "text_2": ""
           }
@@ -1075,7 +1030,7 @@
         "step_9"
       ],
       "settings": {
-        "title": "<p><em>Two minutes a night.</em><br>Because regrowth shouldn’t be complicated.</p>",
+        "title": "<p><em>Do I put it on my scalp or swallow it?</em><br>Your questions, answered.</p>",
         "image_alt": "Applying Elaren Pumpkin Seed Regrowth Oil to the scalp"
       }
     },
@@ -1178,8 +1133,8 @@
       "type": "froya-guarantee",
       "settings": {
         "background": false,
-        "title": "Fuller hair in 30 days or your money back",
-        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
+        "title": "Less shedding in 30 days, or your money back",
+        "text": "<p>Hair grows in cycles. In the first month what changes is how much you lose, not how much you have: less hair in the brush, less in the drain. Use Elaren nightly for 30 days and if nothing has changed, tell us and we'll refund every cent. No photos, no awkward questions. Regrowth itself takes longer, and we'd rather tell you that now than have you give up at week three.</p>",
         "link_label": "Learn More",
         "link_url": "/policies/refund-policy",
         "button_label": "SHOP ALL PRODUCTS",
