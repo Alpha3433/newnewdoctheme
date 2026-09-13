@@ -421,24 +421,32 @@
     show(current);
   }
 
-  /* ===================================================== ingredients modal */
-  function initModal(root) {
-    var modal = $('#ingredients-modal', root) || (root === document ? $('#ingredients-modal') : null);
-    var openers = $$('.js-view-ingredients', root);
-    if (!modal || !once(modal, 'init')) return;
-    // Hoist out of the sticky gallery column so no ancestor stacking context can paint over it.
-    document.body.appendChild(modal);
-    var setModal = function (open) {
-      if (open) { modal.removeAttribute('hidden'); modal.setAttribute('open', ''); }
-      else { modal.removeAttribute('open'); modal.setAttribute('hidden', ''); }
-      document.body.classList.toggle('modal-open', open);
-    };
-    openers.forEach(function (b) { b.addEventListener('click', function () { setModal(true); }); });
-    $$('.s-main-product__modal-close, .js-close-ingredients-modal, .s-main-product__modal-overlay', modal).forEach(function (b) {
-      b.addEventListener('click', function () { setModal(false); });
+  /* ================================================================ modals */
+  // Any element carrying [data-modal] is a dialog: [data-modal-open="<its id>"] anywhere on the
+  // page opens it, [data-modal-close] inside it closes it, and so does Escape. Used by the
+  // ingredients modal in the buy box and the guarantee section's "learn more".
+  function initModals(root) {
+    $$('[data-modal]', root).forEach(function (modal) {
+      if (!once(modal, 'init')) return;
+      modal.setAttribute('data-for-section', (root.getAttribute && root.getAttribute('data-section-id')) || '');
+      // Hoist out of the section so no ancestor stacking context - the sticky gallery column, a
+      // transformed section - can paint over the dialog.
+      document.body.appendChild(modal);
+      var setModal = function (open) {
+        if (open) { modal.removeAttribute('hidden'); modal.setAttribute('open', ''); }
+        else { modal.removeAttribute('open'); modal.setAttribute('hidden', ''); }
+        document.body.classList.toggle('modal-open', open);
+      };
+      $$('[data-modal-open="' + modal.id + '"]').forEach(function (b) {
+        // The opener can be a link to the page this dialog replaces - the guarantee section's
+        // "learn more" points at the refund policy - so hold the navigation.
+        b.addEventListener('click', function (e) { e.preventDefault(); setModal(true); });
+      });
+      $$('[data-modal-close]', modal).forEach(function (b) {
+        b.addEventListener('click', function () { setModal(false); });
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setModal(false); });
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setModal(false); });
-    modal.setAttribute('data-for-section', (root.getAttribute && root.getAttribute('data-section-id')) || '');
   }
 
   /* ============================================================= buy box */
@@ -574,7 +582,7 @@
     initSliders(root);
     initVideos(root);
     initGallery(root);
-    initModal(root);
+    initModals(root);
     initBuyBox(root);
     initScience(root);
     initBars(root);
@@ -591,8 +599,12 @@
 
   // Theme editor: re-initialise a section after it is re-rendered, and open drawers when selected.
   document.addEventListener('shopify:section:load', function (e) {
-    var old = document.querySelector('#ingredients-modal[data-for-section]');
-    if (old && e.target.querySelector('.js-view-ingredients')) old.parentNode.removeChild(old);
+    // Drop the dialogs this section hoisted to <body> last time so the fresh ones don't collide
+    // with them by id.
+    $$('[data-modal]', e.target).forEach(function (fresh) {
+      var stale = document.querySelector('body > [data-modal][id="' + fresh.id + '"]');
+      if (stale && stale !== fresh) stale.parentNode.removeChild(stale);
+    });
     initSection(e.target);
   });
   document.addEventListener('shopify:section:select', function (e) {

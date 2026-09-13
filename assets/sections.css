@@ -636,7 +636,11 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   background: #f1fcef;
   padding: 16px 18px;
 }
-.c-buybox-toggle__head { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; }
+/* Copy on the left, switch on the right: the shopper reads the offer before the control, and the
+   switch lands where a toggle is expected. DOM order stays switch-first so the button's
+   aria-checked state is announced before its label. */
+.c-buybox-toggle__head { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; text-align: left; }
+.c-buybox-toggle__head-text { order: -1; }
 .c-buybox-toggle__switch {
   position: relative;
   flex: 0 0 46px;
@@ -1081,6 +1085,15 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .s-guarantee__title p { font-family: var(--font-serif); font-size: 30px; line-height: 1.2; letter-spacing: -0.01em; }
 .s-guarantee__text p { font-size: 15px; line-height: 1.6; color: #3b3b3b; }
 .s-guarantee__link { font-size: 14px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+/* Promise dialog. Borrows the buy box modal's shell (overlay, container, close button) and only
+   adds the single-column body, since there is no second panel to place. */
+.s-guarantee__modal .s-main-product__modal-container { width: min(620px, 94vw); }
+.s-guarantee__modal-body { display: flex; flex-direction: column; gap: 18px; }
+.s-guarantee__modal .s-main-product__modal-content-title { margin-bottom: 0; font-size: 26px; padding-right: 44px; }
+.s-guarantee__modal-text p { margin: 0 0 14px; font-size: 15px; line-height: 1.6; color: #3b3b3b; }
+.s-guarantee__modal-text p:last-child { margin-bottom: 0; }
+.s-guarantee__modal-text strong { color: var(--brand-ink); }
+.s-guarantee__modal-link { align-self: flex-start; font-size: 14px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 .s-guarantee > .s-guarantee__container { display: flex; justify-content: center; padding-top: 28px; }
 .s-guarantee__button { min-width: 300px; }
 @media screen and (max-width: 767px) {
@@ -1089,6 +1102,10 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .s-guarantee__image { flex-basis: auto; width: 150px; }
   .s-guarantee__title p { font-size: 26px; }
   .s-guarantee__button { width: 100%; min-width: 0; }
+  /* Full-screen sheet, like the ingredients modal. Declared here rather than in the shared modal
+     media block above, which the guarantee rules that follow it would override. */
+  .s-guarantee__modal .s-main-product__modal-container { width: 100vw; }
+  .s-guarantee__modal .s-main-product__modal-content-title { font-size: 22px; }
 }
 
 /* --------------------------------------------------------------------------

@@ -49,6 +49,12 @@ template (`templates/page.froya-landing.json`).
   oil", "3rd party tested", "cold-pressed", and the "precision applicator + scalp massager" in the
   what-you-get list (both are mentioned in customer reviews). The research figures quote published
   ingredient studies (Cho 2014, Dhurat 2017, Otberg 2008) and are footnoted as such.
+* **Guarantee popup:** "Learn more" opens the promise in a dialog (Guarantee → Learn more popup).
+  Clear "Popup text" and the label goes back to linking straight at the refund policy. The popup's
+  default text describes the refund mechanics from the store's own policy - check it still matches
+  if that policy changes. Note that the published policy excludes personal-care goods and requires
+  unused product in original packaging, which reads against the page's "use it for 30 days, then
+  we refund you" promise; the promise is the one customers will hold you to.
 * **Guarantee:** the copy promises a 30-day money-back guarantee and fuller hair in 30 days, which
   matches the 30-day return window on the store's refund policy page. The "Our Elaren Story" page
   still says 90 days – update it, or change the guarantee copy back in the theme editor.

@@ -160,9 +160,10 @@
 #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__message p {font-size: 13.1px !important;}
 
 /* ---- froya-header ---- */
-/* Logo max-width: matches legacy header's logo_max_width: 100 setting. */
+/* The logo is sized by the section's "Logo width" setting, which theme.css reads from the
+   --logo-width custom property on the link. This used to pin max-width to the legacy header's
+   100px, which capped the slider: anything above 100px did nothing. */
   #shopify-section-froya-nav-variant .header__logo-image {
-    max-width: 100px;
     height: auto;
   }
 

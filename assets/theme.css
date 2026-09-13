@@ -596,7 +596,9 @@ body.drawer-open { overflow: hidden; }
   .froya-nav__burger { display: inline-flex; }
   .froya-nav__desktop-nav { display: none; }
   .froya-nav__mega { display: none !important; }
-  .header__logo-image { width: min(var(--logo-width, 100px), 120px); }
+  /* The bar is 48px + 1fr + 48px inside 16px gutters, so cap the logo at a share of the
+     viewport rather than a fixed 120px - the "Logo width" setting still applies below that. */
+  .header__logo-image { width: min(var(--logo-width, 100px), 44vw); }
   .cart-button { font-size: 12px; }
 }
 @media screen and (min-width: 1000px) {

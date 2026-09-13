@@ -218,17 +218,23 @@
         </div>
 
         {%- if ingredients.size > 0 -%}
-        <button aria-controls="ingredients-modal" aria-haspopup="dialog" class="s-main-product__view-ingredients js-view-ingredients" type="button">{{ section.settings.ingredients_button }}</button>
+        <button aria-controls="ingredients-modal" aria-haspopup="dialog" class="s-main-product__view-ingredients" data-modal-open="ingredients-modal" type="button">{{ section.settings.ingredients_button }}</button>
 
-        <div aria-labelledby="ingredients-modal-title" aria-modal="true" class="s-main-product__modal" hidden id="ingredients-modal" role="dialog">
-          <div class="s-main-product__modal-overlay"></div>
+        {%- comment -%}
+          Inner ids must not contain "modal": critical.css (captured verbatim from the live page)
+          force-hides every [id*="modal"] that is not [open] or [hidden], which silently collapsed
+          this dialog's heading when it was called "ingredients-modal-title". The dialog itself is
+          fine - it always carries one of those two attributes.
+        {%- endcomment -%}
+        <div aria-labelledby="ingredients-title" aria-modal="true" class="s-main-product__modal" data-modal hidden id="ingredients-modal" role="dialog">
+          <div class="s-main-product__modal-overlay" data-modal-close></div>
           <div class="s-main-product__modal-container">
-            <button aria-label="Close ingredients modal" class="s-main-product__modal-close" type="button">
+            <button aria-label="Close ingredients modal" class="s-main-product__modal-close" data-modal-close type="button">
               <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
             </button>
             <div class="s-main-product__modal-wrapper">
               <div class="s-main-product__modal-ingredients product-ingredients">
-                <div class="s-main-product__modal-content-title section-title" id="ingredients-modal-title"><p></p><p>{{ section.settings.ingredients_title }}</p><p></p></div>
+                <div class="s-main-product__modal-content-title section-title" id="ingredients-title"><p></p><p>{{ section.settings.ingredients_title }}</p><p></p></div>
                 <ul class="product-ingredients__list" role="list">
                   {%- for block in ingredients -%}
                     <li class="product-ingredients__item" role="listitem" {{ block.shopify_attributes }}>
@@ -281,7 +287,7 @@
                     </div>
                   </div>
                   <div class="product-content__tags-button-wrapper">
-                    <button class="product-content__tags-button js-close-ingredients-modal" type="button"><p> {{ section.settings.ingredients_close }} </p></button>
+                    <button class="product-content__tags-button" data-modal-close type="button"><p> {{ section.settings.ingredients_close }} </p></button>
                   </div>
                 </div>
               </div>
