@@ -14,7 +14,7 @@
     "announcement-bar": {
       "type": "froya-announcement-bar",
       "settings": {
-        "text": "FREE INSURED SHIPPING 🌱 90-DAY MONEY-BACK GUARANTEE",
+        "text": "FREE INSURED SHIPPING 🌱 30-DAY MONEY-BACK GUARANTEE",
         "link": ""
       }
     },
@@ -291,7 +291,7 @@
           "type": "badge",
           "settings": {
             "default_icon": "dollar",
-            "text": "<p>90-Day<br>Money-Back</p>"
+            "text": "<p>30-Day<br>Money-Back</p>"
           }
         },
         "badge_2": {

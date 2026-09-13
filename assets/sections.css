@@ -722,6 +722,143 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .js-subscribtion__compare-at-price { text-decoration: line-through; color: var(--brand-muted); font-size: 13px; }
 .c-subscribtion__button-info-wrapper { grid-column: 2 / -1; font-size: 13px; }
 
+/* Bundle tiers (quantity breaks) - same card language as the buy box radios */
+.c-bundle {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.c-bundle__legend {
+  padding: 0 0 2px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-muted);
+}
+.c-bundle__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--brand-line);
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+.c-bundle__card:hover { border-color: var(--brand-mauve-light); }
+.c-bundle__card--highlight { border-color: var(--brand-mauve-light); }
+.c-bundle__card.is-selected {
+  border-color: var(--brand-cta);
+  box-shadow: inset 0 0 0 1px var(--brand-cta);
+  background: #fffaf6;
+}
+.c-bundle__card:has(.c-bundle__radio:focus-visible) { outline: 2px solid var(--brand-ink); outline-offset: 3px; }
+@supports not selector(:has(*)) {
+  .c-bundle__card:focus-within { outline: 2px solid var(--brand-ink); outline-offset: 3px; }
+}
+.c-bundle__radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.c-bundle__main { display: flex; align-items: center; gap: 12px; }
+.c-bundle__dot {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--brand-line);
+  border-radius: 50%;
+  background: #fff;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.c-bundle__card.is-selected .c-bundle__dot {
+  border-color: var(--brand-cta);
+  box-shadow: inset 0 0 0 4px var(--brand-cta);
+}
+.c-bundle__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 auto; }
+.c-bundle__badge {
+  align-self: flex-start;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--brand-cta);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.c-bundle__name { font-size: 16px; font-weight: 700; line-height: 1.2; }
+.c-bundle__sub { font-size: 13px; color: var(--brand-muted); }
+.c-bundle__pricing {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 0 6px;
+  margin-left: auto;
+  text-align: right;
+  white-space: nowrap;
+}
+.c-bundle__unit { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.c-bundle__unit-compare { font-size: 13px; color: var(--brand-muted); text-decoration: line-through; }
+.c-bundle__unit-label {
+  flex: 0 0 100%;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-muted);
+}
+.c-bundle__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding-left: 32px;
+  font-size: 13px;
+}
+.c-bundle__meta:empty { display: none; }
+.c-bundle__total { font-weight: 600; }
+.c-bundle__save { font-weight: 700; color: var(--brand-cta); }
+.c-bundle__gift,
+.c-bundle__perks { padding-left: 32px; font-size: 13px; line-height: 1.4; }
+.c-bundle__gift { font-weight: 600; color: var(--brand-green); }
+.c-bundle__perks { color: var(--brand-muted); }
+
+/* One-time / subscription prices swap with the Subscribe & save switch */
+.c-subscribtion:not(.is-one-time) .c-bundle__unit--otp,
+.c-subscribtion:not(.is-one-time) .c-bundle__unit-compare--otp,
+.c-subscribtion:not(.is-one-time) .c-bundle__total--otp,
+.c-subscribtion:not(.is-one-time) .c-bundle__save--otp { display: none; }
+.c-subscribtion.is-one-time .c-bundle__unit--sub,
+.c-subscribtion.is-one-time .c-bundle__unit-compare--sub,
+.c-subscribtion.is-one-time .c-bundle__total--sub,
+.c-subscribtion.is-one-time .c-bundle__save--sub { display: none; }
+/* Bundles still save money without a subscription, so keep the savings line visible */
+.c-subscribtion--bundles.is-one-time .c-buybox-toggle__congrats { display: flex; }
+.c-buybox-toggle__price-unit {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-muted);
+}
+
 /* USPs + stock */
 .s-featured-product__product-icons { display: flex; justify-content: center; gap: 30px; margin-top: 6px; }
 .s-featured-product__product-icon-wrapper {
@@ -772,6 +909,17 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .s-main-product__modal-container { width: 100vw; max-height: 100vh; height: 100vh; border-radius: 0; padding: 60px 20px 32px; }
   .s-featured-product__product-icons { gap: 16px; }
   .s-featured-product__product-icon-wrapper { min-width: 0; }
+  .c-bundle__card { padding: 12px; }
+  .c-bundle__name { font-size: 15px; }
+  .c-bundle__unit { font-size: 18px; }
+  .c-bundle__meta,
+  .c-bundle__gift,
+  .c-bundle__perks { padding-left: 0; }
+}
+@media screen and (max-width: 479px) {
+  .c-bundle__main { gap: 10px; }
+  .c-bundle__pricing { flex-direction: column; align-items: flex-end; gap: 0; }
+  .c-bundle__badge { font-size: 9px; padding: 3px 7px; }
 }
 
 /* --------------------------------------------------------------------------

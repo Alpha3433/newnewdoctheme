@@ -454,17 +454,64 @@
     var buttonPrice = $('.c-subscribtion__add-to-cart .js-subscribtion__main-price .product_price', sub);
     var buttonCompare = $('.c-subscribtion__add-to-cart .igcp', sub);
     var compareText = buttonCompare ? buttonCompare.textContent : '';
+
+    // Bundle tiers (quantity breaks). The selected tier drives the quantity added to cart and every
+    // price in the buy box: the big price is per bottle, the button shows the bundle total.
+    var tiers = $$('.js-bundle-card', sub);
+    var quantityInput = $('.js-bundle-quantity', sub);
+    var congrats = $('.c-buybox-toggle__congrats', sub);
+    var congratsPrice = congrats ? $('.product_price', congrats) : null;
+    var tier = tiers.filter(function (c) { return $('input', c).checked; })[0] || tiers[0];
+    var isSubscription = true;
+
+    var renderTier = function () {
+      if (!tier) return;
+      var d = tier.getAttribute.bind(tier);
+      var total = d(isSubscription ? 'data-total-sub' : 'data-total-otp');
+      var save = d(isSubscription ? 'data-save-sub' : 'data-save-otp');
+      var saveCents = parseInt(d(isSubscription ? 'data-save-sub-cents' : 'data-save-otp-cents'), 10) || 0;
+      if (priceMain) priceMain.textContent = d('data-unit-sub');
+      if (priceOtp) priceOtp.textContent = d('data-unit-otp');
+      if (buttonPrice) buttonPrice.textContent = total;
+      if (buttonCompare) buttonCompare.textContent = saveCents > 0 ? d('data-compare-total') : '';
+      if (congratsPrice) congratsPrice.textContent = save;
+      if (congrats) {
+        if (saveCents > 0) congrats.removeAttribute('hidden');
+        else congrats.setAttribute('hidden', '');
+      }
+    };
+
+    var selectTier = function (card) {
+      if (!card) return;
+      tier = card;
+      tiers.forEach(function (c) {
+        var on = c === card;
+        c.classList.toggle('is-selected', on);
+        var input = $('input', c);
+        if (input) input.checked = on;
+      });
+      if (quantityInput) quantityInput.value = card.getAttribute('data-qty') || '1';
+      renderTier();
+    };
+
+    tiers.forEach(function (card) {
+      card.addEventListener('change', function () { selectTier(card); });
+    });
+
     var setMode = function (subscription) {
+      isSubscription = subscription;
       sub.classList.toggle('is-one-time', !subscription);
       if (toggle) toggle.setAttribute('aria-checked', subscription ? 'true' : 'false');
       radios.forEach(function (r) { r.checked = (r.value === 'subscription') === subscription; });
       if (sellingPlan) sellingPlan.value = subscription ? defaultPlan : '';
+      if (tiers.length) { renderTier(); return; }
       if (buttonPrice) buttonPrice.textContent = ((subscription ? priceMain : priceOtp) || priceMain || { textContent: '' }).textContent.trim();
       // The one-time price has no compare-at price, so only show the strike-through on the subscription price.
       if (buttonCompare) buttonCompare.textContent = subscription ? compareText : '';
     };
     if (toggle) toggle.addEventListener('click', function () { setMode(toggle.getAttribute('aria-checked') !== 'true'); });
     radios.forEach(function (r) { r.addEventListener('change', function () { setMode(r.value === 'subscription'); }); });
+    if (tier) selectTier(tier);
     setMode(!!defaultPlan && (!radios.length || radios.some(function (r) { return r.checked && r.value === 'subscription'; })));
   }
 

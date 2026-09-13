@@ -11,11 +11,14 @@
   assign actives = section.blocks | where: 'type', 'active'
   assign tags = section.blocks | where: 'type', 'tag'
   assign usps = section.blocks | where: 'type', 'usp'
+  assign bundles = section.blocks | where: 'type', 'bundle'
   assign percent_placeholder = '{percent}'
   assign count_placeholder = '{count}'
+  assign amount_placeholder = '{amount}'
+  assign total_placeholder = '{total}'
 
   assign fallback_images = 'IMG_1_8c681b46-2a29-4394-8f0b-a4d7759e9a48.jpg,IMG_2.png,nikki-reed-desktop_2x_2970174c-c49b-4943-8807-ab853fe8e55c.png,IMG_3.png,IMG_4_51e90354-5a8f-4469-9287-d1746d6736e0.png,IMG_5.png,IMG_6_corrected.png,IMG_7.png,IMG_8.png,IMG_9.png,IMG_10.png' | split: ','
-  assign fallback_alts = 'Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex bottle|Woman applying Elaren Pumpkin Seed Regrowth Oil to her scalp along her part|Pumpkin Seed Regrowth Oil|Elaren Pumpkin Seed Regrowth Oil held in hand with key benefit callouts|Grid of customer before and after photos showing fuller parts, crowns and edges|Star rating and two verified customer reviews|Published research results for pumpkin seed oil and caffeine|Cold-pressed pumpkin seed oil and Caffeine Complex ingredients|Regrowth timeline at 2 weeks, 30 days and 90 days|Nightly two-minute scalp routine guide|Woman holding Elaren Pumpkin Seed Regrowth Oil with the 90-day money-back promise' | split: '|'
+  assign fallback_alts = 'Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex bottle|Woman applying Elaren Pumpkin Seed Regrowth Oil to her scalp along her part|Pumpkin Seed Regrowth Oil|Elaren Pumpkin Seed Regrowth Oil held in hand with key benefit callouts|Grid of customer before and after photos showing fuller parts, crowns and edges|Star rating and two verified customer reviews|Published research results for pumpkin seed oil and caffeine|Cold-pressed pumpkin seed oil and Caffeine Complex ingredients|Regrowth timeline at 2 weeks, 30 days and 30 days|Nightly two-minute scalp routine guide|Woman holding Elaren Pumpkin Seed Regrowth Oil with the 30-day money-back promise' | split: '|'
 
   if product != blank
     assign variant = product.selected_or_first_available_variant
@@ -45,6 +48,65 @@
     endif
     assign saving = otp_price | minus: sub_price
     assign media_count = product.media.size
+
+    comment
+      Bundle tiers (quantity breaks, mirroring the Kaching Bundles set-up). Every tier is priced off the
+      product's own price: the tier discount comes off the unit price, so the per-bottle price falls as the
+      bundle grows. The quantity is what gets added to cart - the Kaching Bundles discount applies the
+      matching quantity break at checkout.
+    endcomment
+    assign base_compare = otp_price
+    if otp_compare > otp_price
+      assign base_compare = otp_compare
+    endif
+    assign default_bundle = blank
+    assign default_qty = 1
+    assign display_unit_sub = sub_price
+    assign display_unit_otp = otp_price
+    assign display_total_sub = sub_price
+    assign display_total_otp = otp_price
+    assign display_compare_unit = base_compare
+    assign display_compare_total = base_compare
+    assign display_save = saving
+    if bundles.size > 0
+      assign default_bundle = bundles.first
+      for tier in bundles
+        if tier.settings.selected
+          assign default_bundle = tier
+          break
+        endif
+      endfor
+      assign default_qty = default_bundle.settings.quantity | at_least: 1
+      assign default_keep = 100 | minus: default_bundle.settings.discount
+      assign display_unit_sub = sub_price | times: default_keep | divided_by: 100
+      assign display_unit_otp = otp_price | times: default_keep | divided_by: 100
+      assign display_total_sub = display_unit_sub | times: default_qty
+      assign display_total_otp = display_unit_otp | times: default_qty
+      assign display_compare_total = base_compare | times: default_qty
+      assign display_save = display_compare_total | minus: display_total_sub
+      if plan == blank
+        assign display_save = display_compare_total | minus: display_total_otp
+      endif
+    endif
+
+    assign show_button_compare = false
+    if plan != blank
+      if display_compare_total > display_total_sub
+        assign show_button_compare = true
+      endif
+    elsif display_compare_total > display_total_otp
+      assign show_button_compare = true
+    endif
+    if bundles.size > 0
+      assign show_button_compare = true
+    endif
+
+    assign show_congrats = false
+    if section.settings.congrats_text != blank
+      if saving > 0 or bundles.size > 0
+        assign show_congrats = true
+      endif
+    endif
   endif
 -%}
 <div class="shopify-section" id="shopify-section-template--26717513089391__custom_featured_product_m69X4b">
@@ -236,16 +298,17 @@
         {%- endif -%}
 
         <div class="c-product-form js-product-form">
-          <c-subscription class="c-subscribtion c-subscribtion--buybox-toggle igcp-on{% if plan == blank %} c-subscribtion--no-plan{% endif %}" data-default-selling-plan="{{ plan.id }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
+          <c-subscription class="c-subscribtion c-subscribtion--buybox-toggle igcp-on{% if plan == blank %} c-subscribtion--no-plan{% endif %}{% if bundles.size > 0 %} c-subscribtion--bundles{% endif %}" data-default-selling-plan="{{ plan.id }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
             {%- form 'product', product, class: 'c-subscribtion__subscription-form js-subscribtion__subscription-form js-ajax-add', id: 'featured-product-form' -%}
               <div class="c-buybox-toggle__priceline">
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--sub">
-                  <span class="c-buybox-toggle__price-main"><span class="product_price">{{ sub_price | money }}</span></span>{% if saving > 0 %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{{ otp_price | money }}</span></span>{% endif %}</span>
+                  <span class="c-buybox-toggle__price-main"><span class="product_price">{{ display_unit_sub | money }}</span></span>{% if display_compare_unit > display_unit_sub %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{{ display_compare_unit | money }}</span></span>{% endif %}</span>
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--otp">
-                  <span class="c-buybox-toggle__price-main"><span class="product_price">{{ otp_price | money }}</span></span>{% if otp_compare > otp_price %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{{ otp_compare | money }}</span></span>{% endif %}</span>
+                  <span class="c-buybox-toggle__price-main"><span class="product_price">{{ display_unit_otp | money }}</span></span>{% if display_compare_unit > display_unit_otp %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{{ display_compare_unit | money }}</span></span>{% endif %}</span>
+                {%- if bundles.size > 0 and section.settings.unit_suffix != blank -%}<span class="c-buybox-toggle__price-unit">{{ section.settings.unit_suffix }}</span>{%- endif -%}
               </div>
               <input name="id" type="hidden" value="{{ variant.id }}">
-              <input name="quantity" type="hidden" value="1">
+              <input class="js-bundle-quantity" name="quantity" type="hidden" value="{{ default_qty }}">
 
               {%- if plan != blank -%}
               <div class="c-buybox-toggle__box">
@@ -275,11 +338,69 @@
                   {%- endfor -%}
                 </div>
               </div>
-              {%- if saving > 0 and section.settings.congrats_text != blank -%}
-              <div class="c-buybox-toggle__congrats">
-                <span aria-hidden="true">🎉</span><span>{{ section.settings.congrats_text }} <span class="product_price">{{ saving | money }}</span></span>
+              {%- endif -%}
+
+              {%- if bundles.size > 0 -%}
+              <fieldset class="c-bundle" id="bundle-fieldset-{{ section.id }}">
+                {%- if section.settings.bundle_title != blank -%}<legend class="c-bundle__legend">{{ section.settings.bundle_title }}</legend>{%- endif -%}
+                {%- for block in bundles -%}
+                  {%- liquid
+                    assign qty = block.settings.quantity | at_least: 1
+                    assign keep = 100 | minus: block.settings.discount
+                    assign unit_otp = otp_price | times: keep | divided_by: 100
+                    assign unit_sub = sub_price | times: keep | divided_by: 100
+                    assign total_otp = unit_otp | times: qty
+                    assign total_sub = unit_sub | times: qty
+                    assign tier_compare = base_compare | times: qty
+                    assign tier_save_otp = tier_compare | minus: total_otp
+                    assign tier_save_sub = tier_compare | minus: total_sub
+                    assign tier_name = block.settings.title | default: qty
+                    assign total_sub_money = total_sub | money
+                    assign total_otp_money = total_otp | money
+                    assign save_sub_money = tier_save_sub | money
+                    assign save_otp_money = tier_save_otp | money
+                  -%}
+                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare | money }}" data-compare-total-cents="{{ tier_compare }}" data-qty="{{ qty }}" data-save-otp="{{ tier_save_otp | money }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ tier_save_sub | money }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp | money }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub | money }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp | money }}" data-unit-sub="{{ unit_sub | money }}" {{ block.shopify_attributes }}>
+                    <input class="c-bundle__radio" name="bundle_tier" type="radio" value="{{ qty }}"{% if block.id == default_bundle.id %} checked{% endif %}>
+                    <span class="c-bundle__main">
+                      <span aria-hidden="true" class="c-bundle__dot"></span>
+                      <span class="c-bundle__text">
+                        {%- if block.settings.badge != blank -%}<span class="c-bundle__badge">{{ block.settings.badge }}</span>{%- endif -%}
+                        <span class="c-bundle__name">{{ tier_name }}</span>
+                        {%- if block.settings.subtitle != blank -%}<span class="c-bundle__sub">{{ block.settings.subtitle }}</span>{%- endif -%}
+                      </span>
+                      <span class="c-bundle__pricing">
+                        <span class="c-bundle__unit c-bundle__unit--sub"><span class="product_price">{{ unit_sub | money }}</span></span>
+                        <span class="c-bundle__unit c-bundle__unit--otp"><span class="product_price">{{ unit_otp | money }}</span></span>
+                        {%- if base_compare > unit_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{{ base_compare | money }}</span></span>{%- endif -%}
+                        {%- if base_compare > unit_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{{ base_compare | money }}</span></span>{%- endif -%}
+                        {%- if section.settings.unit_suffix != blank -%}<span class="c-bundle__unit-label">{{ section.settings.unit_suffix }}</span>{%- endif -%}
+                      </span>
+                    </span>
+                    <span class="c-bundle__meta">
+                      {%- if section.settings.total_text != blank -%}
+                      <span class="c-bundle__total c-bundle__total--sub">{{ section.settings.total_text | replace: total_placeholder, total_sub_money }}</span>
+                      <span class="c-bundle__total c-bundle__total--otp">{{ section.settings.total_text | replace: total_placeholder, total_otp_money }}</span>
+                      {%- endif -%}
+                      {%- if block.settings.discount > 0 and section.settings.save_text != blank -%}
+                      <span class="c-bundle__save c-bundle__save--sub">{{ section.settings.save_text | replace: amount_placeholder, save_sub_money | replace: percent_placeholder, block.settings.discount }}</span>
+                      <span class="c-bundle__save c-bundle__save--otp">{{ section.settings.save_text | replace: amount_placeholder, save_otp_money | replace: percent_placeholder, block.settings.discount }}</span>
+                      {%- endif -%}
+                    </span>
+                    {%- if block.settings.gift != blank -%}<span class="c-bundle__gift">{{ block.settings.gift }}</span>{%- endif -%}
+                    {%- if block.settings.perks != blank -%}<span class="c-bundle__perks">{{ block.settings.perks }}</span>{%- endif -%}
+                  </label>
+                {%- endfor -%}
+              </fieldset>
+              {%- endif -%}
+
+              {%- if show_congrats -%}
+              <div class="c-buybox-toggle__congrats"{% if display_save <= 0 %} hidden{% endif %}>
+                <span aria-hidden="true">🎉</span><span>{{ section.settings.congrats_text }} <span class="product_price">{{ display_save | money }}</span></span>
               </div>
               {%- endif -%}
+
+              {%- if plan != blank -%}
               <fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--column" id="purchase-type-fieldset">
                 <label>
                   <input checked name="purchase_type" type="radio" value="subscription">
@@ -318,7 +439,7 @@
                   <span class="c-subscribtion__button-text js-subscribtion__button-text">{% if variant.available %}{{ section.settings.button_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</span>
                   {%- if variant.available -%}
                   <span class="js-subscribtion__price-wrapper">
-                    <span class="c-subscribtion__price js-subscribtion__main-price"><span class="product_price">{% if plan != blank %}{{ sub_price | money }}{% else %}{{ otp_price | money }}{% endif %}</span></span>{% if saving > 0 %}<s class="igcp">{{ otp_price | money }}</s>{% endif %}
+                    <span class="c-subscribtion__price js-subscribtion__main-price"><span class="product_price">{% if plan != blank %}{{ display_total_sub | money }}{% else %}{{ display_total_otp | money }}{% endif %}</span></span>{% if show_button_compare %}<s class="igcp">{{ display_compare_total | money }}</s>{% endif %}
                   </span>
                   {%- endif -%}
                 </span>
@@ -375,7 +496,7 @@
     { "type": "text", "id": "rating_text", "label": "Rating text", "default": "4.77/5 FROM VERIFIED BUYERS" },
     { "type": "text", "id": "save_tag", "label": "Gallery save tag", "default": "Save {percent}%", "info": "{percent} is replaced with the subscription discount." },
     { "type": "text", "id": "ships_free_text", "label": "Shipping banner", "default": "THIS ORDER SHIPS FREE" },
-    { "type": "richtext", "id": "includes", "label": "What you get", "default": "<p>What you get (30-day supply):<br>· Pumpkin Seed Regrowth Oil with Caffeine Complex<br>· Precision applicator for scalp-only, no-waste application<br>· Scalp massager to boost circulation at the root<br>· Free insured shipping and a 90-day money-back guarantee</p>" },
+    { "type": "richtext", "id": "includes", "label": "What you get", "default": "<p>What you get (30-day supply):<br>· Pumpkin Seed Regrowth Oil with Caffeine Complex<br>· Precision applicator for scalp-only, no-waste application<br>· Scalp massager to boost circulation at the root<br>· Free insured shipping and a 30-day money-back guarantee</p>" },
     { "type": "header", "content": "Ingredients modal" },
     { "type": "text", "id": "ingredients_button", "label": "Open button label", "default": "View Ingredients" },
     { "type": "text", "id": "ingredients_title", "label": "Modal heading", "default": "6 Key Actives, Chosen to Work Together" },
@@ -386,12 +507,17 @@
     { "type": "text", "id": "badge_4", "label": "Badge 4", "default": "3rd party tested" },
     { "type": "text", "id": "legend_title", "label": "Legend heading", "default": "INGREDIENT LEVELS" },
     { "type": "text", "id": "actives_title", "label": "Actives heading", "default": "KEY ACTIVES – PUMPKIN SEED REGROWTH OIL" },
+    { "type": "header", "content": "Bundles" },
+    { "type": "text", "id": "bundle_title", "label": "Bundle heading", "default": "Choose your bundle", "info": "Add \"Bundle tier\" blocks below. The tier discount comes off the price per bottle; the quantity is what is added to cart, so the Kaching Bundles quantity break applies the same discount at checkout. Keep the tiers and discounts identical to the ones set in Kaching Bundles." },
+    { "type": "text", "id": "unit_suffix", "label": "Per-unit label", "default": "per bottle" },
+    { "type": "text", "id": "total_text", "label": "Total line", "default": "{total} total", "info": "{total} is replaced with the bundle total." },
+    { "type": "text", "id": "save_text", "label": "Savings line", "default": "Save {amount} ({percent}% off)", "info": "{amount} is the money saved, {percent} the tier discount." },
     { "type": "header", "content": "Subscribe & save" },
     { "type": "text", "id": "toggle_title", "label": "Toggle title", "default": "Save {percent}% with our flexible plan" },
     { "type": "text", "id": "toggle_sub", "label": "Toggle subtitle", "default": "No contracts. Cancel with ease." },
     { "type": "inline_richtext", "id": "benefit_1", "label": "Benefit 1", "default": "<strong>Free Insured Shipping</strong> Every Order" },
     { "type": "inline_richtext", "id": "benefit_2", "label": "Benefit 2", "default": "<strong>{percent}% Off</strong> Every Order" },
-    { "type": "inline_richtext", "id": "benefit_3", "label": "Benefit 3", "default": "90-Day <strong>Money-Back Guarantee</strong>" },
+    { "type": "inline_richtext", "id": "benefit_3", "label": "Benefit 3", "default": "30-Day <strong>Money-Back Guarantee</strong>" },
     { "type": "inline_richtext", "id": "benefit_4", "label": "Benefit 4", "default": "<strong>Skip</strong>, <strong>Pause</strong> or <strong>Cancel</strong> Anytime" },
     { "type": "inline_richtext", "id": "benefit_5", "label": "Benefit 5", "default": "Consistency Is <strong>What Regrows Hair</strong>" },
     { "type": "inline_richtext", "id": "benefit_6", "label": "Benefit 6", "default": "<strong>Never Miss</strong> a Night of Regrowth" },
@@ -412,6 +538,21 @@
     { "type": "text", "id": "low_stock_text", "label": "Low-stock text", "default": "Low Stock: only {count} left" }
   ],
   "blocks": [
+    {
+      "type": "bundle",
+      "name": "Bundle tier",
+      "settings": [
+        { "type": "range", "id": "quantity", "label": "Bottles in this bundle", "min": 1, "max": 6, "step": 1, "default": 1, "info": "Added to cart as this quantity." },
+        { "type": "range", "id": "discount", "label": "Discount off the price per bottle", "min": 0, "max": 60, "step": 1, "unit": "%", "default": 0, "info": "Must match the quantity break configured in Kaching Bundles, which applies the real discount at checkout." },
+        { "type": "text", "id": "title", "label": "Tier name", "default": "1 Bottle" },
+        { "type": "text", "id": "subtitle", "label": "Tier subtitle", "default": "30-day supply" },
+        { "type": "text", "id": "badge", "label": "Badge", "info": "For example MOST POPULAR or BEST VALUE. Leave empty for no badge." },
+        { "type": "text", "id": "gift", "label": "Free gift line", "info": "For example + FREE Scalp Massager. Leave empty to hide." },
+        { "type": "inline_richtext", "id": "perks", "label": "Perks line" },
+        { "type": "checkbox", "id": "highlight", "label": "Highlight this tier", "default": false },
+        { "type": "checkbox", "id": "selected", "label": "Selected by default", "default": false }
+      ]
+    },
     {
       "type": "ingredient",
       "name": "Ingredient (modal)",
@@ -453,14 +594,14 @@
       "name": "USP under the button",
       "settings": [
         { "type": "image_picker", "id": "icon", "label": "Icon", "info": "About 32 × 28 px." },
-        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>fuller hair in 90 days or your money back</p>" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>fuller hair in 30 days or your money back</p>" },
         { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
       ]
     }
   ],
   "max_blocks": 30,
   "presets": [
-    { "name": "Featured product", "blocks": [ { "type": "tag" }, { "type": "tag" }, { "type": "tag" }, { "type": "usp" }, { "type": "usp" }, { "type": "usp" } ] }
+    { "name": "Featured product", "blocks": [ { "type": "bundle" }, { "type": "bundle" }, { "type": "bundle" }, { "type": "tag" }, { "type": "tag" }, { "type": "tag" }, { "type": "usp" }, { "type": "usp" }, { "type": "usp" } ] }
   ]
 }
 {% endschema %}

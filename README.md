@@ -4,7 +4,7 @@ A Shopify landing-page theme for **Elaren** (shopelaren.com) and its Pumpkin See
 Caffeine Complex. The copy targets women over 35 experiencing hair loss in all its forms (female
 pattern thinning, postpartum and menopausal shedding, traction alopecia, alopecia areata, stress
 shedding) and is grounded in Elaren's own store data: real product names, prices, subscription
-terms, verified customer reviews, the 90-day money-back guarantee and the hair-loss research
+terms, verified customer reviews, the 30-day money-back guarantee and the hair-loss research
 donation from the "Our Elaren Story" page.
 
 The layout was recreated from the Frøya Organics landing page
@@ -25,6 +25,11 @@ template (`templates/page.froya-landing.json`).
 * **Products** – the buy box, menu bestseller cards, review-card product tiles and cart-drawer
   "Pair with" list use product pickers. Prices, the subscribe & save plan, stock, variant and
   product images all come from the product, so update those in Products, not in the theme.
+* **Bundles** – Featured product → *Bundle tier* blocks are the quantity breaks in the buy box
+  (add, remove or reorder them). Each tier sets the quantity added to cart and a discount that
+  comes off the price per bottle, so the per-bottle price falls as the bundle grows. The theme only
+  displays that price: the real discount is applied at checkout by the Kaching Bundles app, so the
+  tier quantities and discounts here must match the quantity breaks configured there.
 * **Reviews / videos** – Review slider and Video reviews are block lists: add, remove, reorder,
   upload a photo/video and poster, or paste an mp4 URL.
 * **Lists** – benefits, science steps, research bars, hair-loss pillars/badges, how-to steps,
@@ -44,8 +49,9 @@ template (`templates/page.froya-landing.json`).
   oil", "3rd party tested", "cold-pressed", and the "precision applicator + scalp massager" in the
   what-you-get list (both are mentioned in customer reviews). The research figures quote published
   ingredient studies (Cho 2014, Dhurat 2017, Otberg 2008) and are footnoted as such.
-* **Guarantee:** the copy uses the 90-day money-back guarantee from the "Our Elaren Story" page.
-  The store's refund policy page still describes a 30-day return window – align one with the other.
+* **Guarantee:** the copy promises a 30-day money-back guarantee and fuller hair in 30 days, which
+  matches the 30-day return window on the store's refund policy page. The "Our Elaren Story" page
+  still says 90 days – update it, or change the guarantee copy back in the theme editor.
 * Links point at the connected store (`/products/...`, `/collections/all`, `/pages/about-us`,
   `/pages/contact`, `/policies/...`). `/pages/faq` and `/blogs/news` articles do not exist yet;
   select a blog in Header → Blog links once you publish articles.
@@ -62,7 +68,7 @@ The theme folders Shopify needs (`layout`, `templates`, `sections`, `snippets`, 
 | --- | --- |
 | `layout/theme.liquid` | Page shell: meta/fonts, the five stylesheets, `content_for_header`, the header section group (announcement bar, header, cart drawer), `content_for_layout`, the footer section group, scripts. |
 | `sections/header-group.json`, `sections/footer-group.json` | Section groups with the default header/footer content (menu links, bestseller cards, blog links, footer links, cart-drawer badges and upsells). |
-| `sections/froya-*.liquid` | The landing page, one editable section per block (settings + blocks in each `{% schema %}`): announcement bar, sticky header with mega menus and mobile drawer, cart drawer, hero, benefits strip, logo/quote slider, review slider, backed-by-science timeline, research results, featured product (gallery, ingredients modal, buy box), founder story, hair-loss types & badges, review wall, guarantee, video reviews, how-to-use, ingredient quality, ingredient science, newsletter, footer. Markup keeps the captured page's class names so the verbatim CSS still applies. |
+| `sections/froya-*.liquid` | The landing page, one editable section per block (settings + blocks in each `{% schema %}`): announcement bar, sticky header with mega menus and mobile drawer, cart drawer, hero, benefits strip, logo/quote slider, review slider, backed-by-science timeline, research results, featured product (gallery, ingredients modal, buy box with bundle tiers), founder story, hair-loss types & badges, review wall, guarantee, video reviews, how-to-use, ingredient quality, ingredient science, newsletter, footer. Markup keeps the captured page's class names so the verbatim CSS still applies. |
 | `snippets/froya-image.liquid`, `snippets/froya-nav-card.liquid` | Image-picker-with-fallback helper and the menu bestseller card. |
 | `sections/main-*.liquid` | Minimal, on-brand sections for the rest of the store: page, product, collection, collections list, cart, search, blog, article, 404, password, and the customer account pages. |
 | `templates/*.json` | JSON templates wiring the sections above; `index.json` and `page.froya-landing.json` carry the landing page's default block content. |
@@ -70,7 +76,7 @@ The theme folders Shopify needs (`layout`, `templates`, `sections`, `snippets`, 
 | `assets/sections-inline.css` | Verbatim copy of every per-section inline `<style>` block from the live page. Section ids are preserved so these rules apply unchanged. |
 | `assets/theme.css` | Reconstruction of the theme's external stylesheets that the capture did not include: base typography, buttons, header/mega menu/drawer, footer, plus a light layer for the supporting store templates. |
 | `assets/sections.css` | Reconstruction of the landing-page component styles for desktop and mobile. |
-| `assets/main.js` | Interactions: cart drawer (Ajax add/change/remove, subscribe & save toggle, "Pair with" upsells, re-rendered through the Section Rendering API), in-page add to cart from every product form, mega menus, mobile drawer, carousels (Blaze Slider), product gallery + thumbnails, ingredients modal, subscribe/one-time buy-box toggle, lazy video playback, science scroll-spy, animated result bars, smooth anchors, theme-editor re-initialisation. |
+| `assets/main.js` | Interactions: cart drawer (Ajax add/change/remove, subscribe & save toggle, "Pair with" upsells, re-rendered through the Section Rendering API), in-page add to cart from every product form, mega menus, mobile drawer, carousels (Blaze Slider), product gallery + thumbnails, ingredients modal, subscribe/one-time buy-box toggle, bundle tier selection (quantity + per-bottle and total prices), lazy video playback, science scroll-spy, animated result bars, smooth anchors, theme-editor re-initialisation. |
 | `assets/blaze.css`, `assets/blaze-slider.min.js` | Blaze Slider 1.9.3 (MIT, <https://github.com/MananTank/blaze-slider>), the carousel library the live page uses, vendored unmodified. |
 | `scripts/localize_assets.py` | Vendors every remote placeholder image/font/video into `assets/` and rewrites the references (Liquid and JSON get `asset_url`). |
 | `tools/extract.py`, `tools/build.py` | Historical: the pipeline that produced the original static `froya-*` sections from a Chrome capture of the Frøya page. **Do not re-run it** – it would overwrite the editable Elaren sections. |

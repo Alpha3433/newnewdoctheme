@@ -15,7 +15,7 @@
         "image_alt": "Woman over 35 parting her hair to show fuller regrowth along her part after using Elaren Pumpkin Seed Regrowth Oil",
         "mobile_text_color": "#ffffff",
         "review_text": "Rated 4.77/5 by verified customers · Made for women 35+",
-        "title": "Visibility Fuller Hair in as little as <em>90 Days.</em>",
+        "title": "Visibility Fuller Hair in as little as <em>30 Days.</em>",
         "subtitle": "Elaren Pumpkin Seed Regrowth Oil feeds-tired follicles, calms shedding and helps your hair grow back thicker. For the widening part, the thinning crown, the edges that never recovered, postpartum and menopausal shedding, and alopecia.",
         "button_label": "TRY IT RISK-FREE - SAVE 40%",
         "button_link": "#product-section",
@@ -129,7 +129,7 @@
           "type": "slide",
           "settings": {
             "logo_alt": "",
-            "quote": "\"Less shedding in as little as 2 weeks. Fuller-looking hair in 90 days.\"",
+            "quote": "\"Less shedding in as little as 2 weeks. Fuller-looking hair in 30 days.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/ELLE_Magazine_Logo.svg?v=1732863266"
           }
         },
@@ -472,7 +472,7 @@
         "note_1": {
           "type": "note",
           "settings": {
-            "text": "*Studies cited were conducted on the ingredients (oral pumpkin seed oil supplementation, Cho et al. 2014; topical caffeine, Dhurat et al. 2017 and Otberg et al. 2008), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, with visible density changes typically taking 3–6 months of consistent use. Not seeing progress? Contact us within 90 days for a full refund."
+            "text": "*Studies cited were conducted on the ingredients (oral pumpkin seed oil supplementation, Cho et al. 2014; topical caffeine, Dhurat et al. 2017 and Otberg et al. 2008), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, with visible density changes typically taking 3–6 months of consistent use. Not seeing progress? Contact us within 30 days for a full refund."
           }
         }
       },
@@ -492,6 +492,48 @@
     "featured-product": {
       "type": "froya-featured-product",
       "blocks": {
+        "bundle_1": {
+          "type": "bundle",
+          "settings": {
+            "quantity": 1,
+            "discount": 0,
+            "title": "1 Bottle",
+            "subtitle": "30-day supply",
+            "badge": "",
+            "gift": "",
+            "perks": "",
+            "highlight": false,
+            "selected": false
+          }
+        },
+        "bundle_2": {
+          "type": "bundle",
+          "settings": {
+            "quantity": 2,
+            "discount": 10,
+            "title": "2 Bottles",
+            "subtitle": "60-day supply",
+            "badge": "MOST POPULAR",
+            "gift": "",
+            "perks": "Keep going through a full growth cycle",
+            "highlight": true,
+            "selected": true
+          }
+        },
+        "bundle_3": {
+          "type": "bundle",
+          "settings": {
+            "quantity": 3,
+            "discount": 20,
+            "title": "3 Bottles",
+            "subtitle": "90-day supply",
+            "badge": "BEST VALUE",
+            "gift": "",
+            "perks": "Lowest price per bottle",
+            "highlight": false,
+            "selected": false
+          }
+        },
         "ingredient_1": {
           "type": "ingredient",
           "settings": {
@@ -640,7 +682,7 @@
         "usp_2": {
           "type": "usp",
           "settings": {
-            "text": "<p>fuller hair in 90 days or your money back</p>",
+            "text": "<p>fuller hair in 30 days or your money back</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/product_icon_2.svg"
           }
         },
@@ -653,6 +695,9 @@
         }
       },
       "block_order": [
+        "bundle_1",
+        "bundle_2",
+        "bundle_3",
         "ingredient_1",
         "ingredient_2",
         "ingredient_3",
@@ -689,7 +734,7 @@
         "rating_text": "4.77/5 FROM VERIFIED BUYERS",
         "save_tag": "Save {percent}%",
         "ships_free_text": "THIS ORDER SHIPS FREE",
-        "includes": "<p>What you get (30-day supply):<br>· Pumpkin Seed Regrowth Oil with Caffeine Complex<br>· Precision applicator for scalp-only, no-waste application<br>· Scalp massager to boost circulation at the root<br>· Free insured shipping and a 90-day money-back guarantee</p>",
+        "includes": "<p>What you get (30-day supply):<br>· Pumpkin Seed Regrowth Oil with Caffeine Complex<br>· Precision applicator for scalp-only, no-waste application<br>· Scalp massager to boost circulation at the root<br>· Free insured shipping and a 30-day money-back guarantee</p>",
         "ingredients_button": "View Ingredients",
         "ingredients_title": "6 Key Actives, Chosen to Work Together",
         "ingredients_close": "Close",
@@ -699,11 +744,15 @@
         "badge_4": "3rd party tested",
         "legend_title": "INGREDIENT LEVELS",
         "actives_title": "KEY ACTIVES – PUMPKIN SEED REGROWTH OIL",
+        "bundle_title": "Choose your bundle",
+        "unit_suffix": "per bottle",
+        "total_text": "{total} total",
+        "save_text": "Save {amount} ({percent}% off)",
         "toggle_title": "Save {percent}% with our flexible plan",
         "toggle_sub": "No contracts. Cancel with ease.",
         "benefit_1": "<strong>Free Insured Shipping</strong> Every Order",
         "benefit_2": "<strong>{percent}% Off</strong> Every Order",
-        "benefit_3": "90-Day <strong>Money-Back Guarantee</strong>",
+        "benefit_3": "30-Day <strong>Money-Back Guarantee</strong>",
         "benefit_4": "<strong>Skip</strong>, <strong>Pause</strong> or <strong>Cancel</strong> Anytime",
         "benefit_5": "Consistency Is <strong>What Regrows Hair</strong>",
         "benefit_6": "<strong>Never Miss</strong> a Night of Regrowth",
@@ -730,7 +779,7 @@
         "image_position": "right",
         "subtitle": "The Story Behind Elaren",
         "title": "Why We Started Elaren",
-        "text": "<p><strong>If you’ve tried everything, we understand.<br>We have too.<br><br></strong>Thickening shampoos, biotin gummies, rosemary oil from the internet, a doctor who shrugged and said “it’s just your age”...<strong> only to find more hair in the shower drain, a wider part in every photo, and one more bottle on the shelf that didn’t work.</strong></p><p><strong>Hair loss isn’t just about hair.<br>It changes how you feel walking into a room, how you look in photos, and how you see yourself in the mirror every morning.</strong></p><p><strong>That’s why we created Elaren.<br>Our founder started losing his hair at 31 and went to the clinical research instead of the marketing. Pumpkin seed oil kept coming up as a natural DHT blocker. When his partner’s crown thinning started improving on the same routine, we realised the women in our lives were being ignored by an industry built for men and sold to them in prettier packaging.</strong></p><p><strong>So we built the regrowth oil we wished existed: cold-pressed pumpkin seed oil, powered by a Caffeine Complex, made for a woman’s scalp and a woman’s hair loss. No prescriptions. No side effects. No $3,000 clinic visits.</strong> And 10% of every purchase goes to hair-loss research.</p><p><strong>We don’t expect you to take our word for it. That’s why every bottle comes with a </strong>90-day money-back guarantee.<strong><br>If you don’t see a difference, just let us know. No hassle, no awkward questions.</strong></p><p><strong>If you’re ready to finally see a change, take a photo of your part today. In a few months you might be sending it to us with the message we hear most: “I can’t believe I didn’t start sooner.”</strong></p>"
+        "text": "<p><strong>If you’ve tried everything, we understand.<br>We have too.<br><br></strong>Thickening shampoos, biotin gummies, rosemary oil from the internet, a doctor who shrugged and said “it’s just your age”...<strong> only to find more hair in the shower drain, a wider part in every photo, and one more bottle on the shelf that didn’t work.</strong></p><p><strong>Hair loss isn’t just about hair.<br>It changes how you feel walking into a room, how you look in photos, and how you see yourself in the mirror every morning.</strong></p><p><strong>That’s why we created Elaren.<br>Our founder started losing his hair at 31 and went to the clinical research instead of the marketing. Pumpkin seed oil kept coming up as a natural DHT blocker. When his partner’s crown thinning started improving on the same routine, we realised the women in our lives were being ignored by an industry built for men and sold to them in prettier packaging.</strong></p><p><strong>So we built the regrowth oil we wished existed: cold-pressed pumpkin seed oil, powered by a Caffeine Complex, made for a woman’s scalp and a woman’s hair loss. No prescriptions. No side effects. No $3,000 clinic visits.</strong> And 10% of every purchase goes to hair-loss research.</p><p><strong>We don’t expect you to take our word for it. That’s why every bottle comes with a </strong>30-day money-back guarantee.<strong><br>If you don’t see a difference, just let us know. No hassle, no awkward questions.</strong></p><p><strong>If you’re ready to finally see a change, take a photo of your part today. In a few months you might be sending it to us with the message we hear most: “I can’t believe I didn’t start sooner.”</strong></p>"
       }
     },
     "arctic-plants": {
@@ -847,8 +896,8 @@
       "type": "froya-guarantee",
       "settings": {
         "background": true,
-        "title": "Fuller hair in 90 days or your money back",
-        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 90 days. Still shedding, still no baby hairs along your part or hairline?<br>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
+        "title": "Fuller hair in 30 days or your money back",
+        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
         "link_label": "Learn More",
         "link_url": "/policies/refund-policy",
         "button_label": "SHOP ALL PRODUCTS",
@@ -1013,7 +1062,7 @@
           "settings": {
             "heading": "<p>Be patient.<br>Hair grows in cycles.</p>",
             "label": "REGROWTH OIL",
-            "text": "<p><strong>Most women notice less hair in the brush and the shower drain within the first 2–4 weeks. Fine new baby hairs along the hairline and part usually show up around month 2 or 3. Visible density takes 90 days of nightly use.</strong></p><p><strong>Don’t stop at week three. Consistency is the whole secret, and Elaren does the rest.</strong></p>",
+            "text": "<p><strong>Most women notice less hair in the brush and the shower drain within the first 2–4 weeks. Fine new baby hairs along the hairline and part usually show up around month 2 or 3. Visible density takes 30 days of nightly use.</strong></p><p><strong>Don’t stop at week three. Consistency is the whole secret, and Elaren does the rest.</strong></p>",
             "label_2": "",
             "text_2": ""
           }
@@ -1129,8 +1178,8 @@
       "type": "froya-guarantee",
       "settings": {
         "background": false,
-        "title": "Fuller hair in 90 days or your money back",
-        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 90 days. Still shedding, still no baby hairs along your part or hairline?<br>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
+        "title": "Fuller hair in 30 days or your money back",
+        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
         "link_label": "Learn More",
         "link_url": "/policies/refund-policy",
         "button_label": "SHOP ALL PRODUCTS",
