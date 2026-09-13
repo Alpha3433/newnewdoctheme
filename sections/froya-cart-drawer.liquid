@@ -226,12 +226,12 @@
           {%- endif -%}
           <div class="total-info__row total-info__row--estimated">
             <span class="total-info__label">{{ section.settings.subtotal_label }}</span>
-            <span class="total-info__prices"><span class="total-info__price total-info__price--highlight"><span class="product_price">{{ cart.total_price | money }}</span></span></span>
+            <span class="total-info__prices"><span class="total-info__price total-info__price--highlight"><span class="product_price">{% if settings.currency_code_enable %}{{ cart.total_price | money_with_currency }}{% else %}{{ cart.total_price | money }}{% endif %}</span></span></span>
           </div>
         </div>
         <button form="mini-cart-form" type="submit" class="checkout-button button button--primary button--full" name="checkout">
           <span class="checkout-button__lock"><svg aria-hidden="true" width="16" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
-          <span class="checkout-button__label">{{ section.settings.checkout_label }}</span>{% if section.settings.show_total_on_button %} - <span class="product_price">{{ cart.total_price | money_without_trailing_zeros }}</span>{% endif %}
+          <span class="checkout-button__label">{{ section.settings.checkout_label }}</span>{% if section.settings.show_total_on_button %} - <span class="product_price">{% if settings.currency_code_enable %}{{ cart.total_price | money_with_currency }}{% else %}{{ cart.total_price | money_without_trailing_zeros }}{% endif %}</span>{% endif %}
         </button>
         {%- if badges.size > 0 -%}
         <div class="s-mini-cart__guarantee-badges">
