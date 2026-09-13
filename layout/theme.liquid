@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="js" lang="{{ request.locale.iso_code }}" dir="ltr" data-froya-nav="b">
+<html class="js" lang="{{ request.locale.iso_code }}" dir="ltr" data-froya-nav="b" data-country="{{ localization.country.iso_code }}" data-currency="{{ localization.country.currency.iso_code }}">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -50,6 +50,26 @@
   </div>
 
   {% sections 'footer-group' %}
+
+  {%- comment -%}
+    Shopify only pre-selects a visitor's country on Shopify Plus. On every other plan the storefront
+    opens in the primary market's default country, so a shopper abroad sees the wrong currency until
+    checkout asks for an address. assets/main.js asks Shopify which country it detects for this
+    visitor (browsing_context_suggestions.json, Shopify's own GeoIP) and submits this form once so the
+    buy box, cart and checkout all start in the local currency. The select lists every country the
+    store sells to, so a detected country the store does not serve is simply ignored.
+  {%- endcomment -%}
+  {%- if settings.auto_localize and localization.available_countries.size > 1 and request.design_mode == false -%}
+    <div hidden>
+      {%- form 'localization', id: 'localization_form_auto', data-current-country: localization.country.iso_code -%}
+        <select name="country_code" aria-hidden="true" tabindex="-1">
+          {%- for country in localization.available_countries -%}
+            <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>{{ country.name }}</option>
+          {%- endfor -%}
+        </select>
+      {%- endform -%}
+    </div>
+  {%- endif -%}
 
   <script src="{{ 'blaze-slider.min.js' | asset_url }}" defer></script>
   <script src="{{ 'main.js' | asset_url }}" defer></script>

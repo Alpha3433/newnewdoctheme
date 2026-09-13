@@ -331,6 +331,7 @@
         "empty_button": "Shop All Products",
         "empty_url": "/collections/all",
         "show_subscribe_toggle": true,
+        "selling_plan_id": "1039991141",
         "subscribe_label": "SUBSCRIBE & SAVE",
         "upsell_title": "PAIR WITH:",
         "upsells": [

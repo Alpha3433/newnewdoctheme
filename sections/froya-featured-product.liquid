@@ -13,6 +13,13 @@
   assign usps = section.blocks | where: 'type', 'usp'
   assign bundles = section.blocks | where: 'type', 'bundle'
   assign percent_placeholder = '{percent}'
+  comment
+    The rich text editor stores braces as HTML entities, so a "{percent}" typed into a richtext or
+    inline_richtext setting reaches Liquid as "&lcub;percent&rcub;" (or "&#123;percent&#125;") and
+    a plain replace of "{percent}" never matches - the page then prints "{percent}% OFF" literally.
+  endcomment
+  assign percent_entity = '&lcub;percent&rcub;'
+  assign percent_entity_numeric = '&#123;percent&#125;'
   assign count_placeholder = '{count}'
   assign amount_placeholder = '{amount}'
   assign total_placeholder = '{total}'
@@ -347,7 +354,7 @@
                         {%- if section.settings[key] != blank -%}
                         <div class="c-buybox-toggle__row">
                           <span aria-hidden="true" class="c-buybox-toggle__check"><svg fill="none" viewBox="0 0 11.5 10.5" xmlns="http://www.w3.org/2000/svg"><path d="M10.25 1.25L4.0625 9.25L1.25 6.368" stroke="#E98044" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg></span>
-                          <p>{{ section.settings[key] | replace: percent_placeholder, sub_percent }}</p>
+                          <p>{{ section.settings[key] | replace: percent_placeholder, sub_percent | replace: percent_entity, sub_percent | replace: percent_entity_numeric, sub_percent }}</p>
                         </div>
                         {%- endif -%}
                       {%- endfor -%}
@@ -450,7 +457,7 @@
                     {%- if saving > 0 -%}<span class="js-subscribtion__compare-at-price"><span class="product_price">{{ otp_price | money }}</span></span>{%- endif -%}
                   </div>
                   {%- if section.settings.sub_perks != blank -%}
-                  <div class="c-subscribtion__button-info-wrapper"><div><div class="metafield-rich_text_field">{{ section.settings.sub_perks | replace: percent_placeholder, sub_percent }}</div></div></div>
+                  <div class="c-subscribtion__button-info-wrapper"><div><div class="metafield-rich_text_field">{{ section.settings.sub_perks | replace: percent_placeholder, sub_percent | replace: percent_entity, sub_percent | replace: percent_entity_numeric, sub_percent }}</div></div></div>
                   {%- endif -%}
                 </label>
                 <label>
