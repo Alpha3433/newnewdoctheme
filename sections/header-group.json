@@ -260,7 +260,7 @@
       ],
       "settings": {
         "logo": "shopify://shop_images/hf_20260509_170327_c83b61e7-455e-4c70-94eb-e812328a9e2a.png",
-        "logo_width": 240,
+        "logo_width": 170,
         "shop_label": "Shop",
         "bestsellers_label": "Bestsellers",
         "more_label": "More",
@@ -316,8 +316,18 @@
       ],
       "settings": {
         "title": "Cart",
+        "show_shipping_bar": true,
+        "shipping_threshold": 40,
+        "shipping_text": "Spend {amount} and get",
+        "shipping_highlight": "FREE SHIPPING",
+        "shipping_unlocked": "You’ve unlocked FREE SHIPPING",
+        "shipping_label": "Free shipping",
+        "reviews_banner": "RATED 4.77/5 BY VERIFIED CUSTOMERS",
         "empty_title": "Your cart is empty",
         "empty_text": "",
+        "empty_product": "elaren-pumpkin-seed-oil-regrowth-serum",
+        "from_label": "From",
+        "empty_add_label": "+ Add To Cart",
         "empty_button": "Shop All Products",
         "empty_url": "/collections/all",
         "show_subscribe_toggle": true,
@@ -330,13 +340,12 @@
           "elaren-sleepsilk-pillowcase"
         ],
         "upsell_button": "ADD TO CART",
+        "show_country_selector": true,
+        "country_label": "Ship to",
         "discount_label": "DISCOUNT",
         "subtotal_label": "SUBTOTAL",
         "checkout_label": "SECURE CHECKOUT",
-        "show_total_on_button": true,
-        "empty_product": "elaren-pumpkin-seed-oil-regrowth-serum",
-        "reviews_banner": "RATED 4.77/5 BY VERIFIED CUSTOMERS",
-        "shipping_threshold": 40
+        "show_total_on_button": true
       }
     }
   },
