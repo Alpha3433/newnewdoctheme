@@ -136,24 +136,22 @@
                   endif
                 endfor
                 comment
-                  A pin that no longer resolves must not silently offer some other cadence.
+                  A pin that no longer resolves offers nothing: plan_id stays blank, so the toggle
+                  is not rendered at all. Substituting some other cadence here is exactly the
+                  silent re-cadencing the pin exists to prevent, and a toggle that disappears is a
+                  visible prompt to fix the setting.
                 endcomment
-                if pinned_toggle_id != blank and plan_id == blank
-                  for allocation in item.variant.selling_plan_allocations
-                    if plan_id == blank or allocation.price < plan_price
-                      assign plan_id = allocation.selling_plan.id
-                      assign plan_name = allocation.selling_plan.name
-                      assign plan_price = allocation.price
-                    endif
-                  endfor
-                endif
               endif
               if plan_id != blank
                 comment
-                  The saving is shown against the whole line, so it has to be the whole line's -
-                  a per-unit figure understates a 2- or 3-bottle bundle by the quantity.
+                  What subscribing would add, measured against what this line costs now rather than
+                  the undiscounted variant price - a line already carrying a discount would
+                  otherwise overstate it. Multiplied up because the figure sits against the whole
+                  line: per-unit understated a 2- or 3-bottle bundle by the quantity. The template
+                  only prints it when it is positive, so a line already cheaper than the plan shows
+                  nothing rather than a negative saving.
                 endcomment
-                assign plan_saving = item.variant.price | minus: plan_price | times: item.quantity
+                assign plan_saving = item.final_price | minus: plan_price | times: item.quantity
               endif
               comment
                 A subscription app will happily put each delivery cadence on its own variant
@@ -197,7 +195,12 @@
                           <span class="subscription-text">
                             {{ section.settings.subscribe_label }}
                             {%- if item.selling_plan_allocation == blank and plan_saving > 0 %} <span class="product_price">{{ plan_saving | money }}</span>{%- endif -%}
-                            {%- if plan_name != blank -%}<span class="subscription-cadence">{{ plan_name }}</span>{%- endif -%}
+                            {%- comment -%}
+                              What the toggle will put the line on, so the cadence is on screen
+                              before the shopper opts in. A line already subscribed prints its own
+                              cadence just above, so this would only repeat it.
+                            {%- endcomment -%}
+                            {%- if item.selling_plan_allocation == blank and plan_name != blank -%}<span class="subscription-cadence">{{ plan_name | escape }}</span>{%- endif -%}
                           </span>
                           <span class="subscription-toggle-switch" aria-hidden="true"><span class="subscription-toggle-knob"></span></span>
                         </label>

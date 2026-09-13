@@ -45,12 +45,14 @@
       endif
     endfor
     assign pinned_plan_id = section.settings.selling_plan_id | default: '' | strip
+    assign section_plan_matched = false
     if pinned_plan_id != blank
       for allocation in variant.selling_plan_allocations
         assign candidate_id = allocation.selling_plan.id | append: ''
         if candidate_id == pinned_plan_id
           assign plan = allocation.selling_plan
           assign sub_price = allocation.price
+          assign section_plan_matched = true
           break
         endif
       endfor
@@ -416,19 +418,25 @@
                       The label has to describe the plan that was RESOLVED, never the one the tier
                       asked for: a tier whose id no longer resolves falls back to the section's plan
                       and must drop its own label with it, or the card would advertise a cadence that
-                      is not the one being bought. The section's label only describes the section's
-                      plan, so it is used only when that is what this tier ended up on. Whitespace-
-                      only values are stripped so they cannot defeat the fallbacks.
+                      is not the one being bought. The section's label is reusable only when this
+                      tier landed on the section's plan AND the section's own pin resolved - a stale
+                      section pin leaves that label describing a cadence nobody is on. Everything
+                      else falls through to the plan's own name, which is always the truth.
+                      Whitespace-only values are stripped so they cannot defeat the fallbacks.
                     endcomment
                     assign tier_delivery = blank
                     if tier_plan_matched
                       assign tier_delivery = block.settings.delivery_label | default: '' | strip
                     endif
                     if tier_delivery == blank
-                      assign resolved_plan_id = tier_plan.id | append: ''
-                      assign section_plan_id = plan.id | append: ''
-                      if resolved_plan_id == section_plan_id
-                        assign tier_delivery = section.settings.delivery_label | default: '' | strip
+                      if plan != blank
+                        if section_plan_matched
+                          assign resolved_plan_id = tier_plan.id | append: ''
+                          assign section_plan_id = plan.id | append: ''
+                          if resolved_plan_id == section_plan_id
+                            assign tier_delivery = section.settings.delivery_label | default: '' | strip
+                          endif
+                        endif
                       endif
                     endif
                     if tier_delivery == blank
