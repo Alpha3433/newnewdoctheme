@@ -551,7 +551,10 @@
 .s-main-product__info-content-text-faq > div > div > div { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
 .s-main-product__info-content-text-faq svg { width: 9px; height: 9px; flex-shrink: 0; }
 .product-content__tags-button-wrapper { margin-top: 8px; }
-.product-content__tags-button {
+/* The button that ends a dialog. Shared so the guarantee popup and the ingredients modal close
+   the same way. */
+.product-content__tags-button,
+.s-guarantee__modal-close-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -566,6 +569,8 @@
   text-transform: uppercase;
 }
 .product-content__tags-button p { margin: 0; }
+.product-content__tags-button:hover,
+.s-guarantee__modal-close-button:hover { background: #000; }
 body.modal-open { overflow: hidden; }
 
 /* Product info column */
