@@ -51,9 +51,6 @@
       <div class="s-guarantee__modal-body">
         <div class="s-main-product__modal-content-title section-title" id="{{ modal_title_id }}"><p>{{ section.settings.modal_title | default: section.settings.title }}</p></div>
         <div class="s-guarantee__modal-text">{{ section.settings.modal_content }}</div>
-        {%- if section.settings.modal_link_label != blank -%}
-        <a class="s-guarantee__modal-link" href="{{ policy_url }}">{{ section.settings.modal_link_label }}</a>
-        {%- endif -%}
       </div>
     </div>
   </div>
@@ -77,11 +74,10 @@
     { "type": "text", "id": "title", "label": "Heading", "default": "Fuller hair in 30 days or your money back" },
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>" },
     { "type": "text", "id": "link_label", "label": "Link label", "default": "Learn More" },
-    { "type": "url", "id": "link_url", "label": "Link", "info": "Where the label goes when no popup text is set below, and where the popup's own link points. Defaults to the refund policy." },
+    { "type": "url", "id": "link_url", "label": "Link", "info": "Where the label goes when the popup text below is empty, and the fallback the label keeps for anyone whose scripts do not load. Defaults to the refund policy." },
     { "type": "header", "content": "Learn more popup" },
-    { "type": "richtext", "id": "modal_content", "label": "Popup text", "info": "Set this and the label above opens a popup instead of leaving the page. Leave empty to link straight to the policy.", "default": "<p><strong>Use Elaren every night for 30 days.</strong> If you are not seeing less shedding, email us within 30 days of your order arriving and we will refund it in full. No photos, no awkward questions.</p><p><strong>How it works</strong><br>Email support@shopelaren.com and tell us it did not work for you. We will confirm your order and approve the refund - it goes back to your original payment method within 10 business days, and your bank may take a few days more to post it.</p><p><strong>On a subscription?</strong><br>Cancel, pause or change the delivery date yourself at any time from your account. A refund does not cancel the plan, so tell us if you want both.</p>" },
+    { "type": "richtext", "id": "modal_content", "label": "Popup text", "info": "Set this and the label above opens a popup instead of leaving the page. Leave empty to link straight to the policy.", "default": "<p><strong>Use Elaren every night for 30 days.</strong> If you are not seeing less shedding, email us within 30 days of your order arriving and we will refund it in full. No photos, no awkward questions.</p><p><strong>What changes first</strong><br>Hair grows in cycles, so the first thing to change is how much you lose, not how much you have: less hair in the brush, less in the shower drain. Most women notice that inside the first two to four weeks. Fine new hairs along the part and hairline usually follow around month two or three, and visible density takes longer again - we would rather tell you that now than have you give up at week three.</p><p><strong>Give it a fair run</strong><br>Two minutes a night, every night, on a dry scalp. The 30 days only mean something if the bottle is actually used, and consistency is the part most routines get wrong - so if you miss a night, carry on the next one rather than starting the count again.</p><p><strong>How it works</strong><br>Email support@shopelaren.com and tell us it did not work for you. We will confirm your order and approve the refund - it goes back to your original payment method within 10 business days, and your bank may take a few days more to post it.</p><p><strong>On a subscription?</strong><br>Cancel, pause or change the delivery date yourself at any time from your account. A refund does not cancel the plan, so tell us if you want both.</p>" },
     { "type": "text", "id": "modal_title", "label": "Popup heading", "info": "Defaults to the section heading." },
-    { "type": "text", "id": "modal_link_label", "label": "Popup link label", "default": "Read the full refund policy", "info": "Points at the link above. Leave empty to hide." },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "SHOP ALL PRODUCTS" },
     { "type": "url", "id": "button_url", "label": "Button link" }
   ],
