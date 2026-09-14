@@ -3,38 +3,89 @@
 /* ---- live-page inline head style block 0 ---- */
 /* Critical inline styles - prevent FOUC and improve LCP */
 /* Inlined from critical.css to eliminate render-blocking request */
+/* Font files are hosted in this store's own Files (Content > Files, "elaren-*"), so they load from
+   cdn.shopify.com with CORS headers. The captured page served half of them from froyaorganics.com,
+   which another origin cannot load, and a font that fails to load falls back to the system font. */
+
+/* The page's CSS variables and many rules ask for "Pangram" and "Apercu Mono Pro", but the captured
+   head only ever declared "PP Pangram Sans" and "Apercu" - the live store's external stylesheet
+   supplied the rest, so here body text silently fell back to the system font. These aliases point
+   the missing family names at the same files. */
+@font-face {
+  font-family: 'Pangram';
+  src: url('https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PP_Pangram_Sans_Light.woff2?v=1789345230') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pangram';
+  src: url('https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-Pangram-Regular.otf?v=1789345230') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pangram';
+  src: url('https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-Pangram-Medium.otf?v=1789345231') format('opentype');
+  font-weight: 500 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Apercu Mono Pro';
+  src: url('https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-ApercuMonoProLight.woff2?v=1789345230') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Apercu Mono Pro';
+  src: url('https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-ApercuMonoProRegular.woff2?v=1789345230') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Apercu Mono Pro';
+  src: url('https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-ApercuMonoProBold.woff2?v=1789345230') format('woff2');
+  font-weight: 500 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* PP Pangram Sans — all weights as WOFF2 (replacing the old OTF set) */
 @font-face {
   font-family: 'PP Pangram Sans';
-  src: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Light_400.woff2?v=1778696600') format('woff2');
+  src: url('https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PP_Pangram_Sans_Light.woff2?v=1789345230') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'PP Pangram Sans';
-  src: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Compact_Regular_400.woff2?v=1778696600') format('woff2');
+  src: url('https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PP_Pangram_Sans_Regular.woff2?v=1789345230') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'PP Pangram Sans';
-  src: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Medium_400.woff2?v=1778696600') format('woff2');
+  src: url('https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PP_Pangram_Sans_Medium.woff2?v=1789345230') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'PP Pangram Sans';
-  src: url('https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PP_Pangram_Sans_Bold_400.woff2?v=1778696599') format('woff2');
+  src: url('https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PP_Pangram_Sans_Bold.woff2?v=1789345230') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Objectivity';
-  src: url('https://froyaorganics.com/cdn/shop/t/207/assets/Objectivity-Regular.woff2?v=143561238108505086661775650485') format('woff2');
+  src: url('https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-Objectivity-Regular.woff2?v=1789345230') format('woff2');
   font-display: swap;
   font-weight: 400;
   font-style: normal;
@@ -394,7 +445,7 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
 
   @font-face {
     font-family: 'Libre Baskerville';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/LibreBaskerville-Regular.woff2?v=37369604778581562331777467258) format('woff2');
+    src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-LibreBaskerville-Regular.woff2?v=1789345230) format('woff2');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -402,7 +453,7 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
 
   @font-face {
     font-family: 'Libre Baskerville';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/LibreBaskerville-Bold.woff2?v=6890962853957226821777467257) format('woff2');
+    src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-LibreBaskerville-Bold.woff2?v=1789345230) format('woff2');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -410,7 +461,7 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
 
   @font-face {
     font-family: 'Libre Baskerville';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/LibreBaskerville-Italic.woff2?v=64609648977462219181777467257) format('woff2');
+    src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-LibreBaskerville-Italic.woff2?v=1789345230) format('woff2');
     font-weight: 400;
     font-style: italic;
     font-display: swap;
@@ -419,7 +470,7 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
   /* OPTIMIZED: Load only essential font weights to reduce font errors */
   @font-face {
     font-family: 'PP Pangram Sans';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Regular.otf?v=11778403425827296001775650487) format('opentype');
+    src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-Pangram-Regular.otf?v=1789345230) format('opentype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -427,7 +478,7 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
 
   @font-face {
     font-family: 'PP Pangram Sans';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Medium.otf?v=144727013393520700831775650487) format('opentype');
+    src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-Pangram-Medium.otf?v=1789345231) format('opentype');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -436,7 +487,7 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
   /* Use font-synthesis for bold weights to reduce font file loading */
   @font-face {
     font-family: 'PP Pangram Sans';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Medium.otf?v=144727013393520700831775650487) format('opentype');
+    src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-Pangram-Medium.otf?v=1789345231) format('opentype');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -444,7 +495,7 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
   
   @font-face {
     font-family: 'PP Pangram Sans';
-    src: url(https://froyaorganics.com/cdn/shop/t/207/assets/Pangram-Medium.otf?v=144727013393520700831775650487) format('opentype');
+    src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-Pangram-Medium.otf?v=1789345231) format('opentype');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -681,42 +732,42 @@ html.loading popover-content:not([open]):not(.is-open) {
 
 @font-face {
         font-family: 'Apercu'; 
-        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/ApercuMonoProBold.woff2?v=1713282759);
+        src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-ApercuMonoProBold.woff2?v=1789345230);
         font-weight: 700;
         font-style: normal;
         font-display: swap;
       }
 @font-face {
         font-family: 'Apercu'; 
-        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/ApercuMonoProLight.woff2?v=1713282759);
+        src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-ApercuMonoProLight.woff2?v=1789345230);
         font-weight: 300;
         font-style: normal;
         font-display: swap;
       }
 @font-face {
         font-family: 'Apercu'; 
-        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/ApercuMonoProRegular.woff2?v=1713282759);
+        src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-ApercuMonoProRegular.woff2?v=1789345230);
         font-weight: 400;
         font-style: normal;
         font-display: swap;
       }
 @font-face {
         font-family: 'PP Pangram Sans'; 
-        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PPPangramSans-Bold_745f4534-2286-4aad-82a3-6426792f67c7.woff2?v=1718640639);
+        src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PPPangramSans-Bold.woff2?v=1789345230);
         font-weight: 900;
         font-style: normal;
         font-display: swap;
       }
 @font-face {
         font-family: 'PP Pangram Sans'; 
-        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PPPangramSans-Light.woff2?v=1718639257);
+        src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PPPangramSans-Light.woff2?v=1789345230);
         font-weight: 400;
         font-style: normal;
         font-display: swap;
       }
 @font-face {
         font-family: 'PP Pangram Sans'; 
-        src: url(https://cdn.shopify.com/s/files/1/0473/9999/3493/files/PPPangramSans-Medium_12609bed-341f-4767-a67c-ba219cb66cba.woff2?v=1718639737);
+        src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PPPangramSans-Medium.woff2?v=1789345230);
         font-weight: 700;
         font-style: normal;
         font-display: swap;
