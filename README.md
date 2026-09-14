@@ -46,8 +46,9 @@ template (`templates/page.froya-landing.json`).
   selling plan's own name ("Delivery: every month | 10% off") under a subscription line: the
   Subscribe & save switch shows the state.
 * **Add-to-cart button** – Featured product → Button & stock → *Price on the button*: label only
-  (the default: the bundle total already sits in the price line and on the selected bundle card),
-  label with the bundle total, or label with the total and the regular price struck through. The
+  (the bundle total already sits in the price line and on the selected bundle card), label with the
+  bundle total (the landing page's choice), or label with the total and the regular price struck
+  through. The
   "-" separator is added automatically when a price is shown. The *Savings line* renders as a pill
   directly above the button ("🎉 Congrats! You’re saving $7.00") and follows the selected bundle
   and the Subscribe & save switch; the two static info lines under the plan are still available as
