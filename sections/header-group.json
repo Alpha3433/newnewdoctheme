@@ -17,7 +17,7 @@
         "text": "",
         "link": "",
         "message_size": 16,
-        "message_size_mobile": 19,
+        "message_size_mobile": 11,
         "layout": "center-countdown-first",
         "layout_mobile": "stack",
         "show_countdown": true,
