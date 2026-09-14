@@ -159,6 +159,10 @@
 .s-reviews-slider__container { max-width: var(--page-max); margin: 0 auto; padding: 0 0 0 40px; }
 .s-reviews-slider__title { margin: 0 40px 32px 0; }
 .s-reviews-slider__slider { padding-right: 0; }
+/* Blaze clips the track at the container's edge. With fractional slide widths the card's 1px bottom
+   border lands on that edge and sub-pixel rounding can swallow it, so the card looks cut off. Padding
+   moves the clip edge away from the card; the negative margin keeps the pagination where it was. */
+.s-reviews-slider .blaze-track-container { padding: 4px 0 10px; margin: -4px 0 -10px; }
 .s-reviews-slider__slide { display: flex; }
 
 .c-review-card { display: flex; width: 100%; }
@@ -170,6 +174,7 @@
   border: 1px solid #ece7e4;
   border-radius: 14px;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(31, 31, 31, 0.06);
 }
 .c-review-card__review-image { background: var(--brand-cream); }
 .c-review-card__review-image img { width: 100%; height: auto; aspect-ratio: 380 / 225; object-fit: cover; }

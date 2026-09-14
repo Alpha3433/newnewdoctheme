@@ -452,8 +452,9 @@
       slider.isTransitioning = false;
       if (count > 0 && dx < 0) slider.next(count);
       else if (count > 0 && dx > 0) slider.prev(count);
-      // Already at the end (or too short a drag): Blaze does not repaint, so snap the track back.
-      if (slider.stateIndex === before) paint(0);
+      // Too short a drag, or already at the end of a non-looping slider: Blaze does not repaint, so snap
+      // the track back. A looping slider always moves for count > 0, even when it lands on the same state.
+      if (count === 0 || (!slider.config.loop && slider.stateIndex === before)) paint(0);
     };
 
     track.addEventListener(usePointer ? 'pointerdown' : 'touchstart', onStart, { passive: true });
@@ -482,7 +483,8 @@
   }
   function initSliders(root) {
     $$('.s-icons-slider__slider', root).forEach(function (el) { makeSlider(el, 6.1, 3.2, 1.6); });
-    $$('.s-reviews-slider__slider', root).forEach(function (el) { makeSlider(el, 5.5, 2.4, 1.15); });
+    // Reviews loop: after the last card the slider carries on from the first, in both directions.
+    $$('.s-reviews-slider__slider', root).forEach(function (el) { makeSlider(el, 5.5, 2.4, 1.15, { loop: true }); });
     $$('.s-videos-slider__slider', root).forEach(function (el) { makeSlider(el, 5.5, 2.4, 1.15); });
   }
 
