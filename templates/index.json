@@ -81,6 +81,7 @@
         "slide_1": {
           "type": "slide",
           "settings": {
+            "logo": "shopify://shop_images/022-WH-Logo_1_f9d35ece-afee-460b-a61c-c41647d2d41b.svg",
             "logo_alt": "",
             "quote": "\"Pumpkin seed oil naturally blocks DHT, the hormone behind female pattern thinning.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/WH-Logo_1.svg?v=1732727762"
@@ -97,6 +98,7 @@
         "slide_3": {
           "type": "slide",
           "settings": {
+            "logo": "shopify://shop_images/023-Frame_3944.png",
             "logo_alt": "",
             "quote": "\"Lightweight and fast-absorbing. Never greasy, even on fine hair.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/Frame_3945.png?v=1739968273"
