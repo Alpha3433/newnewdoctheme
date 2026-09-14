@@ -159,6 +159,10 @@
 .s-reviews-slider__container { max-width: var(--page-max); margin: 0 auto; padding: 0 0 0 40px; }
 .s-reviews-slider__title { margin: 0 40px 32px 0; }
 .s-reviews-slider__slider { padding-right: 0; }
+/* Blaze clips the track at the container's edge. With fractional slide widths the card's 1px bottom
+   border lands on that edge and sub-pixel rounding can swallow it, so the card looks cut off. Padding
+   moves the clip edge away from the card; the negative margin keeps the pagination where it was. */
+.s-reviews-slider .blaze-track-container { padding: 4px 0 10px; margin: -4px 0 -10px; }
 .s-reviews-slider__slide { display: flex; }
 
 .c-review-card { display: flex; width: 100%; }
@@ -170,6 +174,7 @@
   border: 1px solid #ece7e4;
   border-radius: 14px;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(31, 31, 31, 0.06);
 }
 .c-review-card__review-image { background: var(--brand-cream); }
 .c-review-card__review-image img { width: 100%; height: auto; aspect-ratio: 380 / 225; object-fit: cover; }
@@ -1557,111 +1562,4 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
     align-items: center;
     min-height: 40px;
   }
-}
-
-/* --------------------------------------------------------------------------
-   Bundle fit quiz (sections/froya-fit-quiz.liquid)
-   -------------------------------------------------------------------------- */
-.s-fit-quiz { padding: 56px 20px; }
-.s-fit-quiz--background { background: var(--brand-cream); }
-.s-fit-quiz__container { max-width: 680px; margin: 0 auto; }
-.s-fit-quiz__head { text-align: center; margin-bottom: 26px; }
-/* Same eyebrow treatment as the research section ("Peer-reviewed. Placebo-controlled.") */
-.s-fit-quiz__eyebrow {
-  margin: 0 0 14px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--brand-ink);
-}
-.s-fit-quiz__title { font-size: 32px; }
-.s-fit-quiz__intro { max-width: 560px; margin: 14px auto 0; font-size: 15px; line-height: 1.55; color: var(--brand-ink); }
-.s-fit-quiz__intro p { margin: 0; }
-.s-fit-quiz__card {
-  position: relative;
-  padding: 28px 28px 26px;
-  border: 1px solid var(--brand-line);
-  border-radius: 18px;
-  background: #fff;
-  box-shadow: 0 10px 30px rgba(31, 31, 31, 0.06);
-}
-.s-fit-quiz__progress { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
-.s-fit-quiz__step { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
-.s-fit-quiz__dots { display: inline-flex; gap: 6px; }
-.s-fit-quiz__dot { width: 22px; height: 4px; border-radius: 2px; background: var(--brand-line); transition: background-color .2s ease; }
-.s-fit-quiz__dot.is-active, .s-fit-quiz__dot.is-done { background: var(--brand-cta); }
-.s-fit-quiz__question { margin: 0; padding: 0; border: 0; min-width: 0; }
-.s-fit-quiz__question.is-hidden, .s-fit-quiz__result.is-hidden, .s-fit-quiz__progress.is-hidden { display: none; }
-.s-fit-quiz__question-title { padding: 0; margin: 0 0 6px; font-family: var(--font-serif); font-size: 24px; line-height: 1.2; letter-spacing: -0.01em; }
-.s-fit-quiz__question-hint { margin: 0 0 6px; font-size: 14px; color: var(--brand-ink); }
-.s-fit-quiz__options { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
-.s-fit-quiz__option {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; /* the global button rule centres content */
-  gap: 12px;
-  width: 100%;
-  min-height: 52px;
-  padding: 13px 16px;
-  border: 1.5px solid var(--brand-line);
-  border-radius: 12px;
-  background: #fff;
-  font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 1.3;
-  text-align: left;
-  color: var(--brand-ink);
-  transition: border-color .15s ease, background-color .15s ease;
-}
-.s-fit-quiz__option:hover, .s-fit-quiz__option:focus-visible { border-color: var(--brand-cta); }
-.s-fit-quiz__option.is-selected { border-color: var(--brand-cta); background: #fdf1e8; }
-.s-fit-quiz__option-check { flex: 0 0 20px; width: 20px; height: 20px; border-radius: 50%; border: 2px solid #c9c2bd; position: relative; }
-.s-fit-quiz__option.is-selected .s-fit-quiz__option-check { border-color: var(--brand-cta); }
-.s-fit-quiz__option.is-selected .s-fit-quiz__option-check::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--brand-cta); }
-.s-fit-quiz__nav { display: flex; justify-content: flex-start; margin-top: 16px; min-height: 24px; }
-.s-fit-quiz__back { font-size: 14px; font-weight: 600; color: var(--brand-ink); text-decoration: underline; text-underline-offset: 3px; }
-.s-fit-quiz__back[hidden] { display: none; }
-.s-fit-quiz.is-finished .s-fit-quiz__nav { display: none; }
-.s-fit-quiz__empty { margin: 0; text-align: center; color: var(--brand-ink); }
-/* Results */
-.s-fit-quiz__result { display: flex; flex-direction: column; gap: 14px; }
-.s-fit-quiz__result-tag {
-  align-self: flex-start;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: var(--brand-green);
-  color: #fff;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.s-fit-quiz__result--starter .s-fit-quiz__result-tag { background: #2f7d8c; }
-.s-fit-quiz__result--full .s-fit-quiz__result-tag { background: var(--brand-cta); }
-.s-fit-quiz__result--medical .s-fit-quiz__result-tag { background: var(--brand-mauve-dark); }
-.s-fit-quiz__result-title { margin: 0; font-family: var(--font-serif); font-size: 26px; line-height: 1.2; letter-spacing: -0.01em; }
-.s-fit-quiz__result-body { font-size: 15px; line-height: 1.55; }
-.s-fit-quiz__result-body p { margin: 0 0 10px; }
-.s-fit-quiz__result-body p:last-child { margin-bottom: 0; }
-.s-fit-quiz__result-row { padding: 14px 16px; border-radius: 12px; background: var(--brand-cream); }
-.s-fit-quiz__result-row-label { display: block; margin-bottom: 4px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
-.s-fit-quiz__result-row-text { font-size: 14px; line-height: 1.5; }
-.s-fit-quiz__result-row--notes[hidden] { display: none; }
-.s-fit-quiz__notes { margin: 0; padding: 0 0 0 18px; font-size: 14px; line-height: 1.5; }
-.s-fit-quiz__notes li + li { margin-top: 8px; }
-.s-fit-quiz__cta.custom-button { width: 100%; margin-top: 4px; }
-.s-fit-quiz__restart { align-self: center; font-size: 13px; color: var(--brand-ink); text-decoration: underline; text-underline-offset: 3px; }
-.s-fit-quiz__footnote { max-width: 640px; margin: 18px auto 0; font-size: 12px; line-height: 1.5; text-align: center; color: var(--brand-ink); }
-@media screen and (max-width: 767px) {
-  .s-fit-quiz { padding: 40px 16px; }
-  .s-fit-quiz__eyebrow { font-size: 12px; letter-spacing: 0.04em; }
-  .s-fit-quiz__title { font-size: 26px; }
-  .s-fit-quiz__card { padding: 20px 18px; border-radius: 14px; }
-  .s-fit-quiz__question-title { font-size: 21px; }
-  .s-fit-quiz__option { font-size: 14px; padding: 12px 14px; }
-  .s-fit-quiz__result-title { font-size: 22px; }
 }
