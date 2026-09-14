@@ -12,6 +12,8 @@
     "hero": {
       "type": "froya-hero",
       "settings": {
+        "image": "shopify://shop_images/hf_20260914_081839_356d619f-61ef-49f9-bf92-17c5e0aff78b.png",
+        "image_mobile": "shopify://shop_images/hf_20260914_081839_356d619f-61ef-49f9-bf92-17c5e0aff78b.png",
         "image_alt": "Woman over 35 parting her hair to show fuller regrowth along her part after using Elaren Pumpkin Seed Regrowth Oil",
         "mobile_text_color": "#ffffff",
         "pill_text": "GET AN EXCLUSIVE GIFT [LIMITED TIME]",
