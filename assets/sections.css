@@ -57,6 +57,12 @@
   .s-hero-aging-lp__title p { font-size: 46px; }
 }
 @media screen and (max-width: 767px) {
+  /* Mobile framing from the section settings (see the comment in sections/froya-hero.liquid) */
+  .s-hero-aging-lp__container {
+    background-color: var(--hero-aging-lp-mobile-bg-color, transparent);
+    background-size: var(--hero-aging-lp-mobile-size, cover);
+    background-position: var(--hero-aging-lp-mobile-position, center center);
+  }
   .s-hero-aging-lp__content-wrapper { padding: 28px 20px; }
   .s-hero-aging-lp__content { align-items: center; margin: 0 auto; }
   .s-hero-aging-lp__title { max-width: 360px; }
@@ -1478,6 +1484,14 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   max-width: 100%;
   flex-shrink: 1;
   text-wrap: pretty;
+}
+/* On phones the stars and the review line share one row: the text scales with the screen width
+   (about 8.6px on a 390px phone, never above the desktop 11px) and the star graphic is a touch
+   smaller, so "Rated 4.77/5 by verified customers · Made for women 35+" fits without wrapping. */
+@media screen and (max-width: 767px) {
+  .s-hero-aging-lp__review { width: 100%; gap: 5px; flex-wrap: nowrap; }
+  .s-hero-aging-lp__stars { flex: 0 0 auto; max-width: 58px; }
+  .s-hero-aging-lp__review-text { font-size: clamp(7.5px, 2.15vw, 11px); letter-spacing: 0; line-height: 1.2; white-space: nowrap; text-wrap: nowrap; flex-shrink: 0; }
 }
 /* Both carried a 12px line-height meant for a single line; once they wrap at
    narrower widths the lines sat on top of each other. */
