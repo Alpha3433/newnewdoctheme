@@ -23,12 +23,27 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "This store sells in USD and converts to the visitor's local currency through Shopify Markets. Many of those currencies share the $ symbol (USD, AUD, CAD, NZD, SGD), so the currency code is shown next to the cart totals a shopper commits to. Which currency that is comes from the market Shopify picks from the shopper's IP address, not from the theme, and the cart keeps it through to Shopify's checkout - if it looks wrong, switch country with the selector in the cart drawer or the footer."
+        "content": "This store sells in USD and converts to the visitor's local currency through Shopify Markets. Many of those currencies share the $ symbol (USD, AUD, CAD, NZD, SGD), so the currency code is shown next to the cart totals a shopper commits to. The currency is the one for the storefront's current country (see Localization below), and the cart keeps it through to Shopify's checkout - a shopper can change it with the selector in the cart drawer or the footer."
       },
       {
         "type": "checkbox",
         "id": "currency_code_enable",
         "label": "Show currency codes on totals",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Localization",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Shopify only pre-selects a visitor's country automatically on Shopify Plus. On other plans every visitor starts in the primary market's default country and only sees their own currency after picking it in a country selector, or once checkout has their address. With this on, the theme asks Shopify which country it detects for the visitor and switches the storefront to it on their first visit, so the buy box, cart and checkout all start in the local currency. A visitor who picks a country in the cart or footer selector keeps that choice."
+      },
+      {
+        "type": "checkbox",
+        "id": "auto_localize",
+        "label": "Switch new visitors to their detected country",
         "default": true
       }
     ]

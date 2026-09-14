@@ -111,6 +111,22 @@
                   assign plan_price = allocation.price
                 endif
               endfor
+              comment
+                Every cadence carries the same discount, so "cheapest" is a tie and the toggle would
+                enrol the shopper in whichever plan Liquid lists first - possibly the six-monthly one.
+                The "Subscription plan ID" setting pins the toggle to the plan the buy box sells.
+              endcomment
+              assign pinned_plan_id = section.settings.selling_plan_id | default: '' | strip
+              if pinned_plan_id != blank
+                for allocation in item.variant.selling_plan_allocations
+                  assign candidate_id = allocation.selling_plan.id | append: ''
+                  if candidate_id == pinned_plan_id
+                    assign plan_id = allocation.selling_plan.id
+                    assign plan_price = allocation.price
+                    break
+                  endif
+                endfor
+              endif
               if plan_id != blank
                 assign plan_saving = item.variant.price | minus: plan_price
               endif
@@ -238,8 +254,9 @@
       <div class="drawer__footer__content">
         {%- liquid
           comment
-            Currency follows the market Shopify picks for the shopper, and the cart carries that
-            currency through to checkout. Shopify reads it from the IP, which is wrong often enough
+            Currency follows the storefront's current country, and the cart carries that currency
+            through to checkout. The theme sets that country from Shopify's own GeoIP guess on a
+            visitor's first page view (Theme settings > Localization), which is wrong often enough
             - a VPN, a corporate proxy, a trip - and the totals below are where the theme first
             spells the currency out, so offer the correction here instead of making the shopper
             hunt for the selector at the bottom of the footer. Submitting reloads the page, which
@@ -315,7 +332,7 @@
     { "type": "text", "id": "title", "label": "Title", "default": "Cart" },
     { "type": "header", "content": "Empty cart" },
     { "type": "checkbox", "id": "show_shipping_bar", "label": "Show free-shipping progress bar", "default": true },
-    { "type": "number", "id": "shipping_threshold", "label": "Free-shipping threshold (in your store currency)", "default": 40 },
+    { "type": "number", "id": "shipping_threshold", "label": "Free-shipping threshold (in your store currency)", "default": 30 },
     { "type": "text", "id": "shipping_text", "label": "Progress text", "default": "Spend {amount} and get", "info": "{amount} is replaced with what is left to spend." },
     { "type": "text", "id": "shipping_highlight", "label": "Progress text highlight", "default": "FREE SHIPPING" },
     { "type": "text", "id": "shipping_unlocked", "label": "Text once the threshold is reached", "default": "You’ve unlocked FREE SHIPPING" },
@@ -330,6 +347,7 @@
     { "type": "url", "id": "empty_url", "label": "Shop all button link" },
     { "type": "header", "content": "Line items" },
     { "type": "checkbox", "id": "show_subscribe_toggle", "label": "Show subscribe & save toggle on line items", "default": true },
+    { "type": "text", "id": "selling_plan_id", "label": "Subscription plan ID", "info": "Optional. The plan the line toggle switches a one-time line to. Use the same ID as the Featured product section so the drawer sells the cadence the buy box promised. Leave blank to use the cheapest plan the variant offers." },
     { "type": "text", "id": "subscribe_label", "label": "Subscribe toggle label", "default": "SUBSCRIBE & SAVE" },
     { "type": "header", "content": "Recommendations" },
     { "type": "text", "id": "upsell_title", "label": "Heading", "default": "PAIR WITH:" },

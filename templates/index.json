@@ -475,7 +475,7 @@
         "note_1": {
           "type": "note",
           "settings": {
-            "text": "*Studies cited were conducted on the ingredients (oral pumpkin seed oil supplementation, Cho et al. 2014; topical caffeine, Dhurat et al. 2017 and Otberg et al. 2008), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, with visible density changes typically taking 3–6 months of consistent use. Not seeing progress? Contact us within 30 days for a full refund."
+            "text": "*Studies cited were conducted on the ingredients (oral pumpkin seed oil supplementation, Cho et al. 2014; topical caffeine, Dhurat et al. 2017 and Otberg et al. 2008), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, fuller-looking hair after 30 nights of use, and density that keeps building over 3–6 months. Still shedding after 30 nights? Tell us and we’ll refund every cent."
           }
         }
       },
@@ -499,9 +499,10 @@
           "type": "bundle",
           "settings": {
             "quantity": 1,
+            "free_quantity": 1,
             "discount": 0,
-            "title": "1 Bottle",
-            "subtitle": "30-day supply",
+            "title": "Buy 1, Get 1 Free",
+            "subtitle": "2-Month Supply",
             "badge": "",
             "gift": "",
             "perks": "",
@@ -513,12 +514,13 @@
           "type": "bundle",
           "settings": {
             "quantity": 2,
-            "discount": 10,
-            "title": "2 Bottles",
-            "subtitle": "60-day supply",
+            "free_quantity": 2,
+            "discount": 0,
+            "title": "Buy 2, Get 2 Free",
+            "subtitle": "4-Month Supply",
             "badge": "MOST POPULAR",
-            "gift": "",
-            "perks": "Keep going through a full growth cycle",
+            "gift": "+ FREE Express Shipping",
+            "perks": "",
             "highlight": true,
             "selected": true
           }
@@ -527,12 +529,13 @@
           "type": "bundle",
           "settings": {
             "quantity": 3,
-            "discount": 20,
-            "title": "3 Bottles",
-            "subtitle": "90-day supply",
+            "free_quantity": 4,
+            "discount": 0,
+            "title": "Buy 3, Get 4 Free",
+            "subtitle": "7-Month Supply",
             "badge": "BEST VALUE",
             "gift": "",
-            "perks": "Lowest price per bottle",
+            "perks": "",
             "highlight": false,
             "selected": false
           }
@@ -732,13 +735,13 @@
         "badge_bg": "#e5f3fa",
         "badge_color": "#54585a",
         "label_1": "Pumpkin Seed Oil + Caffeine Complex",
-        "label_2": "30-day supply",
+        "label_2": "1 bottle = 1-month supply",
         "reviews_count": 43,
-        "rating": 4.8,
+        "rating": "4.77",
         "rating_text": "4.77/5 FROM VERIFIED BUYERS",
         "save_tag": "Save {percent}%",
         "ships_free_text": "THIS ORDER SHIPS FREE",
-        "includes": "<p>What you get (30-day supply):<br/>· Pumpkin Seed Regrowth Oil with Caffeine Complex<br/>· Precision applicator for scalp-only, no-waste application<br/>· Scalp massager to boost circulation at the root<br/>· Free insured shipping and a 30-day money-back guarantee</p>",
+        "includes": "<p>What you get (per bottle, a 1-month supply):<br/>· Pumpkin Seed Regrowth Oil with Caffeine Complex<br/>· Precision applicator for scalp-only, no-waste application<br/>· Scalp massager to boost circulation at the root<br/>· Free insured shipping and a 30-day money-back guarantee</p>",
         "ingredients_button": "View Ingredients",
         "ingredients_title": "6 Key Actives, Chosen to Work Together",
         "ingredients_close": "Close",
@@ -748,7 +751,8 @@
         "badge_4": "3rd party tested",
         "legend_title": "INGREDIENT LEVELS",
         "actives_title": "KEY ACTIVES – PUMPKIN SEED REGROWTH OIL",
-        "bundle_title": "Choose your bundle",
+        "bundle_title": "Choose your plan",
+        "price_style": "total",
         "unit_suffix": "per bottle",
         "total_text": "{total} total",
         "save_text": "Save {amount} ({percent}% off)",
@@ -779,7 +783,7 @@
     "founder-story": {
       "type": "froya-founder-story",
       "settings": {
-        "image_alt": "The Elaren founders",
+        "image_alt": "The Elaren founder",
         "image_position": "right",
         "subtitle": "The Story Behind Elaren",
         "title": "Why We Started Elaren",
@@ -1066,7 +1070,7 @@
           "settings": {
             "heading": "<p>Be patient.<br>Hair grows in cycles.</p>",
             "label": "REGROWTH OIL",
-            "text": "<p><strong>Most women notice less hair in the brush and the shower drain within the first 2–4 weeks. Fine new baby hairs along the hairline and part usually show up around month 2 or 3. Visible density takes 30 days of nightly use.</strong></p><p><strong>Don’t stop at week three. Consistency is the whole secret, and Elaren does the rest.</strong></p>",
+            "text": "<p><strong>Most women notice less hair in the brush and the shower drain within the first 2–4 weeks, and fuller-looking hair by day 30. Fine new baby hairs along the hairline and part usually show up around month 2 or 3, and density keeps building the longer you stay consistent.</strong></p><p><strong>Don’t stop at week three. Consistency is the whole secret, and Elaren does the rest.</strong></p>",
             "label_2": "",
             "text_2": ""
           }

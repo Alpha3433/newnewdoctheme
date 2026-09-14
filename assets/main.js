@@ -155,6 +155,56 @@
     if (message) box.removeAttribute('hidden'); else box.setAttribute('hidden', '');
   }
 
+  /* ======================================================== localization */
+  // Shopify only pre-selects a visitor's country on Shopify Plus. On every other plan the storefront
+  // opens in the primary market's default country, so an Australian shopper sees USD (and a US
+  // shopper may see AUD) until checkout asks for an address and re-prices the order. Ask Shopify
+  // which country it detects for this visitor - browsing_context_suggestions.json is Shopify's own
+  // GeoIP + Accept-Language lookup - and, once per browser, submit the hidden localization form in
+  // layout/theme.liquid so every price, the cart and the checkout start in the local currency.
+  // A shopper who picks a country themselves (footer or cart selector) is never overridden.
+  var COUNTRY_CHOICE_KEY = 'elaren:country-choice';
+  var AUTO_LOCALIZED_KEY = 'elaren:auto-localized';
+  function readFlag(key) { try { return window.localStorage.getItem(key); } catch (err) { return null; } }
+  function writeFlag(key, value) { try { window.localStorage.setItem(key, value); } catch (err) { /* private mode */ } }
+  function isLocalizationForm(form) {
+    if (!form || form.tagName !== 'FORM') return false;
+    var action = (form.getAttribute('action') || '').split('?')[0];
+    return /\/localization$/.test(action) || !!form.querySelector('input[name="form_type"][value="localization"]');
+  }
+  // A manual country/language choice anywhere on the site wins over auto-detection from then on.
+  document.addEventListener('submit', function (e) {
+    var form = e.target;
+    if (form.id === 'localization_form_auto' || !isLocalizationForm(form)) return;
+    writeFlag(COUNTRY_CHOICE_KEY, '1');
+  });
+  function autoLocalize() {
+    var form = document.getElementById('localization_form_auto');
+    if (!form || !window.fetch) return;
+    if (window.Shopify && window.Shopify.designMode) return;
+    if (readFlag(COUNTRY_CHOICE_KEY) || readFlag(AUTO_LOCALIZED_KEY)) return;
+    var select = form.querySelector('select[name="country_code"]');
+    var current = (form.getAttribute('data-current-country') || (window.Shopify && window.Shopify.country) || '').toUpperCase();
+    if (!select || !current) return;
+    var url = rootUrl() + 'browsing_context_suggestions.json?country[enabled]=true&country[exclude]=' + encodeURIComponent(current);
+    fetch(url, { credentials: 'same-origin', headers: { Accept: 'application/json' } })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (json) {
+        if (!json) return;
+        var detected = json.detected_values && json.detected_values.country && json.detected_values.country.handle;
+        var first = json.suggestions && json.suggestions[0] && json.suggestions[0].parts && json.suggestions[0].parts.country;
+        var country = String(detected || (first && first.handle) || '').toUpperCase();
+        if (!country || country === current) return;
+        var option = Array.prototype.slice.call(select.options).filter(function (o) { return o.value.toUpperCase() === country; })[0];
+        if (!option) return; // Shopify detected a country the store does not sell to - leave the shopper where they are.
+        writeFlag(AUTO_LOCALIZED_KEY, country);
+        select.value = option.value;
+        if (typeof form.requestSubmit === 'function') form.requestSubmit(); else form.submit();
+      })
+      .catch(function () { /* offline or blocked: keep the server-rendered context */ });
+  }
+  window.ElarenLocalization = { detect: autoLocalize, choiceKey: COUNTRY_CHOICE_KEY, autoKey: AUTO_LOCALIZED_KEY };
+
   // Product forms anywhere on the page (buy box, menu cards, drawer upsells) add in place and open the drawer.
   document.addEventListener('submit', function (e) {
     var form = e.target.closest('form.js-ajax-add');
@@ -586,6 +636,7 @@
     initSection(document);
     if (Cart.drawer()) Cart.updateCount(parseInt(Cart.drawer().getAttribute('data-cart-count') || '0', 10));
     document.documentElement.classList.add('loaded');
+    autoLocalize();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 

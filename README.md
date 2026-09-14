@@ -52,14 +52,20 @@ template (`templates/page.froya-landing.json`).
 * **Guarantee:** the copy promises a 30-day money-back guarantee and fuller hair in 30 days, which
   matches the 30-day return window on the store's refund policy page. The "Our Elaren Story" page
   still says 90 days – update it, or change the guarantee copy back in the theme editor.
-* **Currency and country are Shopify's call, not the theme's.** Shopify puts each visitor in a
-  market based on their IP address, and that market's currency is the one the cart keeps all the
-  way through checkout — which is also where Shopify pre-fills the address country. A VPN does not
-  reliably change it: VPN exit IPs are often registered to the provider's home country, so a UK
-  exit node can still read as the US. To test another market, switch country with the selector in
-  the cart drawer or the footer (or use Shopify's own market preview), not a VPN. The currency code
-  next to the cart totals is on by default in Theme settings → Currency format, because most of the
-  store's markets use the `$` symbol.
+* **Currency and country.** Shopify only pre-selects a visitor's country automatically on Shopify
+  Plus; on the store's Basic plan every visitor starts in the primary market's default country, and
+  checkout only re-prices the order once it has a shipping address. So the theme does the detection
+  itself: on a visitor's first page view `assets/main.js` asks Shopify which country it detects
+  (`browsing_context_suggestions.json`, Shopify's own GeoIP) and submits the hidden localization
+  form in `layout/theme.liquid`, which reloads the page in that country's currency. The cart keeps
+  that currency through to checkout, which also pre-fills the address country. It runs once per
+  browser (`localStorage` key `elaren:auto-localized`) and never after a shopper has picked a
+  country in the cart or footer selector (`elaren:country-choice`); Theme settings → Localization
+  turns it off. A VPN does not reliably change the result: VPN exit IPs are often registered to the
+  provider's home country, so a UK exit node can still read as the US. To test another market,
+  switch country with the selector in the cart drawer or the footer (or use Shopify's own market
+  preview), not a VPN. The currency code next to the cart totals is on by default in Theme
+  settings → Currency format, because most of the store's markets use the `$` symbol.
 * **Subscription cadence lives on the variant, not the variant name.** The serum's variants
   (Monthly / Quarterly / Biannual) exist only to hang selling plans on; the buy box pins one plan
   with "Subscription plan ID" and never shows a variant picker. Cart lines therefore print the
