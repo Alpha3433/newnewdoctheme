@@ -289,21 +289,6 @@
             "image_fallback": "https://froyaorganics.com/cdn/shop/files/Iriel_G.jpg"
           }
         },
-        "review_7": {
-          "type": "review",
-          "settings": {
-            "image": "shopify://shop_images/hf_20260914_115935_f9003938-0572-4989-b1c3-603495429f5b.png",
-            "image_alt": "",
-            "name": "Roshani55 · Verified buyer",
-            "tag_1": "curly hair",
-            "tag_2": "third purchase",
-            "quote": "\"This is my third purchase. Good for straight hair after wash day.\"",
-            "text": "",
-            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
-            "product_title": "",
-            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Sarah_M.png"
-          }
-        },
         "review_8": {
           "type": "review",
           "settings": {
@@ -354,7 +339,6 @@
         "review_4",
         "review_5",
         "review_6",
-        "review_7",
         "review_8",
         "review_9",
         "review_10"
