@@ -71,6 +71,13 @@ template (`templates/page.froya-landing.json`).
 * **Sliders** – the logo & quote, review and video sliders can be swiped: the track follows the
   finger (or mouse), snaps to the nearest slide and a long or fast swipe moves several slides, so
   the whole set can be run through right-to-left. The dots still work.
+* **Hair-loss fit quiz** – three questions, one result screen that says how well Elaren fits the
+  *kind* of hair loss the visitor has (never a probability). *Question* blocks are asked in sidebar
+  order; each *Answer* block names the question it belongs to and the hair-loss type it points to;
+  each *Result* block is the screen for one type, with what to expect, what the research measured
+  and a button that scrolls to the buy box with a bundle tier pre-selected. Precedence: a "See a
+  doctor first" answer always wins, then "Traction", then whichever of pattern / shedding got more
+  answers. Clicking a Result block in the editor previews that screen.
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
   "Pair with" products, checkout label, country/currency selector and trust badges. The header
   CART button opens it and every add-to-cart button adds in place and opens it.

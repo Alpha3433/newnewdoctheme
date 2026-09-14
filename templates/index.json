@@ -23,14 +23,15 @@
         "pill_text": "GET AN EXCLUSIVE GIFT [LIMITED TIME]",
         "pill_bg": "#b3173a",
         "pill_color": "#ffffff",
-        "review_text": "Rated 4.77/5 by verified customers",
+        "review_text": "4.77/5 from verified customers · Women 35+",
         "title": "Less Shedding in 2 Weeks.",
-        "subtitle": "Elaren Pumpkin seed oil and caffeine feed tired follicles, calm shedding and help hair grow back thicker. For the part, the crown, the edges, postpartum and menopausal shedding.",
+        "subtitle": "Pumpkin seed oil and caffeine feed tired follicles, calm shedding and help hair grow back thicker. For the part, crown and edges, postpartum and menopausal shedding.",
         "button_label": "START MY REGROWTH – RISK-FREE",
         "button_link": "#product-section",
-        "stat_1": "LESS SHEDDING IN AS LITTLE AS 2 WEEKS",
-        "stat_2": "FULLER HAIR IN 30 DAYS OR YOUR MONEY BACK",
-        "stat_3": "FOR EVERY TEXTURE & EVERY TYPE OF HAIR LOSS"
+        "stat_1": "LESS SHEDDING IN 2 WEEKS",
+        "stat_2": "FULLER HAIR IN 30 DAYS OR MONEY BACK",
+        "stat_3": "FOR EVERY TEXTURE & TYPE OF HAIR LOSS",
+        "mobile_scrim": 35
       }
     },
     "benefits-strip": {
@@ -1228,6 +1229,212 @@
         "button_label": "Subscribe",
         "success_text": "Thanks for subscribing. Your first regrowth tips are on their way."
       }
+    },
+    "fit-quiz": {
+      "type": "froya-fit-quiz",
+      "blocks": {
+        "question_1": {
+          "type": "question",
+          "settings": {
+            "text": "Where are you noticing it most?"
+          }
+        },
+        "option_1": {
+          "type": "option",
+          "settings": {
+            "question": 1,
+            "label": "A widening part or a thinning crown",
+            "band": "pattern"
+          }
+        },
+        "option_2": {
+          "type": "option",
+          "settings": {
+            "question": 1,
+            "label": "My temples or hairline",
+            "band": "pattern"
+          }
+        },
+        "option_3": {
+          "type": "option",
+          "settings": {
+            "question": 1,
+            "label": "All over - more hair in the brush and the drain",
+            "band": "shedding"
+          }
+        },
+        "option_4": {
+          "type": "option",
+          "settings": {
+            "question": 1,
+            "label": "Smooth, round bald patches",
+            "band": "medical"
+          }
+        },
+        "question_2": {
+          "type": "question",
+          "settings": {
+            "text": "When did it start?"
+          }
+        },
+        "option_5": {
+          "type": "option",
+          "settings": {
+            "question": 2,
+            "label": "Gradually, over a year or more",
+            "band": "pattern"
+          }
+        },
+        "option_6": {
+          "type": "option",
+          "settings": {
+            "question": 2,
+            "label": "Around perimenopause or menopause",
+            "band": "pattern"
+          }
+        },
+        "option_7": {
+          "type": "option",
+          "settings": {
+            "question": 2,
+            "label": "After a baby, an illness, surgery or a stressful stretch",
+            "band": "shedding"
+          }
+        },
+        "option_8": {
+          "type": "option",
+          "settings": {
+            "question": 2,
+            "label": "Since wearing tight braids, extensions or ponytails",
+            "band": "traction"
+          }
+        },
+        "question_3": {
+          "type": "question",
+          "settings": {
+            "text": "How does your scalp feel?"
+          }
+        },
+        "option_9": {
+          "type": "option",
+          "settings": {
+            "question": 3,
+            "label": "Normal",
+            "band": "none"
+          }
+        },
+        "option_10": {
+          "type": "option",
+          "settings": {
+            "question": 3,
+            "label": "Oily, flaky or dandruff-prone",
+            "band": "none"
+          }
+        },
+        "option_11": {
+          "type": "option",
+          "settings": {
+            "question": 3,
+            "label": "Tender where my hair is pulled tight",
+            "band": "traction"
+          }
+        },
+        "option_12": {
+          "type": "option",
+          "settings": {
+            "question": 3,
+            "label": "Itchy, sore, inflamed or scarred",
+            "band": "medical"
+          }
+        },
+        "result_1": {
+          "type": "result",
+          "settings": {
+            "band": "pattern",
+            "tag": "Strong match",
+            "title": "This is the kind of thinning pumpkin seed oil was studied for",
+            "body": "<p>A widening part, a thinning crown and receding temples that crept in gradually are the signature of hormonal pattern thinning: DHT shrinks the follicle a little more each cycle. Pumpkin seed oil’s phytosterols work on exactly that step, and the Caffeine Complex keeps the follicle in its growth phase.</p>",
+            "expect": "Less shedding first, usually within 2 weeks. Fuller-looking hair after 30 nights. Density that keeps building over 3–6 months, which is why the 3-month bundle is the one we recommend.",
+            "evidence": "A 24-week randomised, placebo-controlled trial of pumpkin seed oil in pattern hair loss saw hair count rise 40%, four times the placebo group.",
+            "show_cta": true,
+            "bundle_tier": 2
+          }
+        },
+        "result_2": {
+          "type": "result",
+          "settings": {
+            "band": "shedding",
+            "tag": "Likely to help",
+            "title": "This looks like shedding after a trigger, and it usually recovers",
+            "body": "<p>Hair that comes out all over a few months after a baby, an illness, surgery or a hard stretch is usually telogen effluvium: a wave of follicles resting at once. The honest news is that most of it grows back on its own over 6–12 months. Caffeine and a nightly scalp massage support the regrowth phase, and the oil helps the hair that returns come back stronger.</p>",
+            "expect": "The timeline is mostly your body’s. Expect shedding to ease over the first weeks and new baby hairs along the hairline within 2–3 months. A 3-month bundle covers the recovery window.",
+            "evidence": "Topical caffeine was statistically non-inferior to 5% minoxidil at increasing growth-phase hairs in a 6-month clinical study.",
+            "show_cta": true,
+            "bundle_tier": 2
+          }
+        },
+        "result_3": {
+          "type": "result",
+          "settings": {
+            "band": "traction",
+            "tag": "Good match, with one condition",
+            "title": "This is traction loss, and the style has to change first",
+            "body": "<p>Thinning at the edges and temples that started with tight braids, extensions, buns or ponytails is traction alopecia. No oil regrows hair while the pulling continues. Loosen the style, give the edges a rest, and then the oil helps the recovery.</p>",
+            "expect": "Once the tension is off, expect the fine hairs along the edges to return over 2–4 months. If an area has been pulled tight for years and is smooth and shiny, see a dermatologist: that can be permanent.",
+            "evidence": "Pumpkin seed oil and caffeine were studied in pattern thinning, not in traction loss. Here they support regrowth that only starts when the pulling stops.",
+            "show_cta": true,
+            "bundle_tier": 1
+          }
+        },
+        "result_4": {
+          "type": "result",
+          "settings": {
+            "band": "medical",
+            "tag": "See a doctor first",
+            "title": "Please see a dermatologist before you buy anything",
+            "body": "<p>Smooth round patches, or a scalp that is sore, inflamed or scarred, point to alopecia areata or a scarring alopecia. Those are medical conditions a topical oil does not address, and the earlier they are treated the better the outcome. We would rather you keep your money and get the right help.</p>",
+            "expect": "Ask your GP for a referral to a dermatologist. If they rule those conditions out and find pattern thinning or shedding instead, come back: Elaren is made for those.",
+            "evidence": "Pumpkin seed oil and caffeine were studied in pattern hair loss. There is no evidence for them in autoimmune or scarring hair loss, so we don’t claim any.",
+            "show_cta": false,
+            "bundle_tier": 0
+          }
+        }
+      },
+      "block_order": [
+        "question_1",
+        "option_1",
+        "option_2",
+        "option_3",
+        "option_4",
+        "question_2",
+        "option_5",
+        "option_6",
+        "option_7",
+        "option_8",
+        "question_3",
+        "option_9",
+        "option_10",
+        "option_11",
+        "option_12",
+        "result_1",
+        "result_2",
+        "result_3",
+        "result_4"
+      ],
+      "settings": {
+        "background": true,
+        "eyebrow": "3 questions · 20 seconds",
+        "title": "How well does Elaren fit <em>your</em> hair loss?",
+        "text": "<p>Pumpkin seed oil and caffeine each work on a specific cause of thinning. Answer three quick questions and we’ll tell you honestly how good a match they are for yours - and when it’s better to see a doctor first.</p>",
+        "step_label": "Question {current} of {total}",
+        "back_label": "← Back",
+        "restart_label": "Start again",
+        "expect_label": "What to expect",
+        "evidence_label": "What the research measured",
+        "cta_label": "See my bundle",
+        "cta_link": "#product-section",
+        "footnote": "The match is based on what pumpkin seed oil and caffeine were studied for (oral pumpkin seed oil, Cho et al. 2014; topical caffeine, Dhurat et al. 2017), not on a trial of Elaren’s finished formula. It is general information, not a diagnosis. Individual results vary."
+      }
     }
   },
   "order": [
@@ -1237,6 +1444,7 @@
     "reviews-slider",
     "backed-by-science",
     "clinical-trial",
+    "fit-quiz",
     "featured-product",
     "founder-story",
     "arctic-plants",

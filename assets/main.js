@@ -769,6 +769,101 @@
     });
   }
 
+  /* ============================================================= fit quiz */
+  // Hair-loss fit quiz (sections/froya-fit-quiz.liquid). One question at a time; each answer points
+  // to a hair-loss type ("band"). Precedence: any "medical" answer wins (see a doctor), then any
+  // "traction" answer, then whichever of pattern / shedding collected more answers (pattern on a
+  // tie). The result's button scrolls to the buy box and pre-selects a bundle tier.
+  function initFitQuiz(root) {
+    $$('[data-fit-quiz]', root).forEach(function (quiz) {
+      if (!once(quiz, 'init')) return;
+      var questions = $$('[data-quiz-question]', quiz);
+      var results = $$('[data-quiz-result]', quiz);
+      var progress = $('[data-quiz-progress]', quiz);
+      var stepLabel = $('[data-quiz-step]', quiz);
+      var dots = $$('.s-fit-quiz__dot', quiz);
+      var back = $('[data-quiz-back]', quiz);
+      var template = stepLabel ? stepLabel.textContent : '';
+      var answers = [];
+      var current = 0;
+      if (!questions.length) return;
+
+      var focusCard = function () {
+        var card = $('[data-quiz-card]', quiz);
+        if (!card) return;
+        var top = card.getBoundingClientRect().top;
+        if (top < 0) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      };
+      var show = function (index) {
+        current = index;
+        quiz.classList.remove('is-finished');
+        questions.forEach(function (q, i) { q.classList.toggle('is-hidden', i !== index); });
+        results.forEach(function (r) { r.classList.add('is-hidden'); });
+        if (progress) progress.classList.remove('is-hidden');
+        if (stepLabel) stepLabel.textContent = template.replace(/\d+(?= of )/, String(index + 1)).replace('{current}', String(index + 1)).replace('{total}', String(questions.length));
+        dots.forEach(function (d, i) { d.classList.toggle('is-active', i === index); d.classList.toggle('is-done', i < index); });
+        if (back) back.hidden = index === 0;
+      };
+      var band = function () {
+        var picked = answers.filter(Boolean);
+        if (picked.indexOf('medical') > -1) return 'medical';
+        if (picked.indexOf('traction') > -1) return 'traction';
+        var pattern = picked.filter(function (b) { return b === 'pattern'; }).length;
+        var shedding = picked.filter(function (b) { return b === 'shedding'; }).length;
+        return shedding > pattern ? 'shedding' : 'pattern';
+      };
+      var finish = function () {
+        var key = band();
+        quiz.classList.add('is-finished');
+        questions.forEach(function (q) { q.classList.add('is-hidden'); });
+        if (progress) progress.classList.add('is-hidden');
+        if (back) back.hidden = true;
+        var shown = false;
+        results.forEach(function (r) {
+          var match = r.getAttribute('data-quiz-result') === key;
+          r.classList.toggle('is-hidden', !match);
+          if (match) shown = true;
+        });
+        if (!shown && results[0]) results[0].classList.remove('is-hidden');
+        focusCard();
+      };
+
+      questions.forEach(function (q, qi) {
+        $$('[data-quiz-option]', q).forEach(function (opt) {
+          opt.addEventListener('click', function () {
+            $$('[data-quiz-option]', q).forEach(function (o) { o.classList.toggle('is-selected', o === opt); });
+            answers[qi] = opt.getAttribute('data-band') || 'none';
+            window.setTimeout(function () {
+              if (qi + 1 < questions.length) { show(qi + 1); focusCard(); } else finish();
+            }, 180);
+          });
+        });
+      });
+      if (back) back.addEventListener('click', function () { if (current > 0) show(current - 1); });
+      $$('[data-quiz-restart]', quiz).forEach(function (b) {
+        b.addEventListener('click', function () {
+          answers = [];
+          $$('[data-quiz-option]', quiz).forEach(function (o) { o.classList.remove('is-selected'); });
+          show(0);
+          focusCard();
+        });
+      });
+      // The result button: pre-select the recommended bundle tier, then let the page scroll to the buy box.
+      $$('[data-quiz-tier]', quiz).forEach(function (cta) {
+        cta.addEventListener('click', function () {
+          var n = parseInt(cta.getAttribute('data-quiz-tier'), 10) || 0;
+          if (!n) return;
+          var card = $$('.js-bundle-card')[n - 1];
+          var input = card ? $('input', card) : null;
+          if (!input || input.checked) return;
+          input.checked = true;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      });
+      show(0);
+    });
+  }
+
   /* ============================================================ newsletter */
   function initNewsletter(root) {
     $$('.s-newsletter__form', root).forEach(function (form) {
@@ -793,6 +888,7 @@
     initScience(root);
     initBars(root);
     initNewsletter(root);
+    initFitQuiz(root);
     initCountdown(root);
     initCartDrawer($('#mini-cart', root) || (root === document ? Cart.drawer() : null));
   }
@@ -810,6 +906,14 @@
     var old = document.querySelector('#ingredients-modal[data-for-section]');
     if (old && e.target.querySelector('.js-view-ingredients')) old.parentNode.removeChild(old);
     initSection(e.target);
+  });
+  // Theme editor: clicking a quiz "Result" block previews that result screen.
+  document.addEventListener('shopify:block:select', function (e) {
+    var result = e.target && e.target.closest && e.target.closest('[data-quiz-result]');
+    if (!result) return;
+    var quiz = result.closest('[data-fit-quiz]');
+    $$('[data-quiz-question], [data-quiz-progress]', quiz).forEach(function (el) { el.classList.add('is-hidden'); });
+    $$('[data-quiz-result]', quiz).forEach(function (r) { r.classList.toggle('is-hidden', r !== result); });
   });
   document.addEventListener('shopify:section:select', function (e) {
     if (e.target.querySelector('#mini-cart')) Cart.open();

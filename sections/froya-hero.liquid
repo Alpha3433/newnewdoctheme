@@ -27,7 +27,7 @@
   endif
 -%}
 <div class="shopify-section" id="shopify-section-template--26717513089391__hero_banner_BnFCDE">
-<section aria-label="Hero banner" class="s-hero-aging-lp" role="region" style="--mobile-text-color:{{ section.settings.mobile_text_color }};--ig-aging-lp-mobile-min-height:550px;--ig-aging-lp-cta-max-width:550px;--hero-aging-lp-mobile-bg:url('{{ mobile_bg }}');--hero-aging-lp-mobile-offset:0px;--hero-aging-lp-mobile-size:{{ mobile_size }};--hero-aging-lp-mobile-position:{{ mobile_position }};--hero-aging-lp-mobile-bg-color:{{ section.settings.image_mobile_bg | default: '#3d4b33' }};--hero-aging-lp-mobile-photo-space:{{ section.settings.mobile_photo_space | default: 150 }}px;">
+<section aria-label="Hero banner" class="s-hero-aging-lp" role="region" style="--mobile-text-color:{{ section.settings.mobile_text_color }};--ig-aging-lp-mobile-min-height:550px;--ig-aging-lp-cta-max-width:550px;--hero-aging-lp-mobile-bg:url('{{ mobile_bg }}');--hero-aging-lp-mobile-offset:0px;--hero-aging-lp-mobile-size:{{ mobile_size }};--hero-aging-lp-mobile-position:{{ mobile_position }};--hero-aging-lp-mobile-bg-color:{{ section.settings.image_mobile_bg | default: '#3d4b33' }};--hero-aging-lp-mobile-photo-space:{{ section.settings.mobile_photo_space | default: 150 }}px;--hero-aging-lp-scrim:{{ section.settings.mobile_scrim | default: 35 | divided_by: 100.0 }};">
   <div class="s-hero-aging-lp__container" data-hero-link="{{ section.settings.button_link | default: '#product-section' }}"><div class="s-hero-aging-lp__image-desktop">
       {%- render 'froya-image', image: section.settings.image, fallback: desktop_fallback, alt: section.settings.image_alt, width: 1600, height: 1179, loading: 'eager', sizes: '(min-width: 1920px) 960px, (min-width: 1200px) 600px, 50vw' -%}
     </div>
@@ -80,6 +80,7 @@
       { "value": "left center", "label": "Middle left" }, { "value": "center center", "label": "Centre" }, { "value": "right center", "label": "Middle right" },
       { "value": "left bottom", "label": "Bottom left" }, { "value": "center bottom", "label": "Bottom centre" }, { "value": "right bottom", "label": "Bottom right" }
     ], "default": "center bottom", "info": "The part of the photo kept when it is cropped (Fill the hero only). Bottom centre keeps the person in a portrait shot composed like the reference: foliage at the top, the person in the lower half." },
+    { "type": "range", "id": "mobile_scrim", "label": "Text backdrop (mobile)", "min": 0, "max": 70, "step": 5, "unit": "%", "default": 35, "info": "A soft dark gradient behind the copy that fades out above the photo's subject, so white text stays readable over bright foliage. 0 turns it off." },
     { "type": "range", "id": "mobile_photo_space", "label": "Photo space under the text (mobile)", "min": 0, "max": 320, "step": 10, "unit": "px", "default": 150, "info": "Empty room kept below the last proof point so the person in the photo stays visible under the copy, as on the reference page." },
     { "type": "color", "id": "image_mobile_bg", "label": "Colour behind the text (mobile)", "default": "#3d4b33", "info": "Used by \"Whole photo at the top\" for the area under the photo." },
     { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Woman over 35 parting her hair to show fuller regrowth along her part after using Elaren Pumpkin Seed Regrowth Oil" },
@@ -90,14 +91,14 @@
     { "type": "color", "id": "pill_bg", "label": "Pill background", "default": "#b3173a" },
     { "type": "color", "id": "pill_color", "label": "Pill text colour", "default": "#ffffff" },
     { "type": "header", "content": "Copy" },
-    { "type": "text", "id": "review_text", "label": "Review line", "default": "Rated 4.77/5 by verified customers · Made for women 35+" },
+    { "type": "text", "id": "review_text", "label": "Review line", "default": "4.77/5 from verified customers · Women 35+" },
     { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Less Shedding in 2 Weeks. <em>Fuller Hair in 30 Days.</em>" },
-    { "type": "textarea", "id": "subtitle", "label": "Subheading", "default": "Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex feeds tired follicles, calms shedding and helps your hair grow back thicker. For the widening part, the thinning crown, the edges that never recovered, postpartum and menopausal shedding, and alopecia. No prescriptions, no harsh chemicals. Just a two-minute scalp ritual, every night." },
+    { "type": "textarea", "id": "subtitle", "label": "Subheading", "default": "Pumpkin seed oil and caffeine feed tired follicles, calm shedding and help hair grow back thicker. For the part, crown and edges, postpartum and menopausal shedding." },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "START MY REGROWTH – RISK-FREE" },
     { "type": "text", "id": "button_link", "label": "Button link", "default": "#product-section", "info": "Use #product-section to scroll to the buy box." },
-    { "type": "text", "id": "stat_1", "label": "Proof point 1", "default": "LESS SHEDDING IN AS LITTLE AS 2 WEEKS" },
-    { "type": "text", "id": "stat_2", "label": "Proof point 2", "default": "FULLER HAIR IN 30 DAYS OR YOUR MONEY BACK" },
-    { "type": "text", "id": "stat_3", "label": "Proof point 3", "default": "FOR EVERY TEXTURE & EVERY TYPE OF HAIR LOSS" }
+    { "type": "text", "id": "stat_1", "label": "Proof point 1", "default": "LESS SHEDDING IN 2 WEEKS" },
+    { "type": "text", "id": "stat_2", "label": "Proof point 2", "default": "FULLER HAIR IN 30 DAYS OR MONEY BACK" },
+    { "type": "text", "id": "stat_3", "label": "Proof point 3", "default": "FOR EVERY TEXTURE & TYPE OF HAIR LOSS" }
   ],
   "presets": [ { "name": "Hero" } ]
 }
