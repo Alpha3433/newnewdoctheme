@@ -16,11 +16,18 @@
       "settings": {
         "text": "",
         "link": "",
+        "message_size": 19,
+        "message_size_mobile": 13,
+        "layout": "center-countdown-first",
+        "layout_mobile": "stack",
         "show_countdown": true,
         "countdown_label": "BUY 1 GET 1 FREE ENDS TONIGHT:",
         "countdown_mode": "midnight",
         "countdown_end": "",
-        "countdown_units": "Days,Hours,Minutes,Seconds"
+        "countdown_units": "Days,Hours,Minutes,Seconds",
+        "countdown_text_size": 11,
+        "countdown_number_size": 20,
+        "countdown_unit_size": 8
       }
     },
     "header": {
