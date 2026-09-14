@@ -191,6 +191,9 @@ em { font-style: italic; }
 
 /* Position of the message and the countdown (Announcement bar > Position). The mobile
    variants live next to the captured phone rules in assets/sections-inline.css. */
+/* Countdown only (no message typed): centre it whatever the layout says */
+.announcement-bar .announcement-bar__item--no-message { justify-content: center; }
+.announcement-bar .announcement-bar__item--no-message .announcement-bar__countdown { margin: 0; }
 @media screen and (min-width: 741px) {
   .announcement-bar .announcement-bar__item--layout-message-left .announcement-bar__message { text-align: left; }
   .announcement-bar .announcement-bar__item--layout-countdown-left .announcement-bar__countdown { order: -1; margin-left: 0; margin-right: auto; }

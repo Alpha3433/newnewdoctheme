@@ -25,6 +25,9 @@
   if show_countdown
     assign item_classes = item_classes | append: ' announcement-bar__item--countdown'
   endif
+  if section.settings.text == blank
+    assign item_classes = item_classes | append: ' announcement-bar__item--no-message'
+  endif
   capture item_style
     echo '--ab-message-size: ' | append: section.settings.message_size | append: 'px; '
     echo '--ab-message-size-mobile: ' | append: section.settings.message_size_mobile | append: 'px; '
@@ -35,9 +38,9 @@
 -%}
 <div class="shopify-section shopify-section-group-header-group shopify-section--announcement-bar" id="shopify-section-sections--26717504897391__announcement-bar">
 <section class="bw-slider-bar">
-  <announcement-bar class="announcement-bar"><div class="announcement-bar__list"><announcement-bar-item class="{{ item_classes }}" style="{{ item_style | strip }}"><div class="announcement-bar__message text--small"><div>
+  <announcement-bar class="announcement-bar"><div class="announcement-bar__list"><announcement-bar-item class="{{ item_classes }}" style="{{ item_style | strip }}">{%- if section.settings.text != blank -%}<div class="announcement-bar__message text--small"><div>
     <p>{%- if section.settings.link != blank -%}<a href="{{ section.settings.link }}">{{ section.settings.text }}</a>{%- else -%}{{ section.settings.text }}{%- endif -%}</p>
-  </div></div>
+  </div></div>{%- endif -%}
   {%- if show_countdown -%}
   <div class="announcement-bar__countdown" data-countdown data-mode="{{ section.settings.countdown_mode }}" data-end="{{ section.settings.countdown_end | strip | escape }}" data-offset="{{ shop_offset }}" hidden>
     {%- if section.settings.countdown_label != blank -%}<span class="announcement-bar__countdown-text">{{ section.settings.countdown_label }}</span>{%- endif -%}
@@ -86,8 +89,8 @@
     { "type": "text", "id": "countdown_end", "label": "Fixed end date and time", "info": "Only used by the fixed mode. Format YYYY-MM-DD HH:MM, read in the store's timezone (Settings > General), for example 2026-09-30 23:59. The timer hides itself once this time has passed." },
     { "type": "text", "id": "countdown_units", "label": "Unit labels", "default": "Days,Hours,Minutes,Seconds", "info": "Four labels separated by commas. Days only show when there is at least one full day left." },
     { "type": "range", "id": "countdown_text_size", "label": "Label text size", "min": 8, "max": 20, "step": 1, "unit": "px", "default": 11, "info": "The label before the timer." },
-    { "type": "range", "id": "countdown_number_size", "label": "Number size", "min": 12, "max": 40, "step": 1, "unit": "px", "default": 20 },
-    { "type": "range", "id": "countdown_unit_size", "label": "Unit label size", "min": 5, "max": 14, "step": 1, "unit": "px", "default": 8, "info": "The Days / Hours / Minutes / Seconds labels under the numbers." }
+    { "type": "range", "id": "countdown_number_size", "label": "Number size", "min": 12, "max": 40, "step": 1, "unit": "px", "default": 18 },
+    { "type": "range", "id": "countdown_unit_size", "label": "Unit label size", "min": 5, "max": 14, "step": 1, "unit": "px", "default": 7, "info": "The Days / Hours / Minutes / Seconds labels under the numbers." }
   ]
 }
 {% endschema %}

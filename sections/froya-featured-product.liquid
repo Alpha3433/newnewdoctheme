@@ -121,8 +121,12 @@
       assign default_keep = 100 | minus: default_bundle.settings.discount
       assign display_total_sub = sub_price | times: default_keep | divided_by: 100 | times: default_paid
       assign display_total_otp = otp_price | times: default_keep | divided_by: 100 | times: default_paid
-      assign display_unit_sub = display_total_sub | divided_by: default_qty
-      assign display_unit_otp = display_total_otp | divided_by: default_qty
+      comment
+        Per-bottle price rounded to the nearest cent (Liquid's integer division truncates, so
+        $31.49 over two bottles showed $15.74 rather than $15.75).
+      endcomment
+      assign display_unit_sub = display_total_sub | times: 10 | divided_by: default_qty | plus: 5 | divided_by: 10
+      assign display_unit_otp = display_total_otp | times: 10 | divided_by: default_qty | plus: 5 | divided_by: 10
       assign default_compare_basis = base_compare
       if default_free > 0
         assign default_compare_basis = otp_price
@@ -467,8 +471,8 @@
                     assign keep = 100 | minus: block.settings.discount
                     assign total_otp = otp_price | times: keep | divided_by: 100 | times: paid
                     assign total_sub = sub_price | times: keep | divided_by: 100 | times: paid
-                    assign unit_otp = total_otp | divided_by: qty
-                    assign unit_sub = total_sub | divided_by: qty
+                    assign unit_otp = total_otp | times: 10 | divided_by: qty | plus: 5 | divided_by: 10
+                    assign unit_sub = total_sub | times: 10 | divided_by: qty | plus: 5 | divided_by: 10
                     assign compare_basis = base_compare
                     if free > 0
                       assign compare_basis = otp_price
@@ -584,12 +588,11 @@
                   </div>
                 </label>
                 <fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--no-marign c-subscribtion__buttons-wrapper--fixed-plan" id="selling-plan-fieldset">
-                  {%- liquid
-                    assign delivery_label = section.settings.delivery_label
-                    if delivery_label == blank
-                      assign delivery_label = plan.name
-                    endif
-                  -%}
+                  {%- comment -%}
+                    Empty label = no label. It used to fall back to the selling plan's own name, which
+                    printed Kaching's internal "Delivery: every month | 10% off" on the page.
+                  {%- endcomment -%}
+                  {%- assign delivery_label = section.settings.delivery_label -%}
                   {%- if delivery_label != blank -%}<div class="c-subscribtion__fixed-plan-label">{{ delivery_label }}</div>{%- endif -%}
                   <input class="js-default-selling-plan" name="selling_plan" type="hidden" value="{{ plan.id }}">
                   <div class="c-subscribtion__subscription-info-wrapper">
@@ -724,7 +727,7 @@
     { "type": "richtext", "id": "sub_perks", "label": "Subscription perks", "default": "<p><strong>LOWEST PRICE</strong> every month<br><strong>{percent}% OFF</strong> every order<br><strong>FREE INSURED SHIPPING</strong> always<br><strong>CANCEL, PAUSE, EDIT</strong> anytime<br><strong>RESERVED</strong> stock<br><strong>LONG-TERM</strong> fuller hair</p>" },
     { "type": "text", "id": "otp_badge", "label": "One-time badge", "default": "NO COMMITMENT" },
     { "type": "text", "id": "otp_name", "label": "One-time option name", "default": "One-Time Purchase" },
-    { "type": "text", "id": "delivery_label", "label": "Delivery frequency label", "default": "Delivered every 30 days" },
+    { "type": "text", "id": "delivery_label", "label": "Delivery frequency label", "info": "Shown under the plan while Subscribe & save is on, for example \"Delivered every 30 days\". Leave empty to show nothing." },
     { "type": "text", "id": "info_1", "label": "Info line 1", "default": "FREE insured shipping on every order" },
     { "type": "text", "id": "info_2", "label": "Info line 2", "default": "Cancel online anytime" },
     { "type": "header", "content": "Button & stock" },
