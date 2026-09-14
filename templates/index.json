@@ -13,7 +13,11 @@
       "type": "froya-hero",
       "settings": {
         "image": "shopify://shop_images/hf_20260914_081839_356d619f-61ef-49f9-bf92-17c5e0aff78b.png",
-        "image_mobile": "shopify://shop_images/hf_20260914_081839_356d619f-61ef-49f9-bf92-17c5e0aff78b.png",
+        "image_mobile": "shopify://shop_images/hf_20260914_092446_5e6f22cc-62ea-4189-8434-e72004f4661c.png",
+        "image_mobile_fit": "cover",
+        "image_mobile_position": "center bottom",
+        "mobile_photo_space": 150,
+        "image_mobile_bg": "#3d4b33",
         "image_alt": "Woman over 35 parting her hair to show fuller regrowth along her part after using Elaren Pumpkin Seed Regrowth Oil",
         "mobile_text_color": "#ffffff",
         "pill_text": "GET AN EXCLUSIVE GIFT [LIMITED TIME]",
@@ -26,10 +30,7 @@
         "button_link": "#product-section",
         "stat_1": "LESS SHEDDING IN AS LITTLE AS 2 WEEKS",
         "stat_2": "FULLER HAIR IN 30 DAYS OR YOUR MONEY BACK",
-        "stat_3": "FOR EVERY TEXTURE & EVERY TYPE OF HAIR LOSS",
-        "image_mobile_fit": "cover",
-        "image_mobile_position": "center bottom",
-        "mobile_photo_space": 150
+        "stat_3": "FOR EVERY TEXTURE & EVERY TYPE OF HAIR LOSS"
       }
     },
     "benefits-strip": {

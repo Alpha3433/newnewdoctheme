@@ -21,10 +21,7 @@
         "button_link": "#product-section",
         "stat_1": "APPLY TO THE SCALP - 2 MINUTES A NIGHT",
         "stat_2": "LESS SHEDDING IN AS LITTLE AS 2 WEEKS",
-        "stat_3": "10k+ UNITS SOLD WORLDWIDE",
-        "image_mobile_fit": "cover",
-        "image_mobile_position": "center bottom",
-        "mobile_photo_space": 150
+        "stat_3": "10k+ UNITS SOLD WORLDWIDE"
       }
     },
     "benefits-strip": {
@@ -689,11 +686,12 @@
         "badge_underline": "not adapted from men’s",
         "badge_bg": "#e5f3fa",
         "badge_color": "#54585a",
-        "label_1": "",
-        "label_2": "",
         "reviews_count": 43,
         "rating": "4.8",
         "rating_text": "4.77/5 FROM VERIFIED BUYERS",
+        "reviews_anchor": "reviews-section",
+        "label_1": "",
+        "label_2": "",
         "save_tag": "Save {percent}%",
         "ships_free_text": "THIS ORDER SHIPS FREE",
         "includes": "<p>What you get (30-day supply):<br>· Pumpkin Seed Regrowth Oil with Caffeine Complex - applied to the scalp, not swallowed<br>· Precision applicator for scalp-only, no-waste application<br>· Scalp massager to boost circulation at the root<br>· Free insured shipping and a 30-day money-back guarantee</p>",
@@ -707,6 +705,7 @@
         "legend_title": "INGREDIENT LEVELS",
         "actives_title": "KEY ACTIVES – PUMPKIN SEED REGROWTH OIL",
         "bundle_title": "Choose your bundle",
+        "price_style": "unit",
         "unit_suffix": "per bottle",
         "total_text": "{total} total",
         "save_text": "Save {amount} ({percent}% off)",
@@ -728,15 +727,13 @@
         "info_1": "",
         "info_2": "",
         "button_label": "Add to Cart",
+        "button_price": "total",
         "sold_out_label": "Sold out",
         "show_low_stock": true,
-        "low_stock_threshold": 150,
-        "low_stock_text": "Low Stock: only {count} left",
-        "button_price": "total",
         "low_stock_source": "fixed",
+        "low_stock_threshold": 150,
         "low_stock_count": 156,
-        "reviews_anchor": "reviews-section",
-        "price_style": "unit"
+        "low_stock_text": "Low Stock: only {count} left"
       }
     },
     "founder-story": {
