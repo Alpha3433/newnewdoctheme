@@ -14,7 +14,7 @@
     "announcement-bar": {
       "type": "froya-announcement-bar",
       "settings": {
-        "text": "FREE INSURED SHIPPING 🌱 30-DAY MONEY-BACK GUARANTEE",
+        "text": "",
         "link": "",
         "show_countdown": true,
         "countdown_label": "OFFER ENDS IN",
