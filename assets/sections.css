@@ -57,6 +57,12 @@
   .s-hero-aging-lp__title p { font-size: 46px; }
 }
 @media screen and (max-width: 767px) {
+  /* Mobile framing from the section settings (see the comment in sections/froya-hero.liquid) */
+  .s-hero-aging-lp__container {
+    background-color: var(--hero-aging-lp-mobile-bg-color, transparent);
+    background-size: var(--hero-aging-lp-mobile-size, cover);
+    background-position: var(--hero-aging-lp-mobile-position, center center);
+  }
   .s-hero-aging-lp__content-wrapper { padding: 28px 20px; }
   .s-hero-aging-lp__content { align-items: center; margin: 0 auto; }
   .s-hero-aging-lp__title { max-width: 360px; }

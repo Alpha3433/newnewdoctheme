@@ -12,9 +12,22 @@
   else
     assign mobile_bg = mobile_fallback
   endif
+  comment
+    Mobile framing. "cover" fills the hero and crops (the captured behaviour); a landscape desktop
+    photo used here is cropped hard because the phone hero is tall, so the focal point picks which
+    part survives. "top" shows the whole photo across the top, uncropped, with a solid colour
+    behind the text below it - the "zoomed out" option when only a landscape photo exists.
+  endcomment
+  assign mobile_fit = section.settings.image_mobile_fit | default: 'cover'
+  assign mobile_position = section.settings.image_mobile_position | default: 'center center'
+  assign mobile_size = 'cover'
+  if mobile_fit == 'top'
+    assign mobile_size = '100% auto'
+    assign mobile_position = 'center top'
+  endif
 -%}
 <div class="shopify-section" id="shopify-section-template--26717513089391__hero_banner_BnFCDE">
-<section aria-label="Hero banner" class="s-hero-aging-lp" role="region" style="--mobile-text-color:{{ section.settings.mobile_text_color }};--ig-aging-lp-mobile-min-height:550px;--ig-aging-lp-cta-max-width:550px;--hero-aging-lp-mobile-bg:url('{{ mobile_bg }}');--hero-aging-lp-mobile-offset:0px;">
+<section aria-label="Hero banner" class="s-hero-aging-lp" role="region" style="--mobile-text-color:{{ section.settings.mobile_text_color }};--ig-aging-lp-mobile-min-height:550px;--ig-aging-lp-cta-max-width:550px;--hero-aging-lp-mobile-bg:url('{{ mobile_bg }}');--hero-aging-lp-mobile-offset:0px;--hero-aging-lp-mobile-size:{{ mobile_size }};--hero-aging-lp-mobile-position:{{ mobile_position }};--hero-aging-lp-mobile-bg-color:{{ section.settings.image_mobile_bg | default: '#3d4b33' }};">
   <div class="s-hero-aging-lp__container" data-hero-link="{{ section.settings.button_link | default: '#product-section' }}"><div class="s-hero-aging-lp__image-desktop">
       {%- render 'froya-image', image: section.settings.image, fallback: desktop_fallback, alt: section.settings.image_alt, width: 1600, height: 1179, loading: 'eager', sizes: '(min-width: 1920px) 960px, (min-width: 1200px) 600px, 50vw' -%}
     </div>
@@ -57,7 +70,17 @@
   "settings": [
     { "type": "header", "content": "Images" },
     { "type": "image_picker", "id": "image", "label": "Desktop image", "info": "Shown on the right on desktop. Recommended 1600 × 1180 px." },
-    { "type": "image_picker", "id": "image_mobile", "label": "Mobile background image", "info": "Falls back to the desktop image. Recommended 820 × 1100 px." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile background image", "info": "Falls back to the desktop image. Recommended 820 × 1100 px (portrait): the phone hero is tall, so a landscape photo is cropped to roughly a third of its width." },
+    { "type": "select", "id": "image_mobile_fit", "label": "Mobile image framing", "options": [
+      { "value": "cover", "label": "Fill the hero (crops to the focal point)" },
+      { "value": "top", "label": "Show the whole photo at the top, colour behind the text" }
+    ], "default": "cover" },
+    { "type": "select", "id": "image_mobile_position", "label": "Mobile focal point", "options": [
+      { "value": "left top", "label": "Top left" }, { "value": "center top", "label": "Top centre" }, { "value": "right top", "label": "Top right" },
+      { "value": "left center", "label": "Middle left" }, { "value": "center center", "label": "Centre" }, { "value": "right center", "label": "Middle right" },
+      { "value": "left bottom", "label": "Bottom left" }, { "value": "center bottom", "label": "Bottom centre" }, { "value": "right bottom", "label": "Bottom right" }
+    ], "default": "center center", "info": "The part of the photo kept when it is cropped (Fill the hero only)." },
+    { "type": "color", "id": "image_mobile_bg", "label": "Colour behind the text (mobile)", "default": "#3d4b33", "info": "Used by \"Show the whole photo at the top\" for the area under the photo." },
     { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Woman over 35 parting her hair to show fuller regrowth along her part after using Elaren Pumpkin Seed Regrowth Oil" },
     { "type": "image_picker", "id": "stars_image", "label": "Star rating image", "info": "Small 68 × 14 px graphic shown before the review line." },
     { "type": "color", "id": "mobile_text_color", "label": "Mobile text colour", "default": "#ffffff" },

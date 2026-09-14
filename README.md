@@ -21,6 +21,11 @@ template (`templates/page.froya-landing.json`).
 * **Images** – every image has an *Image* picker. Until you upload one, the placeholder from the
   Frøya capture is shown (its URL sits in a "Fallback … URL" field on blocks, so you can also
   clear it). Recommended sizes are shown under each picker.
+* **Hero on phones** – the hero is tall on a phone, so a landscape desktop photo gets cropped to
+  about a third of its width. Upload a portrait crop (820 × 1100 px) as *Mobile background image*
+  for the best result. Hero → *Mobile image framing* offers *Fill the hero* (crops; *Mobile focal
+  point* chooses which part is kept) or *Show the whole photo at the top* (uncropped, with *Colour
+  behind the text* filling the area under it).
 * **Logo** – Header → Logo (plus a width slider). Used in the bar and the mobile menu.
 * **Products** – the buy box, menu bestseller cards, review-card product tiles and cart-drawer
   "Pair with" list use product pickers. Prices, the subscribe & save plan, stock, variant and
