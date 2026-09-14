@@ -32,7 +32,16 @@
     assign variant = product.selected_or_first_available_variant
     assign product_title = section.settings.product_title | default: product.title
     assign otp_price = variant.price
-    assign otp_compare = variant.compare_at_price
+    comment
+      Every saving on the page is measured against one anchor. By default that is the product's
+      own price, so "Save 10%" means 10% off what a one-time buyer pays. The compare-at price can
+      be used instead, but then a one-time bottle shows a discount that isn't one and the same
+      10% subscription reads as 37%.
+    endcomment
+    assign otp_compare = 0
+    if section.settings.compare_basis == 'compare_at'
+      assign otp_compare = variant.compare_at_price
+    endif
     comment
       Pick the subscription plan from the VARIANT's own allocations rather than from the product's
       selling plan groups. Only an allocation is guaranteed to be valid for the variant this form
@@ -494,6 +503,8 @@
                       {%- endif -%}
                       {%- if section.settings.save_text != blank and tier_save_sub > 0 -%}
                       <span class="c-bundle__save c-bundle__save--sub">{{ section.settings.save_text | replace: amount_placeholder, save_sub_money | replace: percent_placeholder, tier_pct_sub }}</span>
+                      {%- endif -%}
+                      {%- if section.settings.save_text != blank and tier_save_otp > 0 -%}
                       <span class="c-bundle__save c-bundle__save--otp">{{ section.settings.save_text | replace: amount_placeholder, save_otp_money | replace: percent_placeholder, tier_pct_otp }}</span>
                       {%- endif -%}
                     </span>
@@ -566,7 +577,7 @@
                       else
                         echo button_total | money
                       endif
-                    %}</span></span>{% if show_button_compare %}<s class="igcp">{{ display_compare_total | money }}</s>{% endif %}
+                    %}</span></span>{% if show_button_compare %}<s class="igcp">{% if display_compare_total > button_total %}{{ display_compare_total | money }}{% endif %}</s>{% endif %}
                   </span>
                   {%- endif -%}
                 </span>
@@ -638,6 +649,7 @@
     { "type": "header", "content": "Bundles" },
     { "type": "text", "id": "bundle_title", "label": "Bundle heading", "default": "Choose your bundle", "info": "Add \"Bundle tier\" blocks below. A tier is a number of paid bottles, optional free bottles (Buy 2, Get 2 Free) and an optional discount off the price per bottle. Every bottle is added to cart; the theme only displays the price, so the matching quantity break or Buy X Get Y discount must exist in Kaching Bundles or Shopify Discounts for checkout to charge the same amount." },
     { "type": "select", "id": "price_style", "label": "Tier price shown on each card", "options": [ { "value": "unit", "label": "Price per bottle, total underneath" }, { "value": "total", "label": "Bundle total with the regular price struck through" } ], "default": "unit" },
+    { "type": "select", "id": "compare_basis", "label": "Savings are measured against", "options": [ { "value": "price", "label": "The product's price (recommended)" }, { "value": "compare_at", "label": "The product's compare-at price" } ], "default": "price", "info": "Against the product's price, \"Save 10%\" means 10% off what a one-time buyer pays and a single bottle bought once shows no discount. Against the compare-at price every figure is inflated by that anchor: a 10% subscription reads as 37%." },
     { "type": "text", "id": "unit_suffix", "label": "Per-unit label", "default": "per bottle" },
     { "type": "text", "id": "total_text", "label": "Total line", "default": "{total} total", "info": "{total} is replaced with the bundle total." },
     { "type": "text", "id": "save_text", "label": "Savings line", "default": "Save {amount} ({percent}% off)", "info": "{amount} is the money saved, {percent} the tier discount." },
