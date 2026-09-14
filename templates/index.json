@@ -262,6 +262,7 @@
         "review_5": {
           "type": "review",
           "settings": {
+            "image": "shopify://shop_images/hf_20260914_111918_aaa1cbb1-a54d-4128-b485-5e99b106a209.png",
             "image_alt": "",
             "name": "Pat · Verified buyer (UK)",
             "tag_1": "does what it says",
