@@ -382,6 +382,13 @@
                   {%- liquid
                     assign gift_price = gift_product.price | money_without_trailing_zeros
                     assign gift_badge = section.settings.gift_badge | replace: price_placeholder, gift_price | replace: '&lcub;price&rcub;', gift_price
+                    comment
+                      Placeholders are swapped here, inside a liquid tag: a literal "{" inside an
+                      output tag trips Shopify's parser ("was not properly terminated").
+                    endcomment
+                    assign product_placeholder = '{product}'
+                    assign product_entity = '&lcub;product&rcub;'
+                    assign gift_text_html = section.settings.gift_text | replace: product_placeholder, gift_product.title | replace: product_entity, gift_product.title
                   -%}
                   <div class="c-buybox-toggle__gift">
                     {%- if gift_product.featured_image != blank -%}
@@ -389,7 +396,7 @@
                     {%- endif -%}
                     <div class="c-buybox-toggle__gift-body">
                       {%- if gift_badge != blank -%}<span class="c-buybox-toggle__gift-badge">{{ gift_badge }}</span>{%- endif -%}
-                      <div class="c-buybox-toggle__gift-text">{{ section.settings.gift_text | replace: '{product}', gift_product.title | replace: '&lcub;product&rcub;', gift_product.title }}</div>
+                      <div class="c-buybox-toggle__gift-text">{{ gift_text_html }}</div>
                     </div>
                   </div>
                 {%- endif -%}
