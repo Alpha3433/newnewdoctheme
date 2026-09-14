@@ -393,7 +393,7 @@
         "intro_1": {
           "type": "intro",
           "settings": {
-            "text": "Elaren is built on the two most-studied natural hair growth actives. Here is what independent, peer-reviewed research found:",
+            "text": "Elaren is built on cold-pressed pumpkin seed oil, the most-studied natural DHT blocker for hair growth, with a Caffeine Complex in support. Here is what independent, peer-reviewed research found:",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/Screenshot_2025-12-18_at_1.11.35_PM_1.png"
           }
         },
@@ -402,32 +402,32 @@
           "settings": {
             "value": "+40%",
             "width": 40,
-            "title": "HAIR COUNT",
-            "text": "Pumpkin seed oil increased hair count by 40% over 24 weeks in a randomised, placebo-controlled trial."
+            "title": "PUMPKIN SEED OIL: HAIR COUNT",
+            "text": "Pumpkin seed oil increased hair count by 40% over 24 weeks in a randomised, double-blind, placebo-controlled trial."
           }
         },
         "stat_2": {
           "type": "stat",
           "settings": {
-            "value": "≈ 5% MINOXIDIL",
-            "width": 90,
-            "title": "CAFFEINE VS MINOXIDIL",
-            "text": "In a 6-month clinical study, a topical caffeine liquid was statistically non-inferior to 5% minoxidil at increasing growth-phase hairs."
+            "value": "4× PLACEBO",
+            "width": 80,
+            "title": "PUMPKIN SEED OIL VS PLACEBO",
+            "text": "In the same trial the pumpkin seed oil group gained four times the hair count of the placebo group (40% vs 10%), with no significant side effects reported."
           }
         },
         "stat_3": {
           "type": "stat",
           "settings": {
-            "value": "5 MINUTES",
-            "width": 100,
-            "title": "FOLLICLE PENETRATION",
-            "text": "Caffeine applied to the scalp was detected in the bloodstream within 5 minutes, showing it is absorbed straight through the hair follicle."
+            "value": "≈ 5% MINOXIDIL",
+            "width": 90,
+            "title": "CAFFEINE COMPLEX: THE SUPPORTING ACTIVE",
+            "text": "In a 6-month clinical study, a topical caffeine liquid was statistically non-inferior to 5% minoxidil at increasing growth-phase hairs."
           }
         },
         "note_1": {
           "type": "note",
           "settings": {
-            "text": "*Studies cited were conducted on the ingredients (oral pumpkin seed oil supplementation, Cho et al. 2014; topical caffeine, Dhurat et al. 2017 and Otberg et al. 2008), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, with visible density changes typically taking 3–6 months of consistent use. Not seeing less shedding after 30 nights? Contact us for a full refund."
+            "text": "*Studies cited were conducted on the ingredients (oral pumpkin seed oil supplementation, Cho et al. 2014, 76 participants over 24 weeks; topical caffeine, Dhurat et al. 2017), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, fuller-looking hair after 30 nights of use, and density that keeps building over 3–6 months. Still shedding after 30 nights? Tell us and we’ll refund every cent."
           }
         }
       },
@@ -439,9 +439,9 @@
         "note_1"
       ],
       "settings": {
-        "image_alt": "Published research results for pumpkin seed oil and caffeine",
+        "image_alt": "Published clinical results for pumpkin seed oil, with caffeine as the supporting active",
         "label": "Peer-reviewed. Placebo-controlled.",
-        "title": "<p>Two Ingredients With<br><em>Published Clinical</em> Results</p>"
+        "title": "<p>Pumpkin Seed Oil, With<br><em>Published Clinical</em> Results</p>"
       }
     },
     "featured-product": {
@@ -719,13 +719,16 @@
         "otp_badge": "NO COMMITMENT",
         "otp_name": "One-Time Purchase",
         "delivery_label": "Delivered every 30 days",
-        "info_1": "FREE insured shipping on every order",
-        "info_2": "Cancel online anytime",
-        "button_label": "Add to Cart -",
+        "info_1": "",
+        "info_2": "",
+        "button_label": "Add to Cart",
         "sold_out_label": "Sold out",
         "show_low_stock": true,
         "low_stock_threshold": 150,
-        "low_stock_text": "Low Stock: only {count} left"
+        "low_stock_text": "Low Stock: only {count} left",
+        "button_price": "none",
+        "low_stock_source": "fixed",
+        "low_stock_count": 156
       }
     },
     "founder-story": {

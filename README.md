@@ -34,6 +34,25 @@ template (`templates/page.froya-landing.json`).
   upload a photo/video and poster, or paste an mp4 URL.
 * **Lists** – benefits, science steps, research bars, hair-loss pillars/badges, how-to steps,
   ingredient legend, footer links, menu links and blog links are all blocks (add/remove/reorder).
+* **Announcement bar** – Header group → Announcement bar: message and countdown text sizes
+  (message, label before the timer, numbers and unit labels are separate sliders, with a mobile
+  size for the message) and *Position*: a desktop layout (message left / countdown left / both
+  centered in either order / stacked in either order) and a mobile layout (stacked or side by side,
+  in either order).
+* **Add-to-cart button** – Featured product → Button & stock → *Price on the button*: label only
+  (the default: the bundle total already sits in the price line and on the selected bundle card),
+  label with the bundle total, or label with the total and the regular price struck through. The
+  "-" separator is added automatically when a price is shown. The *Savings line* renders as a pill
+  directly above the button ("🎉 Congrats! You’re saving $7.00") and follows the selected bundle
+  and the Subscribe & save switch; the two static info lines under the plan are still available as
+  *Info line 1 / 2* but are empty by default now that the pill carries that spot.
+* **Low-stock notice** – Featured product → Button & stock → *Number shown*: *Tracked inventory*
+  reads the variant's real stock and only shows at or below the threshold; *A fixed number* shows
+  the figure typed below on every visit. The store tracks more than 2,000 units of the serum, so the
+  landing page uses the fixed number; switch back to tracked inventory once real stock is low.
+* **Sliders** – the logo & quote, review and video sliders can be swiped: the track follows the
+  finger (or mouse), snaps to the nearest slide and a long or fast swipe moves several slides, so
+  the whole set can be run through right-to-left. The dots still work.
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
   "Pair with" products, checkout label, country/currency selector and trust badges. The header
   CART button opens it and every add-to-cart button adds in place and opens it.

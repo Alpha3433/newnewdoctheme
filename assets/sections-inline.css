@@ -157,7 +157,23 @@
   }
 
 /* ---- froya-announcement-bar ---- */
-#shopify-section-sections--26717504897391__announcement-bar .announcement-bar__message p {font-size: 13.1px !important;}
+#shopify-section-sections--26717504897391__announcement-bar .announcement-bar__message p {font-size: var(--ab-message-size, 13.1px) !important;}
+@media screen and (max-width: 740px) {
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__message p {font-size: var(--ab-message-size-mobile, var(--ab-message-size, 13.1px)) !important;}
+  /* Mobile position (Announcement bar > Position > Mobile layout). Same id-prefixed specificity as the captured phone rules above. */
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-stack-countdown-first .announcement-bar__countdown { order: -1; }
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row,
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row-countdown-first { flex-direction: row; flex-wrap: nowrap; justify-content: space-between; gap: 0.75rem; }
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row .announcement-bar__message { text-align: left; }
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row-countdown-first .announcement-bar__message { text-align: right; }
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row-countdown-first .announcement-bar__countdown { order: -1; }
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row .announcement-bar__countdown,
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row-countdown-first .announcement-bar__countdown { width: auto; flex: 0 1 auto; min-width: 0; }
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row .announcement-bar__countdown-text,
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row-countdown-first .announcement-bar__countdown-text { flex-basis: 100%; margin-right: 0; text-align: center; white-space: normal; }
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row .announcement-bar__message,
+  #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row-countdown-first .announcement-bar__message { flex: 1 1 45%; min-width: 0; }
+}
 
 /* ---- froya-header ---- */
 /* Logo max-width: matches legacy header's logo_max_width: 100 setting. */

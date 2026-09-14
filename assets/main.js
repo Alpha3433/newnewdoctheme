@@ -361,16 +361,124 @@
   }
 
   /* ============================================================= sliders */
+  /* Finger-follow swipe for the Blaze sliders. Blaze's own drag moves exactly one slide per
+     gesture, whatever the distance, and ignores a gesture that starts while the previous one is
+     still animating (300ms) - on a phone that reads as "swiping does nothing". This handler
+     follows the finger, rubber-bands at the ends, snaps to the nearest slide on release and lets
+     a long or fast swipe travel several slides, so the shopper can run through every slide by
+     dragging right-to-left. Pointer events where they exist (one code path for mouse, pen and
+     touch), touch events otherwise. Vertical movement is handed back to the page immediately. */
+  function attachSwipe(slider) {
+    var track = slider && slider.track;
+    if (!track || slider.isStatic || !once(track, 'swipe')) return;
+    var usePointer = 'PointerEvent' in window;
+    var active = false, moved = false, axis = null;
+    var startX = 0, startY = 0, lastX = 0, lastT = 0, velocity = 0, dragged = 0;
+
+    var stepPx = function () {
+      var first = slider.slides && slider.slides[0];
+      var gap = parseFloat(slider.config.slideGap) || 0;
+      return (first ? first.getBoundingClientRect().width : track.clientWidth) + gap;
+    };
+    // Same transform Blaze paints, plus the live drag offset.
+    var paint = function (dx) {
+      dragged = dx;
+      slider.dragged = dx;
+      track.style.transform = slider.offset === 0
+        ? 'translate3d(' + dx + 'px,0px,0px)'
+        : 'translate3d(calc(' + dx + 'px + ' + slider.offset + ' * (var(--slide-width) + ' + slider.config.slideGap + ')),0px,0px)';
+    };
+    var point = function (e) { return e.touches ? (e.touches[0] || (e.changedTouches && e.changedTouches[0])) : e; };
+    var atStart = function () { return slider.stateIndex === 0; };
+    var atEnd = function () { return slider.stateIndex === slider.states.length - 1; };
+    var listen = function (method) {
+      var target = document;
+      if (usePointer) {
+        target[method]('pointermove', onMove, { passive: false });
+        target[method]('pointerup', onEnd);
+        target[method]('pointercancel', onEnd);
+      } else {
+        target[method]('touchmove', onMove, { passive: false });
+        target[method]('touchend', onEnd);
+        target[method]('touchcancel', onEnd);
+      }
+    };
+    var finish = function () {
+      active = false;
+      listen('removeEventListener');
+      track.style.transitionDuration = slider.config.transitionDuration + 'ms';
+    };
+
+    var onStart = function (e) {
+      if (active || (e.button && e.button > 0)) return;
+      var p = point(e);
+      if (!p) return;
+      active = true; moved = false; axis = null;
+      startX = lastX = p.clientX; startY = p.clientY; lastT = Date.now(); velocity = 0;
+      slider.isTransitioning = false; // a new swipe must never die because the last one is still animating
+      track.style.transitionDuration = '0ms';
+      listen('addEventListener');
+    };
+    var onMove = function (e) {
+      if (!active) return;
+      var p = point(e);
+      if (!p) return;
+      var dx = p.clientX - startX, dy = p.clientY - startY;
+      if (!axis) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        if (axis === 'y') { finish(); return; } // vertical: it is a page scroll, not a swipe
+      }
+      if (e.cancelable) e.preventDefault();
+      moved = true;
+      var now = Date.now();
+      if (now > lastT) velocity = (p.clientX - lastX) / (now - lastT); // px per ms
+      lastX = p.clientX; lastT = now;
+      if (!slider.config.loop && ((dx > 0 && atStart()) || (dx < 0 && atEnd()))) dx *= 0.3; // rubber-band
+      paint(dx);
+    };
+    var onEnd = function () {
+      if (!active) return;
+      var dx = dragged;
+      finish();
+      slider.dragged = 0;
+      if (!moved) { paint(0); return; }
+      var step = stepPx();
+      var count = step > 0 ? Math.round(Math.abs(dx) / step) : 0;
+      // A short flick still turns one slide; a fast one carries on past the nearest slide.
+      if (count === 0 && (Math.abs(dx) > 20 || Math.abs(velocity) > 0.3)) count = 1;
+      if (Math.abs(velocity) > 0.6 && velocity * dx > 0) count += Math.min(3, Math.floor(Math.abs(velocity)));
+      var before = slider.stateIndex;
+      slider.isTransitioning = false;
+      if (count > 0 && dx < 0) slider.next(count);
+      else if (count > 0 && dx > 0) slider.prev(count);
+      // Already at the end (or too short a drag): Blaze does not repaint, so snap the track back.
+      if (slider.stateIndex === before) paint(0);
+    };
+
+    track.addEventListener(usePointer ? 'pointerdown' : 'touchstart', onStart, { passive: true });
+    track.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    // A drag must not count as a click on whatever the finger happened to be over.
+    track.addEventListener('click', function (e) {
+      if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+    }, true);
+    track.classList.add('is-swipeable');
+  }
+
   function makeSlider(el, desktop, tablet, mobile, opts) {
     if (!el || typeof BlazeSlider === 'undefined' || !once(el, 'blaze')) return null;
     var pagination = el.querySelector('.blaze-pagination');
     if (pagination) pagination.innerHTML = ''; // Blaze renders its own dots
     var config = {
-      all: Object.assign({ slidesToShow: desktop, slideGap: '20px', loop: false, enablePagination: true, draggable: true, transitionDuration: 300 }, opts || {}),
+      // draggable: false - the swipe handler below replaces Blaze's one-slide-per-gesture drag
+      all: Object.assign({ slidesToShow: desktop, slideGap: '20px', loop: false, enablePagination: true, draggable: false, transitionDuration: 300 }, opts || {}),
       '(max-width: 999px)': { slidesToShow: tablet },
       '(max-width: 767px)': { slidesToShow: mobile, slideGap: '14px' }
     };
-    try { return new BlazeSlider(el, config); } catch (err) { return null; }
+    var slider = null;
+    try { slider = new BlazeSlider(el, config); } catch (err) { return null; }
+    attachSwipe(slider);
+    return slider;
   }
   function initSliders(root) {
     $$('.s-icons-slider__slider', root).forEach(function (el) { makeSlider(el, 6.1, 3.2, 1.6); });

@@ -1,5 +1,6 @@
 {% comment %}
   Research / results panel – image on the left, stats on the right. Everything is editable in the theme editor.
+  The result bars lead with pumpkin seed oil (the hero active); caffeine is presented as the supporting active.
   The layout no longer overlays the text on the image (see assets/sections.css), so any image works here.
 {% endcomment %}
 {%- liquid
@@ -70,9 +71,9 @@
   "settings": [
     { "type": "image_picker", "id": "image", "label": "Image", "info": "Portrait or square image, about 1440 × 1440 px. Shown on the left of the text." },
     { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile)", "info": "Optional landscape crop for phones, about 780 × 540 px." },
-    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Published research results for pumpkin seed oil and caffeine" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Published clinical results for pumpkin seed oil, with caffeine as the supporting active" },
     { "type": "text", "id": "label", "label": "Eyebrow", "default": "Peer-reviewed. Placebo-controlled." },
-    { "type": "richtext", "id": "title", "label": "Heading", "default": "<p>Two Ingredients With<br><em>Published Clinical</em> Results</p>" }
+    { "type": "richtext", "id": "title", "label": "Heading", "default": "<p>Pumpkin Seed Oil, With<br><em>Published Clinical</em> Results</p>" }
   ],
   "blocks": [
     {
@@ -81,7 +82,7 @@
       "limit": 1,
       "settings": [
         { "type": "image_picker", "id": "icon", "label": "Icon", "info": "Round icon, about 50 × 50 px." },
-        { "type": "textarea", "id": "text", "label": "Text", "default": "Elaren is built on the two most-studied natural hair growth actives. Here is what independent, peer-reviewed research found:" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Elaren is built on cold-pressed pumpkin seed oil, the most-studied natural DHT blocker for hair growth, with a Caffeine Complex in support. Here is what independent, peer-reviewed research found:" },
         { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
       ]
     },
@@ -91,8 +92,8 @@
       "settings": [
         { "type": "text", "id": "value", "label": "Value shown in the bar", "default": "+40%" },
         { "type": "range", "id": "width", "label": "Bar fill", "min": 10, "max": 100, "step": 5, "unit": "%", "default": 40 },
-        { "type": "text", "id": "title", "label": "Title", "default": "HAIR COUNT" },
-        { "type": "textarea", "id": "text", "label": "Description", "default": "Pumpkin seed oil increased hair count by 40% over 24 weeks in a randomised, placebo-controlled trial." }
+        { "type": "text", "id": "title", "label": "Title", "default": "PUMPKIN SEED OIL: HAIR COUNT" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Pumpkin seed oil increased hair count by 40% over 24 weeks in a randomised, double-blind, placebo-controlled trial." }
       ]
     },
     {

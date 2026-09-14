@@ -177,7 +177,7 @@ em { font-style: italic; }
 .announcement-bar__item { min-height: 40px; padding: 6px 16px; }
 .announcement-bar__message {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: var(--ab-message-size, 13px);
   font-weight: 500;
   line-height: 1.4;
   letter-spacing: 0.06em;
@@ -185,7 +185,29 @@ em { font-style: italic; }
   text-align: center;
 }
 .announcement-bar__message p { margin: 0; }
-.announcement-bar__item:not(.has-countdown) .announcement-bar__message { text-align: center; flex: 1; }
+.announcement-bar__item:not(.announcement-bar__item--countdown) .announcement-bar__message { text-align: center; flex: 1; }
+
+/* Position of the message and the countdown (Announcement bar > Position). The mobile
+   variants live next to the captured phone rules in assets/sections-inline.css. */
+@media screen and (min-width: 741px) {
+  .announcement-bar .announcement-bar__item--layout-message-left .announcement-bar__message { text-align: left; }
+  .announcement-bar .announcement-bar__item--layout-countdown-left .announcement-bar__countdown { order: -1; margin-left: 0; margin-right: auto; }
+  .announcement-bar .announcement-bar__item--layout-countdown-left .announcement-bar__message { text-align: right; }
+  .announcement-bar .announcement-bar__item--layout-center,
+  .announcement-bar .announcement-bar__item--layout-center-countdown-first { justify-content: center; gap: 28px; }
+  .announcement-bar .announcement-bar__item--layout-center .announcement-bar__message,
+  .announcement-bar .announcement-bar__item--layout-center-countdown-first .announcement-bar__message { flex: 0 1 auto; text-align: center; }
+  .announcement-bar .announcement-bar__item--layout-center .announcement-bar__countdown,
+  .announcement-bar .announcement-bar__item--layout-center-countdown-first .announcement-bar__countdown { margin-left: 0; }
+  .announcement-bar .announcement-bar__item--layout-center-countdown-first .announcement-bar__countdown { order: -1; }
+  .announcement-bar .announcement-bar__item--layout-stack,
+  .announcement-bar .announcement-bar__item--layout-stack-countdown-first { flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+  .announcement-bar .announcement-bar__item--layout-stack .announcement-bar__message,
+  .announcement-bar .announcement-bar__item--layout-stack-countdown-first .announcement-bar__message { flex: 0 0 auto; width: 100%; text-align: center; }
+  .announcement-bar .announcement-bar__item--layout-stack .announcement-bar__countdown,
+  .announcement-bar .announcement-bar__item--layout-stack-countdown-first .announcement-bar__countdown { margin-left: 0; }
+  .announcement-bar .announcement-bar__item--layout-stack-countdown-first .announcement-bar__countdown { order: -1; }
+}
 
 /* --------------------------------------------------------------------------
    Header (Frøya nav variant)
