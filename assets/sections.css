@@ -762,6 +762,30 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .js-subscribtion__compare-at-price { text-decoration: line-through; color: var(--brand-muted); font-size: 13px; }
 .c-subscribtion__button-info-wrapper { grid-column: 2 / -1; font-size: 13px; }
 
+/* Announcement bar countdown - sits on the captured page's own countdown styles, sized to keep the bar compact */
+.announcement-bar__countdown { align-items: center; gap: 3px; margin: 0; padding: 0; }
+.announcement-bar__countdown[hidden],
+.announcement-bar__countdown-item[hidden],
+.announcement-bar__countdown-separator[hidden] { display: none !important; }
+.announcement-bar__countdown-text {
+  margin-right: 10px;
+  color: #f7f7f7;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.announcement-bar__countdown-item { min-width: 32px; }
+.announcement-bar__countdown-number { font-size: 20px; line-height: 1; font-variant-numeric: tabular-nums; }
+.announcement-bar__countdown-label { font-size: 8px; line-height: 1.4; letter-spacing: 0.08em; }
+.announcement-bar__countdown-separator { font-size: 20px; line-height: 1; padding-bottom: 11px; }
+@media screen and (max-width: 740px) {
+  .announcement-bar__item--countdown { padding-top: 8px; padding-bottom: 8px; }
+  .announcement-bar__countdown-text { margin-right: 8px; font-size: 10px; }
+}
+
 /* Bundle tiers (quantity breaks) - same card language as the buy box radios */
 .c-bundle {
   display: flex;

@@ -1,12 +1,37 @@
 {% comment %}
-  Announcement bar – the message is editable in the theme editor.
-  The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
+  Announcement bar – the message and the countdown are editable in the theme editor.
+  The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies; the
+  countdown reuses the captured page's own .announcement-bar__countdown styles (message on the
+  left, timer on the right on desktop, stacked on phones). assets/main.js runs the clock:
+  "midnight" counts to the visitor's next local midnight and restarts every day, "fixed" counts
+  to the date and time typed below, read in the store's timezone, and hides once it has passed.
 {% endcomment %}
+{%- liquid
+  assign show_countdown = section.settings.show_countdown
+  if section.settings.countdown_mode == 'fixed' and section.settings.countdown_end == blank
+    assign show_countdown = false
+  endif
+  assign shop_offset = 'now' | date: '%z'
+  assign unit_labels = section.settings.countdown_units | default: 'Days,Hours,Minutes,Seconds' | split: ','
+-%}
 <div class="shopify-section shopify-section-group-header-group shopify-section--announcement-bar" id="shopify-section-sections--26717504897391__announcement-bar">
 <section class="bw-slider-bar">
-  <announcement-bar class="announcement-bar"><div class="announcement-bar__list"><announcement-bar-item class="announcement-bar__item"><div class="announcement-bar__message text--small"><div>
+  <announcement-bar class="announcement-bar"><div class="announcement-bar__list"><announcement-bar-item class="announcement-bar__item{% if show_countdown %} announcement-bar__item--countdown{% endif %}"><div class="announcement-bar__message text--small"><div>
     <p>{%- if section.settings.link != blank -%}<a href="{{ section.settings.link }}">{{ section.settings.text }}</a>{%- else -%}{{ section.settings.text }}{%- endif -%}</p>
-  </div></div></announcement-bar-item></div></announcement-bar>
+  </div></div>
+  {%- if show_countdown -%}
+  <div class="announcement-bar__countdown" data-countdown data-mode="{{ section.settings.countdown_mode }}" data-end="{{ section.settings.countdown_end | strip | escape }}" data-offset="{{ shop_offset }}" hidden>
+    {%- if section.settings.countdown_label != blank -%}<span class="announcement-bar__countdown-text">{{ section.settings.countdown_label }}</span>{%- endif -%}
+    <span class="announcement-bar__countdown-item" data-unit="days" hidden><span class="announcement-bar__countdown-number">00</span><span class="announcement-bar__countdown-label">{{ unit_labels[0] | strip }}</span></span>
+    <span class="announcement-bar__countdown-separator" data-unit="days-sep" hidden aria-hidden="true">:</span>
+    <span class="announcement-bar__countdown-item" data-unit="hours"><span class="announcement-bar__countdown-number">00</span><span class="announcement-bar__countdown-label">{{ unit_labels[1] | strip }}</span></span>
+    <span class="announcement-bar__countdown-separator" aria-hidden="true">:</span>
+    <span class="announcement-bar__countdown-item" data-unit="minutes"><span class="announcement-bar__countdown-number">00</span><span class="announcement-bar__countdown-label">{{ unit_labels[2] | strip }}</span></span>
+    <span class="announcement-bar__countdown-separator" aria-hidden="true">:</span>
+    <span class="announcement-bar__countdown-item" data-unit="seconds"><span class="announcement-bar__countdown-number">00</span><span class="announcement-bar__countdown-label">{{ unit_labels[3] | strip }}</span></span>
+  </div>
+  {%- endif -%}
+  </announcement-bar-item></div></announcement-bar>
 </section>
 </div>
 
@@ -15,7 +40,13 @@
   "name": "Announcement bar",
   "settings": [
     { "type": "inline_richtext", "id": "text", "label": "Message", "default": "FREE INSURED SHIPPING 🌱 30-DAY MONEY-BACK GUARANTEE" },
-    { "type": "url", "id": "link", "label": "Link (optional)" }
+    { "type": "url", "id": "link", "label": "Link (optional)" },
+    { "type": "header", "content": "Countdown timer" },
+    { "type": "checkbox", "id": "show_countdown", "label": "Show countdown", "default": true },
+    { "type": "text", "id": "countdown_label", "label": "Label before the timer", "default": "OFFER ENDS IN" },
+    { "type": "select", "id": "countdown_mode", "label": "Counts down to", "options": [ { "value": "midnight", "label": "Midnight tonight in the visitor's timezone (restarts every day)" }, { "value": "fixed", "label": "A fixed date and time" } ], "default": "midnight" },
+    { "type": "text", "id": "countdown_end", "label": "Fixed end date and time", "info": "Only used by the fixed mode. Format YYYY-MM-DD HH:MM, read in the store's timezone (Settings > General), for example 2026-09-30 23:59. The timer hides itself once this time has passed." },
+    { "type": "text", "id": "countdown_units", "label": "Unit labels", "default": "Days,Hours,Minutes,Seconds", "info": "Four labels separated by commas. Days only show when there is at least one full day left." }
   ]
 }
 {% endschema %}

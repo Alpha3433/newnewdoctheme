@@ -6,6 +6,7 @@
 {%- liquid
   assign badges = section.blocks | where: 'type', 'badge'
   assign upsells = section.settings.upsells
+  assign amount_placeholder = '{amount}'
 -%}
 <cart-drawer id="mini-cart" class="mini-cart s-mini-cart drawer drawer--large" role="dialog" aria-modal="true" aria-labelledby="mini-cart-title" data-section-id="{{ section.id }}" data-root-url="{{ routes.root_url }}" data-cart-count="{{ cart.item_count }}" hidden>
   <span class="drawer__overlay" data-cart-close></span>
@@ -169,9 +170,13 @@
                       <div class="line-item__subscription">
                         <label class="subscription-toggle" role="switch" aria-checked="{% if item.selling_plan_allocation %}true{% else %}false{% endif %}">
                           <input type="checkbox" class="subscription-checkbox" data-cart-plan-toggle data-line="{{ line }}" data-variant-id="{{ item.variant_id }}" data-quantity="{{ item.quantity }}" data-selling-plan-id="{{ plan_id }}"{% if item.selling_plan_allocation %} checked{% endif %}>
+                          {%- liquid
+                            assign saving_money = plan_saving | money
+                            assign saving_line = section.settings.subscribe_saving_text | replace: amount_placeholder, saving_money
+                          -%}
                           <span class="subscription-text">
                             {{ section.settings.subscribe_label }}
-                            {%- if item.selling_plan_allocation == blank and plan_saving > 0 %} <span class="product_price">{{ plan_saving | money }}</span>{%- endif -%}
+                            {%- if item.selling_plan_allocation == blank and plan_saving > 0 and saving_line != blank %} <span class="subscription-saving product_price">{{ saving_line }}</span>{%- endif -%}
                           </span>
                           <span class="subscription-toggle-switch" aria-hidden="true"><span class="subscription-toggle-knob"></span></span>
                         </label>
@@ -295,7 +300,7 @@
         </div>
         <button form="mini-cart-form" type="submit" class="checkout-button button button--primary button--full" name="checkout">
           <span class="checkout-button__lock"><svg aria-hidden="true" width="16" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
-          <span class="checkout-button__label">{{ section.settings.checkout_label }}</span>{% if section.settings.show_total_on_button %} - <span class="product_price">{% if settings.currency_code_enable %}{{ cart.total_price | money_with_currency }}{% else %}{{ cart.total_price | money_without_trailing_zeros }}{% endif %}</span>{% endif %}
+          <span class="checkout-button__label">{{ section.settings.checkout_label }}</span>{% if section.settings.show_total_on_button %} - <span class="product_price">{{ cart.total_price | money }}</span>{% endif %}
         </button>
         {%- if badges.size > 0 -%}
         <div class="s-mini-cart__guarantee-badges">
@@ -349,6 +354,7 @@
     { "type": "checkbox", "id": "show_subscribe_toggle", "label": "Show subscribe & save toggle on line items", "default": true },
     { "type": "text", "id": "selling_plan_id", "label": "Subscription plan ID", "info": "Optional. The plan the line toggle switches a one-time line to. Use the same ID as the Featured product section so the drawer sells the cadence the buy box promised. Leave blank to use the cheapest plan the variant offers." },
     { "type": "text", "id": "subscribe_label", "label": "Subscribe toggle label", "default": "SUBSCRIBE & SAVE" },
+    { "type": "text", "id": "subscribe_saving_text", "label": "Saving shown next to the toggle", "default": "Save {amount}", "info": "{amount} is what the plan takes off that line. Leave empty to show no amount." },
     { "type": "header", "content": "Recommendations" },
     { "type": "text", "id": "upsell_title", "label": "Heading", "default": "PAIR WITH:" },
     { "type": "product_list", "id": "upsells", "label": "Products to recommend", "limit": 6 },
