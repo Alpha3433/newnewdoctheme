@@ -770,10 +770,10 @@
   }
 
   /* ============================================================= fit quiz */
-  // Hair-loss fit quiz (sections/froya-fit-quiz.liquid). One question at a time; each answer points
-  // to a hair-loss type ("band"). Precedence: any "medical" answer wins (see a doctor), then any
-  // "traction" answer, then whichever of pattern / shedding collected more answers (pattern on a
-  // tie). The result's button scrolls to the buy box and pre-selects a bundle tier.
+  // Bundle fit quiz (sections/froya-fit-quiz.liquid). One question at a time; each answer points to
+  // a bundle ("band": starter / core / full), to "medical", or to "none". Any "medical" answer wins
+  // (see a doctor); otherwise the bundle with the most answers, and a tie goes to "core" (3-month).
+  // The result's button scrolls to the buy box and pre-selects a bundle tier.
   function initFitQuiz(root) {
     $$('[data-fit-quiz]', root).forEach(function (quiz) {
       if (!once(quiz, 'init')) return;
@@ -804,13 +804,15 @@
         dots.forEach(function (d, i) { d.classList.toggle('is-active', i === index); d.classList.toggle('is-done', i < index); });
         if (back) back.hidden = index === 0;
       };
+      // "medical" always wins; otherwise the bundle with the most answers, and a tie goes to "core" (3-month).
       var band = function () {
         var picked = answers.filter(Boolean);
         if (picked.indexOf('medical') > -1) return 'medical';
-        if (picked.indexOf('traction') > -1) return 'traction';
-        var pattern = picked.filter(function (b) { return b === 'pattern'; }).length;
-        var shedding = picked.filter(function (b) { return b === 'shedding'; }).length;
-        return shedding > pattern ? 'shedding' : 'pattern';
+        var count = function (b) { return picked.filter(function (p) { return p === b; }).length; };
+        var starter = count('starter'), core = count('core'), full = count('full');
+        if (full > core && full > starter) return 'full';
+        if (starter > core && starter > full) return 'starter';
+        return 'core';
       };
       var finish = function () {
         var key = band();
@@ -819,7 +821,7 @@
         if (progress) progress.classList.add('is-hidden');
         if (back) back.hidden = true;
         var shown = false;
-        // Every picked answer may carry a note (how to use it, minoxidil, timeline, proof): repeat them on the result.
+        // Every picked answer may carry a note (why the oil fits, how to use it, minoxidil, timeline): repeat them on the result.
         var notes = questions.map(function (q) {
           var picked = $('[data-quiz-option].is-selected [data-quiz-note]', q);
           return picked ? picked.textContent.trim() : '';
