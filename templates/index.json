@@ -217,8 +217,9 @@
         "review_2": {
           "type": "review",
           "settings": {
+            "image": "shopify://shop_images/hf_20260914_111147_ce53d50c-fbb1-4feb-915b-59e826610067.png",
             "image_alt": "",
-            "name": "Emily L. · Verified buyer",
+            "name": "Emily L, 61",
             "tag_1": "healthier scalp",
             "tag_2": "lightweight",
             "quote": "\"My scalp feels noticeably healthier, and it sinks in without that heavy, greasy feeling.\"",
