@@ -90,6 +90,7 @@
         "slide_2": {
           "type": "slide",
           "settings": {
+            "logo": "shopify://shop_images/023-Frame_3944_095ad195-566c-4987-82ec-27b570a5b206.png",
             "logo_alt": "",
             "quote": "\"Caffeine reaches the follicle in minutes and helps keep it in its growth phase.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/Frame_3944.png?v=1739968270"
@@ -98,7 +99,7 @@
         "slide_3": {
           "type": "slide",
           "settings": {
-            "logo": "shopify://shop_images/023-Frame_3944.png",
+            "logo": "shopify://shop_images/024-Frame_3945_24c816cf-235c-4ad9-8c61-153a074d50a9.png",
             "logo_alt": "",
             "quote": "\"Lightweight and fast-absorbing. Never greasy, even on fine hair.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/Frame_3945.png?v=1739968273"
