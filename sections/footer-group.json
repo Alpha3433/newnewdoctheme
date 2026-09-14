@@ -13,16 +13,6 @@
   "sections": {
     "footer": {
       "type": "froya-footer",
-      "settings": {
-        "links_title": "About",
-        "contact_title": "Contact",
-        "social_title": "Follow us",
-        "facebook_url": "https://www.facebook.com/",
-        "instagram_url": "https://www.instagram.com/wellness.weichen/",
-        "tiktok_url": "https://www.tiktok.com/",
-        "show_payment_icons": true,
-        "show_localization": true
-      },
       "blocks": {
         "link_1": {
           "type": "link",
@@ -186,7 +176,21 @@
         "link_18",
         "link_19",
         "link_20"
-      ]
+      ],
+      "settings": {
+        "headline": "<p>Not satisfied?<br/>Get your money<br/>back in 30 days</p>",
+        "manifesto": "<p>Hair loss isn’t just about hair.<br/>It’s the photo you didn’t post,<br/>the ponytail that keeps getting thinner,<br/>the mirror you stopped looking in.<br/><br/>We’ve been where you are.<br/>So we went back to the research,<br/>found what actually works,<br/>and put it in a bottle made for you.<br/><br/>Cold-pressed pumpkin seed oil.<br/>A Caffeine Complex that wakes the root.<br/>Two minutes a night, every night.<br/>And 10% of every order to hair-loss research.</p>",
+        "links_title": "About",
+        "contact_title": "Contact",
+        "contact_text": "<p><strong>Customer Support</strong><br/>support@shopelaren.com</p><p><strong>Shipping</strong><br/>Free insured shipping on every order. Free express shipping on orders over $50.</p><p><br/>© 2026 Elaren.<br/>All Rights Reserved.</p>",
+        "social_title": "Follow us",
+        "facebook_url": "https://www.facebook.com/",
+        "instagram_url": "https://www.instagram.com/wellness.weichen/",
+        "tiktok_url": "https://www.tiktok.com/",
+        "show_payment_icons": true,
+        "show_localization": true,
+        "disclaimer": "<p>Disclaimer: Elaren Pumpkin Seed Regrowth Oil is a cosmetic scalp treatment, not a medicine, and is not intended to diagnose, treat, cure or prevent any disease, including alopecia areata or other medical conditions. Studies referenced were conducted on the ingredients, not on this finished product. Individual results vary and depend on the cause of hair loss and consistent nightly use: most customers notice reduced shedding within the first weeks and fuller-looking hair after 30 days. If you are pregnant, breastfeeding or under medical treatment for hair loss, check with your doctor first. Not seeing results? Contact support@shopelaren.com within 30 days of purchase for a full refund.</p>"
+      }
     }
   },
   "order": [
