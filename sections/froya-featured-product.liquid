@@ -153,6 +153,41 @@
         assign show_congrats = true
       endif
     endif
+
+    comment
+      The add-to-cart button. "button_price" decides whether the bundle total is restated on the
+      button (Frøya's control arm: "ADD TO CART - $119"), restated with the regular price struck
+      through, or left off so the button is the plain "ADD TO CART" under the savings pill. The
+      separator is added here, never typed into the label, so a label saved with a trailing "-"
+      from an earlier version never shows a dangling hyphen.
+    endcomment
+    assign button_price = section.settings.button_price | default: 'none'
+    assign button_label = section.settings.button_label | strip
+    assign button_label_last = button_label | slice: -1
+    if button_label_last == '-' or button_label_last == '–'
+      assign button_label_len = button_label.size | minus: 1
+      assign button_label = button_label | slice: 0, button_label_len | strip
+    endif
+    if button_price != 'none' and button_label != blank
+      assign button_label = button_label | append: ' -'
+    endif
+    if button_price != 'total_compare'
+      assign show_button_compare = false
+    endif
+
+    comment
+      Low-stock notice. "inventory" reads the variant's tracked stock and only shows at or below
+      the threshold; "fixed" shows the number typed in the settings whenever the variant can be
+      bought (the store keeps far more units on hand than a scarcity line should quote).
+    endcomment
+    assign low_stock_count = 0
+    if section.settings.show_low_stock and section.settings.low_stock_text != blank and variant.available
+      if section.settings.low_stock_source == 'fixed'
+        assign low_stock_count = section.settings.low_stock_count | default: 0
+      elsif variant.inventory_management == 'shopify' and variant.inventory_quantity > 0 and variant.inventory_quantity <= section.settings.low_stock_threshold
+        assign low_stock_count = variant.inventory_quantity
+      endif
+    endif
   endif
 -%}
 <div class="shopify-section" id="shopify-section-template--26717513089391__custom_featured_product_m69X4b">
@@ -516,12 +551,6 @@
               </fieldset>
               {%- endif -%}
 
-              {%- if show_congrats -%}
-              <div class="c-buybox-toggle__congrats"{% if display_save <= 0 %} hidden{% endif %}>
-                <span aria-hidden="true">🎉</span><span>{{ section.settings.congrats_text }} <span class="product_price">{{ display_save | money }}</span></span>
-              </div>
-              {%- endif -%}
-
               {%- if plan != blank -%}
               <fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--column" id="purchase-type-fieldset">
                 <label>
@@ -562,10 +591,21 @@
               </fieldset>
               {%- endif -%}
 
-              <button class="c-subscribtion__add-to-cart js-subscribtion__add-to-cart custom-button" data-redirect-to-checkout="false" is="loader-button" type="submit"{% unless variant.available %} disabled{% endunless %}>
+              {%- if show_congrats -%}
+              {%- comment -%}
+                Savings pill, directly above the button. The amount is the saving on what is selected
+                right now: assets/main.js (initBuyBox > renderTier) rewrites it whenever the shopper
+                picks another bundle tier or switches subscription off, from the tier's data-save-*.
+              {%- endcomment -%}
+              <div class="c-buybox-toggle__congrats" role="status" aria-live="polite"{% if display_save <= 0 %} hidden{% endif %}>
+                <span aria-hidden="true">🎉</span><span>{{ section.settings.congrats_text }} <span class="product_price">{{ display_save | money }}</span></span>
+              </div>
+              {%- endif -%}
+
+              <button class="c-subscribtion__add-to-cart js-subscribtion__add-to-cart custom-button c-subscribtion__add-to-cart--price-{{ button_price }}" data-redirect-to-checkout="false" is="loader-button" type="submit"{% unless variant.available %} disabled{% endunless %}>
                 <span class="loader-button__text">
-                  <span class="c-subscribtion__button-text js-subscribtion__button-text">{% if variant.available %}{{ section.settings.button_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</span>
-                  {%- if variant.available -%}
+                  <span class="c-subscribtion__button-text js-subscribtion__button-text">{% if variant.available %}{{ button_label }}{% else %}{{ section.settings.sold_out_label }}{% endif %}</span>
+                  {%- if variant.available and button_price != 'none' -%}
                   <span class="js-subscribtion__price-wrapper">
                     <span class="c-subscribtion__price js-subscribtion__main-price"><span class="product_price">{% liquid
                       assign button_total = display_total_otp
@@ -601,10 +641,11 @@
         </div>
         {%- endif -%}
 
-        {%- if section.settings.show_low_stock and variant.inventory_management == 'shopify' and variant.inventory_quantity > 0 and variant.inventory_quantity <= section.settings.low_stock_threshold -%}
-        <div class="c-low-stock"><div class="c-low-stock__inner">
+        {%- if low_stock_count > 0 -%}
+        {%- capture low_stock_number -%}<span class="c-low-stock__count">{{ low_stock_count }}</span>{%- endcapture -%}
+        <div class="c-low-stock" role="status"><div class="c-low-stock__inner">
           <span aria-hidden="true" class="c-low-stock__flame">🔥</span>
-          <span class="c-low-stock__text">{{ section.settings.low_stock_text | replace: count_placeholder, variant.inventory_quantity }}</span>
+          <span class="c-low-stock__text">{{ section.settings.low_stock_text | replace: count_placeholder, low_stock_number }}</span>
         </div></div>
         {%- endif -%}
       </div>
@@ -666,7 +707,7 @@
     { "type": "product", "id": "gift_product", "label": "Gift product", "info": "Its image and price fill the card." },
     { "type": "text", "id": "gift_badge", "label": "Gift badge", "default": "FREE GIFT WORTH {price}", "info": "{price} is replaced with the gift product's price." },
     { "type": "richtext", "id": "gift_text", "label": "Gift text", "default": "<p>Complete your routine with our <strong>{product}</strong>.</p>", "info": "{product} is replaced with the gift product's title." },
-    { "type": "text", "id": "congrats_text", "label": "Savings line", "default": "Congrats! You’re saving" },
+    { "type": "text", "id": "congrats_text", "label": "Savings line", "default": "Congrats! You’re saving", "info": "Shown as a pill directly above the add-to-cart button, followed by the amount saved on the selected bundle. It updates as the shopper changes bundle or switches Subscribe & save off. Leave empty to hide." },
     { "type": "text", "id": "sub_badge", "label": "Subscription badge", "default": "SAVE {percent}% ON EVERY ORDER" },
     { "type": "text", "id": "sub_name", "label": "Subscription option name", "default": "Subscribe & save" },
     { "type": "richtext", "id": "sub_perks", "label": "Subscription perks", "default": "<p><strong>LOWEST PRICE</strong> every month<br><strong>{percent}% OFF</strong> every order<br><strong>FREE INSURED SHIPPING</strong> always<br><strong>CANCEL, PAUSE, EDIT</strong> anytime<br><strong>RESERVED</strong> stock<br><strong>LONG-TERM</strong> fuller hair</p>" },
@@ -676,10 +717,20 @@
     { "type": "text", "id": "info_1", "label": "Info line 1", "default": "FREE insured shipping on every order" },
     { "type": "text", "id": "info_2", "label": "Info line 2", "default": "Cancel online anytime" },
     { "type": "header", "content": "Button & stock" },
-    { "type": "text", "id": "button_label", "label": "Add to cart label", "default": "Add to Cart -" },
+    { "type": "text", "id": "button_label", "label": "Add to cart label", "default": "Add to Cart" },
+    { "type": "select", "id": "button_price", "label": "Price on the button", "options": [
+      { "value": "none", "label": "Label only (price shown above the button)" },
+      { "value": "total", "label": "Label - bundle total" },
+      { "value": "total_compare", "label": "Label - bundle total, regular price struck through" }
+    ], "default": "none", "info": "The bundle total always shows in the price line and on the selected bundle card, so the button can stay a plain call to action." },
     { "type": "text", "id": "sold_out_label", "label": "Sold out label", "default": "Sold out" },
-    { "type": "checkbox", "id": "show_low_stock", "label": "Show low-stock notice", "default": true, "info": "Uses the variant's tracked inventory." },
-    { "type": "range", "id": "low_stock_threshold", "label": "Low-stock threshold", "min": 5, "max": 500, "step": 5, "default": 150 },
+    { "type": "checkbox", "id": "show_low_stock", "label": "Show low-stock notice", "default": true },
+    { "type": "select", "id": "low_stock_source", "label": "Number shown", "options": [
+      { "value": "inventory", "label": "Tracked inventory (only at or below the threshold)" },
+      { "value": "fixed", "label": "A fixed number (always shown while in stock)" }
+    ], "default": "inventory", "info": "Tracked inventory hides the notice while stock is above the threshold - with more than 2,000 units on hand it never appears. A fixed number shows the figure typed below on every visit." },
+    { "type": "range", "id": "low_stock_threshold", "label": "Low-stock threshold", "min": 5, "max": 500, "step": 5, "default": 150, "info": "Tracked inventory only." },
+    { "type": "number", "id": "low_stock_count", "label": "Fixed number", "default": 156, "info": "Fixed number only." },
     { "type": "text", "id": "low_stock_text", "label": "Low-stock text", "default": "Low Stock: only {count} left" }
   ],
   "blocks": [

@@ -13,15 +13,35 @@
   endif
   assign shop_offset = 'now' | date: '%z'
   assign unit_labels = section.settings.countdown_units | default: 'Days,Hours,Minutes,Seconds' | split: ','
+  comment
+    Layout and sizes come from the settings below. They land on the item as modifier classes and CSS
+    variables (see "Announcement bar" in assets/theme.css and the mobile block in
+    assets/sections-inline.css), so the captured styles keep working and only the parts a merchant
+    asked to control move.
+  endcomment
+  assign layout = section.settings.layout | default: 'message-left'
+  assign layout_mobile = section.settings.layout_mobile | default: 'stack'
+  assign item_classes = 'announcement-bar__item announcement-bar__item--layout-' | append: layout | append: ' announcement-bar__item--mobile-' | append: layout_mobile
+  if show_countdown
+    assign item_classes = item_classes | append: ' announcement-bar__item--countdown'
+  endif
+  capture item_style
+    echo '--ab-message-size: ' | append: section.settings.message_size | append: 'px; '
+    echo '--ab-message-size-mobile: ' | append: section.settings.message_size_mobile | append: 'px; '
+    echo '--ab-text-size: ' | append: section.settings.countdown_text_size | append: 'px; '
+    echo '--ab-number-size: ' | append: section.settings.countdown_number_size | append: 'px; '
+    echo '--ab-unit-size: ' | append: section.settings.countdown_unit_size | append: 'px;'
+  endcapture
 -%}
 <div class="shopify-section shopify-section-group-header-group shopify-section--announcement-bar" id="shopify-section-sections--26717504897391__announcement-bar">
 <section class="bw-slider-bar">
-  <announcement-bar class="announcement-bar"><div class="announcement-bar__list"><announcement-bar-item class="announcement-bar__item{% if show_countdown %} announcement-bar__item--countdown{% endif %}"><div class="announcement-bar__message text--small"><div>
+  <announcement-bar class="announcement-bar"><div class="announcement-bar__list"><announcement-bar-item class="{{ item_classes }}" style="{{ item_style | strip }}"><div class="announcement-bar__message text--small"><div>
     <p>{%- if section.settings.link != blank -%}<a href="{{ section.settings.link }}">{{ section.settings.text }}</a>{%- else -%}{{ section.settings.text }}{%- endif -%}</p>
   </div></div>
   {%- if show_countdown -%}
   <div class="announcement-bar__countdown" data-countdown data-mode="{{ section.settings.countdown_mode }}" data-end="{{ section.settings.countdown_end | strip | escape }}" data-offset="{{ shop_offset }}" hidden>
     {%- if section.settings.countdown_label != blank -%}<span class="announcement-bar__countdown-text">{{ section.settings.countdown_label }}</span>{%- endif -%}
+    <span class="announcement-bar__countdown-units">
     <span class="announcement-bar__countdown-item" data-unit="days" hidden><span class="announcement-bar__countdown-number">00</span><span class="announcement-bar__countdown-label">{{ unit_labels[0] | strip }}</span></span>
     <span class="announcement-bar__countdown-separator" data-unit="days-sep" hidden aria-hidden="true">:</span>
     <span class="announcement-bar__countdown-item" data-unit="hours"><span class="announcement-bar__countdown-number">00</span><span class="announcement-bar__countdown-label">{{ unit_labels[1] | strip }}</span></span>
@@ -29,6 +49,7 @@
     <span class="announcement-bar__countdown-item" data-unit="minutes"><span class="announcement-bar__countdown-number">00</span><span class="announcement-bar__countdown-label">{{ unit_labels[2] | strip }}</span></span>
     <span class="announcement-bar__countdown-separator" aria-hidden="true">:</span>
     <span class="announcement-bar__countdown-item" data-unit="seconds"><span class="announcement-bar__countdown-number">00</span><span class="announcement-bar__countdown-label">{{ unit_labels[3] | strip }}</span></span>
+    </span>
   </div>
   {%- endif -%}
   </announcement-bar-item></div></announcement-bar>
@@ -41,12 +62,32 @@
   "settings": [
     { "type": "inline_richtext", "id": "text", "label": "Message", "default": "FREE INSURED SHIPPING 🌱 30-DAY MONEY-BACK GUARANTEE" },
     { "type": "url", "id": "link", "label": "Link (optional)" },
+    { "type": "range", "id": "message_size", "label": "Message text size", "min": 10, "max": 24, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "message_size_mobile", "label": "Message text size (mobile)", "min": 9, "max": 20, "step": 1, "unit": "px", "default": 13 },
+    { "type": "header", "content": "Position", "info": "Where the message and the countdown sit in the bar. Both settings also apply when only one of them is shown." },
+    { "type": "select", "id": "layout", "label": "Desktop layout", "options": [
+      { "value": "message-left", "label": "Message left, countdown right" },
+      { "value": "countdown-left", "label": "Countdown left, message right" },
+      { "value": "center", "label": "Centered: message then countdown" },
+      { "value": "center-countdown-first", "label": "Centered: countdown then message" },
+      { "value": "stack", "label": "Stacked: message above countdown" },
+      { "value": "stack-countdown-first", "label": "Stacked: countdown above message" }
+    ], "default": "message-left" },
+    { "type": "select", "id": "layout_mobile", "label": "Mobile layout", "options": [
+      { "value": "stack", "label": "Stacked: message above countdown" },
+      { "value": "stack-countdown-first", "label": "Stacked: countdown above message" },
+      { "value": "row", "label": "Side by side: message left, countdown right" },
+      { "value": "row-countdown-first", "label": "Side by side: countdown left, message right" }
+    ], "default": "stack" },
     { "type": "header", "content": "Countdown timer" },
     { "type": "checkbox", "id": "show_countdown", "label": "Show countdown", "default": true },
     { "type": "text", "id": "countdown_label", "label": "Label before the timer", "default": "OFFER ENDS IN" },
     { "type": "select", "id": "countdown_mode", "label": "Counts down to", "options": [ { "value": "midnight", "label": "Midnight in the visitor's timezone (daily)" }, { "value": "fixed", "label": "A fixed date and time" } ], "default": "midnight", "info": "Midnight mode counts to the next midnight on each visitor's own clock and starts again every day." },
     { "type": "text", "id": "countdown_end", "label": "Fixed end date and time", "info": "Only used by the fixed mode. Format YYYY-MM-DD HH:MM, read in the store's timezone (Settings > General), for example 2026-09-30 23:59. The timer hides itself once this time has passed." },
-    { "type": "text", "id": "countdown_units", "label": "Unit labels", "default": "Days,Hours,Minutes,Seconds", "info": "Four labels separated by commas. Days only show when there is at least one full day left." }
+    { "type": "text", "id": "countdown_units", "label": "Unit labels", "default": "Days,Hours,Minutes,Seconds", "info": "Four labels separated by commas. Days only show when there is at least one full day left." },
+    { "type": "range", "id": "countdown_text_size", "label": "Label text size", "min": 8, "max": 20, "step": 1, "unit": "px", "default": 11, "info": "The label before the timer." },
+    { "type": "range", "id": "countdown_number_size", "label": "Number size", "min": 12, "max": 40, "step": 1, "unit": "px", "default": 20 },
+    { "type": "range", "id": "countdown_unit_size", "label": "Unit label size", "min": 5, "max": 14, "step": 1, "unit": "px", "default": 8, "info": "The Days / Hours / Minutes / Seconds labels under the numbers." }
   ]
 }
 {% endschema %}
