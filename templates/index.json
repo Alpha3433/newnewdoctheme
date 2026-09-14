@@ -516,15 +516,14 @@
         "question_1": {
           "type": "question",
           "settings": {
-            "text": "Where are you noticing it most?",
-            "hint": ""
+            "text": "What’s changed with your hair?"
           }
         },
         "option_1": {
           "type": "option",
           "settings": {
             "question": 1,
-            "label": "A widening part or a thinning crown",
+            "label": "My part is wider and the crown looks thinner under the bathroom light",
             "band": "pattern"
           }
         },
@@ -532,7 +531,7 @@
           "type": "option",
           "settings": {
             "question": 1,
-            "label": "My temples or hairline",
+            "label": "My hairline or temples are creeping back",
             "band": "pattern"
           }
         },
@@ -540,7 +539,7 @@
           "type": "option",
           "settings": {
             "question": 1,
-            "label": "All over - more hair in the brush and the drain",
+            "label": "My ponytail is half what it was and I lose handfuls in the shower",
             "band": "shedding"
           }
         },
@@ -548,86 +547,93 @@
           "type": "option",
           "settings": {
             "question": 1,
-            "label": "Smooth, round bald patches",
+            "label": "Smooth bald patches, or a scalp that is sore, itchy or scarred",
             "band": "medical"
           }
         },
         "question_2": {
           "type": "question",
           "settings": {
-            "text": "When did it start?",
-            "hint": ""
+            "text": "What do you think is behind it?"
           }
         },
         "option_5": {
           "type": "option",
           "settings": {
             "question": 2,
-            "label": "Gradually, over a year or more",
-            "band": "pattern"
+            "label": "It crept in over years, and thin hair runs in my family",
+            "band": "pattern",
+            "note": "Slow, inherited thinning is driven by DHT, a hormone that shrinks the follicle a little more every cycle. That is the exact step pumpkin seed oil’s plant sterols work on, and it is the reason Elaren is built around it."
           }
         },
         "option_6": {
           "type": "option",
           "settings": {
             "question": 2,
-            "label": "Around perimenopause or menopause",
-            "band": "pattern"
+            "label": "It got worse with perimenopause or menopause",
+            "band": "pattern",
+            "note": "As oestrogen falls after 35, follicles feel DHT more. Pumpkin seed oil dampens the enzyme that makes DHT, which is why it is the active we lead with for women in this stage."
           }
         },
         "option_7": {
           "type": "option",
           "settings": {
             "question": 2,
-            "label": "After a baby, an illness, surgery or a stressful stretch",
-            "band": "shedding"
+            "label": "A baby, an illness, rapid weight loss or a brutal year",
+            "band": "shedding",
+            "note": "A shock to the body pushes a wave of follicles into rest at once and they let go two to three months later. It is common after weight-loss injections too. It usually recovers; the oil helps the hair that returns come back stronger."
           }
         },
         "option_8": {
           "type": "option",
           "settings": {
             "question": 2,
-            "label": "Since wearing tight braids, extensions or ponytails",
-            "band": "traction"
+            "label": "Years of tight braids, buns, extensions or ponytails",
+            "band": "traction",
+            "note": "Pulling thins the edges and temples first. Nothing regrows while the tension stays, so the style has to change before the oil can help."
           }
         },
         "question_3": {
           "type": "question",
           "settings": {
-            "text": "How does your scalp feel?",
-            "hint": ""
+            "text": "What do you most want a straight answer on?",
+            "hint": "This one doesn’t change your result. It changes what we tell you."
           }
         },
         "option_9": {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "Normal",
-            "band": "none"
+            "label": "How do I use it? Is it a pill, or does it go on my scalp?",
+            "band": "none",
+            "note": "It goes on your scalp, not in your mouth. Part your hair, squeeze a few drops onto the skin where it is thinning, massage for two minutes and leave it in overnight. Every night. One bottle is about 30 nights."
           }
         },
         "option_10": {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "Oily, flaky or dandruff-prone",
-            "band": "none"
+            "label": "Can I use it with minoxidil, or instead of it?",
+            "band": "none",
+            "note": "Both. Elaren has no minoxidil and no hormones, so it does not compete with anything a doctor has prescribed. Using both: apply the minoxidil first, let it dry, then the oil. Many women use it on its own as the gentler option."
           }
         },
         "option_11": {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "Tender where my hair is pulled tight",
-            "band": "traction"
+            "label": "How long before I see anything, honestly?",
+            "band": "none",
+            "note": "Weeks 2–4: less hair in the brush and the drain. Months 2–3: fine baby hairs along the part and hairline. Months 4–6: visible density. Anyone promising faster is guessing. Do not stop at week three."
           }
         },
         "option_12": {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "Itchy, sore, inflamed or scarred",
-            "band": "medical"
+            "label": "Is this real, or another oil that does nothing?",
+            "band": "none",
+            "note": "Fair question. Pumpkin seed oil has a 24-week placebo-controlled trial behind it, Elaren has 43 verified reviews you can read further down, and if your shedding has not eased after 30 nights we refund you. No photos, no awkward questions."
           }
         },
         "result_1": {
@@ -635,12 +641,11 @@
           "settings": {
             "band": "pattern",
             "tag": "Strong match",
-            "title": "This is the kind of thinning pumpkin seed oil was studied for",
-            "body": "<p>A widening part, a thinning crown and receding temples that crept in gradually are the signature of hormonal pattern thinning: DHT shrinks the follicle a little more each cycle. Pumpkin seed oil’s phytosterols work on exactly that step, and the Caffeine Complex keeps the follicle in its growth phase.</p>",
-            "expect": "Less shedding first, usually within 2 weeks. Fuller-looking hair after 30 nights. Density that keeps building over 3–6 months, which is why the 3-month bundle is the one we recommend.",
+            "title": "Your thinning is the kind pumpkin seed oil was studied for",
+            "body": "<p>A part that keeps widening, a crown that shows more scalp each year, temples that creep back: that is hormonal pattern thinning, and after 35 it is the most common reason a woman loses hair. As oestrogen falls, follicles feel DHT more, and DHT shrinks each one a little more every cycle until the hair it grows is too fine to see.</p><p>Pumpkin seed oil’s plant sterols dampen the enzyme that makes DHT. That is the whole idea behind Elaren: cold-pressed pumpkin seed oil, massaged into the scalp where the thinning is, every night.</p>",
+            "expect": "Two minutes on the scalp before bed, every night. Less hair in the brush within 2–4 weeks. Fine baby hairs along the part and hairline by month 2–3. Visible density over months 4–6, which is why the 3-month bundle is the one we recommend.",
             "evidence": "A 24-week randomised, placebo-controlled trial of pumpkin seed oil in pattern hair loss saw hair count rise 40%, four times the placebo group.",
             "show_cta": true,
-            "cta_label": "",
             "bundle_tier": 2
           }
         },
@@ -649,12 +654,11 @@
           "settings": {
             "band": "shedding",
             "tag": "Likely to help",
-            "title": "This looks like shedding after a trigger, and it usually recovers",
-            "body": "<p>Hair that comes out all over a few months after a baby, an illness, surgery or a hard stretch is usually telogen effluvium: a wave of follicles resting at once. The honest news is that most of it grows back on its own over 6–12 months. Caffeine and a nightly scalp massage support the regrowth phase, and the oil helps the hair that returns come back stronger.</p>",
-            "expect": "The timeline is mostly your body’s. Expect shedding to ease over the first weeks and new baby hairs along the hairline within 2–3 months. A 3-month bundle covers the recovery window.",
-            "evidence": "Topical caffeine was statistically non-inferior to 5% minoxidil at increasing growth-phase hairs in a 6-month clinical study.",
+            "title": "This looks like shedding after a shock, and it usually recovers",
+            "body": "<p>Hair that comes out all over a few months after a baby, an illness, surgery, rapid weight loss or a brutal year is telogen effluvium: a wave of follicles resting at once. The honest news is that most of it grows back on its own over 6–12 months.</p><p>Where pumpkin seed oil helps is the hair that returns: massaging it into the scalp nightly supports the follicle through regrowth and keeps DHT from quietly thinning what comes back, which matters more after 35.</p>",
+            "expect": "The timeline is mostly your body’s. Shedding eases over the first weeks, new baby hairs along the hairline within 2–3 months. A 3-month bundle covers the recovery window.",
+            "evidence": "Pumpkin seed oil was studied in pattern hair loss, not in shedding after a trigger. Here it supports regrowth; the recovery itself is your body’s.",
             "show_cta": true,
-            "cta_label": "",
             "bundle_tier": 2
           }
         },
@@ -664,11 +668,10 @@
             "band": "traction",
             "tag": "Good match, with one condition",
             "title": "This is traction loss, and the style has to change first",
-            "body": "<p>Thinning at the edges and temples that started with tight braids, extensions, buns or ponytails is traction alopecia. No oil regrows hair while the pulling continues. Loosen the style, give the edges a rest, and then the oil helps the recovery.</p>",
-            "expect": "Once the tension is off, expect the fine hairs along the edges to return over 2–4 months. If an area has been pulled tight for years and is smooth and shiny, see a dermatologist: that can be permanent.",
-            "evidence": "Pumpkin seed oil and caffeine were studied in pattern thinning, not in traction loss. Here they support regrowth that only starts when the pulling stops.",
+            "body": "<p>Thinning at the edges and temples that started with tight braids, extensions, buns or ponytails is traction alopecia. No oil regrows hair while the pulling continues. Loosen the style, give the edges a rest, and then pumpkin seed oil massaged into the scalp helps the recovery.</p>",
+            "expect": "Once the tension is off, the fine hairs along the edges return over 2–4 months. If an area has been pulled tight for years and is smooth and shiny, see a dermatologist: that can be permanent.",
+            "evidence": "Pumpkin seed oil was studied in pattern thinning, not in traction loss. Here it supports regrowth that only starts when the pulling stops.",
             "show_cta": true,
-            "cta_label": "",
             "bundle_tier": 1
           }
         },
@@ -679,10 +682,9 @@
             "tag": "See a doctor first",
             "title": "Please see a dermatologist before you buy anything",
             "body": "<p>Smooth round patches, or a scalp that is sore, inflamed or scarred, point to alopecia areata or a scarring alopecia. Those are medical conditions a topical oil does not address, and the earlier they are treated the better the outcome. We would rather you keep your money and get the right help.</p>",
-            "expect": "Ask your GP for a referral to a dermatologist. If they rule those conditions out and find pattern thinning or shedding instead, come back: Elaren is made for those.",
-            "evidence": "Pumpkin seed oil and caffeine were studied in pattern hair loss. There is no evidence for them in autoimmune or scarring hair loss, so we don’t claim any.",
+            "expect": "Ask your GP for a referral to a dermatologist. If they rule those conditions out and find pattern thinning or shedding instead, come back: that is what pumpkin seed oil is for.",
+            "evidence": "Pumpkin seed oil was studied in pattern hair loss. There is no evidence for it in autoimmune or scarring hair loss, so we do not claim any.",
             "show_cta": false,
-            "cta_label": "",
             "bundle_tier": 0
           }
         }
@@ -711,8 +713,8 @@
       "settings": {
         "background": true,
         "eyebrow": "3 questions · 20 seconds",
-        "title": "How well does Elaren fit <em>your</em> hair loss?",
-        "text": "<p>Pumpkin seed oil and caffeine each work on a specific cause of thinning. Answer three quick questions and we’ll tell you honestly how good a match they are for yours - and when it’s better to see a doctor first.</p>",
+        "title": "Does pumpkin seed oil fit <em>your</em> hair loss?",
+        "text": "<p>Women over 35 lose hair for a handful of reasons, and pumpkin seed oil works on one of them exceptionally well. Three quick questions and we’ll tell you honestly whether it’s yours - plus straight answers to the things people ask us most.</p>",
         "step_label": "Question {current} of {total}",
         "back_label": "← Back",
         "restart_label": "Start again",
@@ -720,7 +722,8 @@
         "evidence_label": "What the research measured",
         "cta_label": "See my bundle",
         "cta_link": "#product-section",
-        "footnote": ""
+        "footnote": "The match is based on what pumpkin seed oil and caffeine were studied for (oral pumpkin seed oil, Cho et al. 2014; topical caffeine, Dhurat et al. 2017), not on a trial of Elaren’s finished formula. It is general information, not a diagnosis. Individual results vary.",
+        "notes_label": "Your question, answered"
       }
     },
     "featured-product": {

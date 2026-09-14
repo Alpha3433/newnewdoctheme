@@ -1650,6 +1650,9 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .s-fit-quiz__result-row { padding: 14px 16px; border-radius: 12px; background: var(--brand-cream); }
 .s-fit-quiz__result-row-label { display: block; margin-bottom: 4px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
 .s-fit-quiz__result-row-text { font-size: 14px; line-height: 1.5; }
+.s-fit-quiz__result-row--notes[hidden] { display: none; }
+.s-fit-quiz__notes { margin: 0; padding: 0 0 0 18px; font-size: 14px; line-height: 1.5; }
+.s-fit-quiz__notes li + li { margin-top: 8px; }
 .s-fit-quiz__cta.custom-button { width: 100%; margin-top: 4px; }
 .s-fit-quiz__restart { align-self: center; font-size: 13px; color: var(--brand-ink); text-decoration: underline; text-underline-offset: 3px; }
 .s-fit-quiz__footnote { max-width: 640px; margin: 18px auto 0; font-size: 12px; line-height: 1.5; text-align: center; color: var(--brand-ink); }
