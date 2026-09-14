@@ -374,6 +374,25 @@
                     </div>
                   {%- endfor -%}
                 </div>
+                {%- liquid
+                  assign gift_product = section.settings.gift_product
+                  assign price_placeholder = '{price}'
+                -%}
+                {%- if gift_product != blank and section.settings.gift_text != blank -%}
+                  {%- liquid
+                    assign gift_price = gift_product.price | money_without_trailing_zeros
+                    assign gift_badge = section.settings.gift_badge | replace: price_placeholder, gift_price | replace: '&lcub;price&rcub;', gift_price
+                  -%}
+                  <div class="c-buybox-toggle__gift">
+                    {%- if gift_product.featured_image != blank -%}
+                    <div class="c-buybox-toggle__gift-image">{{ gift_product.featured_image | image_url: width: 160, height: 160, crop: 'center' | image_tag: alt: gift_product.title, loading: 'lazy', width: 78, height: 78 }}</div>
+                    {%- endif -%}
+                    <div class="c-buybox-toggle__gift-body">
+                      {%- if gift_badge != blank -%}<span class="c-buybox-toggle__gift-badge">{{ gift_badge }}</span>{%- endif -%}
+                      <div class="c-buybox-toggle__gift-text">{{ section.settings.gift_text | replace: '{product}', gift_product.title | replace: '&lcub;product&rcub;', gift_product.title }}</div>
+                    </div>
+                  </div>
+                {%- endif -%}
               </div>
               {%- endif -%}
 
@@ -624,6 +643,10 @@
     { "type": "inline_richtext", "id": "benefit_4", "label": "Benefit 4", "default": "<strong>Skip</strong>, <strong>Pause</strong> or <strong>Cancel</strong> Anytime" },
     { "type": "inline_richtext", "id": "benefit_5", "label": "Benefit 5", "default": "Consistency Is <strong>What Regrows Hair</strong>" },
     { "type": "inline_richtext", "id": "benefit_6", "label": "Benefit 6", "default": "<strong>Never Miss</strong> a Night of Regrowth" },
+    { "type": "header", "content": "Free subscription gift", "info": "Shown under the perks while Subscribe & save is on. The theme only advertises the gift: it must also be set up as a free gift on the subscription plan in Kaching Subscriptions so checkout adds it." },
+    { "type": "product", "id": "gift_product", "label": "Gift product", "info": "Its image and price fill the card." },
+    { "type": "text", "id": "gift_badge", "label": "Gift badge", "default": "FREE GIFT WORTH {price}", "info": "{price} is replaced with the gift product's price." },
+    { "type": "richtext", "id": "gift_text", "label": "Gift text", "default": "<p>Complete your routine with our <strong>{product}</strong>.</p>", "info": "{product} is replaced with the gift product's title." },
     { "type": "text", "id": "congrats_text", "label": "Savings line", "default": "Congrats! You’re saving" },
     { "type": "text", "id": "sub_badge", "label": "Subscription badge", "default": "SAVE {percent}% ON EVERY ORDER" },
     { "type": "text", "id": "sub_name", "label": "Subscription option name", "default": "Subscribe & save" },
