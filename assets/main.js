@@ -819,10 +819,22 @@
         if (progress) progress.classList.add('is-hidden');
         if (back) back.hidden = true;
         var shown = false;
+        // Every picked answer may carry a note (how to use it, minoxidil, timeline, proof): repeat them on the result.
+        var notes = questions.map(function (q) {
+          var picked = $('[data-quiz-option].is-selected [data-quiz-note]', q);
+          return picked ? picked.textContent.trim() : '';
+        }).filter(Boolean);
         results.forEach(function (r) {
           var match = r.getAttribute('data-quiz-result') === key;
           r.classList.toggle('is-hidden', !match);
           if (match) shown = true;
+          var box = $('[data-quiz-notes]', r);
+          if (box) {
+            var list = $('ul', box);
+            if (list) list.innerHTML = notes.map(function (n) { return '<li></li>'; }).join('');
+            if (list) $$('li', list).forEach(function (li, i) { li.textContent = notes[i]; });
+            box.hidden = !notes.length;
+          }
         });
         if (!shown && results[0]) results[0].classList.remove('is-hidden');
         focusCard();
