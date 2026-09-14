@@ -14,14 +14,15 @@
       "settings": {
         "image_alt": "Woman over 35 parting her hair to show fuller regrowth along her part after using Elaren Pumpkin Seed Regrowth Oil",
         "mobile_text_color": "#ffffff",
-        "review_text": "Rated 4.77/5 by verified customers · Made for women 35+",
+        "review_text": "4.77/5 from verified customers · Women 35+",
         "title": "Less Shedding in <em>Weeks.</em> Real Regrowth in Months.",
-        "subtitle": "A cold-pressed pumpkin seed oil you massage into your scalp for two minutes before bed. Not a pill, not a prescription. For the widening part, the thinning crown, the edges that never recovered, postpartum and menopausal shedding, and alopecia.",
+        "subtitle": "Pumpkin seed oil and caffeine feed tired follicles, calm shedding and help hair grow back thicker. For the part, crown and edges, postpartum and menopausal shedding.",
         "button_label": "SEE HOW IT WORKS",
         "button_link": "#product-section",
-        "stat_1": "APPLY TO THE SCALP - 2 MINUTES A NIGHT",
-        "stat_2": "LESS SHEDDING IN AS LITTLE AS 2 WEEKS",
-        "stat_3": "10k+ UNITS SOLD WORLDWIDE"
+        "stat_1": "LESS SHEDDING IN 2 WEEKS",
+        "stat_2": "FULLER HAIR IN 30 DAYS OR MONEY BACK",
+        "stat_3": "FOR EVERY TEXTURE & TYPE OF HAIR LOSS",
+        "mobile_scrim": 35
       }
     },
     "benefits-strip": {

@@ -23,14 +23,15 @@
         "pill_text": "GET AN EXCLUSIVE GIFT [LIMITED TIME]",
         "pill_bg": "#b3173a",
         "pill_color": "#ffffff",
-        "review_text": "Rated 4.77/5 by verified customers",
+        "review_text": "4.77/5 from verified customers · Women 35+",
         "title": "Less Shedding in 2 Weeks.",
-        "subtitle": "Elaren Pumpkin seed oil and caffeine feed tired follicles, calm shedding and help hair grow back thicker. For the part, the crown, the edges, postpartum and menopausal shedding.",
+        "subtitle": "Pumpkin seed oil and caffeine feed tired follicles, calm shedding and help hair grow back thicker. For the part, crown and edges, postpartum and menopausal shedding.",
         "button_label": "START MY REGROWTH – RISK-FREE",
         "button_link": "#product-section",
-        "stat_1": "LESS SHEDDING IN AS LITTLE AS 2 WEEKS",
-        "stat_2": "FULLER HAIR IN 30 DAYS OR YOUR MONEY BACK",
-        "stat_3": "FOR EVERY TEXTURE & EVERY TYPE OF HAIR LOSS"
+        "stat_1": "LESS SHEDDING IN 2 WEEKS",
+        "stat_2": "FULLER HAIR IN 30 DAYS OR MONEY BACK",
+        "stat_3": "FOR EVERY TEXTURE & TYPE OF HAIR LOSS",
+        "mobile_scrim": 35
       }
     },
     "benefits-strip": {

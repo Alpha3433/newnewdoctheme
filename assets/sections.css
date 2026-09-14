@@ -60,14 +60,23 @@
   /* Mobile framing from the section settings (see the comment in sections/froya-hero.liquid) */
   .s-hero-aging-lp__container {
     background-color: var(--hero-aging-lp-mobile-bg-color, transparent);
-    background-size: var(--hero-aging-lp-mobile-size, cover);
-    background-position: var(--hero-aging-lp-mobile-position, center center);
+    /* Layer 1: the text backdrop (Hero > Text backdrop), a dark gradient over the top ~70% that has
+       faded out by the time it reaches the photo's subject. Layer 2: the photo itself. */
+    background-image:
+      linear-gradient(to bottom, rgba(0, 0, 0, var(--hero-aging-lp-scrim, 0.35)) 0%, rgba(0, 0, 0, calc(var(--hero-aging-lp-scrim, 0.35) * 0.85)) 42%, rgba(0, 0, 0, 0) 70%),
+      var(--hero-aging-lp-mobile-bg);
+    background-size: auto, var(--hero-aging-lp-mobile-size, cover);
+    background-position: 0 0, var(--hero-aging-lp-mobile-position, center center);
+    background-repeat: no-repeat, no-repeat;
   }
+  /* Copy sizes tuned for three-line subtitle and one-line proof points on a 360-430px phone */
+  .s-hero-aging-lp__subtitle { font-size: 13px; line-height: 1.5; max-width: 360px; }
+  .s-hero-aging-lp__stats p { font-size: 13px; line-height: 1.3; white-space: nowrap; }
+  .s-hero-aging-lp__stats p + p { margin-top: 9px; }
   /* Copy sits at the top; the space under it keeps the person in the photo visible (Hero > Photo space under the text) */
   .s-hero-aging-lp__content-wrapper { padding: 28px 20px calc(28px + var(--hero-aging-lp-mobile-photo-space, 0px)); }
   .s-hero-aging-lp__content { align-items: center; margin: 0 auto; }
   .s-hero-aging-lp__title { max-width: 360px; }
-  .s-hero-aging-lp__subtitle { max-width: 340px; }
 }
 
 /* --------------------------------------------------------------------------
@@ -836,8 +845,9 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 }
 .announcement-bar__countdown-units { display: inline-flex; align-items: center; gap: 4px; }
 .announcement-bar__countdown-item {
-  min-width: calc(var(--ab-number-size, 18px) * 2);
-  padding: 3px 6px 2px;
+  /* Equal tiles wide enough for the longest unit label ("MINUTES" / "SECONDS") at its size */
+  min-width: max(calc(var(--ab-number-size, 18px) * 2.2), calc(var(--ab-unit-size, 7px) * 7.4 + 16px));
+  padding: 4px 8px 3px;
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.16);
 }
@@ -857,8 +867,9 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   font-size: var(--ab-unit-size, 7px);
   font-weight: 600;
   line-height: 1;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   opacity: 0.85;
+  white-space: nowrap;
   -webkit-text-stroke: 0;
   color: inherit;
 }
@@ -1492,7 +1503,7 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 @media screen and (max-width: 767px) {
   .s-hero-aging-lp__review { width: 100%; gap: 5px; flex-wrap: nowrap; }
   .s-hero-aging-lp__stars { flex: 0 0 auto; max-width: 58px; }
-  .s-hero-aging-lp__review-text { font-size: clamp(7.5px, 2.15vw, 11px); letter-spacing: 0; line-height: 1.2; white-space: nowrap; text-wrap: nowrap; flex-shrink: 0; }
+  .s-hero-aging-lp__review-text { font-size: clamp(8px, 2.75vw, 11px); letter-spacing: 0; line-height: 1.2; white-space: nowrap; text-wrap: nowrap; flex-shrink: 0; }
 }
 /* Both carried a 12px line-height meant for a single line; once they wrap at
    narrower widths the lines sat on top of each other. */
