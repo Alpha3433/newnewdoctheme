@@ -21,7 +21,7 @@
         "layout": "center-countdown-first",
         "layout_mobile": "stack",
         "show_countdown": true,
-        "countdown_label": "BUY 1 GET 1 FREE ENDS TONIGHT:",
+        "countdown_label": "BUY 2 GET 1 FREE ENDS TONIGHT:",
         "countdown_mode": "midnight",
         "countdown_end": "",
         "countdown_units": "Days,Hours,Minutes,Seconds",
