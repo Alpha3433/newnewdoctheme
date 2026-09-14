@@ -277,6 +277,7 @@
         "review_6": {
           "type": "review",
           "settings": {
+            "image": "shopify://shop_images/hf_20260914_112252_5a9fd099-1b8c-4ec0-bedf-45a9cf88883c.png",
             "image_alt": "",
             "name": "Verified buyer (US)",
             "tag_1": "wider part",
