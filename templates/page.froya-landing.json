@@ -21,7 +21,10 @@
         "button_link": "#product-section",
         "stat_1": "APPLY TO THE SCALP - 2 MINUTES A NIGHT",
         "stat_2": "LESS SHEDDING IN AS LITTLE AS 2 WEEKS",
-        "stat_3": "10k+ UNITS SOLD WORLDWIDE"
+        "stat_3": "10k+ UNITS SOLD WORLDWIDE",
+        "image_mobile_fit": "cover",
+        "image_mobile_position": "center bottom",
+        "mobile_photo_space": 150
       }
     },
     "benefits-strip": {
