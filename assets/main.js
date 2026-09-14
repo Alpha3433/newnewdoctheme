@@ -605,6 +605,62 @@
     fills.forEach(function (f) { fio.observe(f); });
   }
 
+  /* ============================================================= countdown */
+  // Announcement-bar timer. "midnight" counts to the visitor's next local midnight and starts
+  // over every day; "fixed" counts to a date/time the merchant typed, read in the store's
+  // timezone (the section passes the store's UTC offset), and hides itself once it has passed.
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function countdownTarget(el) {
+    if (el.getAttribute('data-mode') === 'fixed') {
+      var raw = (el.getAttribute('data-end') || '').trim();
+      var m = raw.match(/^(\d{4}-\d{2}-\d{2})(?:[ T](\d{1,2}):(\d{2}))?/);
+      if (!m) return null;
+      var offset = (el.getAttribute('data-offset') || '+0000').replace(/^([+-]\d{2}):?(\d{2})$/, '$1:$2');
+      if (!/^[+-]\d{2}:\d{2}$/.test(offset)) offset = 'Z';
+      var t = new Date(m[1] + 'T' + pad2(parseInt(m[2] || '23', 10)) + ':' + (m[3] || '59') + ':00' + offset);
+      return isNaN(t.getTime()) ? null : t;
+    }
+    var next = new Date();
+    next.setHours(24, 0, 0, 0);
+    return next;
+  }
+  function initCountdown(root) {
+    $$('[data-countdown]', root).forEach(function (el) {
+      if (!once(el, 'init')) return;
+      var unit = function (name) { var u = $('[data-unit="' + name + '"]', el); return u ? u.querySelector('.announcement-bar__countdown-number') : null; };
+      var days = $('[data-unit="days"]', el), daysSep = $('[data-unit="days-sep"]', el);
+      var nums = { d: unit('days'), h: unit('hours'), m: unit('minutes'), s: unit('seconds') };
+      var target = countdownTarget(el);
+      if (!target) { el.setAttribute('hidden', ''); return; }
+      var timer = null;
+      var tick = function () {
+        var diff = target - new Date();
+        if (diff <= 0) {
+          if (el.getAttribute('data-mode') === 'fixed') {
+            el.setAttribute('hidden', '');
+            if (timer) window.clearInterval(timer);
+            return;
+          }
+          target = countdownTarget(el); // midnight passed: start the next day
+          diff = Math.max(0, target - new Date());
+        }
+        var total = Math.floor(diff / 1000);
+        var d = Math.floor(total / 86400); total -= d * 86400;
+        var h = Math.floor(total / 3600); total -= h * 3600;
+        var mi = Math.floor(total / 60); total -= mi * 60;
+        if (nums.d) nums.d.textContent = pad2(d);
+        if (nums.h) nums.h.textContent = pad2(h);
+        if (nums.m) nums.m.textContent = pad2(mi);
+        if (nums.s) nums.s.textContent = pad2(total);
+        if (days) { if (d > 0) days.removeAttribute('hidden'); else days.setAttribute('hidden', ''); }
+        if (daysSep) { if (d > 0) daysSep.removeAttribute('hidden'); else daysSep.setAttribute('hidden', ''); }
+        el.removeAttribute('hidden');
+      };
+      tick();
+      timer = window.setInterval(tick, 1000);
+    });
+  }
+
   /* ============================================================ newsletter */
   function initNewsletter(root) {
     $$('.s-newsletter__form', root).forEach(function (form) {
@@ -629,6 +685,7 @@
     initScience(root);
     initBars(root);
     initNewsletter(root);
+    initCountdown(root);
     initCartDrawer($('#mini-cart', root) || (root === document ? Cart.drawer() : null));
   }
 

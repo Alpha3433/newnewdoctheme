@@ -15,7 +15,12 @@
       "type": "froya-announcement-bar",
       "settings": {
         "text": "FREE INSURED SHIPPING 🌱 30-DAY MONEY-BACK GUARANTEE",
-        "link": ""
+        "link": "",
+        "show_countdown": true,
+        "countdown_label": "OFFER ENDS IN",
+        "countdown_mode": "midnight",
+        "countdown_end": "",
+        "countdown_units": "Days,Hours,Minutes,Seconds"
       }
     },
     "header": {
@@ -341,7 +346,7 @@
           "elaren-sleepsilk-pillowcase"
         ],
         "upsell_button": "ADD TO CART",
-        "show_country_selector": true,
+        "show_country_selector": false,
         "country_label": "Ship to",
         "discount_label": "DISCOUNT",
         "subtotal_label": "SUBTOTAL",
