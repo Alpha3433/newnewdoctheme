@@ -25,9 +25,9 @@
         "countdown_mode": "midnight",
         "countdown_end": "",
         "countdown_units": "Days,Hours,Minutes,Seconds",
-        "countdown_text_size": 14,
+        "countdown_text_size": 13,
         "countdown_number_size": 15,
-        "countdown_unit_size": 6
+        "countdown_unit_size": 8
       }
     },
     "header": {
