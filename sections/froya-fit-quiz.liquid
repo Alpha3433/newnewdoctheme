@@ -30,7 +30,7 @@
 <div class="s-fit-quiz custom-section{% if section.settings.background %} s-fit-quiz--background{% endif %}" data-fit-quiz data-section-id="{{ section.id }}">
   <div class="s-fit-quiz__container">
     <header class="s-fit-quiz__head">
-      {%- if section.settings.eyebrow != blank -%}<p class="s-fit-quiz__eyebrow"><span aria-hidden="true" class="s-fit-quiz__eyebrow-dot"></span>{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.eyebrow != blank -%}<p class="s-fit-quiz__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
       {%- if section.settings.title != blank -%}<h2 class="s-fit-quiz__title section-title"><p>{{ section.settings.title }}</p></h2>{%- endif -%}
       {%- if section.settings.text != blank -%}<div class="s-fit-quiz__intro">{{ section.settings.text }}</div>{%- endif -%}
     </header>
