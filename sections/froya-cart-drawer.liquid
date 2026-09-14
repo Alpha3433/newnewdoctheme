@@ -163,9 +163,10 @@
                     {%- if show_variant_title -%}
                       <span class="product-item-meta__variant text--xsmall text--subdued">{{ item.variant.title }}</span>
                     {%- endif -%}
-                    {%- if item.selling_plan_allocation -%}
-                      <span class="product-item-meta__plan text--xsmall text--subdued">{{ item.selling_plan_allocation.selling_plan.name }}</span>
-                    {%- endif -%}
+                    {%- comment -%}
+                      The selling plan's own name ("Delivery: every month | 10% off") is not repeated
+                      here: the Subscribe & save switch below already shows what the line is.
+                    {%- endcomment -%}
                     {%- if plan_id != blank and section.settings.show_subscribe_toggle -%}
                       <div class="line-item__subscription">
                         <label class="subscription-toggle" role="switch" aria-checked="{% if item.selling_plan_allocation %}true{% else %}false{% endif %}">

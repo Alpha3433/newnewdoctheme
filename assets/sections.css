@@ -579,7 +579,11 @@ body.modal-open { overflow: hidden; }
 /* The live page's critical CSS gives every div[class*="loox"] content-visibility:auto with a
    100px placeholder; render the rating normally so it never reserves phantom height. */
 div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibility: visible; contain: none; contain-intrinsic-size: none; min-height: 0; }
-.custom_loox_star_rating a { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.custom_loox_star_rating a { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; color: inherit; text-decoration: none; }
+/* Rating line above the product name (Frøya's buy-box header): one link to the review wall */
+.custom_loox_star_rating--above-name { margin-bottom: 8px; }
+.custom_loox_star_rating--above-name a:hover .loox-rating__text,
+.custom_loox_star_rating--above-name a:focus-visible .loox-rating__text { text-decoration: underline; text-underline-offset: 3px; }
 .loox-rating { display: inline-flex; align-items: center; }
 .loox-rating-content { display: inline-flex; align-items: center; gap: 2px; }
 .loox-rating .loox-icon { flex: 0 0 16px; width: 16px; height: 16px; color: var(--brand-orange); fill: currentColor; }
@@ -595,6 +599,7 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 6px;
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.06em;
@@ -826,6 +831,7 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   border: 0;
 }
 .c-bundle__legend {
+  width: 100%;
   padding: 0 0 2px;
   font-size: 13px;
   font-weight: 700;
@@ -1017,16 +1023,19 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }
-.c-low-stock { display: flex; justify-content: center; }
+/* Low-stock notice: a full-width soft box under the USPs, dark text with the count in the CTA colour */
+.c-low-stock { display: flex; justify-content: center; width: 100%; margin-top: 14px; padding: 22px 16px; border-radius: 4px; background: #f4f1ed; }
 .c-low-stock__inner {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--brand-cta);
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #1f1f1f;
+  text-align: center;
 }
-.c-low-stock__count { font-weight: 800; }
+.c-low-stock__count { font-weight: 600; color: var(--brand-cta); }
 
 @media screen and (max-width: 999px) {
   .s-featured-product__content { gap: 32px; }
@@ -1056,6 +1065,7 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .c-buybox-toggle__head-title { font-size: 17px; }
   .c-buybox-toggle__head-sub { font-size: 14px; }
   .c-buybox-toggle__row p { font-size: 14px; }
+  .c-bundle__legend { text-align: center; }
   .c-buybox-toggle__gift { margin: 0 10px 10px; padding: 12px; gap: 12px; }
   .c-buybox-toggle__gift-image { flex-basis: 64px; width: 64px; height: 64px; }
   .c-bundle__card { padding: 12px; }

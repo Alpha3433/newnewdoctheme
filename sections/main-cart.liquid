@@ -31,7 +31,6 @@
                   <div>
                     <a class="product-card__title" href="{{ item.url }}">{{ item.product.title }}</a>
                     {%- if show_variant_title -%}<div class="cart-footer__note">{{ item.variant.title }}</div>{%- endif -%}
-                    {%- if item.selling_plan_allocation -%}<div class="cart-footer__note">{{ item.selling_plan_allocation.selling_plan.name }}</div>{%- endif -%}
                     <a class="cart-footer__note link-underline" href="{{ item.url_to_remove }}">{{ 'cart.general.remove' | t }}</a>
                   </div>
                 </div>

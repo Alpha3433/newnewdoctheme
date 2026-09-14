@@ -683,8 +683,8 @@
         "badge_underline": "not adapted from men’s",
         "badge_bg": "#e5f3fa",
         "badge_color": "#54585a",
-        "label_1": "Pumpkin Seed Oil + Caffeine Complex",
-        "label_2": "30-day supply",
+        "label_1": "",
+        "label_2": "",
         "reviews_count": 43,
         "rating": "4.8",
         "rating_text": "4.77/5 FROM VERIFIED BUYERS",
@@ -728,7 +728,8 @@
         "low_stock_text": "Low Stock: only {count} left",
         "button_price": "none",
         "low_stock_source": "fixed",
-        "low_stock_count": 156
+        "low_stock_count": 156,
+        "reviews_anchor": "reviews-section"
       }
     },
     "founder-story": {
