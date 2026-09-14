@@ -459,8 +459,8 @@
         "intro_1": {
           "type": "intro",
           "settings": {
-            "text": "Elaren is built on cold-pressed pumpkin seed oil, the most-studied natural DHT blocker for hair growth, with a Caffeine Complex in support. Here is what independent, peer-reviewed research found:",
-            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/Screenshot_2025-12-18_at_1.11.35_PM_1.png"
+            "text": "Here is what independent, peer-reviewed research found:",
+            "icon_fallback": ""
           }
         },
         "stat_1": {
