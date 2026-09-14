@@ -108,6 +108,7 @@
         "slide_4": {
           "type": "slide",
           "settings": {
+            "logo": "shopify://shop_images/025-bazaar-logo-whitee_1.svg",
             "logo_alt": "",
             "quote": "\"Works on the part, the crown, the temples and the edges.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/bazaar-logo-whitee_1.svg?v=1732727762"
@@ -116,6 +117,7 @@
         "slide_5": {
           "type": "slide",
           "settings": {
+            "logo": "shopify://shop_images/026-cosmopolitan-logo_1.png",
             "logo_alt": "",
             "quote": "\"Made for coils, curls, waves and straight hair alike.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/cosmopolitan-logo_1.png?v=1732728169"
@@ -124,6 +126,7 @@
         "slide_6": {
           "type": "slide",
           "settings": {
+            "logo": "shopify://shop_images/027-105_marie_claire_logo_38f7ad58-3b5d-43c9-aa98-1913384c9f81.png",
             "logo_alt": "",
             "quote": "\"Two minutes a night. That’s the whole routine.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/105_marie_claire_logo.png?v=1733330895"
@@ -132,6 +135,7 @@
         "slide_7": {
           "type": "slide",
           "settings": {
+            "logo": "shopify://shop_images/028-the_new_knew.png",
             "logo_alt": "",
             "quote": "\"A gentler option for women who can’t or won’t use minoxidil.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/the_new_knew.png?v=1733254162"
@@ -140,6 +144,7 @@
         "slide_8": {
           "type": "slide",
           "settings": {
+            "logo": "shopify://shop_images/029-ELLE_Magazine_Logo.svg",
             "logo_alt": "",
             "quote": "\"Less shedding in as little as 2 weeks. Fuller-looking hair in 30 days.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/ELLE_Magazine_Logo.svg?v=1732863266"
@@ -148,6 +153,7 @@
         "slide_9": {
           "type": "slide",
           "settings": {
+            "logo": "shopify://shop_images/030-ABC_News_logo_2021.svg",
             "logo_alt": "",
             "quote": "\"Safe under wigs, braids and protective styles.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/ABC_News_logo_2021.svg?v=1727539050"
@@ -156,6 +162,7 @@
         "slide_10": {
           "type": "slide",
           "settings": {
+            "logo": "shopify://shop_images/031-CBS_review_of_Froya_Organics.svg",
             "logo_alt": "",
             "quote": "\"Cold-pressed pumpkin seed oil, powered by a Caffeine Complex.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/CBS_review_of_Froya_Organics.svg?v=1727609603"
@@ -164,6 +171,7 @@
         "slide_11": {
           "type": "slide",
           "settings": {
+            "logo": "shopify://shop_images/032-yahoo.png",
             "logo_alt": "",
             "quote": "\"Rated 4.77/5 by verified customers.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/yahoo.png?v=1733254162"
