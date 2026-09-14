@@ -27,7 +27,7 @@
   endif
 -%}
 <div class="shopify-section" id="shopify-section-template--26717513089391__hero_banner_BnFCDE">
-<section aria-label="Hero banner" class="s-hero-aging-lp" role="region" style="--mobile-text-color:{{ section.settings.mobile_text_color }};--ig-aging-lp-mobile-min-height:550px;--ig-aging-lp-cta-max-width:550px;--hero-aging-lp-mobile-bg:url('{{ mobile_bg }}');--hero-aging-lp-mobile-offset:0px;--hero-aging-lp-mobile-size:{{ mobile_size }};--hero-aging-lp-mobile-position:{{ mobile_position }};--hero-aging-lp-mobile-bg-color:{{ section.settings.image_mobile_bg | default: '#3d4b33' }};">
+<section aria-label="Hero banner" class="s-hero-aging-lp" role="region" style="--mobile-text-color:{{ section.settings.mobile_text_color }};--ig-aging-lp-mobile-min-height:550px;--ig-aging-lp-cta-max-width:550px;--hero-aging-lp-mobile-bg:url('{{ mobile_bg }}');--hero-aging-lp-mobile-offset:0px;--hero-aging-lp-mobile-size:{{ mobile_size }};--hero-aging-lp-mobile-position:{{ mobile_position }};--hero-aging-lp-mobile-bg-color:{{ section.settings.image_mobile_bg | default: '#3d4b33' }};--hero-aging-lp-mobile-photo-space:{{ section.settings.mobile_photo_space | default: 150 }}px;">
   <div class="s-hero-aging-lp__container" data-hero-link="{{ section.settings.button_link | default: '#product-section' }}"><div class="s-hero-aging-lp__image-desktop">
       {%- render 'froya-image', image: section.settings.image, fallback: desktop_fallback, alt: section.settings.image_alt, width: 1600, height: 1179, loading: 'eager', sizes: '(min-width: 1920px) 960px, (min-width: 1200px) 600px, 50vw' -%}
     </div>
@@ -79,7 +79,8 @@
       { "value": "left top", "label": "Top left" }, { "value": "center top", "label": "Top centre" }, { "value": "right top", "label": "Top right" },
       { "value": "left center", "label": "Middle left" }, { "value": "center center", "label": "Centre" }, { "value": "right center", "label": "Middle right" },
       { "value": "left bottom", "label": "Bottom left" }, { "value": "center bottom", "label": "Bottom centre" }, { "value": "right bottom", "label": "Bottom right" }
-    ], "default": "center center", "info": "The part of the photo kept when it is cropped (Fill the hero only)." },
+    ], "default": "center bottom", "info": "The part of the photo kept when it is cropped (Fill the hero only). Bottom centre keeps the person in a portrait shot composed like the reference: foliage at the top, the person in the lower half." },
+    { "type": "range", "id": "mobile_photo_space", "label": "Photo space under the text (mobile)", "min": 0, "max": 320, "step": 10, "unit": "px", "default": 150, "info": "Empty room kept below the last proof point so the person in the photo stays visible under the copy, as on the reference page." },
     { "type": "color", "id": "image_mobile_bg", "label": "Colour behind the text (mobile)", "default": "#3d4b33", "info": "Used by \"Show the whole photo at the top\" for the area under the photo." },
     { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Woman over 35 parting her hair to show fuller regrowth along her part after using Elaren Pumpkin Seed Regrowth Oil" },
     { "type": "image_picker", "id": "stars_image", "label": "Star rating image", "info": "Small 68 × 14 px graphic shown before the review line." },

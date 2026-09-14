@@ -26,7 +26,10 @@
         "button_link": "#product-section",
         "stat_1": "LESS SHEDDING IN AS LITTLE AS 2 WEEKS",
         "stat_2": "FULLER HAIR IN 30 DAYS OR YOUR MONEY BACK",
-        "stat_3": "FOR EVERY TEXTURE & EVERY TYPE OF HAIR LOSS"
+        "stat_3": "FOR EVERY TEXTURE & EVERY TYPE OF HAIR LOSS",
+        "image_mobile_fit": "cover",
+        "image_mobile_position": "center bottom",
+        "mobile_photo_space": 150
       }
     },
     "benefits-strip": {

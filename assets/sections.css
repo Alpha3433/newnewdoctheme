@@ -63,7 +63,8 @@
     background-size: var(--hero-aging-lp-mobile-size, cover);
     background-position: var(--hero-aging-lp-mobile-position, center center);
   }
-  .s-hero-aging-lp__content-wrapper { padding: 28px 20px; }
+  /* Copy sits at the top; the space under it keeps the person in the photo visible (Hero > Photo space under the text) */
+  .s-hero-aging-lp__content-wrapper { padding: 28px 20px calc(28px + var(--hero-aging-lp-mobile-photo-space, 0px)); }
   .s-hero-aging-lp__content { align-items: center; margin: 0 auto; }
   .s-hero-aging-lp__title { max-width: 360px; }
   .s-hero-aging-lp__subtitle { max-width: 340px; }
