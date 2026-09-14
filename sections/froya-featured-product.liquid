@@ -206,22 +206,31 @@
     </h2>
     {%- endif -%}
 
+    {%- comment -%}
+      Buy-box header, laid out like Frøya's: the star-rating line sits ABOVE the product name and is
+      one link that scrolls to the review wall ("Real women, real hair, real reviews", whose header
+      carries id="reviews-section"). The optional two-label line renders under the name only when a
+      label is filled in; the landing page leaves both empty.
+    {%- endcomment -%}
+    {%- assign reviews_anchor = section.settings.reviews_anchor | default: 'reviews-section' | remove: '#' | strip -%}
     {%- capture product_head -%}
-      <div class="s-featured-product__product-info-labels">
-        {%- if section.settings.label_1 != blank -%}<span>{{ section.settings.label_1 }}</span>{%- endif -%}
-        {%- if section.settings.label_1 != blank and section.settings.label_2 != blank -%}<span>·</span>{%- endif -%}
-        {%- if section.settings.label_2 != blank -%}<span>{{ section.settings.label_2 }}</span>{%- endif -%}
-      </div>
-      <h3 class="s-featured-product__product-name">{{ product_title }}</h3>
       {%- if section.settings.reviews_count > 0 -%}
-      <div class="custom_loox_star_rating">
-        <a data-scroll-to="reviews-section" href="#reviews-section">
+      <div class="custom_loox_star_rating custom_loox_star_rating--above-name">
+        <a data-scroll-to="{{ reviews_anchor }}" href="#{{ reviews_anchor }}" aria-label="{{ section.settings.rating_text | default: 'Read the reviews' | escape }}">
           <div aria-label="{{ section.settings.reviews_count }} reviews" class="loox-rating" data-raters="{{ section.settings.reviews_count }}" data-rating="{{ section.settings.rating }}" role="figure" title="{{ section.settings.reviews_count }} reviews"><div class="loox-rating-content">
             {%- for i in (1..5) -%}<svg aria-hidden="true" class="loox-icon" data-lx-fill="full" viewBox="0 0 24 24"><use href="#looxicons-rating-icon"></use></svg>{%- endfor -%}
             <span aria-hidden="true" class="loox-rating-label">&nbsp;({{ section.settings.reviews_count }})</span>
           </div></div>
           {%- if section.settings.rating_text != blank -%}<div class="loox-rating__text">{{ section.settings.rating_text }}</div>{%- endif -%}
         </a>
+      </div>
+      {%- endif -%}
+      <h3 class="s-featured-product__product-name">{{ product_title }}</h3>
+      {%- if section.settings.label_1 != blank or section.settings.label_2 != blank -%}
+      <div class="s-featured-product__product-info-labels">
+        {%- if section.settings.label_1 != blank -%}<span>{{ section.settings.label_1 }}</span>{%- endif -%}
+        {%- if section.settings.label_1 != blank and section.settings.label_2 != blank -%}<span>·</span>{%- endif -%}
+        {%- if section.settings.label_2 != blank -%}<span>{{ section.settings.label_2 }}</span>{%- endif -%}
       </div>
       {%- endif -%}
     {%- endcapture -%}
@@ -668,12 +677,14 @@
     { "type": "text", "id": "badge_underline", "label": "Underlined part", "default": "not adapted from men’s" },
     { "type": "color", "id": "badge_bg", "label": "Badge background", "default": "#e5f3fa" },
     { "type": "color", "id": "badge_color", "label": "Badge text colour", "default": "#54585a" },
-    { "type": "header", "content": "Labels & rating" },
-    { "type": "text", "id": "label_1", "label": "Label 1", "default": "Pumpkin Seed Oil + Caffeine Complex" },
-    { "type": "text", "id": "label_2", "label": "Label 2", "default": "30-day supply" },
-    { "type": "number", "id": "reviews_count", "label": "Review count", "default": 43 },
+    { "type": "header", "content": "Rating line", "info": "Stars, review count and text shown above the product name. The whole line is a link that scrolls to the reviews." },
+    { "type": "number", "id": "reviews_count", "label": "Review count", "default": 43, "info": "Set to 0 to hide the line." },
     { "type": "text", "id": "rating", "label": "Star rating (out of 5)", "default": "4.77", "info": "Keep it equal to the rating quoted in the text below." },
     { "type": "text", "id": "rating_text", "label": "Rating text", "default": "4.77/5 FROM VERIFIED BUYERS" },
+    { "type": "text", "id": "reviews_anchor", "label": "Scrolls to", "default": "reviews-section", "info": "The id of the element to scroll to. reviews-section is the heading of the Review wall (\"Real women, real hair, real reviews\")." },
+    { "type": "header", "content": "Labels under the name", "info": "Optional small line under the product name. Leave both empty to hide it." },
+    { "type": "text", "id": "label_1", "label": "Label 1" },
+    { "type": "text", "id": "label_2", "label": "Label 2" },
     { "type": "text", "id": "save_tag", "label": "Gallery save tag", "default": "Save {percent}%", "info": "{percent} is replaced with the subscription discount." },
     { "type": "text", "id": "ships_free_text", "label": "Shipping banner", "default": "THIS ORDER SHIPS FREE" },
     { "type": "richtext", "id": "includes", "label": "What you get", "default": "<p>What you get (30-day supply):<br>· Pumpkin Seed Regrowth Oil with Caffeine Complex<br>· Precision applicator for scalp-only, no-waste application<br>· Scalp massager to boost circulation at the root<br>· Free insured shipping and a 30-day money-back guarantee</p>" },

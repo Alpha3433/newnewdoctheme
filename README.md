@@ -39,6 +39,12 @@ template (`templates/page.froya-landing.json`).
   size for the message) and *Position*: a desktop layout (message left / countdown left / both
   centered in either order / stacked in either order) and a mobile layout (stacked or side by side,
   in either order).
+* **Buy-box header** – the star-rating line (Featured product → Rating line) sits above the product
+  name, as on Frøya's page, and the whole line scrolls to the review wall ("Real women, real hair,
+  real reviews"); *Scrolls to* takes another element id. The old two-label line under the name is
+  still available (*Labels under the name*) and empty by default. The cart no longer repeats the
+  selling plan's own name ("Delivery: every month | 10% off") under a subscription line: the
+  Subscribe & save switch shows the state.
 * **Add-to-cart button** – Featured product → Button & stock → *Price on the button*: label only
   (the default: the bundle total already sits in the price line and on the selected bundle card),
   label with the bundle total, or label with the total and the regular price struck through. The
