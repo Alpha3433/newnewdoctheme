@@ -774,17 +774,17 @@
         "sub_perks": "<p><strong>LOWEST PRICE</strong> every month<br/><strong>&lcub;percent&rcub;% OFF</strong> every order<br/><strong>FREE INSURED SHIPPING</strong> always<br/><strong>CANCEL, PAUSE, EDIT</strong> anytime<br/><strong>RESERVED</strong> stock<br/><strong>LONG-TERM</strong> fuller hair</p>",
         "otp_badge": "NO COMMITMENT",
         "otp_name": "One-Time Purchase",
-        "delivery_label": "Delivered every 30 days",
+        "delivery_label": "",
         "info_1": "",
         "info_2": "",
         "button_label": "Add to Cart",
+        "button_price": "none",
         "sold_out_label": "Sold out",
         "show_low_stock": true,
-        "low_stock_threshold": 150,
-        "low_stock_text": "Low Stock: only {count} left",
-        "button_price": "none",
         "low_stock_source": "fixed",
-        "low_stock_count": 156
+        "low_stock_threshold": 150,
+        "low_stock_count": 156,
+        "low_stock_text": "Low Stock: only {count} left"
       }
     },
     "founder-story": {
