@@ -609,44 +609,44 @@
         "question_3": {
           "type": "question",
           "settings": {
-            "text": "How do you want to go about it?",
-            "hint": "This decides which bundle we point you to."
+            "text": "How noticeable is it right now?",
+            "hint": "Be honest with yourself here. It only changes how long a supply we point you to."
           }
         },
         "option_10": {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "Try it and see before I commit",
+            "label": "Only I notice it, and mostly when I go looking for it",
             "band": "starter",
-            "note": "Fair. One bottle is 30 nights, and if your shedding has not eased by then we refund you. No photos, no awkward questions. Part your hair, squeeze a few drops onto the scalp where it is thinning, massage for two minutes and leave it in overnight. Every night."
+            "note": "Early thinning is the easiest to turn around: the follicles are smaller, not gone. Caught at this stage, most women see the shedding ease inside the first bottle, and the money-back guarantee covers those 30 nights."
           }
         },
         "option_11": {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "Do it properly: stop the shedding and get my density back",
+            "label": "My hairdresser, partner or a friend has mentioned it",
             "band": "core",
-            "note": "Less hair in the brush by weeks 2–4, fine baby hairs along the part and hairline by month 2–3, visible density over months 4–6. Anyone promising faster is guessing, and stopping at week three is the mistake we see most. Three months is the minimum that shows you the result."
+            "note": "Once other people can see it, the follicles have been shrinking for a few cycles and need a full one, about three months, of nightly DHT-dampening to turn around. Less hair in the brush by weeks 2–4, fine baby hairs by month 2–3, and stopping at week three is the mistake we see most."
           }
         },
         "option_12": {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "Go all in and get the best price per bottle",
+            "label": "I style around it, and scalp shows through in photos or under lights",
             "band": "full",
-            "note": "Six months is two full growth cycles, long enough for the fine baby hairs of month 2–3 to thicken into hair you can actually see. Buy 3, Get 3 Free is the lowest price per bottle we offer, and every bottle is covered by the guarantee."
+            "note": "Scalp that shows through means a lot of follicles are producing hair too fine to see. Fine baby hairs come first, over months 2–3, and it takes a second growth cycle, months 4–6, for them to thicken into density you can see. Six months is the window that covers it."
           }
         },
         "option_13": {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "I’m on minoxidil, or something my doctor prescribed",
+            "label": "It’s mostly the shedding. My hair still looks full, for now",
             "band": "core",
-            "note": "Elaren has no minoxidil and no hormones, so it does not compete with anything a doctor has prescribed. Apply the minoxidil first, let it dry, then the oil. Many women use both; many use the oil on its own as the gentler option."
+            "note": "Shedding before any visible thinning is the best time to act, because the goal is keeping what you have. Nightly use over one full growth cycle, about three months, is what settles the shedding and protects the hair that grows back."
           }
         },
         "result_1": {
