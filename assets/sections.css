@@ -1560,7 +1560,7 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 }
 
 /* --------------------------------------------------------------------------
-   Hair-loss fit quiz (sections/froya-fit-quiz.liquid)
+   Bundle fit quiz (sections/froya-fit-quiz.liquid)
    -------------------------------------------------------------------------- */
 .s-fit-quiz { padding: 56px 20px; }
 .s-fit-quiz--background { background: var(--brand-cream); }
@@ -1640,8 +1640,8 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.s-fit-quiz__result--shedding .s-fit-quiz__result-tag { background: #2f7d8c; }
-.s-fit-quiz__result--traction .s-fit-quiz__result-tag { background: var(--brand-orange); }
+.s-fit-quiz__result--starter .s-fit-quiz__result-tag { background: #2f7d8c; }
+.s-fit-quiz__result--full .s-fit-quiz__result-tag { background: var(--brand-cta); }
 .s-fit-quiz__result--medical .s-fit-quiz__result-tag { background: var(--brand-mauve-dark); }
 .s-fit-quiz__result-title { margin: 0; font-family: var(--font-serif); font-size: 26px; line-height: 1.2; letter-spacing: -0.01em; }
 .s-fit-quiz__result-body { font-size: 15px; line-height: 1.55; }

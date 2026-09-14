@@ -1,18 +1,20 @@
 {% comment %}
-  Hair-loss fit quiz. Three questions, one result screen that tells the visitor how well Elaren fits
-  the KIND of hair loss they have. It never quotes a probability: the result is a band with a reason.
+  Bundle fit quiz. Three questions, one result screen that matches the visitor to the Elaren bundle
+  that fits how their hair is thinning and how they want to go about it. Nearly every path is a
+  positive match; the one exception is the "see a doctor first" answer, which we keep on purpose.
 
   Blocks:
     question  - one question (order in the sidebar = order asked)
     option    - an answer; "Belongs to question" says which question it appears under and "Points to"
-                the hair-loss type it suggests (pattern / shedding / traction / medical / none)
-    result    - the screen shown for one band (pattern, shedding, traction, medical)
+                the bundle it argues for (starter / core / full), "medical" for the doctor off-ramp,
+                or "none" for an answer that only adds a note to the result
+    result    - the screen shown for one band (starter, core, full, medical)
 
   How the band is decided (assets/main.js, initFitQuiz):
     1. any answer pointing to "medical" wins - those visitors are told to see a doctor, not to buy;
-    2. otherwise any answer pointing to "traction" wins;
-    3. otherwise whichever of "pattern" / "shedding" collected more answers, pattern on a tie.
-  Every result can hand the visitor to the buy box with a bundle tier pre-selected.
+    2. otherwise the bundle with the most answers wins; a tie goes to "core" (the 3-month bundle).
+  Every answer may carry a "note", repeated on the result under "Why this fits you", and every result
+  hands the visitor to the buy box with its bundle tier pre-selected.
 {% endcomment %}
 {%- liquid
   assign questions = section.blocks | where: 'type', 'question'
@@ -106,7 +108,7 @@
 
 {% schema %}
 {
-  "name": "Hair-loss fit quiz",
+  "name": "Bundle fit quiz",
   "tag": "section",
   "settings": [
     {
@@ -125,13 +127,13 @@
       "type": "inline_richtext",
       "id": "title",
       "label": "Heading",
-      "default": "Does pumpkin seed oil fit <em>your</em> hair loss?"
+      "default": "Which Elaren bundle fits <em>your</em> hair?"
     },
     {
       "type": "richtext",
       "id": "text",
       "label": "Intro",
-      "default": "<p>Women over 35 lose hair for a handful of reasons, and pumpkin seed oil works on one of them exceptionally well. Three quick questions and we’ll tell you honestly whether it’s yours - plus straight answers to the things people ask us most.</p>"
+      "default": "<p>Thinning after 35 almost always comes down to one thing: as oestrogen falls, follicles feel DHT more, and that is exactly what pumpkin seed oil works on. Three quick questions and we’ll match you to the right supply, with straight answers on how to use it and what to expect.</p>"
     },
     {
       "type": "text",
@@ -171,9 +173,9 @@
     {
       "type": "text",
       "id": "notes_label",
-      "label": "\"Your question, answered\" label",
-      "default": "Your question, answered",
-      "info": "Heading of the box that repeats the answer notes of whatever the visitor picked."
+      "label": "\"Why this fits you\" label",
+      "default": "Why this fits you",
+      "info": "Heading of the box that repeats the notes of whatever the visitor picked."
     },
     {
       "type": "text",
@@ -240,16 +242,16 @@
           "label": "Points to",
           "options": [
             {
-              "value": "pattern",
-              "label": "Hormonal pattern thinning (DHT)"
+              "value": "starter",
+              "label": "Starter bottle (1 bottle)"
             },
             {
-              "value": "shedding",
-              "label": "Shedding after a trigger (telogen effluvium)"
+              "value": "core",
+              "label": "3-month bundle (Buy 2, Get 1 Free)"
             },
             {
-              "value": "traction",
-              "label": "Traction from tight styles"
+              "value": "full",
+              "label": "6-month bundle (Buy 3, Get 3 Free)"
             },
             {
               "value": "medical",
@@ -257,17 +259,17 @@
             },
             {
               "value": "none",
-              "label": "Nothing (neutral answer)"
+              "label": "Nothing (just adds its note to the result)"
             }
           ],
-          "default": "pattern",
-          "info": "A \"See a doctor first\" answer always decides the result, then \"Traction\", then whichever of pattern / shedding got more answers."
+          "default": "core",
+          "info": "A \"See a doctor first\" answer always decides the result. Otherwise the bundle with the most answers wins, and a tie goes to the 3-month bundle."
         },
         {
           "type": "textarea",
           "id": "note",
-          "label": "Answer shown on the result (optional)",
-          "info": "Shown in the \"Your question, answered\" box of the result when this answer is picked. Use it for the things people ask before buying: how to use it, minoxidil, how long it takes."
+          "label": "Shown on the result (optional)",
+          "info": "Repeated in the \"Why this fits you\" box of the result when this answer is picked. Use it for why the oil fits this kind of thinning, or the things people ask before buying: how to use it, minoxidil, how long it takes."
         }
       ]
     },
@@ -281,23 +283,23 @@
           "label": "Shown for",
           "options": [
             {
-              "value": "pattern",
-              "label": "Hormonal pattern thinning (DHT)"
+              "value": "starter",
+              "label": "Starter bottle (1 bottle)"
             },
             {
-              "value": "shedding",
-              "label": "Shedding after a trigger (telogen effluvium)"
+              "value": "core",
+              "label": "3-month bundle (Buy 2, Get 1 Free)"
             },
             {
-              "value": "traction",
-              "label": "Traction from tight styles"
+              "value": "full",
+              "label": "6-month bundle (Buy 3, Get 3 Free)"
             },
             {
               "value": "medical",
               "label": "See a doctor first"
             }
           ],
-          "default": "pattern"
+          "default": "core"
         },
         {
           "type": "text",
@@ -309,19 +311,19 @@
           "type": "text",
           "id": "title",
           "label": "Title",
-          "default": "Your thinning is the kind pumpkin seed oil was studied for"
+          "default": "The 3-month bundle is built for exactly this"
         },
         {
           "type": "richtext",
           "id": "body",
           "label": "Text",
-          "default": "<p>A part that keeps widening, a crown that shows more scalp each year, temples that creep back: that is hormonal pattern thinning, and after 35 it is the most common reason a woman loses hair. As oestrogen falls, follicles feel DHT more, and DHT shrinks each one a little more every cycle until the hair it grows is too fine to see.</p><p>Pumpkin seed oil’s plant sterols dampen the enzyme that makes DHT. That is the whole idea behind Elaren: cold-pressed pumpkin seed oil, massaged into the scalp where the thinning is, every night.</p>"
+          "default": "<p>What you described is hormonal pattern thinning, the most common reason a woman loses hair after 35 and the kind pumpkin seed oil was studied in. As oestrogen falls, follicles feel DHT more, and DHT shrinks each one a little more every cycle until the hair it grows is too fine to see.</p><p>Pumpkin seed oil’s plant sterols dampen the enzyme that makes DHT. A follicle needs a full growth cycle, about three months, to show the difference, which is why Buy 2, Get 1 Free is the bundle most women choose and the one we recommend for you.</p>"
         },
         {
           "type": "textarea",
           "id": "expect",
           "label": "What to expect",
-          "default": "Two minutes on the scalp before bed, every night. Less hair in the brush within 2–4 weeks. Fine baby hairs along the part and hairline by month 2–3. Visible density over months 4–6, which is why the 3-month bundle is the one we recommend."
+          "default": "Two minutes on the scalp before bed, every night. Less hair in the brush within 2–4 weeks. Fine baby hairs along the part and hairline by month 2–3. Visible density from month 4, which the three bottles carry you into."
         },
         {
           "type": "textarea",
@@ -348,7 +350,7 @@
           "max": 5,
           "step": 1,
           "default": 2,
-          "info": "The position of the tier in the Featured product section (1 = first card). 0 = leave the selection alone."
+          "info": "The position of the tier in the Featured product section (1 = first card, e.g. 1 bottle; 2 = 3-month; 3 = 6-month). 0 = leave the selection alone."
         }
       ]
     }
@@ -356,7 +358,7 @@
   "max_blocks": 30,
   "presets": [
     {
-      "name": "Hair-loss fit quiz",
+      "name": "Bundle fit quiz",
       "blocks": [
         {
           "type": "question",
@@ -369,7 +371,8 @@
           "settings": {
             "question": 1,
             "label": "My part is wider and the crown looks thinner under the bathroom light",
-            "band": "pattern"
+            "band": "none",
+            "note": "A widening part and a crown that shows more scalp each year is hormonal pattern thinning, the most common kind after 35 and the kind pumpkin seed oil was studied in. Massaged into the scalp where the thinning is, its plant sterols dampen the enzyme that makes DHT, the hormone shrinking those follicles."
           }
         },
         {
@@ -377,15 +380,26 @@
           "settings": {
             "question": 1,
             "label": "My hairline or temples are creeping back",
-            "band": "pattern"
+            "band": "none",
+            "note": "Temples and hairline are where DHT bites first as oestrogen falls. Pumpkin seed oil dampens the enzyme that makes DHT, which is why it is the active Elaren is built around, and the hairline is where the first fine baby hairs usually show."
           }
         },
         {
           "type": "option",
           "settings": {
             "question": 1,
-            "label": "My ponytail is half what it was and I lose handfuls in the shower",
-            "band": "shedding"
+            "label": "There’s more hair in the brush, the shower and on my pillow",
+            "band": "none",
+            "note": "Heavier shedding is the first thing the oil tends to shift. Most women notice less hair in the brush within 2–4 weeks of nightly use, before any regrowth is visible."
+          }
+        },
+        {
+          "type": "option",
+          "settings": {
+            "question": 1,
+            "label": "It got worse with perimenopause, menopause, a baby or a hard year",
+            "band": "none",
+            "note": "A hormone shift or a shock to the body pushes a wave of follicles into rest at once. As it recovers, nightly pumpkin seed oil supports the hair that returns and keeps DHT from quietly thinning what comes back, which matters more after 35."
           }
         },
         {
@@ -399,124 +413,127 @@
         {
           "type": "question",
           "settings": {
-            "text": "What do you think is behind it?"
+            "text": "How long has it been going on?"
           }
         },
         {
           "type": "option",
           "settings": {
             "question": 2,
-            "label": "It crept in over years, and thin hair runs in my family",
-            "band": "pattern",
-            "note": "Slow, inherited thinning is driven by DHT, a hormone that shrinks the follicle a little more every cycle. That is the exact step pumpkin seed oil’s plant sterols work on, and it is the reason Elaren is built around it."
+            "label": "A few months. It’s new and I want to get ahead of it",
+            "band": "starter",
+            "note": "Caught early is the best time to start. One bottle is 30 nights, which is exactly what our money-back guarantee covers, so you can see the shedding ease before you commit to more."
           }
         },
         {
           "type": "option",
           "settings": {
             "question": 2,
-            "label": "It got worse with perimenopause or menopause",
-            "band": "pattern",
-            "note": "As oestrogen falls after 35, follicles feel DHT more. Pumpkin seed oil dampens the enzyme that makes DHT, which is why it is the active we lead with for women in this stage."
+            "label": "About a year, and it isn’t getting better on its own",
+            "band": "core",
+            "note": "A year in, the follicles have been shrinking for a few cycles and need a full cycle, about three months, of nightly DHT-dampening to turn around. That is what the 3-month bundle covers."
           }
         },
         {
           "type": "option",
           "settings": {
             "question": 2,
-            "label": "A baby, an illness, rapid weight loss or a brutal year",
-            "band": "shedding",
-            "note": "A shock to the body pushes a wave of follicles into rest at once and they let go two to three months later. It is common after weight-loss injections too. It usually recovers; the oil helps the hair that returns come back stronger."
+            "label": "Years. Slowly, steadily, and my mum’s hair did the same",
+            "band": "full",
+            "note": "Slow inherited thinning is DHT doing its work cycle after cycle, so the answer is the same thing done consistently for two cycles. Six months of nightly use is where women with long-standing thinning see the density change, and it is our lowest price per bottle."
           }
         },
         {
           "type": "option",
           "settings": {
             "question": 2,
-            "label": "Years of tight braids, buns, extensions or ponytails",
-            "band": "traction",
-            "note": "Pulling thins the edges and temples first. Nothing regrows while the tension stays, so the style has to change before the oil can help."
+            "label": "It comes and goes, worse some months than others",
+            "band": "core",
+            "note": "Hair that sheds in waves is riding your hormones. A steady nightly routine over a full growth cycle smooths the waves out, and the 3-month bundle covers one cycle start to finish."
           }
         },
         {
           "type": "question",
           "settings": {
-            "text": "What do you most want a straight answer on?",
-            "hint": "This one doesn’t change your result. It changes what we tell you."
+            "text": "How noticeable is it right now?",
+            "hint": "Be honest with yourself here. It only changes how long a supply we point you to."
           }
         },
         {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "How do I use it? Is it a pill, or does it go on my scalp?",
-            "band": "none",
-            "note": "It goes on your scalp, not in your mouth. Part your hair, squeeze a few drops onto the skin where it is thinning, massage for two minutes and leave it in overnight. Every night. One bottle is about 30 nights."
+            "label": "Only I notice it, and mostly when I go looking for it",
+            "band": "starter",
+            "note": "Early thinning is the easiest to turn around: the follicles are smaller, not gone. Caught at this stage, most women see the shedding ease inside the first bottle, and the money-back guarantee covers those 30 nights."
           }
         },
         {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "Can I use it with minoxidil, or instead of it?",
-            "band": "none",
-            "note": "Both. Elaren has no minoxidil and no hormones, so it does not compete with anything a doctor has prescribed. Using both: apply the minoxidil first, let it dry, then the oil. Many women use it on its own as the gentler option."
+            "label": "My hairdresser, partner or a friend has mentioned it",
+            "band": "core",
+            "note": "Once other people can see it, the follicles have been shrinking for a few cycles and need a full one, about three months, of nightly DHT-dampening to turn around. Less hair in the brush by weeks 2–4, fine baby hairs by month 2–3, and stopping at week three is the mistake we see most."
           }
         },
         {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "How long before I see anything, honestly?",
-            "band": "none",
-            "note": "Weeks 2–4: less hair in the brush and the drain. Months 2–3: fine baby hairs along the part and hairline. Months 4–6: visible density. Anyone promising faster is guessing. Do not stop at week three."
+            "label": "I style around it, and scalp shows through in photos or under lights",
+            "band": "full",
+            "note": "Scalp that shows through means a lot of follicles are producing hair too fine to see. Fine baby hairs come first, over months 2–3, and it takes a second growth cycle, months 4–6, for them to thicken into density you can see. Six months is the window that covers it."
           }
         },
         {
           "type": "option",
           "settings": {
             "question": 3,
-            "label": "Is this real, or another oil that does nothing?",
-            "band": "none",
-            "note": "Fair question. Pumpkin seed oil has a 24-week placebo-controlled trial behind it, Elaren has 43 verified reviews you can read further down, and if your shedding has not eased after 30 nights we refund you. No photos, no awkward questions."
+            "label": "It’s mostly the shedding. My hair still looks full, for now",
+            "band": "core",
+            "note": "Shedding before any visible thinning is the best time to act, because the goal is keeping what you have. Nightly use over one full growth cycle, about three months, is what settles the shedding and protects the hair that grows back."
           }
         },
         {
           "type": "result",
           "settings": {
-            "band": "pattern",
+            "band": "core",
             "tag": "Strong match",
-            "title": "Your thinning is the kind pumpkin seed oil was studied for",
-            "body": "<p>A part that keeps widening, a crown that shows more scalp each year, temples that creep back: that is hormonal pattern thinning, and after 35 it is the most common reason a woman loses hair. As oestrogen falls, follicles feel DHT more, and DHT shrinks each one a little more every cycle until the hair it grows is too fine to see.</p><p>Pumpkin seed oil’s plant sterols dampen the enzyme that makes DHT. That is the whole idea behind Elaren: cold-pressed pumpkin seed oil, massaged into the scalp where the thinning is, every night.</p>",
-            "expect": "Two minutes on the scalp before bed, every night. Less hair in the brush within 2–4 weeks. Fine baby hairs along the part and hairline by month 2–3. Visible density over months 4–6, which is why the 3-month bundle is the one we recommend.",
+            "title": "The 3-month bundle is built for exactly this",
+            "body": "<p>What you described is hormonal pattern thinning, the most common reason a woman loses hair after 35 and the kind pumpkin seed oil was studied in. As oestrogen falls, follicles feel DHT more, and DHT shrinks each one a little more every cycle until the hair it grows is too fine to see.</p><p>Pumpkin seed oil’s plant sterols dampen the enzyme that makes DHT. A follicle needs a full growth cycle, about three months, to show the difference, which is why Buy 2, Get 1 Free is the bundle most women choose and the one we recommend for you.</p>",
+            "expect": "Two minutes on the scalp before bed, every night. Less hair in the brush within 2–4 weeks. Fine baby hairs along the part and hairline by month 2–3. Visible density from month 4, which the three bottles carry you into.",
             "evidence": "A 24-week randomised, placebo-controlled trial of pumpkin seed oil in pattern hair loss saw hair count rise 40%, four times the placebo group.",
             "show_cta": true,
+            "cta_label": "See my 3-month bundle",
             "bundle_tier": 2
           }
         },
         {
           "type": "result",
           "settings": {
-            "band": "shedding",
-            "tag": "Likely to help",
-            "title": "This looks like shedding after a shock, and it usually recovers",
-            "body": "<p>Hair that comes out all over a few months after a baby, an illness, surgery, rapid weight loss or a brutal year is telogen effluvium: a wave of follicles resting at once. The honest news is that most of it grows back on its own over 6–12 months.</p><p>Where pumpkin seed oil helps is the hair that returns: massaging it into the scalp nightly supports the follicle through regrowth and keeps DHT from quietly thinning what comes back, which matters more after 35.</p>",
-            "expect": "The timeline is mostly your body’s. Shedding eases over the first weeks, new baby hairs along the hairline within 2–3 months. A 3-month bundle covers the recovery window.",
-            "evidence": "Pumpkin seed oil was studied in pattern hair loss, not in shedding after a trigger. Here it supports regrowth; the recovery itself is your body’s.",
+            "band": "full",
+            "tag": "Strong match · Best value",
+            "title": "You’ll get the most from the 6-month bundle",
+            "body": "<p>Thinning that has built up over years is DHT doing its work cycle after cycle, and it takes more than one cycle to reverse. Pumpkin seed oil’s plant sterols dampen the enzyme that makes DHT. Done nightly for two full cycles, that is where women with long-standing thinning see the density change, not just the shedding stop.</p><p>Buy 3, Get 3 Free is six months at our lowest price per bottle, and every bottle is covered by the guarantee.</p>",
+            "expect": "Less hair in the brush within 2–4 weeks. Fine baby hairs along the part and hairline by month 2–3. Visible density over months 4–6, which is the window this bundle is sized for.",
+            "evidence": "A 24-week randomised, placebo-controlled trial of pumpkin seed oil in pattern hair loss saw hair count rise 40%, four times the placebo group.",
             "show_cta": true,
-            "bundle_tier": 2
+            "cta_label": "See my 6-month bundle",
+            "bundle_tier": 3
           }
         },
         {
           "type": "result",
           "settings": {
-            "band": "traction",
-            "tag": "Good match, with one condition",
-            "title": "This is traction loss, and the style has to change first",
-            "body": "<p>Thinning at the edges and temples that started with tight braids, extensions, buns or ponytails is traction alopecia. No oil regrows hair while the pulling continues. Loosen the style, give the edges a rest, and then pumpkin seed oil massaged into the scalp helps the recovery.</p>",
-            "expect": "Once the tension is off, the fine hairs along the edges return over 2–4 months. If an area has been pulled tight for years and is smooth and shiny, see a dermatologist: that can be permanent.",
-            "evidence": "Pumpkin seed oil was studied in pattern thinning, not in traction loss. Here it supports regrowth that only starts when the pulling stops.",
+            "band": "starter",
+            "tag": "Good match",
+            "title": "Start with one bottle. The first 30 nights are on us if it doesn’t help",
+            "body": "<p>Your hair loss is the kind pumpkin seed oil is for, and you want proof before you commit. That is exactly what one bottle is for: 30 nights of the same routine women use for years, covered end to end by our money-back guarantee.</p><p>Two minutes on the scalp before bed, every night. Most women see less hair in the brush inside the first bottle. When you do, the 3-month bundle picks up where this one leaves off.</p>",
+            "expect": "Less hair in the brush and the drain within 2–4 weeks. Regrowth takes a full growth cycle, so treat this bottle as the first month of three, not the whole answer.",
+            "evidence": "A 24-week randomised, placebo-controlled trial of pumpkin seed oil in pattern hair loss saw hair count rise 40%, four times the placebo group.",
             "show_cta": true,
+            "cta_label": "Get my starter bottle",
             "bundle_tier": 1
           }
         },
@@ -530,6 +547,7 @@
             "expect": "Ask your GP for a referral to a dermatologist. If they rule those conditions out and find pattern thinning or shedding instead, come back: that is what pumpkin seed oil is for.",
             "evidence": "Pumpkin seed oil was studied in pattern hair loss. There is no evidence for it in autoimmune or scarring hair loss, so we do not claim any.",
             "show_cta": false,
+            "cta_label": "",
             "bundle_tier": 0
           }
         }
