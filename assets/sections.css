@@ -1298,6 +1298,9 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .s-guarantee__image { flex-basis: auto; width: 150px; }
   .s-guarantee__title p { font-size: 26px; }
   .s-guarantee__button { width: 100%; min-width: 0; }
+  /* The text is centred on phones, so the "Learn more" link sits under it centred too (as a flex
+     item it used to stretch full width and hug the left edge). */
+  .s-guarantee__link { align-self: center; justify-content: center; text-align: center; }
 }
 
 /* --------------------------------------------------------------------------
