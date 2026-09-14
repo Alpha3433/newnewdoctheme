@@ -24,7 +24,7 @@ template (`templates/page.froya-landing.json`).
 * **Hero on phones** – the hero is tall on a phone, so a landscape desktop photo gets cropped to
   about a third of its width. Upload a portrait crop (820 × 1100 px) as *Mobile background image*
   for the best result. Hero → *Mobile image framing* offers *Fill the hero* (crops; *Mobile focal
-  point* chooses which part is kept) or *Show the whole photo at the top* (uncropped, with *Colour
+  point* chooses which part is kept) or *Whole photo at the top* (uncropped, with *Colour
   behind the text* filling the area under it). *Photo space under the text* keeps room below the
   last proof point so the person in a portrait shot stays visible under the copy, as on the reference.
 * **Logo** – Header → Logo (plus a width slider). Used in the bar and the mobile menu.
