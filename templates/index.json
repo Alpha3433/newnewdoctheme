@@ -232,8 +232,9 @@
         "review_3": {
           "type": "review",
           "settings": {
+            "image": "shopify://shop_images/hf_20260914_111651_476192fd-87d6-4f29-a5c3-3739e7e80007_1.png",
             "image_alt": "",
-            "name": "Artistry W. · Certified herbalist",
+            "name": "Artistry W, 43",
             "tag_1": "herbalist approved",
             "tag_2": "fast absorbing",
             "quote": "\"I’m a certified herbalist and aromatherapist and I trust Elaren as part of my morning routine.\"",
