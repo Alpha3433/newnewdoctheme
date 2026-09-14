@@ -147,7 +147,7 @@
           "settings": {
             "logo": "shopify://shop_images/029-ELLE_Magazine_Logo.svg",
             "logo_alt": "",
-            "quote": "\"Less shedding in as little as 2 weeks. Fuller-looking hair in 30 days.\"",
+            "quote": "“The hair-loss solution women are talking about.”",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/ELLE_Magazine_Logo.svg?v=1732863266"
           }
         },
@@ -156,7 +156,7 @@
           "settings": {
             "logo": "shopify://shop_images/030-ABC_News_logo_2021.svg",
             "logo_alt": "",
-            "quote": "\"Safe under wigs, braids and protective styles.\"",
+            "quote": "“A natural approach to tackling hair loss.”",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/ABC_News_logo_2021.svg?v=1727539050"
           }
         },
