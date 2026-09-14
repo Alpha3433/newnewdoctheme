@@ -56,6 +56,11 @@ template (`templates/page.froya-landing.json`).
   reads the variant's real stock and only shows at or below the threshold; *A fixed number* shows
   the figure typed below on every visit. The store tracks more than 2,000 units of the serum, so the
   landing page uses the fixed number; switch back to tracked inventory once real stock is low.
+* **Typography** – the Pangram and Apercu Mono fonts are served from this store's own Files (see the
+  `@font-face` rules in `assets/critical.css`). Weight 400 maps to the Regular face and 600/700 to the
+  Bold face; an earlier mapping pointed regular text at the Light file, which is why paragraphs looked
+  thin. Secondary copy uses the same black as body text (`--brand-muted` equals `--brand-ink`); only
+  struck-through prices keep a grey (`--brand-strike`).
 * **Sliders** – the logo & quote, review and video sliders can be swiped: the track follows the
   finger (or mouse), snaps to the nearest slide and a long or fast swipe moves several slides, so
   the whole set can be run through right-to-left. The dots still work.
