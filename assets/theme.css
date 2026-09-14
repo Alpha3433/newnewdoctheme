@@ -20,7 +20,9 @@
   --brand-green: #05ac2e;
   --brand-green-tint: #e3fce2;
   --brand-ink: #1f1f1f;
-  --brand-muted: #6b6b6b;
+  /* Secondary text is black too (the reference page has no grey copy); only struck-through prices keep a grey. */
+  --brand-muted: #1f1f1f;
+  --brand-strike: #6b6b6b;
   --brand-line: #e4dfdf;
   --font-serif: 'Libre Baskerville', Georgia, serif;
   --font-sans: 'PP Pangram Sans', 'Pangram', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -747,13 +749,13 @@ body.drawer-open { overflow: hidden; }
 .product-card__media img { width: 100%; height: 100%; object-fit: cover; }
 .product-card__title { font-size: 15px; font-weight: 600; line-height: 1.3; }
 .product-card__price { font-size: 14px; }
-.product-card__price s { color: var(--brand-muted); margin-left: 6px; }
+.product-card__price s { color: var(--brand-strike); margin-left: 6px; }
 .product-page { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
 .product-page__media { display: flex; flex-direction: column; gap: 12px; }
 .product-page__media img { width: 100%; border-radius: 12px; }
 .product-page__title { font-family: var(--font-serif); font-weight: 400; font-size: 30px; line-height: 1.2; }
 .product-page__price { font-size: 24px; font-weight: 700; margin: 12px 0 20px; }
-.product-page__price s { font-size: 16px; font-weight: 400; color: var(--brand-muted); margin-left: 8px; }
+.product-page__price s { font-size: 16px; font-weight: 400; color: var(--brand-strike); margin-left: 8px; }
 .product-form { display: flex; flex-direction: column; gap: 14px; }
 .product-form select, .product-form input[type="number"], .form-field input, .form-field textarea, .form-field select {
   width: 100%; min-height: 48px; padding: 10px 14px; border: 1px solid #d9d2cf; border-radius: 4px; background: #fff; font-size: 15px;

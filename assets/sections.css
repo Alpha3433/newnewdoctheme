@@ -222,10 +222,15 @@
 .c-review-card__block-title {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 1.45;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--brand-ink);
 }
+/* The full review under the bold quote: small regular text, black like the rest of the card */
+.c-review-card__text { margin-top: 6px; font-size: 13px; font-weight: 400; line-height: 1.5; color: var(--brand-ink); }
+.c-review-card__text p { margin: 0 0 6px; }
+.c-review-card__read-more-btn { cursor: pointer; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 .c-review-card__line { height: 1px; background: #ece7e4; margin-top: auto; }
 .c-review-card__product-wrapper,
 .s-videos-slider__product-wrapper { display: flex; align-items: center; gap: 12px; }
@@ -638,7 +643,7 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-buybox-toggle__priceline { display: flex; align-items: baseline; gap: 10px; }
 .c-buybox-toggle__price { display: inline-flex; align-items: baseline; gap: 10px; }
 .c-buybox-toggle__price-main { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
-.c-buybox-toggle__price-compare { font-size: 18px; color: var(--brand-muted); text-decoration: line-through; }
+.c-buybox-toggle__price-compare { font-size: 18px; color: var(--brand-strike); text-decoration: line-through; }
 .c-subscribtion:not(.is-one-time) .c-buybox-toggle__price--otp { display: none; }
 .c-subscribtion.is-one-time .c-buybox-toggle__price--sub { display: none; }
 /* Subscribe & save box: header row with the switch, a rule, the perks in two columns, then the free gift */
@@ -790,7 +795,7 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-subscribtion__discount-label--orange { color: var(--brand-cta); }
 .c-subscribtion__option-name { grid-column: 2; font-size: 15px; font-weight: 600; }
 .c-subscribtion__option-price { grid-column: 3; grid-row: 1 / span 2; display: flex; flex-direction: column; align-items: flex-end; }
-.js-subscribtion__compare-at-price { text-decoration: line-through; color: var(--brand-muted); font-size: 13px; }
+.js-subscribtion__compare-at-price { text-decoration: line-through; color: var(--brand-strike); font-size: 13px; }
 .c-subscribtion__button-info-wrapper { grid-column: 2 / -1; font-size: 13px; }
 
 /* Announcement bar countdown - sits on the captured page's own countdown styles, sized to keep the bar compact */
@@ -915,7 +920,7 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   white-space: nowrap;
 }
 .c-bundle__unit { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
-.c-bundle__unit-compare { font-size: 13px; color: var(--brand-muted); text-decoration: line-through; }
+.c-bundle__unit-compare { font-size: 13px; color: var(--brand-strike); text-decoration: line-through; }
 .c-bundle__unit-label {
   flex: 0 0 100%;
   font-size: 11px;

@@ -484,10 +484,10 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
     font-display: swap;
   }
 
-  /* Use font-synthesis for bold weights to reduce font file loading */
+  /* Bold weights use the real Bold face (the Medium file here made every <strong> look regular) */
   @font-face {
     font-family: 'PP Pangram Sans';
-    src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-Pangram-Medium.otf?v=1789345231) format('opentype');
+    src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PP_Pangram_Sans_Bold.woff2?v=1789345230) format('woff2');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -495,7 +495,7 @@ footer.mini-cart__drawer-footer .checkout-button:hover,
   
   @font-face {
     font-family: 'PP Pangram Sans';
-    src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-Pangram-Medium.otf?v=1789345231) format('opentype');
+    src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PP_Pangram_Sans_Bold.woff2?v=1789345230) format('woff2');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -751,24 +751,27 @@ html.loading popover-content:not([open]):not(.is-open) {
         font-style: normal;
         font-display: swap;
       }
+/* These three used to map the LIGHT face to weight 400 (regular text) and the Medium face to 700,
+   overriding the correct declarations in block 1 - every regular paragraph rendered thin. Weight
+   mapping now matches the file names. */
 @font-face {
         font-family: 'PP Pangram Sans'; 
         src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PPPangramSans-Bold.woff2?v=1789345230);
-        font-weight: 900;
+        font-weight: 700;
         font-style: normal;
         font-display: swap;
       }
 @font-face {
         font-family: 'PP Pangram Sans'; 
         src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PPPangramSans-Light.woff2?v=1789345230);
-        font-weight: 400;
+        font-weight: 300;
         font-style: normal;
         font-display: swap;
       }
 @font-face {
         font-family: 'PP Pangram Sans'; 
         src: url(https://cdn.shopify.com/s/files/1/0864/8805/6165/files/elaren-PPPangramSans-Medium.woff2?v=1789345230);
-        font-weight: 700;
+        font-weight: 500;
         font-style: normal;
         font-display: swap;
       }
