@@ -888,8 +888,9 @@
       "type": "froya-guarantee",
       "settings": {
         "background": true,
+        "image": "shopify://shop_images/hf_20260915_124844_5df67bf1-e85f-44b6-8421-9d2ed47ced81.png",
         "title": "Fuller hair in 30 days or your money back",
-        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
+        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br/>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
         "link_label": "Learn More",
         "link_url": "/policies/refund-policy",
         "button_label": "SHOP ALL PRODUCTS",
