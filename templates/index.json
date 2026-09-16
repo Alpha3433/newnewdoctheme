@@ -463,6 +463,8 @@
         "note_1"
       ],
       "settings": {
+        "image": "shopify://shop_images/hf_20260916_132753_7d52b406-601d-4e6b-84ff-219b33df2182.png",
+        "image_mobile": "shopify://shop_images/hf_20260916_132753_7d52b406-601d-4e6b-84ff-219b33df2182.png",
         "image_alt": "Published clinical results for pumpkin seed oil, with caffeine as the supporting active",
         "label": "Peer-reviewed. Placebo-controlled.",
         "title": "<p>Pumpkin Seed Oil, With <em>Published Clinical</em> Results</p>"
