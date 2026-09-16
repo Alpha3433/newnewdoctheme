@@ -81,6 +81,22 @@ template (`templates/page.froya-landing.json`).
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
   "Pair with" products, checkout label, country/currency selector and trust badges. The header
   CART button opens it and every add-to-cart button adds in place and opens it.
+  * The line's **Subscribe & save switch acts on the whole product**, not on the one line it sits
+    on. A "Buy 2, Get 1 Free" bundle goes into the cart as three bottles on one line and Kaching
+    Bundles then splits the free bottle onto its own $0 line; the switch gathers every line of that
+    variant back into one line of the full quantity, with or without the plan, so the quantity
+    break still applies after switching. The "Save …" figure next to the switch is what the plan
+    takes off everything the shopper is currently paying for that product (the free bottle counts
+    for nothing, a discounted bottle for less).
+  * **Free subscription gift** – pick the gift product the buy box advertises (Featured product →
+    Free subscription gift). The drawer adds one unit, tagged with a `_free_gift` line property, as
+    soon as a line on the drawer's *Subscription plan ID* is in the cart (from the buy box or the
+    switch) and removes it when the last such line goes; a shopper who takes the gift out
+    themselves is not handed it again until they opt into the plan afresh. The gift line shows
+    "FREE GIFT", no quantity control, and "FREE" once its price is $0. **The theme does not price
+    the gift**: it is only free once the same product is set up as a free gift on that plan in
+    Kaching Subscriptions or as a Shopify automatic Buy X get Y discount, otherwise the cart charges
+    its normal price.
 
 ## Before you publish
 
@@ -166,9 +182,12 @@ python3 scripts/localize_assets.py --dry-run
 * The buy box uses the product chosen in the section: first available variant, the first
   subscribe & save plan (price, discount and savings are computed from the selling plan),
   tracked inventory for the low-stock notice. Submitting adds through `/cart/add.js` and opens
-  the cart drawer; the drawer changes quantities, removes lines and switches a line between
-  subscription and one-time through `/cart/change.js`, then re-renders itself with the Section
-  Rendering API. The newsletter posts to Shopify's customer form. The supporting `main-*`
+  the cart drawer; the drawer changes quantities and removes lines through `/cart/change.js`,
+  switches a product between subscription and one-time by zeroing its lines with a positional
+  `/cart/update.js` and re-adding the full quantity through `/cart/add.js` (positions, not keys:
+  a discount-split line shares its key with the paid line), adds or removes the free
+  subscription gift after every cart change, and re-renders itself with the Section Rendering
+  API. The newsletter posts to Shopify's customer form. The supporting `main-*`
   sections use the connected store's own products, cart and customer accounts.
 * Run `shopify theme check` (Shopify CLI) before publishing; the only remaining warnings are the
   remote placeholder images.

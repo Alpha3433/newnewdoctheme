@@ -19,6 +19,12 @@
     return r.charAt(r.length - 1) === '/' ? r : r + '/';
   };
 
+  function readFlag(key) { try { return window.sessionStorage.getItem(key); } catch (err) { return null; } }
+  function writeFlag(key, value) { try { window.sessionStorage.setItem(key, value); } catch (err) { /* private mode */ } }
+  function readStored(key) { try { return window.localStorage.getItem(key); } catch (err) { return null; } }
+  function writeStored(key, value) { try { window.localStorage.setItem(key, value); } catch (err) { /* private mode */ } }
+  var GIFT_DECLINED_KEY = 'elaren:gift-declined';
+
   /* ================================================================ cart */
   var Cart = {
     drawer: function () { return document.getElementById('mini-cart'); },
@@ -95,6 +101,9 @@
         .then(function (r) { return r.json(); })
         .then(function (json) { self.render(json[id]); });
     },
+    fetchCart: function () {
+      return this.request('cart.js', { method: 'GET' });
+    },
     addForm: function (form) {
       var id = this.sectionId();
       var data = new FormData(form);
@@ -104,6 +113,9 @@
       return this.request('cart/add.js', { method: 'POST', body: data }).then(function (json) {
         if (id && json.sections && json.sections[id]) self.render(json.sections[id]);
         else return self.refresh();
+      }).then(function () {
+        // The buy box may have added a subscription: the advertised gift comes along with it.
+        return self.reconcileGift();
       }).then(function () {
         self.setLoading(false);
         self.announce('Added to cart');
@@ -125,6 +137,21 @@
         else return self.refresh();
       });
     },
+    // Positional quantities, one per cart line, in cart order. Lines are addressed by position
+    // rather than by key: when the quantity-break discount splits a bundle's free bottle onto its
+    // own $0 line, that line shares the paid line's key, and a keyed update would hit both.
+    update: function (updates) {
+      var id = this.sectionId();
+      var self = this;
+      return this.request('cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ updates: updates, sections: id })
+      }).then(function (json) {
+        if (id && json.sections && json.sections[id]) self.render(json.sections[id]);
+        else return self.refresh();
+      });
+    },
     change: function (payload) {
       var id = this.sectionId();
       var self = this;
@@ -137,8 +164,86 @@
       }).then(function (json) {
         if (id && json.sections && json.sections[id]) self.render(json.sections[id]);
         else return self.refresh();
+      }).then(function () { return self.reconcileGift(); })
+        .then(function () { self.setLoading(false); })
+        .catch(function (err) { self.setLoading(false); self.announce(err.message); return self.refresh(); });
+    },
+
+    /* Subscribe & save on a cart line.
+       The switch acts on the whole product, not the one line it sits on. A "Buy 2, Get 1 Free"
+       bundle arrives as three bottles on one line and the Kaching quantity-break discount then
+       splits the free bottle onto its own $0 line - so changing only the clicked line left the
+       other bottle behind as a one-time line, two paid bottles moved onto the plan, and the deal
+       (three bottles on one line) was gone. Every one-time line of the variant is removed and the
+       whole quantity re-enters the cart as a single line on the plan (or, switching off, without
+       one), which the discount then re-splits exactly as it did on the first add. */
+    setLinePlan: function (variantId, planId, on) {
+      var self = this;
+      this.setLoading(true);
+      return this.fetchCart().then(function (cart) {
+        var items = cart.items || [];
+        var matched = items.filter(function (item) {
+          if (item.variant_id !== variantId || self.isGiftLine(item)) return false;
+          return on ? !item.selling_plan_allocation : !!item.selling_plan_allocation;
+        });
+        if (!matched.length) return self.refresh();
+        var total = matched.reduce(function (sum, item) { return sum + item.quantity; }, 0);
+        var line = { id: variantId, quantity: total };
+        if (on) line.selling_plan = planId;
+        var properties = matched[0].properties;
+        if (properties && Object.keys(properties).length) line.properties = properties;
+        var updates = items.map(function (item) { return matched.indexOf(item) === -1 ? item.quantity : 0; });
+        return self.request('cart/update.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ updates: updates })
+        }).then(function () { return self.addItems([line]); });
+      }).then(function () {
+        if (on) self.setGiftDeclined(false); // opting in again also brings the gift back
+        return self.reconcileGift();
       }).then(function () { self.setLoading(false); })
         .catch(function (err) { self.setLoading(false); self.announce(err.message); return self.refresh(); });
+    },
+
+    /* Free subscription gift.
+       The buy box advertises a free gift with Subscribe & save, so the gift travels with the
+       subscription: one unit is added (tagged with a _free_gift line property) as soon as a line
+       on the drawer's plan is in the cart, and removed when the last such line goes. A shopper who
+       takes the gift out themselves is not handed it again until they opt into the plan afresh.
+       Pricing is not the theme's to do: the gift only costs $0 once the merchant's free-gift
+       discount (Kaching Subscriptions, or a Shopify automatic discount) is in place. */
+    giftVariantId: function () {
+      var d = this.drawer();
+      return d ? parseInt(d.getAttribute('data-gift-variant-id') || '0', 10) || 0 : 0;
+    },
+    giftPlanId: function () {
+      var d = this.drawer();
+      return d ? (d.getAttribute('data-gift-plan-id') || '').trim() : '';
+    },
+    isGiftLine: function (item) {
+      return !!(item && item.properties && item.properties._free_gift);
+    },
+    giftDeclined: function () { return readFlag(GIFT_DECLINED_KEY) === '1'; },
+    setGiftDeclined: function (declined) { writeFlag(GIFT_DECLINED_KEY, declined ? '1' : ''); },
+    reconcileGift: function () {
+      var giftId = this.giftVariantId();
+      if (!giftId) return Promise.resolve();
+      var self = this;
+      var planId = this.giftPlanId();
+      return this.fetchCart().then(function (cart) {
+        var items = cart.items || [];
+        var subscribed = items.some(function (item) {
+          if (self.isGiftLine(item) || !item.selling_plan_allocation) return false;
+          return !planId || String(item.selling_plan_allocation.selling_plan.id) === planId;
+        });
+        var gifts = items.filter(function (item) { return self.isGiftLine(item); });
+        if (subscribed && !gifts.length && !self.giftDeclined()) {
+          return self.addItems([{ id: giftId, quantity: 1, properties: { _free_gift: 'subscription' } }]);
+        }
+        if (!subscribed && gifts.length) {
+          return self.update(items.map(function (item) { return self.isGiftLine(item) ? 0 : item.quantity; }));
+        }
+      }).catch(function () { /* a bonus must never break the cart: sold-out gift, offline, etc. */ });
     }
   };
   window.ElarenCart = Cart;
@@ -165,8 +270,6 @@
   // A shopper who picks a country themselves (footer or cart selector) is never overridden.
   var COUNTRY_CHOICE_KEY = 'elaren:country-choice';
   var AUTO_LOCALIZED_KEY = 'elaren:auto-localized';
-  function readFlag(key) { try { return window.localStorage.getItem(key); } catch (err) { return null; } }
-  function writeFlag(key, value) { try { window.localStorage.setItem(key, value); } catch (err) { /* private mode */ } }
   function isLocalizationForm(form) {
     if (!form || form.tagName !== 'FORM') return false;
     var action = (form.getAttribute('action') || '').split('?')[0];
@@ -176,13 +279,13 @@
   document.addEventListener('submit', function (e) {
     var form = e.target;
     if (form.id === 'localization_form_auto' || !isLocalizationForm(form)) return;
-    writeFlag(COUNTRY_CHOICE_KEY, '1');
+    writeStored(COUNTRY_CHOICE_KEY, '1');
   });
   function autoLocalize() {
     var form = document.getElementById('localization_form_auto');
     if (!form || !window.fetch) return;
     if (window.Shopify && window.Shopify.designMode) return;
-    if (readFlag(COUNTRY_CHOICE_KEY) || readFlag(AUTO_LOCALIZED_KEY)) return;
+    if (readStored(COUNTRY_CHOICE_KEY) || readStored(AUTO_LOCALIZED_KEY)) return;
     var select = form.querySelector('select[name="country_code"]');
     var current = (form.getAttribute('data-current-country') || (window.Shopify && window.Shopify.country) || '').toUpperCase();
     if (!select || !current) return;
@@ -197,7 +300,7 @@
         if (!country || country === current) return;
         var option = Array.prototype.slice.call(select.options).filter(function (o) { return o.value.toUpperCase() === country; })[0];
         if (!option) return; // Shopify detected a country the store does not sell to - leave the shopper where they are.
-        writeFlag(AUTO_LOCALIZED_KEY, country);
+        writeStored(AUTO_LOCALIZED_KEY, country);
         select.value = option.value;
         if (typeof form.requestSubmit === 'function') form.requestSubmit(); else form.submit();
       })
@@ -228,6 +331,8 @@
     var remove = e.target.closest('[data-cart-remove]');
     if (remove) {
       e.preventDefault();
+      var lineItem = remove.closest('.line-item');
+      if (lineItem && lineItem.hasAttribute('data-gift')) Cart.setGiftDeclined(true);
       Cart.change({ line: parseInt(remove.getAttribute('data-cart-remove'), 10), quantity: 0 });
       return;
     }
@@ -247,21 +352,9 @@
   document.addEventListener('change', function (e) {
     var toggle = e.target.closest('[data-cart-plan-toggle]');
     if (!toggle) return;
-    var line = parseInt(toggle.getAttribute('data-line'), 10);
-    var quantity = parseInt(toggle.getAttribute('data-quantity'), 10) || 1;
     var label = toggle.closest('.subscription-toggle');
     if (label) label.setAttribute('aria-checked', toggle.checked ? 'true' : 'false');
-    if (toggle.checked) {
-      Cart.change({ line: line, quantity: quantity, selling_plan: toggle.getAttribute('data-selling-plan-id') });
-    } else {
-      // Switch back to a one-time purchase: drop the subscription line and re-add the variant without a plan.
-      var variantId = parseInt(toggle.getAttribute('data-variant-id'), 10);
-      Cart.setLoading(true);
-      Cart.request('cart/change.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ line: line, quantity: 0 }) })
-        .then(function () { return Cart.addItems([{ id: variantId, quantity: quantity }]); })
-        .then(function () { Cart.setLoading(false); })
-        .catch(function (err) { Cart.setLoading(false); Cart.announce(err.message); Cart.refresh(); });
-    }
+    Cart.setLinePlan(parseInt(toggle.getAttribute('data-variant-id'), 10), toggle.getAttribute('data-selling-plan-id'), toggle.checked);
   });
 
   document.addEventListener('keydown', function (e) {
