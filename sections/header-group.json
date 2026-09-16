@@ -346,6 +346,9 @@
         "selling_plan_id": "1039991141",
         "subscribe_label": "SUBSCRIBE & SAVE",
         "subscribe_saving_text": "Save {amount}",
+        "gift_product": "elaren-microstamp-pro",
+        "gift_label": "FREE GIFT",
+        "gift_free_text": "FREE",
         "upsell_title": "PAIR WITH:",
         "upsells": [
           "pumpkin-seed-oil-capsules",
