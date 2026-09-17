@@ -1013,6 +1013,7 @@
         "video_11",
         "video_12"
       ],
+      "disabled": true,
       "settings": {
         "title": "Regrowth Stories From Women Like You",
         "from_label": "From",
