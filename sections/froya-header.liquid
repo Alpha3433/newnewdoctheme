@@ -9,6 +9,12 @@
   assign cards = section.blocks | where: 'type', 'card'
   assign more_links = section.blocks | where: 'type', 'more_link'
   assign posts = section.blocks | where: 'type', 'post'
+  assign anchors = section.blocks | where: 'type', 'anchor_link'
+  assign simple_menu = false
+  if section.settings.menu_style == 'anchors'
+    assign simple_menu = true
+  endif
+  assign cta_target = section.settings.cta_target | default: 'shop'
   assign logo_fallback = 'https://froyaorganics.com/cdn/shop/files/froya-logo-v4.svg'
   assign quiz_fallback_desktop = 'https://cdn.shopify.com/s/files/1/0473/9999/3493/files/quiz_1.png?v=1778647247'
   assign quiz_fallback_mobile = 'https://cdn.shopify.com/s/files/1/0473/9999/3493/files/quiz.png?v=1778644514'
@@ -69,14 +75,24 @@
   <div class="froya-nav__bar">
     <button aria-controls="froya-nav-drawer-froya-nav-variant" aria-expanded="false" aria-label="Open menu" class="froya-nav__burger" type="button">
       <svg aria-hidden="true" fill="none" viewBox="0 0 20 14"><path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.5"></path></svg>
-    </button><ul class="froya-nav__desktop-nav froya-nav__desktop-nav--left" role="list"><li class="froya-nav__nav-item">
+    </button>{%- if simple_menu -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--left froya-nav__desktop-nav--anchors" role="list">
+        {%- for block in anchors limit: section.settings.desktop_limit -%}
+          {%- liquid
+            assign anchor_target = block.settings.target | default: 'reviews'
+            if anchor_target == 'custom'
+              assign anchor_target = block.settings.custom_target | default: 'top'
+            endif
+          -%}
+          <li class="froya-nav__nav-item" {{ block.shopify_attributes }}><a class="froya-nav__nav-link froya-nav__nav-link--anchor" data-scroll-to="{{ anchor_target }}" href="{{ routes.root_url }}#{{ anchor_target }}"><span class="froya-nav__nav-label">{{ block.settings.label }}</span></a></li>
+        {%- endfor -%}
+      </ul>{%- else -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--left" role="list"><li class="froya-nav__nav-item">
           <button aria-controls="froya-nav-mega-default-shop" aria-expanded="false" class="froya-nav__nav-link" data-mega-href="{{ section.settings.shop_all_url | default: '/collections/all' }}" data-mega-kind="shop" data-mega-label="{{ section.settings.shop_label | escape }}" data-mega-target="default-shop" type="button"><span class="froya-nav__nav-label">{{ section.settings.shop_label }}</span></button>
         </li>
         {%- if cards.size > 0 -%}
         <li class="froya-nav__nav-item">
           <button aria-controls="froya-nav-mega-default-bestsellers" aria-expanded="false" class="froya-nav__nav-link" data-mega-kind="best_sellers" data-mega-label="{{ section.settings.bestsellers_label | escape }}" data-mega-target="default-bestsellers" type="button"><span class="froya-nav__nav-label">{{ section.settings.bestsellers_label }}</span></button>
         </li>
-        {%- endif -%}</ul>
+        {%- endif -%}</ul>{%- endif -%}
 
     <div class="froya-nav__logo">
       <a class="header__logo-link" href="{{ routes.root_url }}" style="--logo-width: {{ section.settings.logo_width }}px;">
@@ -89,16 +105,18 @@
       </a>
     </div>
 
-    <div class="froya-nav__right header__icon-list"><ul class="froya-nav__desktop-nav froya-nav__desktop-nav--right" role="list"><li class="froya-nav__nav-item">
+    <div class="froya-nav__right header__icon-list">{%- if simple_menu -%}
+      {%- if section.settings.cta_label != blank -%}<a class="froya-nav__cta" data-scroll-to="{{ cta_target }}" href="{{ routes.root_url }}#{{ cta_target }}">{{ section.settings.cta_label }}</a>{%- endif -%}
+    {%- else -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--right" role="list"><li class="froya-nav__nav-item">
             <button aria-controls="froya-nav-mega-default-more" aria-expanded="false" class="froya-nav__nav-link froya-nav__nav-link--more" data-mega-kind="more" data-mega-label="{{ section.settings.more_label | escape }}" data-mega-target="default-more" type="button"><span class="froya-nav__nav-label">{{ section.settings.more_label }}</span></button>
-          </li></ul>
+          </li></ul>{%- endif -%}
 
       <a aria-controls="mini-cart" aria-expanded="false" aria-label="Cart" class="header__icon-wrapper tap-area button header-button cart-button js-cart-toggle" href="{{ routes.cart_url }}">
         {{ section.settings.cart_label }}
         <cart-count class="header__cart-count header__cart-count--floating bubble-count{% if cart.item_count == 0 %} hidden{% endif %}" data-cart-count-bubble>{{ cart.item_count }}</cart-count>
       </a>
     </div>
-  </div><div class="froya-nav__mega froya-nav__mega--shop" data-mega-panel="default-shop" id="froya-nav-mega-default-shop">
+  </div>{%- unless simple_menu -%}<div class="froya-nav__mega froya-nav__mega--shop" data-mega-panel="default-shop" id="froya-nav-mega-default-shop">
   <div class="froya-nav__mega-inner" style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) 254px; gap: 48px; align-items: stretch;"><div>
         <p class="froya-nav__mega-title">{{ section.settings.shop_title }}</p>
         <ul class="froya-nav__shop-list" role="list">
@@ -153,7 +171,7 @@
         {{ blog_list }}
       </details></li>
       {%- endif -%}
-    </ul></div></div>
+    </ul></div></div>{%- endunless -%}
 </froya-nav-variant><froya-nav-drawer aria-hidden="true" class="froya-nav-drawer" id="froya-nav-drawer-froya-nav-variant">
   <div class="froya-nav-drawer__overlay" data-drawer-overlay></div>
   <div aria-label="Site navigation" aria-modal="true" class="froya-nav-drawer__panel" role="dialog">
@@ -170,6 +188,35 @@
       </button>
     </div>
     <div class="froya-nav-drawer__scroll">
+      {%- if simple_menu -%}
+      <div class="froya-nav-drawer__body froya-nav-drawer__body--anchors">
+        <nav aria-label="Page sections"><ul class="froya-nav-drawer__anchors" role="list">
+          {%- for block in anchors -%}
+            {%- liquid
+            assign anchor_target = block.settings.target | default: 'reviews'
+            if anchor_target == 'custom'
+              assign anchor_target = block.settings.custom_target | default: 'top'
+            endif
+          -%}
+            <li {{ block.shopify_attributes }}><a class="froya-nav-drawer__anchor" data-scroll-to="{{ anchor_target }}" href="{{ routes.root_url }}#{{ anchor_target }}">
+              <span class="froya-nav-drawer__anchor-index" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <span class="froya-nav-drawer__anchor-label">{{ block.settings.label }}</span>
+              <svg aria-hidden="true" class="froya-nav-drawer__anchor-arrow" fill="none" viewBox="0 0 16 16"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg>
+            </a></li>
+          {%- endfor -%}
+        </ul></nav>
+        {%- if section.settings.drawer_cta_label != blank -%}<a class="froya-nav-drawer__shop-all" data-scroll-to="{{ cta_target }}" href="{{ routes.root_url }}#{{ cta_target }}">{{ section.settings.drawer_cta_label }}</a>{%- endif -%}
+        {%- if section.settings.drawer_note != blank -%}<div class="froya-nav-drawer__social">{{ section.settings.drawer_note }}</div>{%- endif -%}
+        {%- if testimonial != blank -%}
+        <div class="froya-nav-drawer__testimonial">
+          <div class="froya-nav-drawer__testimonial-image">
+            {%- render 'froya-image', image: section.settings.testimonial_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Group_1484582098.png', alt: 'Customer before and after', width: 150, height: 90 -%}
+          </div>
+          <div class="froya-nav-drawer__testimonial-content">{{ testimonial | replace: 'froya-nav__mega-testimonial-quote', 'froya-nav-drawer__testimonial-quote' | replace: 'froya-nav__mega-testimonial-meta', 'froya-nav-drawer__testimonial-meta' }}</div>
+        </div>
+        {%- endif -%}
+      </div>
+      {%- else -%}
       <div class="froya-nav-drawer__body">
         {%- if cards.size > 0 -%}
         <details class="froya-nav-acc" data-acc>
@@ -228,6 +275,7 @@
         </div>
         {%- endif -%}
       </div>
+      {%- endif -%}
     </div>
   </div>
 </froya-nav-drawer>
@@ -240,7 +288,13 @@
     { "type": "header", "content": "Logo" },
     { "type": "image_picker", "id": "logo", "label": "Logo", "info": "PNG or SVG with a transparent background. Replaces the placeholder logo in the bar and the mobile menu." },
     { "type": "range", "id": "logo_width", "label": "Logo width", "min": 60, "max": 240, "step": 10, "unit": "px", "default": 100 },
-    { "type": "header", "content": "Navigation labels" },
+    { "type": "header", "content": "Menu style" },
+    { "type": "select", "id": "menu_style", "label": "Menu", "options": [ { "value": "anchors", "label": "Single page – links scroll to sections of this page" }, { "value": "full", "label": "Full store menu (shop, bestsellers, more)" } ], "default": "anchors", "info": "Single page uses the \"Section link\" blocks; the bar shows the first few, the mobile menu shows them all." },
+    { "type": "range", "id": "desktop_limit", "label": "Section links in the bar (desktop)", "min": 3, "max": 8, "step": 1, "default": 5 },
+    { "type": "text", "id": "cta_label", "label": "Bar button", "default": "Shop Now" },
+    { "type": "text", "id": "drawer_cta_label", "label": "Mobile menu button", "default": "SHOP THE REGROWTH OIL" },
+    { "type": "text", "id": "cta_target", "label": "Buttons scroll to", "default": "shop", "info": "Section key: shop, faq, reviews, science, results, story, how, ingredients, guarantee, benefits, top." },
+    { "type": "header", "content": "Navigation labels (full menu)" },
     { "type": "text", "id": "shop_label", "label": "Shop menu label", "default": "Shop" },
     { "type": "text", "id": "bestsellers_label", "label": "Bestsellers menu label", "default": "Bestsellers" },
     { "type": "text", "id": "more_label", "label": "More menu label", "default": "More" },
@@ -271,6 +325,29 @@
     { "type": "text", "id": "drawer_note", "label": "Note under the links", "default": "Women’s hair wellness · Rated 4.77/5 by verified customers" }
   ],
   "blocks": [
+    {
+      "type": "anchor_link",
+      "name": "Section link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Reviews" },
+        { "type": "select", "id": "target", "label": "Scrolls to", "options": [
+          { "value": "top", "label": "Top of page" },
+          { "value": "benefits", "label": "Benefits strip" },
+          { "value": "reviews", "label": "Review slider" },
+          { "value": "science", "label": "Backed by science" },
+          { "value": "results", "label": "Clinical results" },
+          { "value": "shop", "label": "Buy box" },
+          { "value": "story", "label": "Founder story" },
+          { "value": "review-wall", "label": "Review wall" },
+          { "value": "guarantee", "label": "Guarantee" },
+          { "value": "how", "label": "How to use" },
+          { "value": "ingredients", "label": "Ingredient quality" },
+          { "value": "faq", "label": "FAQ" },
+          { "value": "custom", "label": "Custom element id" }
+        ], "default": "reviews" },
+        { "type": "text", "id": "custom_target", "label": "Custom element id", "info": "Only used with \"Custom element id\"." }
+      ]
+    },
     {
       "type": "shop_item",
       "name": "Product link",

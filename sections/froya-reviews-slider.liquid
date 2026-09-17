@@ -4,9 +4,16 @@
   The wrapper ids are kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
 {%- liquid
+  assign shop_href = section.settings.shop_url | default: '#shop'
+  assign shop_attrs = ''
+  if shop_href contains '#'
+    assign shop_attrs = shop_href | split: '#' | last | prepend: ' data-scroll-to="' | append: '"'
+  endif
+-%}
+{%- liquid
   assign sid = 'template--26717513089391__reviews_slider_hyUAzq'
 -%}
-<section class="shopify-section section-reviews-slider" id="shopify-section-{{ sid }}">
+<section class="shopify-section section-reviews-slider" data-anchor="reviews" id="shopify-section-{{ sid }}">
 <s-reviews-slider class="s-reviews-slider custom-section">
   <div class="s-reviews-slider__container"><h2 class="s-reviews-slider__title section-title">
         <p>{{ section.settings.title }}</p>
@@ -73,13 +80,13 @@
       {%- endunless -%}
       {%- if product != blank -%}
       <div class="c-review-card__product-wrapper">
-        <a class="c-review-card__product-image" href="{{ product.url }}">
+        <a class="c-review-card__product-image" href="{{ shop_href }}"{{ shop_attrs }}>
           <picture>{%- if product.featured_image != blank -%}{{ product.featured_image | image_url: width: 240, height: 240, crop: 'center' | image_tag: alt: product.title, loading: 'lazy' }}{%- endif -%}</picture>
         </a>
         <div class="c-review-card__product-info">
           <div class="c-review-card__product-title">{{ block.settings.product_title | default: product.title }}</div>
           <div class="c-review-card__product-price"><span>{{ section.settings.from_label }} <span class="product_price">{{ product.price_min | money }}</span></span></div>
-          <a class="c-review-card__product-button custom-button" href="{{ product.url }}">{{ section.settings.shop_label }}</a>
+          <a class="c-review-card__product-button custom-button" href="{{ shop_href }}"{{ shop_attrs }}>{{ section.settings.shop_label }}</a>
         </div>
       </div>
       {%- endif -%}
@@ -106,6 +113,7 @@
     { "type": "image_picker", "id": "stars_image", "label": "Star rating image", "info": "About 71 × 16 px; shown on every card." },
     { "type": "text", "id": "from_label", "label": "Price prefix", "default": "From" },
     { "type": "text", "id": "shop_label", "label": "Product button label", "default": "Shop now" },
+    { "type": "url", "id": "shop_url", "label": "Product button link", "info": "Leave empty to scroll to the buy box on this page." },
     { "type": "text", "id": "read_more", "label": "Read more label", "default": "Read more" },
     { "type": "text", "id": "read_less", "label": "Read less label", "default": "Read less" }
   ],

@@ -377,6 +377,59 @@
     .s-backed-by-science__card-text{font-size:14px;}
   }
 
+/* ---- froya-faq ---- */
+/* Numbered accordion in the "Backed by science" style: same eyebrow/serif header, same card and circle tokens. */
+  .s-faq{
+    --faq-font-sans:'PP Pangram Sans','Pangram','Objectivity',sans-serif;
+    --faq-font-serif:'Libre Baskerville',Georgia,serif;
+    --faq-purple:#af8998;
+    --faq-line-color:rgba(175, 137, 152, 0.25);
+    --faq-card-bg:#fcfaf6;
+    --faq-card-border:#f2f1f0;
+    --faq-circle-size:24px;
+    padding:60px 16px;background:#fff;
+  }
+  .s-faq__container{max-width:900px;margin:0 auto;}
+  .s-faq__header{text-align:center;margin:0 auto 32px;display:flex;flex-direction:column;gap:16px;align-items:center;}
+  .s-faq__eyebrow{margin:0;color:var(--faq-purple);font-family:var(--faq-font-sans);font-size:25px;font-weight:700;line-height:14px;letter-spacing:0.5px;text-transform:uppercase;padding:6px 0;}
+  .s-faq__title{margin:0;color:#000;font-family:var(--faq-font-serif);font-size:32px;font-weight:500;line-height:normal;text-transform:capitalize;max-width:800px;}
+  .s-faq__subtitle{margin:0;color:#1F1F1F;font-family:var(--faq-font-sans);font-size:22px;font-weight:500;line-height:38px;max-width:760px;}
+  .s-faq__list{display:flex;flex-direction:column;gap:12px;}
+  .s-faq__item{border-radius:15px;border:2px solid var(--faq-card-border);background:var(--faq-card-bg);overflow:hidden;transition:border-color 200ms ease;}
+  .s-faq__item[open]{border-color:var(--faq-line-color);}
+  .s-faq__question{list-style:none;cursor:pointer;display:flex;align-items:center;gap:16px;padding:18px 20px;color:#000;font-family:var(--faq-font-sans);font-size:18px;font-weight:600;line-height:1.3;}
+  .s-faq__question::-webkit-details-marker{display:none;}
+  .s-faq__num{flex:0 0 var(--faq-circle-size);width:var(--faq-circle-size);height:var(--faq-circle-size);border-radius:100px;border:2px solid var(--faq-line-color);background:#FFF;color:var(--faq-line-color);font-size:12px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;transition:background-color 320ms cubic-bezier(0.4,0,0.2,1),border-color 320ms cubic-bezier(0.4,0,0.2,1),color 180ms cubic-bezier(0.4,0,0.2,1);}
+  .s-faq__item[open] .s-faq__num{border-color:var(--faq-purple);background:var(--faq-purple);color:#FFF;}
+  .s-faq__question-text{flex:1 1 auto;}
+  .s-faq__icon{position:relative;flex:0 0 18px;width:18px;height:18px;}
+  .s-faq__icon::before,.s-faq__icon::after{content:'';position:absolute;left:50%;top:50%;background:var(--faq-purple);border-radius:2px;transform:translate(-50%,-50%);transition:transform 250ms ease;}
+  .s-faq__icon::before{width:18px;height:2px;}
+  .s-faq__icon::after{width:2px;height:18px;}
+  .s-faq__item[open] .s-faq__icon::after{transform:translate(-50%,-50%) rotate(90deg);}
+  .s-faq__answer{padding:0 20px 20px calc(20px + var(--faq-circle-size) + 16px);color:#000;font-family:var(--faq-font-sans);font-size:16px;font-weight:500;line-height:1.55;}
+  .s-faq__answer p{margin:0 0 10px;}
+  .s-faq__answer p:last-child{margin-bottom:0;}
+  .s-faq__answer a{color:var(--faq-purple);text-decoration:underline;text-underline-offset:2px;}
+  .s-faq__footer{margin:28px auto 0;max-width:640px;text-align:center;color:#1F1F1F;font-family:var(--faq-font-sans);font-size:16px;font-weight:500;line-height:1.55;}
+  .s-faq__footer p{margin:0;}
+  .s-faq__footer a{color:var(--faq-purple);font-weight:600;text-decoration:underline;text-underline-offset:2px;}
+  @media screen and (min-width:768px){
+    .s-faq{padding:48px 40px 80px;}
+    .s-faq__header{margin-bottom:44px;gap:20px;}
+    .s-faq__question{padding:22px 24px;}
+    .s-faq__answer{padding:0 24px 24px calc(24px + var(--faq-circle-size) + 16px);}
+  }
+  @media screen and (max-width:767.98px){
+    .s-faq{padding:40px 16px;}
+    .s-faq__header{margin-bottom:24px;gap:10px;}
+    .s-faq__eyebrow{font-size:16px;line-height:14px;letter-spacing:0.5px;padding:4px 0;}
+    .s-faq__title{font-size:26px;}
+    .s-faq__subtitle{font-size:16px;line-height:20px;}
+    .s-faq__question{font-size:16px;padding:16px;gap:12px;}
+    .s-faq__answer{font-size:14px;padding:0 16px 16px calc(16px + var(--faq-circle-size) + 12px);}
+  }
+
 /* ---- froya-founder-story ---- */
 #shopify-section-template--26717513089391__custom_image_and_text_hqnCVC.custom-image-and-text {
     padding-top: 30px;
