@@ -1,0 +1,56 @@
+{% comment %}
+  FAQ – numbered accordion in the "Backed by science" style. Heading and every question/answer are
+  editable in the theme editor; the wrapper carries data-anchor="faq" so menu and footer links can scroll here.
+{% endcomment %}
+<div class="shopify-section shopify-section-faq" data-anchor="faq" id="shopify-section-{{ section.id }}-faq">
+<section aria-labelledby="s-faq-title-{{ section.id }}" class="s-faq" id="faq-section">
+  <div class="s-faq__container">
+    <header class="s-faq__header">
+      {%- if section.settings.eyebrow != blank -%}<p class="s-faq__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="s-faq__title" id="s-faq-title-{{ section.id }}">{{ section.settings.title }}</h2>
+      {%- if section.settings.subtitle != blank -%}<p class="s-faq__subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+    </header>
+    <div class="s-faq__list">
+      {%- for block in section.blocks -%}
+        <details class="s-faq__item"{% if forloop.first and section.settings.open_first %} open{% endif %} {{ block.shopify_attributes }}>
+          <summary class="s-faq__question">
+            <span aria-hidden="true" class="s-faq__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="s-faq__question-text">{{ block.settings.question }}</span>
+            <span aria-hidden="true" class="s-faq__icon"></span>
+          </summary>
+          <div class="s-faq__answer">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.footer_text != blank -%}<div class="s-faq__footer">{{ section.settings.footer_text }}</div>{%- endif -%}
+  </div>
+</section>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Questions, Answered" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Everything You Want To Know Before You Start" },
+    { "type": "textarea", "id": "subtitle", "label": "Subheading", "default": "Straight answers on results, routine, safety and our guarantee. Anything else, our team is one email away." },
+    { "type": "checkbox", "id": "open_first", "label": "Open the first question by default", "default": true },
+    { "type": "richtext", "id": "footer_text", "label": "Text under the questions", "default": "<p>Still wondering about something? Email <a href=\"mailto:support@shopelaren.com\">support@shopelaren.com</a> and a real person will reply within one business day.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "How soon will I see results?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Hair grows in cycles, so give it a full 30 days of nightly use. Most customers notice less shedding in the first weeks and fuller-looking hair around day 30, with new baby hairs along the part and hairline in the months after.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 16,
+  "presets": [
+    { "name": "FAQ", "blocks": [ { "type": "question" }, { "type": "question" }, { "type": "question" }, { "type": "question" } ] }
+  ]
+}
+{% endschema %}

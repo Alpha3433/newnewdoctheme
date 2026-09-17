@@ -2,6 +2,13 @@
   Video review slider – each block is a customer video (uploaded video or mp4 URL + poster) with a product card.
   The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
+{%- liquid
+  assign shop_href = section.settings.shop_url | default: '#shop'
+  assign shop_attrs = ''
+  if shop_href contains '#'
+    assign shop_attrs = shop_href | split: '#' | last | prepend: ' data-scroll-to="' | append: '"'
+  endif
+-%}
 <div class="shopify-section" id="shopify-section-template--26717513089391__videos_slider_r6HaLL">
 <s-videos-slider class="s-videos-slider custom-section">
   <div class="s-videos-slider__container" style="--slides-to-show: 5.5; --slide-gap: 20px;">
@@ -40,13 +47,13 @@
                     </div>
                     {%- if product != blank -%}
                     <div class="s-videos-slider__product-wrapper">
-                      <a class="s-videos-slider__product-image" href="{{ product.url }}">
+                      <a class="s-videos-slider__product-image" href="{{ shop_href }}"{{ shop_attrs }}>
                         <picture>{%- if product.featured_image != blank -%}{{ product.featured_image | image_url: width: 240, height: 240, crop: 'center' | image_tag: alt: product.title, loading: 'lazy' }}{%- endif -%}</picture>
                       </a>
                       <div class="s-videos-slider__product-info">
                         <div class="s-videos-slider__product-title">{{ block.settings.product_title | default: product.title }}</div>
                         <div class="s-videos-slider__product-price"><span>{{ section.settings.from_label }} <span class="product_price">{{ product.price_min | money }}</span></span></div>
-                        <a class="s-videos-slider__product-button custom-button" href="{{ product.url }}">{{ section.settings.shop_label }}</a>
+                        <a class="s-videos-slider__product-button custom-button" href="{{ shop_href }}"{{ shop_attrs }}>{{ section.settings.shop_label }}</a>
                       </div>
                     </div>
                     {%- endif -%}
@@ -71,7 +78,8 @@
     { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Regrowth Stories From Women Like You" },
     { "type": "image_picker", "id": "stars_image", "label": "Star rating image", "info": "About 71 × 16 px; shown on every card." },
     { "type": "text", "id": "from_label", "label": "Price prefix", "default": "From" },
-    { "type": "text", "id": "shop_label", "label": "Product button label", "default": "Shop now" }
+    { "type": "text", "id": "shop_label", "label": "Product button label", "default": "Shop now" },
+    { "type": "url", "id": "shop_url", "label": "Product button link", "info": "Leave empty to scroll to the buy box on this page." }
   ],
   "blocks": [
     {

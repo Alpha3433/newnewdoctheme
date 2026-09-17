@@ -866,9 +866,10 @@
         "title": "Less shedding in 30 days, or your money back",
         "text": "<p>Hair grows in cycles. In the first month what changes is how much you lose, not how much you have: less hair in the brush, less in the drain. Use Elaren nightly for 30 days and if nothing has changed, tell us and we'll refund every cent. No photos, no awkward questions. Regrowth itself takes longer, and we'd rather tell you that now than have you give up at week three.</p>",
         "link_label": "Learn More",
-        "link_url": "/policies/refund-policy",
+        "link_url": "/#faq",
         "button_label": "SHOP ALL PRODUCTS",
-        "button_url": "/collections/all"
+        "button_url": "",
+        "anchor": true
       }
     },
     "video-reviews": {
@@ -1148,9 +1149,10 @@
         "title": "Less shedding in 30 days, or your money back",
         "text": "<p>Hair grows in cycles. In the first month what changes is how much you lose, not how much you have: less hair in the brush, less in the drain. Use Elaren nightly for 30 days and if nothing has changed, tell us and we'll refund every cent. No photos, no awkward questions. Regrowth itself takes longer, and we'd rather tell you that now than have you give up at week three.</p>",
         "link_label": "Learn More",
-        "link_url": "/policies/refund-policy",
+        "link_url": "/#faq",
         "button_label": "SHOP ALL PRODUCTS",
-        "button_url": "/collections/all"
+        "button_url": "",
+        "anchor": false
       }
     },
     "newsletter": {
@@ -1161,6 +1163,84 @@
         "placeholder": "Enter your email here",
         "button_label": "Subscribe",
         "success_text": "Thanks for subscribing. Your first regrowth tips are on their way."
+      }
+    },
+    "faq": {
+      "type": "froya-faq",
+      "blocks": {
+        "q_1": {
+          "type": "question",
+          "settings": {
+            "question": "How soon will I see results?",
+            "answer": "<p>Hair grows in cycles, so give it a full 30 days of nightly use. Most customers notice less shedding in the first weeks and fuller-looking hair around day 30, with new baby hairs along the part and hairline in the months after. Consistency matters more than anything: two minutes a night, every night.</p>"
+          }
+        },
+        "q_2": {
+          "type": "question",
+          "settings": {
+            "question": "How do I use it?",
+            "answer": "<p>Part dry or towel-dried hair, apply a few drops directly to the scalp where you are thinning (the part, crown, temples or hairline) and massage in for about 60 seconds to get the blood flowing. Leave it in overnight and wash as normal in the morning. One tube is a one-month supply.</p>"
+          }
+        },
+        "q_3": {
+          "type": "question",
+          "settings": {
+            "question": "Will it make my hair greasy?",
+            "answer": "<p>No. The oil is lightweight and goes on the scalp, not the lengths, so it absorbs while you sleep. Customers with fine hair and with alopecia tell us it does not feel greasy once applied, and your normal morning wash takes care of the rest.</p>"
+          }
+        },
+        "q_4": {
+          "type": "question",
+          "settings": {
+            "question": "Which kinds of hair loss does it help with?",
+            "answer": "<p>It was made for the ways women’s hair thins after 35: female pattern thinning at the part and crown, postpartum and menopausal shedding, traction and breakage along the edges, and stress shedding. Pumpkin seed oil targets DHT at the follicle while the Caffeine Complex wakes dormant follicles. It is a cosmetic scalp treatment, not a medicine, so it cannot cure medical conditions such as alopecia areata, though many customers use it to support the hair they have.</p>"
+          }
+        },
+        "q_5": {
+          "type": "question",
+          "settings": {
+            "question": "Is it safe? Can I use it with other treatments?",
+            "answer": "<p>The formula is drug-free and hormone-free: cold-pressed pumpkin seed oil, caffeine and plant-based actives, no minoxidil. Most people can use it alongside their usual products. If you are pregnant, breastfeeding or under medical treatment for hair loss, check with your doctor first.</p>"
+          }
+        },
+        "q_6": {
+          "type": "question",
+          "settings": {
+            "question": "How does the 30-day money-back guarantee work?",
+            "answer": "<p>Use it every night for 30 days. Still shedding, still no baby hairs along your part or hairline? Email <a href=\"mailto:support@shopelaren.com\">support@shopelaren.com</a> within 30 days of purchase and we refund every cent. No photos, no awkward questions.</p>"
+          }
+        },
+        "q_7": {
+          "type": "question",
+          "settings": {
+            "question": "How does Subscribe &amp; Save work, and can I cancel?",
+            "answer": "<p>Subscribe and every delivery is 10% off, shipped on the schedule you choose so you never run out mid-cycle. Pause, skip or cancel any time from your account in two clicks. No lock-in, no cancellation fee.</p>"
+          }
+        },
+        "q_8": {
+          "type": "question",
+          "settings": {
+            "question": "What does shipping cost, and how long does it take?",
+            "answer": "<p>Shipping is free and insured on every order, with free express shipping on orders over $50. Orders leave our warehouse within one business day and you get tracking by email as soon as they do.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q_1",
+        "q_2",
+        "q_3",
+        "q_4",
+        "q_5",
+        "q_6",
+        "q_7",
+        "q_8"
+      ],
+      "settings": {
+        "eyebrow": "Questions, Answered",
+        "title": "Everything You Want To Know Before You Start",
+        "subtitle": "Straight answers on results, routine, safety and our guarantee. Anything else, our team is one email away.",
+        "open_first": true,
+        "footer_text": "<p>Still wondering about something? Email <a href=\"mailto:support@shopelaren.com\">support@shopelaren.com</a> and a real person will reply within one business day.</p>"
       }
     }
   },
@@ -1181,6 +1261,7 @@
     "ingredient-quality",
     "arctic-ingredients",
     "guarantee-2",
+    "faq",
     "newsletter"
   ]
 }

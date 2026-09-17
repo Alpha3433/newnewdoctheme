@@ -428,8 +428,23 @@
   }
 
   /* ====================================================== smooth anchors */
+  /* Anchors resolve by id first, then by the short section keys the landing sections carry as
+     data-anchor (benefits, reviews, science, results, shop, story, how, ingredients, guarantee, faq). */
+  function findAnchor(id) {
+    if (!id) return null;
+    return document.getElementById(id) || document.querySelector('[data-anchor="' + id + '"]') || document.querySelector('[id$="__' + id + '"]') || document.querySelector('[id$="' + id + '"]');
+  }
+  function closeNavDrawer() {
+    var drawer = $('.froya-nav-drawer');
+    if (!drawer || !drawer.classList.contains('is-open')) return;
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('drawer-open');
+    var burger = $('.froya-nav__burger');
+    if (burger) burger.setAttribute('aria-expanded', 'false');
+  }
   function scrollToId(id) {
-    var el = document.getElementById(id) || document.querySelector('[id$="__' + id + '"]') || document.querySelector('[id$="' + id + '"]');
+    var el = findAnchor(id);
     if (!el) return false;
     var offset = ($('.froya-nav__bar') || { offsetHeight: 0 }).offsetHeight + 8;
     var top = el.getBoundingClientRect().top + window.pageYOffset - offset;
@@ -438,10 +453,16 @@
   }
   document.addEventListener('click', function (e) {
     var a = e.target.closest('[data-scroll-to], a[href^="#"]');
-    if (!a || a.closest('#mini-cart')) return;
+    if (!a) return;
+    var inCart = !!a.closest('#mini-cart');
+    if (inCart && !a.hasAttribute('data-scroll-to')) return;
     var id = a.getAttribute('data-scroll-to') || (a.getAttribute('href') || '').replace(/^#/, '');
-    if (!id) return;
-    if (scrollToId(id)) e.preventDefault();
+    if (!id || !findAnchor(id)) return;
+    e.preventDefault();
+    if (inCart) Cart.close();
+    closeNavDrawer();
+    // let the drawer/cart release the body scroll lock before scrolling
+    window.setTimeout(function () { scrollToId(id); }, inCart || a.closest('.froya-nav-drawer') ? 60 : 0);
   });
   function initHero(root) {
     var heroContainer = $('[data-hero-link]', root);
@@ -876,6 +897,19 @@
   }
 
 
+  /* ================================================================= faq */
+  /* Accordion: opening one question closes the others in the same list. */
+  function initFaq(root) {
+    $$('.s-faq__list', root).forEach(function (list) {
+      if (!once(list, 'init')) return;
+      list.addEventListener('toggle', function (e) {
+        var item = e.target;
+        if (!item.open || !item.classList.contains('s-faq__item')) return;
+        $$('.s-faq__item[open]', list).forEach(function (other) { if (other !== item) other.open = false; });
+      }, true);
+    });
+  }
+
   /* ========================================================== email popup */
   /* Trades an email for an extra-10% code. Opens after a delay (or on exit intent), posts the customer
      form in the background, reveals the code and attaches it to the session via /discount/CODE so
@@ -1076,6 +1110,7 @@
     initBars(root);
     initNewsletter(root);
     initCountdown(root);
+    initFaq(root);
     initEmailPopup(root);
     initCartDrawer($('#mini-cart', root) || (root === document ? Cart.drawer() : null));
   }
@@ -1085,6 +1120,9 @@
     if (Cart.drawer()) Cart.updateCount(parseInt(Cart.drawer().getAttribute('data-cart-count') || '0', 10));
     document.documentElement.classList.add('loaded');
     autoLocalize();
+    // Arrived from another page with a section key in the hash (e.g. /#faq): scroll to that section.
+    var hash = (window.location.hash || '').replace(/^#/, '');
+    if (hash && !document.getElementById(hash) && findAnchor(hash)) window.setTimeout(function () { scrollToId(hash); }, 150);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 

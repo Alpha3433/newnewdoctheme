@@ -17,7 +17,8 @@
           <div class="footer__item-content">
             <ul class="linklist list--unstyled" role="list">
               {%- for block in links -%}
-                <li class="linklist__item" {{ block.shopify_attributes }}><a class="link--faded" href="{{ block.settings.url | default: '/' }}">{{ block.settings.label }}</a></li>
+                {%- assign link_href = block.settings.url | default: '/' -%}
+                <li class="linklist__item" {{ block.shopify_attributes }}><a class="link--faded" href="{{ link_href }}"{% if link_href contains '#' %} data-scroll-to="{{ link_href | split: '#' | last }}"{% endif %}>{{ block.settings.label }}</a></li>
               {%- endfor -%}
             </ul>
           </div></div>

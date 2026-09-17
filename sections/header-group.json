@@ -33,6 +33,70 @@
     "header": {
       "type": "froya-header",
       "blocks": {
+        "anchor_1": {
+          "type": "anchor_link",
+          "settings": {
+            "label": "Benefits",
+            "target": "benefits",
+            "custom_target": ""
+          }
+        },
+        "anchor_2": {
+          "type": "anchor_link",
+          "settings": {
+            "label": "Reviews",
+            "target": "reviews",
+            "custom_target": ""
+          }
+        },
+        "anchor_3": {
+          "type": "anchor_link",
+          "settings": {
+            "label": "How It Works",
+            "target": "science",
+            "custom_target": ""
+          }
+        },
+        "anchor_4": {
+          "type": "anchor_link",
+          "settings": {
+            "label": "Results",
+            "target": "results",
+            "custom_target": ""
+          }
+        },
+        "anchor_5": {
+          "type": "anchor_link",
+          "settings": {
+            "label": "Our Story",
+            "target": "story",
+            "custom_target": ""
+          }
+        },
+        "anchor_6": {
+          "type": "anchor_link",
+          "settings": {
+            "label": "Guarantee",
+            "target": "guarantee",
+            "custom_target": ""
+          }
+        },
+        "anchor_7": {
+          "type": "anchor_link",
+          "settings": {
+            "label": "How To Use",
+            "target": "how",
+            "custom_target": ""
+          }
+        },
+        "anchor_8": {
+          "type": "anchor_link",
+          "settings": {
+            "label": "FAQ",
+            "target": "faq",
+            "custom_target": ""
+          }
+        },
         "shop_1": {
           "type": "shop_item",
           "settings": {
@@ -243,6 +307,14 @@
         }
       },
       "block_order": [
+        "anchor_1",
+        "anchor_2",
+        "anchor_3",
+        "anchor_4",
+        "anchor_5",
+        "anchor_6",
+        "anchor_7",
+        "anchor_8",
         "shop_1",
         "shop_2",
         "shop_3",
@@ -293,7 +365,12 @@
         "blog": "",
         "blog_limit": 7,
         "read_more_label": "Read more",
-        "drawer_note": "Women’s hair wellness · Rated 4.77/5 by verified customers"
+        "drawer_note": "Women’s hair wellness · Rated 4.77/5 by verified customers",
+        "menu_style": "anchors",
+        "desktop_limit": 5,
+        "cta_label": "Shop Now",
+        "drawer_cta_label": "SHOP THE REGROWTH OIL",
+        "cta_target": "shop"
       }
     },
     "cart-drawer": {
@@ -341,7 +418,7 @@
         "from_label": "From",
         "empty_add_label": "+ Add To Cart",
         "empty_button": "Shop All Products",
-        "empty_url": "/collections/all",
+        "empty_url": "",
         "show_subscribe_toggle": true,
         "selling_plan_id": "1039991141",
         "subscribe_label": "SUBSCRIBE & SAVE",

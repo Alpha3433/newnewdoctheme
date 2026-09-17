@@ -40,6 +40,19 @@ template (`templates/page.froya-landing.json`).
   upload a photo/video and poster, or paste an mp4 URL.
 * **Lists** – benefits, science steps, research bars, hair-loss pillars/badges, how-to steps,
   ingredient legend, footer links, menu links and blog links are all blocks (add/remove/reorder).
+* **Menu (single page)** – Header → *Menu style*. *Single page* replaces the shop/bestsellers/more mega
+  menus and the long mobile drawer with the *Section link* blocks: each one scrolls to a section of
+  the landing page (benefits, reviews, science, results, story, guarantee, how to use, FAQ or a custom
+  element id). The bar shows the first few links plus a *Shop Now* pill that scrolls to the buy box;
+  the mobile drawer lists them all as numbered rows with one button, the note and the testimonial.
+  *Full store menu* brings the original mega menus back. Every other link on the page (guarantee
+  buttons, "Shop now" on review and video cards, the cart drawer's product links and empty-cart
+  button, the footer's "About" column) also scrolls to a section instead of leaving the page; only the
+  policies and *Manage Subscription* in the footer, and the checkout, lead off it. A link such as
+  `/#faq` from another page lands on the home page and scrolls to that section.
+* **FAQ** – a numbered accordion at the bottom of the page in the "Backed by science" style. Each
+  question is a block (question + rich-text answer); *Open the first question by default* and the
+  closing "still wondering?" line are settings. Menu and footer "FAQ" links scroll here.
 * **Email popup** – Header group → *Email popup (10% off)*. A split card (photo with a rotated
   "EXTRA 10% OFF" stamp, sign-up beside it) that opens after a delay and, on desktop, when the cursor
   leaves the page. The email posts to Shopify's customer form (tags `newsletter`, `popup`), then the

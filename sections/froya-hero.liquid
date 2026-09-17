@@ -26,7 +26,7 @@
     assign mobile_position = 'center top'
   endif
 -%}
-<div class="shopify-section" id="shopify-section-template--26717513089391__hero_banner_BnFCDE">
+<div class="shopify-section" id="shopify-section-template--26717513089391__hero_banner_BnFCDE" data-anchor="top">
 <section aria-label="Hero banner" class="s-hero-aging-lp" role="region" style="--mobile-text-color:{{ section.settings.mobile_text_color }};--ig-aging-lp-mobile-min-height:550px;--ig-aging-lp-cta-max-width:550px;--hero-aging-lp-mobile-bg:url('{{ mobile_bg }}');--hero-aging-lp-mobile-offset:0px;--hero-aging-lp-mobile-size:{{ mobile_size }};--hero-aging-lp-mobile-position:{{ mobile_position }};--hero-aging-lp-mobile-bg-color:{{ section.settings.image_mobile_bg | default: '#3d4b33' }};--hero-aging-lp-mobile-photo-space:{{ section.settings.mobile_photo_space | default: 150 }}px;--hero-aging-lp-scrim:{{ section.settings.mobile_scrim | default: 35 | divided_by: 100.0 }};">
   <div class="s-hero-aging-lp__container" data-hero-link="{{ section.settings.button_link | default: '#product-section' }}"><div class="s-hero-aging-lp__image-desktop">
       {%- render 'froya-image', image: section.settings.image, fallback: desktop_fallback, alt: section.settings.image_alt, width: 1600, height: 1179, loading: 'eager', sizes: '(min-width: 1920px) 960px, (min-width: 1200px) 600px, 50vw' -%}

@@ -203,7 +203,7 @@
   {%- endif -%}
 {%- else -%}
 <s-featured-product class="s-featured-product custom-section s-featured-product--badge-title s-featured-product--mobile-head" data-section-id="{{ section.id }}">
-  <div class="s-featured-product__container" id="product-section" style="scroll-margin-top: calc(var(--header-height, 0px) * var(--enable-sticky-header) + var(--announcement-bar-height, 0px) * var(--enable-sticky-announcement-bar) + 10px)">
+  <div class="s-featured-product__container" data-anchor="shop" id="product-section" style="scroll-margin-top: calc(var(--header-height, 0px) * var(--enable-sticky-header) + var(--announcement-bar-height, 0px) * var(--enable-sticky-announcement-bar) + 10px)">
     {%- if section.settings.badge_text != blank -%}
     <h2 class="s-featured-product__title s-featured-product__title--badge section-title" style="--badge-bg: {{ section.settings.badge_bg }}; --badge-text-color: {{ section.settings.badge_color }};">
       <p class="s-featured-product__badge-text"><span aria-hidden="true">✨ </span>{{ section.settings.badge_text }}{% if section.settings.badge_underline != blank %} <span class="s-featured-product__badge-underline">{{ section.settings.badge_underline }}</span>{% endif %}</p>
