@@ -875,6 +875,193 @@
     });
   }
 
+
+  /* ========================================================== email popup */
+  /* Trades an email for an extra-10% code. Opens after a delay (or on exit intent), posts the customer
+     form in the background, reveals the code and attaches it to the session via /discount/CODE so
+     checkout applies it automatically. Remembered per visitor in localStorage. */
+  function initEmailPopup(root) {
+    var popup = $('[data-email-popup]', root) || (root === document ? $('[data-email-popup]') : null);
+    if (!popup || !once(popup, 'init')) return;
+    // Hoist to <body> so no header stacking context can paint over it (dropping the copy a previous
+    // theme-editor render left there).
+    $$('[data-email-popup][data-section-id="' + popup.getAttribute('data-section-id') + '"]').forEach(function (other) {
+      if (other !== popup && other.parentNode) other.parentNode.removeChild(other);
+    });
+    if (popup.parentNode !== document.body) document.body.appendChild(popup);
+
+    var designMode = popup.getAttribute('data-design-mode') === 'true';
+    var enabled = popup.getAttribute('data-enabled') === 'true';
+    var key = popup.getAttribute('data-storage-key') || 'elaren:email-popup';
+    var code = popup.getAttribute('data-code') || '';
+    var form = $('form', popup);
+    var input = $('input[type="email"]', popup);
+    var submit = $('button[type="submit"]', popup);
+    var error = $('[data-popup-error]', popup);
+    var dialog = $('.s-email-popup__dialog', popup);
+    var timer = null;
+    var opened = false;
+    var day = 86400000;
+
+    var hiddenUntil = function () {
+      var raw = readStored(key);
+      if (!raw) return 0;
+      try { return parseInt(JSON.parse(raw).until, 10) || 0; } catch (err) { return parseInt(raw, 10) || 0; }
+    };
+    var remember = function (days, state) {
+      writeStored(key, JSON.stringify({ until: Date.now() + days * day, state: state }));
+    };
+    var showStep = function (name) {
+      $$('[data-popup-step]', popup).forEach(function (step) {
+        if (step.getAttribute('data-popup-step') === name) step.removeAttribute('hidden'); else step.setAttribute('hidden', '');
+      });
+    };
+    var open = function () {
+      if (opened || !document.body.contains(popup)) return;
+      opened = true;
+      if (timer) { window.clearTimeout(timer); timer = null; }
+      popup.removeAttribute('hidden');
+      document.body.classList.add('email-popup-open');
+      window.requestAnimationFrame(function () {
+        popup.classList.add('is-open');
+        var target = (input && !input.closest('[hidden]') && window.matchMedia('(min-width: 768px)').matches) ? input : dialog;
+        if (target) target.focus({ preventScroll: true });
+      });
+    };
+    var close = function (rememberDays) {
+      if (!opened) return;
+      opened = false;
+      popup.classList.remove('is-open');
+      document.body.classList.remove('email-popup-open');
+      window.setTimeout(function () { if (!opened) popup.setAttribute('hidden', ''); }, 400);
+      if (rememberDays && !designMode) remember(rememberDays, 'dismissed');
+    };
+
+    var dismissDays = parseInt(popup.getAttribute('data-dismiss-days') || '7', 10);
+    var signupDays = parseInt(popup.getAttribute('data-signup-days') || '60', 10);
+    $$('[data-popup-close]', popup).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var success = $('[data-popup-step="success"]', popup);
+        close(success && !success.hasAttribute('hidden') ? signupDays : dismissDays);
+      });
+    });
+    popup.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { close(dismissDays); return; }
+      if (e.key !== 'Tab' || !dialog) return;
+      var focusable = $$('a[href], button:not([disabled]), input:not([disabled]), [tabindex="0"]', dialog).filter(function (el) { return !el.closest('[hidden]'); });
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+
+    // Attach the code to the visitor's session so checkout applies it without typing.
+    var applyCode = function () {
+      if (!code) return;
+      var applied = $('[data-popup-applied]', popup);
+      fetch(rootUrl() + 'discount/' + encodeURIComponent(code) + '?redirect=' + encodeURIComponent(rootUrl()), { credentials: 'same-origin' })
+        .then(function () { if (applied) applied.removeAttribute('hidden'); })
+        .catch(function () { /* the visible code still works at checkout */ });
+    };
+    var succeed = function () {
+      showStep('success');
+      applyCode();
+      if (!designMode) remember(signupDays, 'subscribed');
+      var cta = $('.s-email-popup__button--cta', popup);
+      if (cta) cta.focus({ preventScroll: true });
+    };
+
+    var copy = $('[data-popup-copy]', popup);
+    if (copy) {
+      copy.addEventListener('click', function () {
+        var codeEl = $('[data-popup-code]', popup);
+        var text = codeEl ? codeEl.textContent.trim() : code;
+        var done = function () {
+          var label = copy.textContent;
+          copy.textContent = popup.getAttribute('data-copied-label') || 'Copied!';
+          window.setTimeout(function () { copy.textContent = label; }, 1800);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, done);
+        else {
+          var range = document.createRange();
+          if (codeEl) { range.selectNodeContents(codeEl); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); }
+          try { document.execCommand('copy'); } catch (err) { /* unsupported */ }
+          done();
+        }
+      });
+    }
+
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        if (form.classList.contains('is-busy') || form.dataset.native === '1') return;
+        e.preventDefault();
+        if (error) error.setAttribute('hidden', '');
+        if (input && !input.checkValidity()) {
+          input.setAttribute('aria-invalid', 'true');
+          if (error) { error.textContent = popup.getAttribute('data-error-text') || 'Please enter a valid email address.'; error.removeAttribute('hidden'); }
+          input.focus();
+          return;
+        }
+        if (input) input.removeAttribute('aria-invalid');
+        form.classList.add('is-busy');
+        if (submit) submit.disabled = true;
+        var body = new FormData(form);
+        fetch(form.getAttribute('action') || (rootUrl() + 'contact'), { method: 'POST', body: body, credentials: 'same-origin', headers: { 'Accept': 'text/html' } })
+          .then(function (res) {
+            // Shopify's spam challenge cannot be answered in the background: fall back to a normal submit,
+            // the page reloads and the success step renders from form.posted_successfully?.
+            if (!res.ok || /\/challenge/.test(res.url || '')) throw new Error('challenge');
+            if (/customer_posted=true/.test(res.url || '')) return '';
+            return res.text();
+          })
+          .then(function (html) {
+            if (!html) { succeed(); return; }
+            // Shopify re-rendered the page with the form's errors: read them from the popup's own error slot.
+            var doc = new window.DOMParser().parseFromString(html, 'text/html');
+            var slot = doc.querySelector('[data-popup-error]');
+            var message = slot ? slot.textContent.trim() : '';
+            if (message) { var err = new Error('invalid'); err.detail = message; throw err; }
+            succeed();
+          })
+          .catch(function (err) {
+            form.classList.remove('is-busy');
+            if (submit) submit.disabled = false;
+            if (err && err.message === 'invalid') {
+              if (input) input.setAttribute('aria-invalid', 'true');
+              if (error) { error.textContent = err.detail || popup.getAttribute('data-error-text') || 'Please enter a valid email address.'; error.removeAttribute('hidden'); }
+              return;
+            }
+            form.dataset.native = '1';
+            form.submit();
+          });
+      });
+    }
+
+    // Returned from a native submit: Shopify redirects back with ?customer_posted=true.
+    if ($('[data-popup-posted]', popup)) {
+      open();
+      succeed();
+      return;
+    }
+    if (form && $('.s-email-popup__error', popup) && $('.s-email-popup__error', popup).textContent.trim()) {
+      $('.s-email-popup__error', popup).removeAttribute('hidden');
+      open();
+      return;
+    }
+
+    popup.__open = open; popup.__close = close;
+    if (designMode) return; // the editor opens it when the section is selected (see below)
+    if (!enabled || hiddenUntil() > Date.now()) return;
+
+    var delay = Math.max(0, parseInt(popup.getAttribute('data-delay') || '6', 10)) * 1000;
+    timer = window.setTimeout(open, delay);
+    if (popup.getAttribute('data-exit-intent') === 'true' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      document.addEventListener('mouseout', function (e) {
+        if (!e.relatedTarget && e.clientY <= 0 && !document.body.classList.contains('cart-open')) open();
+      });
+    }
+  }
+
   /* ================================================================ init */
   function initSection(root) {
     root = root || document;
@@ -889,6 +1076,7 @@
     initBars(root);
     initNewsletter(root);
     initCountdown(root);
+    initEmailPopup(root);
     initCartDrawer($('#mini-cart', root) || (root === document ? Cart.drawer() : null));
   }
 
@@ -906,10 +1094,19 @@
     if (old && e.target.querySelector('.js-view-ingredients')) old.parentNode.removeChild(old);
     initSection(e.target);
   });
+  var popupForSection = function (sectionEl) {
+    var inline = sectionEl.querySelector('[data-email-popup]');
+    var id = inline ? inline.getAttribute('data-section-id') : (sectionEl.id || '').replace(/^shopify-section-/, '');
+    return document.querySelector('[data-email-popup][data-section-id="' + id + '"]');
+  };
   document.addEventListener('shopify:section:select', function (e) {
     if (e.target.querySelector('#mini-cart')) Cart.open();
+    var popup = popupForSection(e.target);
+    if (popup && popup.__open) popup.__open();
   });
   document.addEventListener('shopify:section:deselect', function (e) {
     if (e.target.querySelector('#mini-cart')) Cart.close();
+    var popup = popupForSection(e.target);
+    if (popup && popup.__close) popup.__close();
   });
 })();

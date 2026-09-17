@@ -1,0 +1,127 @@
+{% comment %}
+  Email capture popup – trades an email address for an extra 10% code.
+  The form posts to Shopify's customer form (subscribers land in Customers with the "newsletter" and
+  "popup" tags). assets/main.js submits it in the background, reveals the code and attaches it to the
+  visitor's session via /discount/CODE, so checkout applies it on top of the bundle discount. If Shopify
+  answers with its spam challenge the form falls back to a normal submit and the success step renders
+  from form.posted_successfully? instead. The popup is hidden in the theme editor until the section is
+  selected, and is remembered per visitor (localStorage) for the "days" set below.
+{% endcomment %}
+{%- liquid
+  assign sid = section.id
+  assign form_id = 'email-popup-form-' | append: sid
+  assign code = section.settings.discount_code | strip | upcase
+  assign storage_key = 'elaren:email-popup:' | append: code | handle
+-%}
+{%- if section.settings.enabled or request.design_mode -%}
+<div class="s-email-popup" id="email-popup-{{ sid }}" hidden data-email-popup data-section-id="{{ sid }}" data-enabled="{{ section.settings.enabled }}" data-design-mode="{{ request.design_mode }}" data-delay="{{ section.settings.delay }}" data-exit-intent="{{ section.settings.exit_intent }}" data-dismiss-days="{{ section.settings.dismiss_days }}" data-signup-days="{{ section.settings.signup_days }}" data-code="{{ code | escape }}" data-storage-key="{{ storage_key }}" data-copied-label="{{ section.settings.copied_label | escape }}" data-error-text="{{ section.settings.error_text | escape }}">
+  <div class="s-email-popup__overlay" data-popup-close></div>
+  <div class="s-email-popup__dialog" role="dialog" aria-modal="true" aria-labelledby="email-popup-title-{{ sid }}" tabindex="-1">
+    <button aria-label="Close" class="s-email-popup__close" data-popup-close type="button">
+      <svg aria-hidden="true" fill="none" height="14" viewBox="0 0 14 14" width="14"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/></svg>
+    </button>
+
+    <div class="s-email-popup__media" aria-hidden="true">
+      {%- render 'froya-image', image: section.settings.image, fallback: section.settings.image_fallback, alt: '', class: 's-email-popup__image', width: 900, height: 672, loading: 'lazy', sizes: '(min-width: 768px) 400px, 100vw' -%}
+      {%- if section.settings.badge_big != blank -%}
+        <span class="s-email-popup__stamp">
+          {%- if section.settings.badge_small != blank -%}<small>{{ section.settings.badge_small }}</small>{%- endif -%}
+          <strong>{{ section.settings.badge_big }}</strong>
+        </span>
+      {%- endif -%}
+    </div>
+
+    <div class="s-email-popup__content">
+      {%- form 'customer', class: 's-email-popup__form', id: form_id -%}
+        <input name="contact[tags]" type="hidden" value="newsletter,popup">
+        <input name="contact[context]" type="hidden" value="{{ form_id }}">
+        {%- if form.posted_successfully? -%}<span data-popup-posted hidden></span>{%- endif -%}
+
+        <div class="s-email-popup__step" data-popup-step="form"{% if form.posted_successfully? %} hidden{% endif %}>
+          {%- if section.settings.eyebrow != blank -%}<p class="s-email-popup__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+          <h2 class="s-email-popup__title" id="email-popup-title-{{ sid }}">{{ section.settings.title }}</h2>
+          {%- if section.settings.text != blank -%}<p class="s-email-popup__text">{{ section.settings.text }}</p>{%- endif -%}
+
+          <div class="s-email-popup__field">
+            <label class="visually-hidden" for="{{ form_id }}-email">{{ section.settings.placeholder }}</label>
+            <input autocomplete="email" class="s-email-popup__input" id="{{ form_id }}-email" name="contact[email]" placeholder="{{ section.settings.placeholder | escape }}" required type="email" value="{{ form.email }}">
+            <button class="s-email-popup__button" type="submit">
+              <span class="s-email-popup__button-text">{{ section.settings.button_label }}</span>
+              <span class="s-email-popup__button-spinner" aria-hidden="true"></span>
+            </button>
+          </div>
+          <p class="s-email-popup__error" data-popup-error role="alert" hidden>
+            {%- if form.errors -%}{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}{%- endif -%}
+          </p>
+          {%- if section.settings.fine_print != blank -%}<p class="s-email-popup__fine">{{ section.settings.fine_print }}</p>{%- endif -%}
+          {%- if section.settings.dismiss_label != blank -%}
+            <button class="s-email-popup__dismiss" data-popup-close type="button">{{ section.settings.dismiss_label }}</button>
+          {%- endif -%}
+        </div>
+
+        <div class="s-email-popup__step s-email-popup__step--success" data-popup-step="success"{% unless form.posted_successfully? %} hidden{% endunless %}>
+          {%- if section.settings.success_eyebrow != blank -%}<p class="s-email-popup__eyebrow">{{ section.settings.success_eyebrow }}</p>{%- endif -%}
+          <h2 class="s-email-popup__title">{{ section.settings.success_title }}</h2>
+          {%- if section.settings.success_text != blank -%}<p class="s-email-popup__text">{{ section.settings.success_text }}</p>{%- endif -%}
+          <div class="s-email-popup__code">
+            <code data-popup-code>{{ code }}</code>
+            <button class="s-email-popup__copy" data-popup-copy type="button">{{ section.settings.copy_label }}</button>
+          </div>
+          <p class="s-email-popup__applied" data-popup-applied hidden>
+            <svg aria-hidden="true" fill="none" height="14" viewBox="0 0 14 14" width="14"><path d="M2 7.5l3.2 3L12 3.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>
+            {{ section.settings.applied_text }}
+          </p>
+          {%- if section.settings.cta_label != blank -%}
+            {%- if section.settings.cta_url != blank -%}
+              <a class="s-email-popup__button s-email-popup__button--cta" href="{{ section.settings.cta_url }}">{{ section.settings.cta_label }}</a>
+            {%- else -%}
+              <button class="s-email-popup__button s-email-popup__button--cta" data-popup-close type="button">{{ section.settings.cta_label }}</button>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Email popup (10% off)",
+  "tag": "div",
+  "class": "shopify-section-email-popup",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Show the popup", "default": true },
+    { "type": "range", "id": "delay", "label": "Open after", "min": 0, "max": 60, "step": 1, "unit": "s", "default": 6 },
+    { "type": "checkbox", "id": "exit_intent", "label": "Also open when the cursor leaves the page (desktop)", "default": true },
+    { "type": "range", "id": "dismiss_days", "label": "Hide after closing for", "min": 1, "max": 90, "step": 1, "unit": "d", "default": 7 },
+    { "type": "range", "id": "signup_days", "label": "Hide after signing up for", "min": 1, "max": 365, "step": 1, "unit": "d", "default": 60 },
+    { "type": "header", "content": "Offer" },
+    { "type": "text", "id": "discount_code", "label": "Discount code", "default": "EXTRA10", "info": "Create this code in Discounts (10% off, set to combine with product discounts so it stacks on the bundle). It is revealed after sign-up and attached to the cart automatically." },
+    { "type": "text", "id": "badge_small", "label": "Stamp – small line", "default": "EXTRA" },
+    { "type": "text", "id": "badge_big", "label": "Stamp – big line", "default": "10% OFF" },
+    { "type": "header", "content": "Photo" },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Landscape, about 900 × 670 px." },
+    { "type": "text", "id": "image_fallback", "label": "Fallback photo URL", "info": "Used only until a photo is uploaded.", "default": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-daisies.png?v=1789651243" },
+    { "type": "header", "content": "Sign-up step" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "A little something for you" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Take an extra 10% off your order" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Pop your email in and we’ll unlock a code worth an extra 10% off your whole order, on top of any bundle or subscription saving already in your cart." },
+    { "type": "text", "id": "placeholder", "label": "Email placeholder", "default": "Enter your email" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Unlock my 10% off" },
+    { "type": "text", "id": "fine_print", "label": "Fine print", "default": "No spam, ever. Unsubscribe in one tap." },
+    { "type": "text", "id": "dismiss_label", "label": "Dismiss link", "default": "No thanks, I’ll pay full price" },
+    { "type": "text", "id": "error_text", "label": "Invalid email message", "default": "Please enter a valid email address." },
+    { "type": "header", "content": "Success step" },
+    { "type": "text", "id": "success_eyebrow", "label": "Eyebrow", "default": "You’re in" },
+    { "type": "inline_richtext", "id": "success_title", "label": "Heading", "default": "Here’s your extra 10% off" },
+    { "type": "textarea", "id": "success_text", "label": "Text", "default": "Your code is below and we’ve already attached it to your cart, so it comes off automatically at checkout." },
+    { "type": "text", "id": "copy_label", "label": "Copy button", "default": "Copy" },
+    { "type": "text", "id": "copied_label", "label": "Copied confirmation", "default": "Copied!" },
+    { "type": "text", "id": "applied_text", "label": "Applied confirmation", "default": "Applied to your cart" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop with 10% off" },
+    { "type": "url", "id": "cta_url", "label": "Button link", "info": "Leave empty to simply close the popup." }
+  ],
+  "presets": [ { "name": "Email popup (10% off)" } ]
+}
+{% endschema %}

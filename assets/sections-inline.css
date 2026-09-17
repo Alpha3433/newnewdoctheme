@@ -329,8 +329,9 @@
   .s-backed-by-science__title p{margin:0;}
   .s-backed-by-science__subtitle{margin:0;color:#1F1F1F;font-family:var(--bbs-font-sans);font-size:22px;font-weight:500;line-height:38px;max-width:1036px;}
   .s-backed-by-science__body{display:flex;flex-direction:column;gap:32px;align-items:stretch;}
-  .s-backed-by-science__images{display:flex;justify-content:center;align-items:flex-start;width:100%;}
-  .s-backed-by-science__image{display:block;max-width:100%;height:auto;}
+  .s-backed-by-science__images{display:flex;flex-direction:column;gap:16px;width:100%;}
+  .s-backed-by-science__figure{margin:0;overflow:hidden;border-radius:15px;border:2px solid var(--bbs-card-border);background:var(--bbs-card-bg);aspect-ratio:4 / 3;}
+  .s-backed-by-science__image{display:block;width:100%;height:100%;object-fit:cover;}
   .s-backed-by-science__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--bbs-item-gap);position:relative;}
   .s-backed-by-science__item{position:relative;display:flex;align-items:stretch;padding-left:calc(var(--bbs-circle-size) + var(--bbs-line-gap));}
 
@@ -363,8 +364,7 @@
     .s-backed-by-science{--bbs-item-gap:20px;--bbs-num-top:16px;padding:48px 40px 80px;}
     .s-backed-by-science__header{margin-bottom:56px;gap:20px;}
     .s-backed-by-science__body{flex-direction:row;gap:48px;align-items:flex-start;}
-    .s-backed-by-science__images{flex:1 1 0;max-width:590px;}
-    .s-backed-by-science__image{width:100%;}
+    .s-backed-by-science__images{flex:1 1 0;max-width:590px;gap:20px;position:sticky;top:calc(var(--header-height, 64px) + 24px);}
     .s-backed-by-science__list{flex:1 1 0;}
   }
   @media screen and (max-width:767.98px){
@@ -373,7 +373,7 @@
     .s-backed-by-science__eyebrow{font-size:16px;line-height:14px;letter-spacing:0.5px;padding:4px 0;}
     .s-backed-by-science__title{font-size:26px;}
     .s-backed-by-science__subtitle{font-size:16px;line-height:20px;}
-    .s-backed-by-science__image{width:100%;}
+    .s-backed-by-science__images{gap:12px;}
     .s-backed-by-science__card-text{font-size:14px;}
   }
 

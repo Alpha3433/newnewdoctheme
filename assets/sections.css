@@ -1563,3 +1563,71 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
     min-height: 40px;
   }
 }
+
+/* ---- froya-email-popup ---- */
+/* Split card: photo with a rotated "EXTRA 10% OFF" stamp on the left, sign-up on the right.
+   Slides up from the bottom on phones, rises into the middle on desktop. */
+.s-email-popup { position: fixed; inset: 0; z-index: 1200; display: flex; align-items: flex-end; justify-content: center; font-family: var(--font-sans); color: var(--brand-ink); }
+.s-email-popup[hidden] { display: none; }
+.s-email-popup__overlay { position: absolute; inset: 0; background: rgba(31, 31, 31, 0.55); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); opacity: 0; transition: opacity 280ms ease; }
+.s-email-popup__dialog { position: relative; width: 100%; max-width: 560px; max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); overflow: auto; overflow-x: hidden; display: flex; flex-direction: column; background: var(--brand-cream); border-radius: 22px 22px 0 0; box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.25); transform: translateY(40px); opacity: 0; transition: transform 380ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 280ms ease; outline: none; }
+.s-email-popup.is-open .s-email-popup__overlay { opacity: 1; }
+.s-email-popup.is-open .s-email-popup__dialog { transform: none; opacity: 1; }
+.s-email-popup__close { position: absolute; top: 12px; right: 12px; z-index: 3; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 999px; background: rgba(255, 255, 255, 0.92); color: var(--brand-ink); cursor: pointer; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18); transition: transform 150ms ease, background 150ms ease; }
+.s-email-popup__close:hover { transform: rotate(90deg); background: #fff; }
+.s-email-popup__media { position: relative; flex: 0 0 auto; height: 190px; background: var(--brand-mauve-light); border-radius: 22px 22px 0 0; }
+.s-email-popup__image { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.s-email-popup__media::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(31, 31, 31, 0) 55%, rgba(250, 247, 240, 0.9) 100%); pointer-events: none; }
+.s-email-popup__stamp { position: absolute; left: 18px; bottom: 14px; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 96px; height: 96px; border-radius: 999px; background: var(--brand-mauve); color: #fff; text-align: center; line-height: 1; transform: rotate(-8deg); box-shadow: 0 0 0 4px var(--brand-cream), 0 8px 18px rgba(0, 0, 0, 0.2); }
+.s-email-popup__stamp::before { content: ''; position: absolute; inset: 5px; border: 1.5px dashed rgba(255, 255, 255, 0.75); border-radius: inherit; }
+.s-email-popup__stamp small { font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px; }
+.s-email-popup__stamp strong { font-family: var(--font-serif); font-size: 21px; font-weight: 700; letter-spacing: -0.02em; }
+.s-email-popup__content { flex: 1 1 auto; padding: 22px 22px 26px; }
+.s-email-popup__form { margin: 0; }
+.s-email-popup__step { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.s-email-popup__step[hidden] { display: none; }
+.s-email-popup__eyebrow { margin: 0; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brand-mauve-dark); }
+.s-email-popup__title { margin: 0; font-family: var(--font-serif); font-weight: 400; font-size: 26px; line-height: 1.15; letter-spacing: -0.02em; }
+.s-email-popup__title em { font-style: italic; color: var(--brand-mauve-dark); }
+.s-email-popup__text { margin: 0; font-size: 15px; line-height: 1.55; }
+.s-email-popup__field { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 4px; }
+.s-email-popup__input { width: 100%; min-height: 50px; padding: 0 16px; border: 1.5px solid var(--brand-line); border-radius: 12px; background: #fff; font: inherit; font-size: 16px; color: var(--brand-ink); outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; }
+.s-email-popup__input:focus { border-color: var(--brand-mauve); box-shadow: 0 0 0 3px rgba(175, 137, 152, 0.25); }
+.s-email-popup__input[aria-invalid="true"] { border-color: #e43044; }
+.s-email-popup__button { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 50px; padding: 0 22px; border: 0; border-radius: 12px; background: var(--brand-cta); color: #fff; font: inherit; font-size: 16px; font-weight: 700; letter-spacing: 0.01em; text-decoration: none; cursor: pointer; transition: background 150ms ease, transform 150ms ease; }
+.s-email-popup__button:hover { background: var(--brand-cta-hover); }
+.s-email-popup__button:active { transform: translateY(1px); }
+.s-email-popup__button[disabled] { cursor: progress; }
+.s-email-popup__button-spinner { display: none; width: 18px; height: 18px; margin-left: 10px; border: 2px solid rgba(255, 255, 255, 0.4); border-top-color: #fff; border-radius: 999px; animation: s-email-popup-spin 700ms linear infinite; }
+.s-email-popup__form.is-busy .s-email-popup__button-spinner { display: inline-block; }
+@keyframes s-email-popup-spin { to { transform: rotate(360deg); } }
+.s-email-popup__error { margin: -4px 0 0; font-size: 13px; color: #e43044; }
+.s-email-popup__error[hidden] { display: none; }
+.s-email-popup__fine { margin: 0; font-size: 12px; color: rgba(31, 31, 31, 0.65); }
+.s-email-popup__dismiss { align-self: center; margin-top: 2px; padding: 4px; border: 0; background: none; font: inherit; font-size: 13px; color: rgba(31, 31, 31, 0.6); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.s-email-popup__dismiss:hover { color: var(--brand-ink); }
+.s-email-popup__code { display: flex; align-items: stretch; width: 100%; margin-top: 4px; border: 2px dashed var(--brand-mauve); border-radius: 12px; background: #fff; overflow: hidden; }
+.s-email-popup__code code { flex: 1 1 auto; display: flex; align-items: center; padding: 0 18px; min-height: 52px; font-family: var(--font-mono); font-size: 20px; font-weight: 700; letter-spacing: 0.16em; color: var(--brand-ink); }
+.s-email-popup__copy { flex: 0 0 auto; padding: 0 18px; border: 0; border-left: 2px dashed var(--brand-mauve); background: var(--brand-mauve-tint); font: inherit; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-mauve-dark); cursor: pointer; transition: background 150ms ease; }
+.s-email-popup__copy:hover { background: var(--brand-mauve-light); }
+.s-email-popup__applied { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 13px; font-weight: 600; color: var(--brand-green); }
+.s-email-popup__applied[hidden] { display: none; }
+.s-email-popup__button--cta { margin-top: 4px; }
+body.email-popup-open { overflow: hidden; }
+
+@media screen and (min-width: 768px) {
+  .s-email-popup { align-items: center; padding: 24px; }
+  .s-email-popup__dialog { flex-direction: row; max-width: 880px; max-height: calc(100vh - 48px); border-radius: 24px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35); transform: translateY(24px) scale(0.98); }
+  .s-email-popup__media { flex: 0 0 44%; height: auto; min-height: 460px; border-radius: 24px 0 0 24px; }
+  .s-email-popup__media::after { background: linear-gradient(90deg, rgba(31, 31, 31, 0) 60%, rgba(250, 247, 240, 0.85) 100%); }
+  .s-email-popup__stamp { left: auto; right: -22px; top: 26px; bottom: auto; width: 116px; height: 116px; transform: rotate(10deg); }
+  .s-email-popup__stamp small { font-size: 11px; }
+  .s-email-popup__stamp strong { font-size: 25px; }
+  .s-email-popup__content { display: flex; align-items: center; padding: 44px 44px 40px 48px; }
+  .s-email-popup__title { font-size: 32px; }
+  .s-email-popup__text { font-size: 16px; }
+  .s-email-popup__field { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-email-popup__overlay, .s-email-popup__dialog, .s-email-popup__close { transition: none; }
+}

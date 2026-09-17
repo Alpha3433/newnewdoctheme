@@ -364,11 +364,41 @@
         "checkout_label": "SECURE CHECKOUT",
         "show_total_on_button": true
       }
+    },
+    "email-popup": {
+      "type": "froya-email-popup",
+      "settings": {
+        "enabled": true,
+        "delay": 6,
+        "exit_intent": true,
+        "dismiss_days": 7,
+        "signup_days": 60,
+        "image_fallback": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-daisies.png?v=1789651243",
+        "badge_small": "EXTRA",
+        "badge_big": "10% OFF",
+        "eyebrow": "A little something for you",
+        "title": "Take an extra 10% off your order",
+        "text": "Pop your email in and we’ll unlock a code worth an extra 10% off your whole order, on top of any bundle or subscription saving already in your cart.",
+        "placeholder": "Enter your email",
+        "button_label": "Unlock my 10% off",
+        "fine_print": "No spam, ever. Unsubscribe in one tap.",
+        "dismiss_label": "No thanks, I’ll pay full price",
+        "discount_code": "EXTRA10",
+        "success_eyebrow": "You’re in",
+        "success_title": "Here’s your extra 10% off",
+        "success_text": "Your code is below and we’ve already attached it to your cart, so it comes off automatically at checkout.",
+        "copy_label": "Copy",
+        "copied_label": "Copied!",
+        "cta_label": "Shop with 10% off",
+        "cta_url": "",
+        "error_text": "Please enter a valid email address."
+      }
     }
   },
   "order": [
     "announcement-bar",
     "header",
-    "cart-drawer"
+    "cart-drawer",
+    "email-popup"
   ]
 }
