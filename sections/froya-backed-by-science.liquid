@@ -1,11 +1,11 @@
 {% comment %}
-  "Backed by science" timeline – heading, image and each numbered step editable in the theme editor.
+  "Backed by science" timeline – heading, the two stacked photos and each numbered step editable in the theme editor.
   The wrapper ids are kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
 {%- liquid
   assign sid = 'template--26717513089391__backed_by_science_VNNFmb'
-  assign desktop_fallback = 'https://froyaorganics.com/cdn/shop/files/Frame_104.png'
-  assign mobile_fallback = 'https://cdn.shopify.com/s/files/1/0473/9999/3493/files/Frame_1484582070.png?v=1776953442&width=700&format=webp'
+  assign image_1_fallback = section.settings.image_1_fallback
+  assign image_2_fallback = section.settings.image_2_fallback
 -%}
 <div class="shopify-section shopify-section-backed-by-science" id="shopify-section-{{ sid }}">
 <section aria-labelledby="s-backed-by-science-title-{{ sid }}" class="s-backed-by-science" data-section-id="{{ sid }}" id="s-backed-by-science-{{ sid }}">
@@ -16,14 +16,14 @@
       {%- if section.settings.subtitle != blank -%}<p class="s-backed-by-science__subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
     </header>
 
-    <div class="s-backed-by-science__body"><picture aria-hidden="true" class="s-backed-by-science__images">
-        {%- if section.settings.image_mobile != blank -%}
-          <source media="(max-width: 767.98px)" srcset="{{ section.settings.image_mobile | image_url: width: 700 }}">
-        {%- elsif section.settings.image == blank -%}
-          <source media="(max-width: 767.98px)" srcset="{{ mobile_fallback }}">
-        {%- endif -%}
-        {%- render 'froya-image', image: section.settings.image, fallback: desktop_fallback, alt: '', class: 's-backed-by-science__image', width: 1200, height: 1637, sizes: '(min-width: 768px) 590px, 100vw' -%}
-      </picture><ol class="s-backed-by-science__list">
+    <div class="s-backed-by-science__body"><div aria-hidden="true" class="s-backed-by-science__images">
+        <figure class="s-backed-by-science__figure">
+          {%- render 'froya-image', image: section.settings.image_1, fallback: image_1_fallback, alt: '', class: 's-backed-by-science__image', width: 1200, height: 896, sizes: '(min-width: 768px) 590px, calc(100vw - 32px)' -%}
+        </figure>
+        <figure class="s-backed-by-science__figure">
+          {%- render 'froya-image', image: section.settings.image_2, fallback: image_2_fallback, alt: '', class: 's-backed-by-science__image', width: 1200, height: 896, sizes: '(min-width: 768px) 590px, calc(100vw - 32px)' -%}
+        </figure>
+      </div><ol class="s-backed-by-science__list">
         {%- for block in section.blocks -%}
           <li class="s-backed-by-science__item" {{ block.shopify_attributes }}>
             <span aria-hidden="true" class="s-backed-by-science__num">{{ forloop.index }}</span>
@@ -49,8 +49,11 @@
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Backed By Science" },
     { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "How Pumpkin Seed Regrowth Oil Works" },
     { "type": "textarea", "id": "subtitle", "label": "Subheading", "default": "5 research-backed ways it targets why women’s hair thins after 35. No drugs, no hormones, just pumpkin seed oil and caffeine." },
-    { "type": "image_picker", "id": "image", "label": "Image (desktop)", "info": "Tall portrait image, about 590 × 805 px." },
-    { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile)", "info": "Optional landscape crop for phones, about 700 × 450 px." }
+    { "type": "header", "content": "Photos", "info": "Two landscape photos stacked beside the steps (about 1200 × 900 px each, 4:3)." },
+    { "type": "image_picker", "id": "image_1", "label": "Top photo" },
+    { "type": "text", "id": "image_1_fallback", "label": "Fallback top photo URL", "info": "Used only until a photo is uploaded.", "default": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-daisies.png?v=1789651243" },
+    { "type": "image_picker", "id": "image_2", "label": "Bottom photo" },
+    { "type": "text", "id": "image_2_fallback", "label": "Fallback bottom photo URL", "info": "Used only until a photo is uploaded.", "default": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-held.png?v=1789651243" }
   ],
   "blocks": [
     {
