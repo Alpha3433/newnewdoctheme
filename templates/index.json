@@ -1160,7 +1160,8 @@
         "level_6"
       ],
       "settings": {
-        "title": "<p>Why women are <br><em>switching</em> to Elaren</p>",
+        "title": "<p>Why women are <br/><em>switching</em> to Elaren</p>",
+        "image_bottom": "shopify://shop_images/hf_20260918_090552_0c030942-232e-4e1b-ab3b-46b8e13655c6_1.png",
         "image_alt": "Cold-pressed pumpkin seed oil",
         "link_label": "LEARN MORE",
         "link_url": "/products/elaren-pumpkin-seed-oil-regrowth-serum"
