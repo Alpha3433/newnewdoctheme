@@ -772,6 +772,7 @@
     "founder-story": {
       "type": "froya-founder-story",
       "settings": {
+        "image": "shopify://shop_images/hf_20260918_085600_567495bf-6e21-4eed-bbf2-e57e31be6884_1.png",
         "image_alt": "The Elaren founder",
         "image_position": "right",
         "subtitle": "The Story Behind Elaren",
