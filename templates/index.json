@@ -350,6 +350,7 @@
         "title": "Verified Reviews From Real Elaren Customers",
         "from_label": "From",
         "shop_label": "Shop now",
+        "shop_url": "",
         "read_more": "Read more",
         "read_less": "Read less"
       }
@@ -770,6 +771,7 @@
     "founder-story": {
       "type": "froya-founder-story",
       "settings": {
+        "image": "shopify://shop_images/hf_20260918_085600_567495bf-6e21-4eed-bbf2-e57e31be6884_1.png",
         "image_alt": "The Elaren founder",
         "image_position": "right",
         "subtitle": "The Story Behind Elaren",
@@ -891,14 +893,14 @@
       "type": "froya-guarantee",
       "settings": {
         "background": true,
+        "anchor": true,
         "image": "shopify://shop_images/hf_20260915_124844_5df67bf1-e85f-44b6-8421-9d2ed47ced81.png",
         "title": "Fuller hair in 30 days or your money back",
         "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br/>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
         "link_label": "Learn More",
         "link_url": "/#faq",
         "button_label": "SHOP ALL PRODUCTS",
-        "button_url": "",
-        "anchor": true
+        "button_url": ""
       }
     },
     "video-reviews": {
@@ -1019,7 +1021,8 @@
       "settings": {
         "title": "Regrowth Stories From Women Like You",
         "from_label": "From",
-        "shop_label": "Shop now"
+        "shop_label": "Shop now",
+        "shop_url": ""
       }
     },
     "how-to-use": {
@@ -1156,7 +1159,8 @@
         "level_6"
       ],
       "settings": {
-        "title": "<p>Why women are <br><em>switching</em> to Elaren</p>",
+        "title": "<p>Why women are <br/><em>switching</em> to Elaren</p>",
+        "image_bottom": "shopify://shop_images/hf_20260918_090552_0c030942-232e-4e1b-ab3b-46b8e13655c6_1.png",
         "image_alt": "Cold-pressed pumpkin seed oil",
         "link_label": "LEARN MORE",
         "link_url": "/products/elaren-pumpkin-seed-oil-regrowth-serum"
@@ -1165,6 +1169,7 @@
     "arctic-ingredients": {
       "type": "froya-arctic-ingredients",
       "settings": {
+        "image": "shopify://shop_images/hf_20260918_090108_4a499bca-b484-455f-98d9-6831a0e49c3c.png",
         "image_alt": "Pumpkin seeds and cold-pressed pumpkin seed oil",
         "image_position": "left",
         "subtitle": "THE SCIENCE OF THE SEED",
@@ -1176,24 +1181,14 @@
       "type": "froya-guarantee",
       "settings": {
         "background": false,
+        "anchor": false,
         "image": "shopify://shop_images/hf_20260915_124844_5df67bf1-e85f-44b6-8421-9d2ed47ced81.png",
         "title": "Fuller hair in 30 days or your money back",
         "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br/>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
         "link_label": "",
         "link_url": "/#faq",
         "button_label": "SHOP ALL PRODUCTS",
-        "button_url": "",
-        "anchor": false
-      }
-    },
-    "newsletter": {
-      "type": "froya-newsletter",
-      "settings": {
-        "title": "Regrowth tips & exclusive offers",
-        "text": "Honest regrowth timelines, scalp-care tips for every texture, and first access to our best offers. No spam, just the good stuff.",
-        "placeholder": "Enter your email here",
-        "button_label": "Subscribe",
-        "success_text": "Thanks for subscribing. Your first regrowth tips are on their way."
+        "button_url": ""
       }
     },
     "faq": {
@@ -1273,6 +1268,47 @@
         "open_first": true,
         "footer_text": "<p>Still wondering about something? Email <a href=\"mailto:support@shopelaren.com\">support@shopelaren.com</a> and a real person will reply within one business day.</p>"
       }
+    },
+    "newsletter": {
+      "type": "froya-newsletter",
+      "settings": {
+        "title": "Regrowth tips & exclusive offers",
+        "text": "Honest regrowth timelines, scalp-care tips for every texture, and first access to our best offers. No spam, just the good stuff.",
+        "placeholder": "Enter your email here",
+        "button_label": "Subscribe",
+        "success_text": "Thanks for subscribing. Your first regrowth tips are on their way."
+      }
+    },
+    "froya_email_popup_3DrArA": {
+      "type": "froya-email-popup",
+      "name": "Email popup (10% off)",
+      "settings": {
+        "enabled": true,
+        "delay": 6,
+        "exit_intent": true,
+        "dismiss_days": 7,
+        "signup_days": 60,
+        "discount_code": "EXTRA10",
+        "badge_small": "EXTRA",
+        "badge_big": "10% OFF",
+        "image_fallback": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-daisies.png?v=1789651243",
+        "eyebrow": "A little something for you",
+        "title": "Take an extra 10% off your order",
+        "text": "Pop your email in and we’ll unlock a code worth an extra 10% off your whole order, on top of any bundle or subscription saving already in your cart.",
+        "placeholder": "Enter your email",
+        "button_label": "Unlock my 10% off",
+        "fine_print": "No spam, ever. Unsubscribe in one tap.",
+        "dismiss_label": "No thanks, I’ll pay full price",
+        "error_text": "Please enter a valid email address.",
+        "success_eyebrow": "You’re in",
+        "success_title": "Here’s your extra 10% off",
+        "success_text": "Your code is below and we’ve already attached it to your cart, so it comes off automatically at checkout.",
+        "copy_label": "Copy",
+        "copied_label": "Copied!",
+        "applied_text": "Applied to your cart",
+        "cta_label": "Shop with 10% off",
+        "cta_url": ""
+      }
     }
   },
   "order": [
@@ -1293,6 +1329,7 @@
     "arctic-ingredients",
     "guarantee-2",
     "faq",
-    "newsletter"
+    "newsletter",
+    "froya_email_popup_3DrArA"
   ]
 }
