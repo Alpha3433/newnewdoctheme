@@ -410,8 +410,7 @@
         "eyebrow": "Backed By Science",
         "title": "How Pumpkin Seed Regrowth Oil Works",
         "subtitle": "5 research-backed ways it targets why women’s hair thins after 35. No drugs, no hormones, just pumpkin seed oil and caffeine.",
-        "image_1_fallback": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-daisies.png?v=1789651243",
-        "image_2_fallback": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-held.png?v=1789651243"
+        "image_fallback": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-held.png?v=1789651243"
       }
     },
     "clinical-trial": {

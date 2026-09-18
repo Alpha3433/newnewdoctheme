@@ -55,15 +55,17 @@ template (`templates/page.froya-landing.json`).
   closing "still wondering?" line are settings. Menu and footer "FAQ" links scroll here.
 * **Email popup** – Header group → *Email popup (10% off)*. A split card (photo with a rotated
   "EXTRA 10% OFF" stamp, sign-up beside it) that opens after a delay and, on desktop, when the cursor
-  leaves the page. The email posts to Shopify's customer form (tags `newsletter`, `popup`), then the
-  popup reveals the *Discount code* and attaches it to the visitor's cart, so checkout takes it off
-  automatically. The code itself lives in Discounts: `EXTRA10` is a 10% order code that combines with
+  leaves the page. The first screen asks which kind of hair loss the visitor has (*Hair-loss option*
+  blocks; a *Skip* link is optional), the second takes the email with the chosen answer shown as a chip.
+  Both are captured together: the email posts to Shopify's customer form with the tags `newsletter`,
+  `popup` and `hair-loss:<answer>` (prefix editable), so the answer sits on the customer in Shopify
+  and can be segmented on. Then the popup reveals the *Discount code* and attaches it to the
+  visitor's cart, so checkout takes it off automatically. The code itself lives in Discounts: `EXTRA10` is a 10% order code that combines with
   product discounts, so it stacks on the Kaching bundle price. Every line of copy, the photo, the delay
   and how many days the popup stays hidden after a close or a sign-up are settings; the popup only
   opens in the editor when the section is selected.
-* **Backed by science photos** – the two landscape photos beside the steps are *Top photo* and
-  *Bottom photo* pickers (with fallback URLs until one is uploaded); they stay in view while the steps
-  scroll on desktop.
+* **Backed by science photo** – the landscape photo beside the steps is a *Photo* picker (with a
+  fallback URL until one is uploaded); it stays in view while the steps scroll on desktop.
 * **Announcement bar** – Header group → Announcement bar: message and countdown text sizes
   (message, label before the timer, numbers and unit labels are separate sliders, with a mobile
   size for the message) and *Position*: a desktop layout (message left / countdown left / both

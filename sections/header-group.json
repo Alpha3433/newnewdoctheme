@@ -453,9 +453,9 @@
         "image_fallback": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-daisies.png?v=1789651243",
         "badge_small": "EXTRA",
         "badge_big": "10% OFF",
-        "eyebrow": "A little something for you",
-        "title": "Take an extra 10% off your order",
-        "text": "Pop your email in and we’ll unlock a code worth an extra 10% off your whole order, on top of any bundle or subscription saving already in your cart.",
+        "eyebrow": "Nearly there",
+        "title": "Unlock your extra 10% off",
+        "text": "Pop your email in and we’ll send your code, plus regrowth tips written for your kind of hair loss. It stacks on any bundle or subscription saving already in your cart.",
         "placeholder": "Enter your email",
         "button_label": "Unlock my 10% off",
         "fine_print": "No spam, ever. Unsubscribe in one tap.",
@@ -468,8 +468,74 @@
         "copied_label": "Copied!",
         "cta_label": "Shop with 10% off",
         "cta_url": "",
-        "error_text": "Please enter a valid email address."
-      }
+        "error_text": "Please enter a valid email address.",
+        "ask_hair_loss": true,
+        "tag_prefix": "hair-loss",
+        "question_eyebrow": "One quick question",
+        "question_title": "What kind of hair loss are you dealing with?",
+        "question_text": "Pick the closest match and we’ll unlock your extra 10% off on the next screen.",
+        "question_skip_label": "Not sure, skip this",
+        "answer_prefix": "You picked:",
+        "change_label": "Change"
+      },
+      "blocks": {
+        "option_1": {
+          "type": "hair_loss_option",
+          "settings": {
+            "label": "Thinning part or crown",
+            "description": "A widening part, more scalp showing on top",
+            "tag": "pattern-thinning"
+          }
+        },
+        "option_2": {
+          "type": "hair_loss_option",
+          "settings": {
+            "label": "Postpartum shedding",
+            "description": "Handfuls in the shower since the baby",
+            "tag": "postpartum"
+          }
+        },
+        "option_3": {
+          "type": "hair_loss_option",
+          "settings": {
+            "label": "Menopause or hormonal",
+            "description": "Thinner all over since your 40s or 50s",
+            "tag": "menopausal"
+          }
+        },
+        "option_4": {
+          "type": "hair_loss_option",
+          "settings": {
+            "label": "Edges, breakage or traction",
+            "description": "Hairline, temples or tight styles",
+            "tag": "traction-breakage"
+          }
+        },
+        "option_5": {
+          "type": "hair_loss_option",
+          "settings": {
+            "label": "Patchy loss or alopecia",
+            "description": "Smooth patches, sudden thinning",
+            "tag": "alopecia"
+          }
+        },
+        "option_6": {
+          "type": "hair_loss_option",
+          "settings": {
+            "label": "Stress shedding or not sure",
+            "description": "It started after a hard stretch",
+            "tag": "stress-unsure"
+          }
+        }
+      },
+      "block_order": [
+        "option_1",
+        "option_2",
+        "option_3",
+        "option_4",
+        "option_5",
+        "option_6"
+      ]
     }
   },
   "order": [
