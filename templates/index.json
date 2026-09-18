@@ -1077,7 +1077,8 @@
         "step_9"
       ],
       "settings": {
-        "title": "<p><em>Two minutes a night.</em><br>Because regrowth shouldn’t be complicated.</p>",
+        "title": "<p><em>Two minutes a night.</em><br/>Because regrowth shouldn’t be complicated.</p>",
+        "image": "shopify://shop_images/hf_20260514_123205_aff016c7-c6cb-4dbd-99dc-395fb36d2d1c.png",
         "image_alt": "Applying Elaren Pumpkin Seed Regrowth Oil to the scalp"
       }
     },
