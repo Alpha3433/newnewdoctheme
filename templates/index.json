@@ -1169,6 +1169,7 @@
     "arctic-ingredients": {
       "type": "froya-arctic-ingredients",
       "settings": {
+        "image": "shopify://shop_images/hf_20260918_090108_4a499bca-b484-455f-98d9-6831a0e49c3c.png",
         "image_alt": "Pumpkin seeds and cold-pressed pumpkin seed oil",
         "image_position": "left",
         "subtitle": "THE SCIENCE OF THE SEED",
