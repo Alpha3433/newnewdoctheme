@@ -1,7 +1,8 @@
 {% comment %}
-  Email capture popup – trades an email address for an extra 10% code.
-  The form posts to Shopify's customer form (subscribers land in Customers with the "newsletter" and
-  "popup" tags). assets/main.js submits it in the background, reveals the code and attaches it to the
+  Email capture popup – asks which kind of hair loss the visitor has, then trades an email address for
+  an extra 10% code. The form posts to Shopify's customer form: subscribers land in Customers with the
+  "newsletter" and "popup" tags plus one tag per answer (e.g. "hair-loss:postpartum"), so the answer is
+  captured with the email and can be segmented on. assets/main.js submits it in the background, reveals the code and attaches it to the
   visitor's session via /discount/CODE, so checkout applies it on top of the bundle discount. If Shopify
   answers with its spam challenge the form falls back to a normal submit and the success step renders
   from form.posted_successfully? instead. The popup is hidden in the theme editor until the section is
@@ -12,9 +13,14 @@
   assign form_id = 'email-popup-form-' | append: sid
   assign code = section.settings.discount_code | strip | upcase
   assign storage_key = 'elaren:email-popup:' | append: code | handle
+  assign options = section.blocks | where: 'type', 'hair_loss_option'
+  assign ask_first = false
+  if section.settings.ask_hair_loss and options.size > 0
+    assign ask_first = true
+  endif
 -%}
 {%- if section.settings.enabled or request.design_mode -%}
-<div class="s-email-popup" id="email-popup-{{ sid }}" hidden data-email-popup data-section-id="{{ sid }}" data-enabled="{{ section.settings.enabled }}" data-design-mode="{{ request.design_mode }}" data-delay="{{ section.settings.delay }}" data-exit-intent="{{ section.settings.exit_intent }}" data-dismiss-days="{{ section.settings.dismiss_days }}" data-signup-days="{{ section.settings.signup_days }}" data-code="{{ code | escape }}" data-storage-key="{{ storage_key }}" data-copied-label="{{ section.settings.copied_label | escape }}" data-error-text="{{ section.settings.error_text | escape }}">
+<div class="s-email-popup" id="email-popup-{{ sid }}" hidden data-email-popup data-section-id="{{ sid }}" data-enabled="{{ section.settings.enabled }}" data-design-mode="{{ request.design_mode }}" data-delay="{{ section.settings.delay }}" data-exit-intent="{{ section.settings.exit_intent }}" data-dismiss-days="{{ section.settings.dismiss_days }}" data-signup-days="{{ section.settings.signup_days }}" data-code="{{ code | escape }}" data-storage-key="{{ storage_key }}" data-copied-label="{{ section.settings.copied_label | escape }}" data-error-text="{{ section.settings.error_text | escape }}" data-ask-first="{{ ask_first }}" data-tag-prefix="{{ section.settings.tag_prefix | default: 'hair-loss' | handle }}">
   <div class="s-email-popup__overlay" data-popup-close></div>
   <div class="s-email-popup__dialog" role="dialog" aria-modal="true" aria-labelledby="email-popup-title-{{ sid }}" tabindex="-1">
     <button aria-label="Close" class="s-email-popup__close" data-popup-close type="button">
@@ -33,15 +39,42 @@
 
     <div class="s-email-popup__content">
       {%- form 'customer', class: 's-email-popup__form', id: form_id -%}
-        <input name="contact[tags]" type="hidden" value="newsletter,popup">
+        <input data-popup-tags name="contact[tags]" type="hidden" value="newsletter,popup">
         <input name="contact[context]" type="hidden" value="{{ form_id }}">
         {%- if form.posted_successfully? -%}<span data-popup-posted hidden></span>{%- endif -%}
 
-        <div class="s-email-popup__step" data-popup-step="form"{% if form.posted_successfully? %} hidden{% endif %}>
+        {%- if ask_first -%}
+        <div class="s-email-popup__step s-email-popup__step--question" data-popup-step="question"{% if form.posted_successfully? or form.errors %} hidden{% endif %}>
+          {%- if section.settings.question_eyebrow != blank -%}<p class="s-email-popup__eyebrow">{{ section.settings.question_eyebrow }}</p>{%- endif -%}
+          <h2 class="s-email-popup__title" id="email-popup-question-title-{{ sid }}">{{ section.settings.question_title }}</h2>
+          {%- if section.settings.question_text != blank -%}<p class="s-email-popup__text">{{ section.settings.question_text }}</p>{%- endif -%}
+          <div aria-labelledby="email-popup-question-title-{{ sid }}" class="s-email-popup__options" role="group">
+            {%- for block in options -%}
+              {%- assign option_tag = block.settings.tag | default: block.settings.label | handle -%}
+              <button class="s-email-popup__option" data-popup-option data-option-label="{{ block.settings.label | escape }}" data-option-tag="{{ option_tag }}" type="button" {{ block.shopify_attributes }}>
+                <span class="s-email-popup__option-label">{{ block.settings.label }}</span>
+                {%- if block.settings.description != blank -%}<span class="s-email-popup__option-desc">{{ block.settings.description }}</span>{%- endif -%}
+              </button>
+            {%- endfor -%}
+          </div>
+          {%- if section.settings.question_skip_label != blank -%}
+            <button class="s-email-popup__dismiss" data-popup-skip type="button">{{ section.settings.question_skip_label }}</button>
+          {%- endif -%}
+        </div>
+        {%- endif -%}
+
+        <div class="s-email-popup__step" data-popup-step="form"{% if form.posted_successfully? or ask_first %}{% unless form.errors %} hidden{% endunless %}{% endif %}>
           {%- if section.settings.eyebrow != blank -%}<p class="s-email-popup__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
           <h2 class="s-email-popup__title" id="email-popup-title-{{ sid }}">{{ section.settings.title }}</h2>
           {%- if section.settings.text != blank -%}<p class="s-email-popup__text">{{ section.settings.text }}</p>{%- endif -%}
 
+          {%- if ask_first -%}
+          <p class="s-email-popup__answer" data-popup-answer-chip hidden>
+            <span class="s-email-popup__answer-label">{{ section.settings.answer_prefix }}</span>
+            <strong data-popup-answer-text></strong>
+            <button class="s-email-popup__answer-change" data-popup-change type="button">{{ section.settings.change_label }}</button>
+          </p>
+          {%- endif -%}
           <div class="s-email-popup__field">
             <label class="visually-hidden" for="{{ form_id }}-email">{{ section.settings.placeholder }}</label>
             <input autocomplete="email" class="s-email-popup__input" id="{{ form_id }}-email" name="contact[email]" placeholder="{{ section.settings.placeholder | escape }}" required type="email" value="{{ form.email }}">
@@ -103,6 +136,15 @@
     { "type": "header", "content": "Photo" },
     { "type": "image_picker", "id": "image", "label": "Photo", "info": "Landscape, about 900 × 670 px." },
     { "type": "text", "id": "image_fallback", "label": "Fallback photo URL", "info": "Used only until a photo is uploaded.", "default": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-daisies.png?v=1789651243" },
+    { "type": "header", "content": "Hair-loss question (first screen)" },
+    { "type": "checkbox", "id": "ask_hair_loss", "label": "Ask which kind of hair loss first", "default": true, "info": "The answer is saved on the customer as a tag (prefix below) next to the email." },
+    { "type": "text", "id": "tag_prefix", "label": "Tag prefix", "default": "hair-loss", "info": "e.g. hair-loss:postpartum" },
+    { "type": "text", "id": "question_eyebrow", "label": "Eyebrow", "default": "One quick question" },
+    { "type": "inline_richtext", "id": "question_title", "label": "Question", "default": "What kind of hair loss are you dealing with?" },
+    { "type": "textarea", "id": "question_text", "label": "Text", "default": "Pick the closest match and we’ll unlock your extra 10% off on the next screen." },
+    { "type": "text", "id": "question_skip_label", "label": "Skip link", "default": "Not sure, skip this" },
+    { "type": "text", "id": "answer_prefix", "label": "Label before the chosen answer", "default": "You picked:" },
+    { "type": "text", "id": "change_label", "label": "Change answer link", "default": "Change" },
     { "type": "header", "content": "Sign-up step" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "A little something for you" },
     { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Take an extra 10% off your order" },
@@ -122,6 +164,18 @@
     { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop with 10% off" },
     { "type": "url", "id": "cta_url", "label": "Button link", "info": "Leave empty to simply close the popup." }
   ],
-  "presets": [ { "name": "Email popup (10% off)" } ]
+  "blocks": [
+    {
+      "type": "hair_loss_option",
+      "name": "Hair-loss option",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Thinning part or crown" },
+        { "type": "text", "id": "description", "label": "Short description", "default": "A widening part, more scalp showing on top" },
+        { "type": "text", "id": "tag", "label": "Tag value", "info": "Saved on the customer as prefix:value. Leave empty to use the label." }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [ { "name": "Email popup (10% off)", "blocks": [ { "type": "hair_loss_option" }, { "type": "hair_loss_option" }, { "type": "hair_loss_option" }, { "type": "hair_loss_option" } ] } ]
 }
 {% endschema %}
