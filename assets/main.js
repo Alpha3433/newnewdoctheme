@@ -917,6 +917,10 @@
   function initEmailPopup(root) {
     var popup = $('[data-email-popup]', root) || (root === document ? $('[data-email-popup]') : null);
     if (!popup || !once(popup, 'init')) return;
+    // One popup per page: if another instance is already live (e.g. the section was also added to the
+    // page template while the header group has one), the first in document order wins and this one is dropped.
+    var live = $$('[data-email-popup][data-init]').filter(function (other) { return other !== popup && document.body.contains(other); });
+    if (live.length) { if (popup.parentNode) popup.parentNode.removeChild(popup); return; }
     // Hoist to <body> so no header stacking context can paint over it (dropping the copy a previous
     // theme-editor render left there).
     $$('[data-email-popup][data-section-id="' + popup.getAttribute('data-section-id') + '"]').forEach(function (other) {
