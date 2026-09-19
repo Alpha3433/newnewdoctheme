@@ -43,8 +43,8 @@ template (`templates/page.froya-landing.json`).
 * **Menu (single page)** – Header → *Menu style*. *Single page* replaces the shop/bestsellers/more mega
   menus and the long mobile drawer with the *Section link* blocks: each one scrolls to a section of
   the landing page (benefits, reviews, science, results, story, guarantee, how to use, FAQ or a custom
-  element id). The bar shows the first few links plus a *Shop Now* pill that scrolls to the buy box;
-  the mobile drawer lists them all as numbered rows with one button, the note and the testimonial.
+  element id). The bar shows the first few links; the mobile drawer lists them all as numbered rows
+  with the note and the testimonial.
   *Full store menu* brings the original mega menus back. Every other link on the page (guarantee
   buttons, "Shop now" on review and video cards, the cart drawer's product links and empty-cart
   button, the footer's "About" column) also scrolls to a section instead of leaving the page; only the
