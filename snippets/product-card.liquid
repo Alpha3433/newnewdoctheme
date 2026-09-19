@@ -1,10 +1,10 @@
 <div class="product-card">
-  <a class="product-card__media" href="{{ product.url }}">
+  <a class="product-card__media" href="{{ routes.root_url }}#shop" data-scroll-to="shop">
     {%- if product.featured_image -%}
       {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 600', sizes: '(min-width: 1000px) 25vw, 50vw', alt: product.featured_image.alt | escape }}
     {%- endif -%}
   </a>
-  <a class="product-card__title" href="{{ product.url }}">{{ product.title }}</a>
+  <a class="product-card__title" href="{{ routes.root_url }}#shop" data-scroll-to="shop">{{ product.title }}</a>
   <div class="product-card__price">
     {{ product.price | money }}
     {%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}

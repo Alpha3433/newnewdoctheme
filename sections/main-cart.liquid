@@ -29,7 +29,7 @@
                 <div class="cart-table__item">
                   {%- if item.image -%}{{ item.image | image_url: width: 160 | image_tag: loading: 'lazy' }}{%- endif -%}
                   <div>
-                    <a class="product-card__title" href="{{ item.url }}">{{ item.product.title }}</a>
+                    <a class="product-card__title" href="{{ routes.root_url }}#shop" data-scroll-to="shop">{{ item.product.title }}</a>
                     {%- if show_variant_title -%}<div class="cart-footer__note">{{ item.variant.title }}</div>{%- endif -%}
                     <a class="cart-footer__note link-underline" href="{{ item.url_to_remove }}">{{ 'cart.general.remove' | t }}</a>
                   </div>

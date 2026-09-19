@@ -86,14 +86,14 @@
             -%}
             <div class="drawer__product drawer__product--empty">
               <div class="drawer__product-image">
-                <a href="#shop" data-scroll-to="shop" class="drawer__product-link">
+                <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="drawer__product-link">
                   {%- if empty_product.featured_image != blank -%}
                     {{ empty_product.featured_image | image_url: width: 320, height: 320, crop: 'center' | image_tag: class: 'drawer__product-image', alt: empty_product.title, loading: 'lazy' }}
                   {%- endif -%}
                 </a>
               </div>
               <div class="drawer__product-content">
-                <a href="#shop" data-scroll-to="shop" class="drawer__product-title">{{ empty_product.title }}</a>
+                <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="drawer__product-title">{{ empty_product.title }}</a>
                 <div class="drawer__product-price">{{ section.settings.from_label }} <strong>{{ empty_product.price_min | money_without_trailing_zeros }}</strong></div>
                 {%- form 'product', empty_product, class: 'drawer__product-form js-ajax-add' -%}
                   <input type="hidden" name="id" value="{{ empty_variant.id }}">
@@ -103,7 +103,7 @@
               </div>
             </div>
           {%- endif -%}
-          {%- assign empty_href = section.settings.empty_url | default: '#shop' -%}<a class="custom-button s-mini-cart__empty-button" href="{{ empty_href }}"{% if empty_href contains '#' %} data-scroll-to="{{ empty_href | split: '#' | last }}"{% endif %}>{{ section.settings.empty_button }}</a>
+          {%- assign buy_box_url = routes.root_url | append: '#shop' -%}{%- assign empty_href = section.settings.empty_url | default: buy_box_url -%}<a class="custom-button s-mini-cart__empty-button" href="{{ empty_href }}"{% if empty_href contains '#' %} data-scroll-to="{{ empty_href | split: '#' | last }}"{% endif %}>{{ section.settings.empty_button }}</a>
         </div>
       {%- else -%}
         <form id="mini-cart-form" action="{{ routes.cart_url }}" method="post" novalidate>
@@ -190,14 +190,14 @@
                 <button type="button" class="s-mini-cart__remove-btn" data-cart-remove="{{ line }}" aria-label="Remove {{ item.product.title | escape }}">
                   <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
                 </button>
-                <a href="#shop" data-scroll-to="shop" class="line-item__image-wrapper" tabindex="-1" aria-hidden="true">
+                <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="line-item__image-wrapper" tabindex="-1" aria-hidden="true">
                   {%- if item.image != blank -%}
                     {{ item.image | image_url: width: 184, height: 184, crop: 'center' | image_tag: class: 'line-item__image', alt: item.product.title, loading: 'lazy' }}
                   {%- endif -%}
                 </a>
                 <div class="line-item__info">
                   <div class="product-item-meta">
-                    <a href="#shop" data-scroll-to="shop" class="product-item-meta__title text--small">{{ item.product.title }}</a>
+                    <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="product-item-meta__title text--small">{{ item.product.title }}</a>
                     {%- if is_gift and section.settings.gift_label != blank -%}
                       <span class="product-item-meta__variant line-item__gift-label">{{ section.settings.gift_label }}</span>
                     {%- elsif show_variant_title -%}
@@ -279,14 +279,14 @@
                     {%- assign upsell_variant = product.selected_or_first_available_variant -%}
                     <div class="drawer__product">
                       <div class="drawer__product-image">
-                        <a href="#shop" data-scroll-to="shop" class="drawer__product-link">
+                        <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="drawer__product-link">
                           {%- if product.featured_image != blank -%}
                             {{ product.featured_image | image_url: width: 200, height: 200, crop: 'center' | image_tag: class: 'drawer__product-image', alt: product.title, loading: 'lazy' }}
                           {%- endif -%}
                         </a>
                       </div>
                       <div class="drawer__product-content">
-                        <a href="#shop" data-scroll-to="shop" class="drawer__product-title">{{ product.title }}</a>
+                        <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="drawer__product-title">{{ product.title }}</a>
                         <div class="drawer__product-price">From <strong>{{ product.price_min | money }}</strong></div>
                         {%- form 'product', product, class: 'drawer__product-form js-ajax-add' -%}
                           <input type="hidden" name="id" value="{{ upsell_variant.id }}">

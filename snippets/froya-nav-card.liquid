@@ -1,5 +1,6 @@
 {%- comment -%}
   Bestseller card used in the header mega menu (vertical) and the mobile drawer (horizontal).
+  Every link goes to the buy box on the home page (the single-product landing page), never the product page.
   {% render 'froya-nav-card', block: block, layout: 'vertical' | 'horizontal' %}
 {%- endcomment -%}
 {%- liquid
@@ -19,7 +20,7 @@
 -%}
 {%- if product != blank -%}
 <div class="froya-nav-card froya-nav-card--{{ layout }}" data-product-id="{{ product.id }}" {{ block.shopify_attributes }}>
-  <a aria-label="{{ title | escape }}" class="froya-nav-card__image" href="{{ product.url }}">
+  <a aria-label="{{ title | escape }}" class="froya-nav-card__image" href="{{ routes.root_url }}#shop" data-scroll-to="shop">
     {%- if block.settings.badge != blank -%}<span class="froya-nav-card__badge">{{ block.settings.badge }}</span>{%- endif -%}
     {%- if block.settings.image != blank -%}
       {{ block.settings.image | image_url: width: img_size, height: img_size, crop: 'center' | image_tag: class: 'froya-nav-card__img', alt: title, loading: 'lazy' }}
@@ -44,11 +45,11 @@
       {%- if block.settings.reviews_text != blank -%}<span class="froya-nav-stars__count">{{ block.settings.reviews_text }}</span>{%- endif -%}
     </span>
     {%- endif -%}
-    <a class="froya-nav-card__title-link" href="{{ product.url }}"><p class="froya-nav-card__title">{{ title }}</p></a>
+    <a class="froya-nav-card__title-link" href="{{ routes.root_url }}#shop" data-scroll-to="shop"><p class="froya-nav-card__title">{{ title }}</p></a>
     {%- if block.settings.subtitle != blank -%}<p class="froya-nav-card__copy">{{ block.settings.subtitle }}</p>{%- endif -%}
     <p class="froya-nav-card__price">from <span class="product_price">{{ product.price_min | money }}</span></p>
     {%- if layout == 'horizontal' -%}
-      <a class="froya-nav-card__cta" href="{{ product.url }}">SHOP NOW</a>
+      <a class="froya-nav-card__cta" href="{{ routes.root_url }}#shop" data-scroll-to="shop">SHOP NOW</a>
     {%- else -%}
       <product-payment-container class="froya-nav-card__payment-container">
         {%- form 'product', product, class: 'froya-nav-card__form js-ajax-add', id: form_id -%}
