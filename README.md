@@ -53,7 +53,7 @@ template (`templates/page.froya-landing.json`).
 * **FAQ** – a numbered accordion at the bottom of the page in the "Backed by science" style. Each
   question is a block (question + rich-text answer); *Open the first question by default* and the
   closing "still wondering?" line are settings. Menu and footer "FAQ" links scroll here.
-* **Email popup** – Header group → *Email popup (mystery gift)*. A wrapped gift box with a "?" tag
+* **Email popup** – Header group → *Email popup (gift)*. A wrapped gift box with a "?" tag
   beside the sign-up: full screen on phones, a split card on desktop. It opens after a delay and, on
   desktop, when the cursor leaves the page. The email posts to Shopify's customer form with the tags
   `newsletter` and `popup`; then the lid lifts, the tag flips to "10% OFF" and the popup reveals the
