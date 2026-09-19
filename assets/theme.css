@@ -280,25 +280,6 @@ em { font-style: italic; }
 .froya-nav__nav-link.is-active::after { transform: scaleX(1); }
 .froya-nav__desktop-nav--anchors { gap: 22px; }
 .froya-nav__nav-link--anchor { text-decoration: none; font-size: 14px; white-space: nowrap; }
-.froya-nav__cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 38px;
-  padding: 0 18px;
-  margin-right: 18px;
-  border-radius: 999px;
-  background: var(--brand-cta);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background .2s ease;
-}
-.froya-nav__cta:hover { background: var(--brand-cta-hover); }
 /* Single-page mobile menu: numbered section links */
 .froya-nav-drawer__body--anchors { padding-top: 4px; }
 .froya-nav-drawer__anchors { list-style: none; margin: 0; padding: 0; }
@@ -317,7 +298,6 @@ em { font-style: italic; }
 .froya-nav-drawer__anchor-label { flex: 1 1 auto; }
 .froya-nav-drawer__anchor-arrow { flex: 0 0 auto; width: 16px; height: 16px; color: var(--brand-mauve); transition: transform .2s ease; }
 .froya-nav-drawer__anchor:active .froya-nav-drawer__anchor-arrow { transform: translateX(3px); }
-.froya-nav-drawer__body--anchors .froya-nav-drawer__shop-all { margin-top: 22px; }
 .froya-nav-drawer__body--anchors .froya-nav-drawer__social { margin-top: 18px; }
 [data-anchor] { scroll-margin-top: 72px; }
 .froya-nav__logo { display: flex; justify-content: center; align-items: center; }
@@ -666,7 +646,6 @@ body.drawer-open { overflow: hidden; }
   .froya-nav__bar { grid-template-columns: 48px 1fr 48px; padding: 0 16px; height: 60px; }
   .froya-nav__burger { display: inline-flex; }
   .froya-nav__desktop-nav { display: none; }
-  .froya-nav__cta { display: none; }
   .froya-nav__mega { display: none !important; }
   .header__logo-image { width: min(var(--logo-width, 100px), 120px); }
   .cart-button { min-height: 36px; padding: 8px 14px; font-size: 12px; }

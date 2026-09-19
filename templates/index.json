@@ -1284,7 +1284,7 @@
     },
     "froya_email_popup_3DrArA": {
       "type": "froya-email-popup",
-      "name": "Email popup (mystery gift)",
+      "name": "Email popup (gift)",
       "settings": {
         "enabled": true,
         "delay": 6,
