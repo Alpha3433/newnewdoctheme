@@ -912,9 +912,8 @@
 
   /* ========================================================== email popup */
   /* Mystery gift: trades an email for a 10% code. Opens after a delay (or on exit intent), posts the
-     customer form in the background, then "unwraps" the gift (.is-revealed lifts the lid and flips the
-     tag), reveals the code and attaches it to the session via /discount/CODE so checkout applies it
-     automatically. Remembered per visitor in localStorage. */
+     customer form in the background, reveals the code and attaches it to the session via /discount/CODE
+     so checkout applies it automatically. Remembered per visitor in localStorage. */
   function initEmailPopup(root) {
     var popup = $('[data-email-popup]', root) || (root === document ? $('[data-email-popup]') : null);
     if (!popup || !once(popup, 'init')) return;
@@ -1005,7 +1004,6 @@
     };
     var succeed = function () {
       showStep('success');
-      popup.classList.add('is-revealed');
       applyCode();
       if (!designMode) writeStored(key, JSON.stringify({ until: Date.now() + signupDays * day, state: 'subscribed' }));
       var cta = $('.s-email-popup__button--cta', popup);

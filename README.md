@@ -53,16 +53,15 @@ template (`templates/page.froya-landing.json`).
 * **FAQ** – a numbered accordion at the bottom of the page in the "Backed by science" style. Each
   question is a block (question + rich-text answer); *Open the first question by default* and the
   closing "still wondering?" line are settings. Menu and footer "FAQ" links scroll here.
-* **Email popup** – Header group → *Email popup (gift)*. A wrapped gift box with a "?" tag
-  beside the sign-up: full screen on phones, a split card on desktop. It opens after a delay and, on
-  desktop, when the cursor leaves the page. The email posts to Shopify's customer form with the tags
-  `newsletter` and `popup`; then the lid lifts, the tag flips to "10% OFF" and the popup reveals the
-  *Discount code* and attaches it to the visitor's cart, so checkout takes it off automatically. The
-  gift is always the same code, only the framing is a mystery. The code itself lives in Discounts:
-  `EXTRA10` is a 10% order code that combines with product discounts, so it stacks on the Kaching
-  bundle price. Every line of copy (both gift-tag states included), the delay and how many days the
-  popup stays hidden after a close or a sign-up are settings; the popup only opens in the editor when
-  the section is selected.
+* **Email popup** – Header group → *Email popup (gift)*. A *Photo* fills the left side (the top on
+  phones) beside the sign-up: full screen on phones, a split card on desktop. It opens after a delay
+  and, on desktop, when the cursor leaves the page. The email posts to Shopify's customer form with
+  the tags `newsletter` and `popup`; then the popup reveals the *Discount code* and attaches it to the
+  visitor's cart, so checkout takes it off automatically. The gift is always the same code, only the
+  framing is a mystery. The code itself lives in Discounts: `EXTRA10` is a 10% order code that
+  combines with product discounts, so it stacks on the Kaching bundle price. Every line of copy, the
+  photo, the delay and how many days the popup stays hidden after a close or a sign-up are settings;
+  the popup only opens in the editor when the section is selected.
 * **Backed by science photo** – the landscape photo beside the steps is a *Photo* picker (with a
   fallback URL until one is uploaded); it stays in view while the steps scroll on desktop.
 * **Announcement bar** – Header group → Announcement bar: message and countdown text sizes
