@@ -2,6 +2,17 @@
 <html class="js" lang="{{ request.locale.iso_code }}" dir="ltr" data-froya-nav="b" data-country="{{ localization.country.iso_code }}" data-currency="{{ localization.country.currency.iso_code }}">
 <head>
   <meta charset="utf-8">
+  {%- comment -%}
+    The store sells from the home page only, so product pages (reached from Google Shopping, order
+    emails, the Shop app…) send the visitor straight to the home page. A theme cannot answer with a
+    real 301 and Shopify's URL redirects only cover paths that no longer exist, so this is a meta
+    refresh backed by a script; skipped in the theme editor so the product template stays editable.
+  {%- endcomment -%}
+  {%- if template.name == 'product' and settings.redirect_product_pages and request.design_mode == false -%}
+    {%- assign home_url = shop.url | append: routes.root_url -%}
+    <meta http-equiv="refresh" content="0; url={{ home_url }}">
+    <script>window.location.replace({{ home_url | json }});</script>
+  {%- endif -%}
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#1f1f1f">
