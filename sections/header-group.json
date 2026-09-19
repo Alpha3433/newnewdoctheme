@@ -345,6 +345,11 @@
       "settings": {
         "logo": "shopify://shop_images/hf_20260509_170327_c83b61e7-455e-4c70-94eb-e812328a9e2a.png",
         "logo_width": 220,
+        "menu_style": "anchors",
+        "desktop_limit": 5,
+        "cta_label": "Shop Now",
+        "drawer_cta_label": "SHOP THE REGROWTH OIL",
+        "cta_target": "shop",
         "shop_label": "Shop",
         "bestsellers_label": "Bestsellers",
         "more_label": "More",
@@ -365,12 +370,7 @@
         "blog": "",
         "blog_limit": 7,
         "read_more_label": "Read more",
-        "drawer_note": "Women’s hair wellness · Rated 4.77/5 by verified customers",
-        "menu_style": "anchors",
-        "desktop_limit": 5,
-        "cta_label": "Shop Now",
-        "drawer_cta_label": "SHOP THE REGROWTH OIL",
-        "cta_target": "shop"
+        "drawer_note": "Women’s hair wellness · Rated 4.77/5 by verified customers"
       }
     },
     "cart-drawer": {
@@ -441,107 +441,11 @@
         "checkout_label": "SECURE CHECKOUT",
         "show_total_on_button": true
       }
-    },
-    "email-popup": {
-      "type": "froya-email-popup",
-      "settings": {
-        "enabled": true,
-        "delay": 6,
-        "exit_intent": true,
-        "dismiss_days": 7,
-        "signup_days": 60,
-        "image_fallback": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-daisies.png?v=1789651243",
-        "badge_small": "EXTRA",
-        "badge_big": "10% OFF",
-        "eyebrow": "Nearly there",
-        "title": "Unlock your extra 10% off",
-        "text": "Pop your email in and we’ll send your code, plus regrowth tips written for your kind of hair loss. It stacks on any bundle or subscription saving already in your cart.",
-        "placeholder": "Enter your email",
-        "button_label": "Unlock my 10% off",
-        "fine_print": "No spam, ever. Unsubscribe in one tap.",
-        "dismiss_label": "No thanks, I’ll pay full price",
-        "discount_code": "EXTRA10",
-        "success_eyebrow": "You’re in",
-        "success_title": "Here’s your extra 10% off",
-        "success_text": "Your code is below and we’ve already attached it to your cart, so it comes off automatically at checkout.",
-        "copy_label": "Copy",
-        "copied_label": "Copied!",
-        "cta_label": "Shop with 10% off",
-        "cta_url": "",
-        "error_text": "Please enter a valid email address.",
-        "ask_hair_loss": true,
-        "tag_prefix": "hair-loss",
-        "question_eyebrow": "One quick question",
-        "question_title": "What kind of hair loss are you dealing with?",
-        "question_text": "Pick the closest match and we’ll unlock your extra 10% off on the next screen.",
-        "question_skip_label": "Not sure, skip this",
-        "answer_prefix": "You picked:",
-        "change_label": "Change"
-      },
-      "blocks": {
-        "option_1": {
-          "type": "hair_loss_option",
-          "settings": {
-            "label": "Thinning part or crown",
-            "description": "A widening part, more scalp showing on top",
-            "tag": "pattern-thinning"
-          }
-        },
-        "option_2": {
-          "type": "hair_loss_option",
-          "settings": {
-            "label": "Postpartum shedding",
-            "description": "Handfuls in the shower since the baby",
-            "tag": "postpartum"
-          }
-        },
-        "option_3": {
-          "type": "hair_loss_option",
-          "settings": {
-            "label": "Menopause or hormonal",
-            "description": "Thinner all over since your 40s or 50s",
-            "tag": "menopausal"
-          }
-        },
-        "option_4": {
-          "type": "hair_loss_option",
-          "settings": {
-            "label": "Edges, breakage or traction",
-            "description": "Hairline, temples or tight styles",
-            "tag": "traction-breakage"
-          }
-        },
-        "option_5": {
-          "type": "hair_loss_option",
-          "settings": {
-            "label": "Patchy loss or alopecia",
-            "description": "Smooth patches, sudden thinning",
-            "tag": "alopecia"
-          }
-        },
-        "option_6": {
-          "type": "hair_loss_option",
-          "settings": {
-            "label": "Stress shedding or not sure",
-            "description": "It started after a hard stretch",
-            "tag": "stress-unsure"
-          }
-        }
-      },
-      "block_order": [
-        "option_1",
-        "option_2",
-        "option_3",
-        "option_4",
-        "option_5",
-        "option_6"
-      ]
     }
   },
   "order": [
     "announcement-bar",
     "header",
-    "cart-drawer",
-    "email-popup"
+    "cart-drawer"
   ]
 }
