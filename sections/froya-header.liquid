@@ -14,6 +14,7 @@
   if section.settings.menu_style == 'anchors'
     assign simple_menu = true
   endif
+  assign buy_box_url = routes.root_url | append: '#shop'
   assign logo_fallback = 'https://froyaorganics.com/cdn/shop/files/froya-logo-v4.svg'
   assign quiz_fallback_desktop = 'https://cdn.shopify.com/s/files/1/0473/9999/3493/files/quiz_1.png?v=1778647247'
   assign quiz_fallback_mobile = 'https://cdn.shopify.com/s/files/1/0473/9999/3493/files/quiz.png?v=1778644514'
@@ -124,11 +125,11 @@
           {%- for block in shop_items -%}
             {%- liquid
               assign item_title = block.settings.label | default: block.settings.product.title
-              assign item_url = block.settings.url | default: block.settings.product.url | default: '/collections/all'
+              assign item_url = block.settings.url | default: buy_box_url
             -%}
             {%- if item_title != blank -%}
             <li class="froya-nav__shop-item{% if block.settings.pill == 'bestseller' %} froya-nav__shop-item--bestseller{% endif %}" {{ block.shopify_attributes }}>
-              <a href="{{ item_url }}"><span data-text="{{ item_title | escape }}"><span>{{ item_title }}</span></span>{% if block.settings.pill == 'bestseller' %}<span class="froya-nav__pill">{{ section.settings.pill_bestseller }}</span>{% elsif block.settings.pill == 'new' %}<span class="froya-nav__pill froya-nav__pill--new">{{ section.settings.pill_new }}</span>{% endif %}</a>
+              <a href="{{ item_url }}"{% if item_url contains '#' %} data-scroll-to="{{ item_url | split: '#' | last }}"{% endif %}><span data-text="{{ item_title | escape }}"><span>{{ item_title }}</span></span>{% if block.settings.pill == 'bestseller' %}<span class="froya-nav__pill">{{ section.settings.pill_bestseller }}</span>{% elsif block.settings.pill == 'new' %}<span class="froya-nav__pill froya-nav__pill--new">{{ section.settings.pill_new }}</span>{% endif %}</a>
             </li>
             {%- endif -%}
           {%- endfor -%}
@@ -228,10 +229,10 @@
             {%- for block in shop_items -%}
               {%- liquid
                 assign item_title = block.settings.label | default: block.settings.product.title
-                assign item_url = block.settings.url | default: block.settings.product.url | default: '/collections/all'
+                assign item_url = block.settings.url | default: buy_box_url
               -%}
               {%- if item_title != blank -%}
-              <a class="froya-nav-acc__row{% if block.settings.pill == 'bestseller' %} froya-nav-acc__row--bestseller{% endif %}" href="{{ item_url }}"><span>{{ item_title }}</span>{% if block.settings.pill == 'bestseller' %}<span class="froya-nav__pill">{{ section.settings.pill_bestseller }}</span>{% elsif block.settings.pill == 'new' %}<span class="froya-nav__pill froya-nav__pill--new">{{ section.settings.pill_new }}</span>{% endif %}</a>
+              <a class="froya-nav-acc__row{% if block.settings.pill == 'bestseller' %} froya-nav-acc__row--bestseller{% endif %}" href="{{ item_url }}"{% if item_url contains '#' %} data-scroll-to="{{ item_url | split: '#' | last }}"{% endif %}><span>{{ item_title }}</span>{% if block.settings.pill == 'bestseller' %}<span class="froya-nav__pill">{{ section.settings.pill_bestseller }}</span>{% elsif block.settings.pill == 'new' %}<span class="froya-nav__pill froya-nav__pill--new">{{ section.settings.pill_new }}</span>{% endif %}</a>
               {%- endif -%}
             {%- endfor -%}
           </div>
