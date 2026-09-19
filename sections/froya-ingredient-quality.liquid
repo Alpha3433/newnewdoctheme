@@ -1,5 +1,7 @@
 {% comment %}
   "Why women are switching" – images, heading, text blocks and the ingredient-level legend, all editable.
+  The "Learn more" link under the legend opens the featured product's ingredients popup (assets/main.js
+  listens for .js-view-ingredients anywhere on the page); the link URL is only a fallback without it.
   The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
 {%- liquid
@@ -41,7 +43,10 @@
                   </div>
                 {%- endfor -%}
               </div>
-              {%- if section.settings.link_label != blank -%}<a href="{{ section.settings.link_url | default: '#product-section' }}">{{ section.settings.link_label }}</a>{%- endif -%}
+              {%- if section.settings.link_label != blank -%}
+                {%- assign legend_link = section.settings.link_url | default: '#shop' -%}
+                <a aria-controls="ingredients-modal" aria-haspopup="dialog" class="js-view-ingredients" href="{{ legend_link }}"{% if legend_link contains '#' %} data-scroll-to="{{ legend_link | split: '#' | last }}"{% endif %}>{{ section.settings.link_label }}</a>
+              {%- endif -%}
             </div>
           {%- endif -%}
         </div>
@@ -68,8 +73,8 @@
     { "type": "image_picker", "id": "image_mobile_top", "label": "Top image (mobile)", "info": "About 390 × 270 px." },
     { "type": "image_picker", "id": "image_bottom", "label": "Bottom image", "info": "About 600 × 420 px." },
     { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Cold-pressed pumpkin seed oil" },
-    { "type": "text", "id": "link_label", "label": "Link label under the legend", "default": "LEARN MORE" },
-    { "type": "url", "id": "link_url", "label": "Link" }
+    { "type": "text", "id": "link_label", "label": "Link label under the legend", "default": "LEARN MORE", "info": "Opens the ingredients popup from the Featured product section." },
+    { "type": "url", "id": "link_url", "label": "Fallback link", "info": "Only used when the page has no Featured product section (and so no ingredients popup). Leave empty to scroll to the buy box." }
   ],
   "blocks": [
     {

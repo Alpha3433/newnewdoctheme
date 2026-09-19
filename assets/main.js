@@ -698,7 +698,6 @@
   /* ===================================================== ingredients modal */
   function initModal(root) {
     var modal = $('#ingredients-modal', root) || (root === document ? $('#ingredients-modal') : null);
-    var openers = $$('.js-view-ingredients', root);
     if (!modal || !once(modal, 'init')) return;
     // Hoist out of the sticky gallery column so no ancestor stacking context can paint over it.
     document.body.appendChild(modal);
@@ -707,7 +706,21 @@
       else { modal.removeAttribute('open'); modal.setAttribute('hidden', ''); }
       document.body.classList.toggle('modal-open', open);
     };
-    openers.forEach(function (b) { b.addEventListener('click', function () { setModal(true); }); });
+    // Openers can live in other sections too (e.g. the "Learn more" link under the ingredient legend),
+    // so clicks are delegated from the document; an opener that is a link falls through to its href
+    // when the modal is not on the page.
+    if (!document.body.hasAttribute('data-ingredients-openers')) {
+      document.body.setAttribute('data-ingredients-openers', '');
+      document.addEventListener('click', function (e) {
+        var opener = e.target.closest && e.target.closest('.js-view-ingredients');
+        var current = opener && document.getElementById('ingredients-modal');
+        if (!current) return;
+        e.preventDefault();
+        e.stopPropagation();
+        current.removeAttribute('hidden'); current.setAttribute('open', '');
+        document.body.classList.add('modal-open');
+      }, true);
+    }
     $$('.s-main-product__modal-close, .js-close-ingredients-modal, .s-main-product__modal-overlay', modal).forEach(function (b) {
       b.addEventListener('click', function () { setModal(false); });
     });
