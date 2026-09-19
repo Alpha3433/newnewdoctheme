@@ -1,5 +1,5 @@
 {% comment %}
-  Footer – guarantee headline, manifesto, link list, contact block, social links, payment icons,
+  Footer – guarantee headline, manifesto, link list, contact block, payment icons,
   disclaimer and Shopify's country/language selectors. Everything is editable in the theme editor.
   The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
@@ -23,29 +23,6 @@
             </ul>
           </div></div>
         <div class="footer__item footer__item--text"><p class="footer__item-title">{{ section.settings.contact_title }}</p><div class="footer__item-content">{{ section.settings.contact_text }}</div></div>
-        <div class="footer__item footer__item--social-media"><p class="footer__item-title">{{ section.settings.social_title }}</p><ul class="social-media list--unstyled" role="list">
-          {%- if section.settings.facebook_url != blank -%}
-          <li class="social-media__item social-media__item--facebook">
-            <a aria-label="Follow us on Facebook" class="social-media__link" href="{{ section.settings.facebook_url }}" rel="noopener" target="_blank">
-              <picture>{%- render 'froya-image', image: section.settings.facebook_icon, fallback: 'https://froyaorganics.com/cdn/shop/files/social_media_icons-02.svg', alt: 'Facebook', width: 29, height: 29 -%}</picture>
-            </a>
-          </li>
-          {%- endif -%}
-          {%- if section.settings.instagram_url != blank -%}
-          <li class="social-media__item social-media__item--instagram">
-            <a aria-label="Follow us on Instagram" class="social-media__link" href="{{ section.settings.instagram_url }}" rel="noopener" target="_blank">
-              <picture>{%- render 'froya-image', image: section.settings.instagram_icon, fallback: 'https://froyaorganics.com/cdn/shop/files/social_media_icons-03.svg', alt: 'Instagram', width: 29, height: 29 -%}</picture>
-            </a>
-          </li>
-          {%- endif -%}
-          {%- if section.settings.tiktok_url != blank -%}
-          <li class="social-media__item social-media__item--tiktok">
-            <a aria-label="Follow us on TikTok" class="social-media__link" href="{{ section.settings.tiktok_url }}" rel="noopener" target="_blank">
-              <picture>{%- render 'froya-image', image: section.settings.tiktok_icon, fallback: 'https://froyaorganics.com/cdn/shop/files/social_media_icons-04.svg', alt: 'TikTok', width: 29, height: 29 -%}</picture>
-            </a>
-          </li>
-          {%- endif -%}
-        </ul></div>
       </div>
     </div>
   </div>
@@ -108,14 +85,6 @@
     { "type": "text", "id": "links_title", "label": "Links column title", "default": "About" },
     { "type": "text", "id": "contact_title", "label": "Contact column title", "default": "Contact" },
     { "type": "richtext", "id": "contact_text", "label": "Contact details", "default": "<p><strong>Customer Support</strong><br>support@shopelaren.com</p><p><strong>Address</strong><br>Elaren<br>5 Clarke Street, Prahran VIC 3181, Australia</p><p><strong>Shipping</strong><br>Free insured shipping on every order. Free express shipping on orders over $50.</p><p><br>© 2026 Elaren.<br>All Rights Reserved.</p>" },
-    { "type": "header", "content": "Social" },
-    { "type": "text", "id": "social_title", "label": "Social column title", "default": "Follow us" },
-    { "type": "url", "id": "facebook_url", "label": "Facebook URL" },
-    { "type": "image_picker", "id": "facebook_icon", "label": "Facebook icon", "info": "About 29 × 29 px, white on transparent." },
-    { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
-    { "type": "image_picker", "id": "instagram_icon", "label": "Instagram icon" },
-    { "type": "url", "id": "tiktok_url", "label": "TikTok URL" },
-    { "type": "image_picker", "id": "tiktok_icon", "label": "TikTok icon" },
     { "type": "header", "content": "Bottom" },
     { "type": "checkbox", "id": "show_payment_icons", "label": "Show payment icons", "default": true },
     { "type": "checkbox", "id": "show_localization", "label": "Show country / language selectors", "default": true, "info": "Only appears when more than one market or language is enabled." },

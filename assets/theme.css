@@ -688,7 +688,7 @@ body.drawer-open { overflow: hidden; }
 .footer__inner { display: block; }
 .footer__item-list {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1.1fr 0.8fr;
+  grid-template-columns: 1.5fr 1fr 1.1fr;
   gap: 48px;
 }
 .footer__item { min-width: 0; }
@@ -717,9 +717,6 @@ body.drawer-open { overflow: hidden; }
   transition: opacity .15s ease;
 }
 .linklist__item a:hover { opacity: 0.75 !important; }
-.social-media { display: flex; gap: 14px; }
-.social-media__link { display: inline-flex; }
-.social-media__link img { width: 29px; height: 29px; }
 .footer__aside {
   display: flex;
   align-items: center;

@@ -911,9 +911,10 @@
   }
 
   /* ========================================================== email popup */
-  /* Trades an email for an extra-10% code. Opens after a delay (or on exit intent), posts the customer
-     form in the background, reveals the code and attaches it to the session via /discount/CODE so
-     checkout applies it automatically. Remembered per visitor in localStorage. */
+  /* Mystery gift: trades an email for a 10% code. Opens after a delay (or on exit intent), posts the
+     customer form in the background, then "unwraps" the gift (.is-revealed lifts the lid and flips the
+     tag), reveals the code and attaches it to the session via /discount/CODE so checkout applies it
+     automatically. Remembered per visitor in localStorage. */
   function initEmailPopup(root) {
     var popup = $('[data-email-popup]', root) || (root === document ? $('[data-email-popup]') : null);
     if (!popup || !once(popup, 'init')) return;
@@ -955,39 +956,6 @@
       });
     };
 
-    /* Hair-loss question (first screen). The answer rides along with the email as a customer tag
-       ("hair-loss:postpartum") and in a hidden field, and is shown as a chip on the email screen. */
-    var askFirst = popup.getAttribute('data-ask-first') === 'true' && !!$('[data-popup-step="question"]', popup);
-    var tagPrefix = popup.getAttribute('data-tag-prefix') || 'hair-loss';
-    var tagsInput = $('[data-popup-tags]', popup);
-    var baseTags = tagsInput ? tagsInput.value : 'newsletter,popup';
-    var answer = null;
-    var setAnswer = function (tag, label) {
-      answer = tag ? { tag: tag, label: label } : null;
-      if (tagsInput) tagsInput.value = tag ? baseTags + ',' + tagPrefix + ':' + tag : baseTags;
-      var chip = $('[data-popup-answer-chip]', popup), text = $('[data-popup-answer-text]', popup);
-      if (text) text.textContent = label || '';
-      if (chip) { if (tag) chip.removeAttribute('hidden'); else chip.setAttribute('hidden', ''); }
-      $$('[data-popup-option]', popup).forEach(function (b) {
-        b.classList.toggle('is-selected', !!tag && b.getAttribute('data-option-tag') === tag);
-        b.setAttribute('aria-pressed', !!tag && b.getAttribute('data-option-tag') === tag ? 'true' : 'false');
-      });
-    };
-    var goToEmail = function () {
-      showStep('form');
-      if (input && window.matchMedia('(min-width: 768px)').matches) input.focus({ preventScroll: true });
-    };
-    $$('[data-popup-option]', popup).forEach(function (b) {
-      b.setAttribute('aria-pressed', 'false');
-      b.addEventListener('click', function () {
-        setAnswer(b.getAttribute('data-option-tag'), b.getAttribute('data-option-label'));
-        window.setTimeout(goToEmail, 220); // let the selected state show before the screen changes
-      });
-    });
-    var skip = $('[data-popup-skip]', popup);
-    if (skip) skip.addEventListener('click', function () { setAnswer(null, ''); goToEmail(); });
-    var change = $('[data-popup-change]', popup);
-    if (change) change.addEventListener('click', function () { showStep('question'); });
     var open = function () {
       if (opened || !document.body.contains(popup)) return;
       opened = true;
@@ -1037,8 +1005,9 @@
     };
     var succeed = function () {
       showStep('success');
+      popup.classList.add('is-revealed');
       applyCode();
-      if (!designMode) writeStored(key, JSON.stringify({ until: Date.now() + signupDays * day, state: 'subscribed', answer: answer ? answer.tag : null }));
+      if (!designMode) writeStored(key, JSON.stringify({ until: Date.now() + signupDays * day, state: 'subscribed' }));
       var cta = $('.s-email-popup__button--cta', popup);
       if (cta) cta.focus({ preventScroll: true });
     };

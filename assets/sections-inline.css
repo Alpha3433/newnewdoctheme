@@ -555,8 +555,7 @@
   #shopify-section-footer p,
   #shopify-section-footer .footer__item-title,
   #shopify-section-footer .linklist__item a,
-  #shopify-section-footer .footer__item-content p,
-  #shopify-section-footer .social-media__link {
+  #shopify-section-footer .footer__item-content p {
     color: #ffffff !important;
   }
 
