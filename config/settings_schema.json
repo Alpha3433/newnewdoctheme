@@ -47,5 +47,17 @@
         "default": true
       }
     ]
+  },
+  {
+    "name": "Product pages",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "redirect_product_pages",
+        "label": "Send product pages to the home page",
+        "default": true,
+        "info": "Anyone opening a /products/… link (Google Shopping, order emails, the Shop app) is taken to the home page, where the buy box is. Untick to show the plain product page instead."
+      }
+    ]
   }
 ]
