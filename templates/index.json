@@ -901,7 +901,7 @@
         "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br/>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
         "link_label": "Learn More",
         "link_url": "/#faq",
-        "button_label": "SHOP ALL PRODUCTS",
+        "button_label": "TRY IT RISK-FREE",
         "button_url": ""
       }
     },
@@ -1166,7 +1166,7 @@
         "image_bottom": "shopify://shop_images/hf_20260918_090552_0c030942-232e-4e1b-ab3b-46b8e13655c6_1.png",
         "image_alt": "Cold-pressed pumpkin seed oil",
         "link_label": "LEARN MORE",
-        "link_url": "/products/elaren-pumpkin-seed-oil-regrowth-serum"
+        "link_url": ""
       }
     },
     "arctic-ingredients": {
@@ -1190,7 +1190,7 @@
         "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br/>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
         "link_label": "",
         "link_url": "/#faq",
-        "button_label": "SHOP ALL PRODUCTS",
+        "button_label": "TRY IT RISK-FREE",
         "button_url": ""
       }
     },
@@ -1292,10 +1292,7 @@
         "dismiss_days": 7,
         "signup_days": 60,
         "discount_code": "EXTRA10",
-        "badge_small": "Mystery gift",
-        "badge_big": "?",
-        "reveal_small": "You got",
-        "reveal_big": "10% OFF",
+        "image_fallback": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-daisies.png?v=1789651243",
         "eyebrow": "A gift is waiting for you",
         "title": "Unwrap your mystery gift",
         "text": "Pop your email in and we’ll open it for you. Hint: it takes something off your whole order, on top of any bundle or subscription saving already in your cart.",

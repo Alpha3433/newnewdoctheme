@@ -1,7 +1,7 @@
 {% comment %}
-  Email capture popup – a "mystery gift" that trades an email address for a 10% code. The gift is a
-  wrapped box with a "?" tag; once the email is in, the lid lifts and the tag flips to "10% OFF" (the
-  gift is always the same code, it is only framed as a mystery). The form posts to Shopify's customer
+  Email capture popup – a "mystery gift" that trades an email address for a 10% code: a photo fills
+  one side, the sign-up sits beside it, and the reveal step names the gift (it is always the same
+  code, it is only framed as a mystery). The form posts to Shopify's customer
   form: subscribers land in Customers with the "newsletter" and "popup" tags. assets/main.js submits it
   in the background, reveals the code and attaches it to the visitor's session via /discount/CODE, so
   checkout applies it on top of the bundle discount. If Shopify answers with its spam challenge the
@@ -16,7 +16,7 @@
   assign storage_key = 'elaren:email-popup:' | append: code | handle
 -%}
 {%- if section.settings.enabled or request.design_mode -%}
-<div class="s-email-popup{% if form.posted_successfully? %} is-revealed{% endif %}" id="email-popup-{{ sid }}" hidden data-email-popup data-section-id="{{ sid }}" data-enabled="{{ section.settings.enabled }}" data-design-mode="{{ request.design_mode }}" data-delay="{{ section.settings.delay }}" data-exit-intent="{{ section.settings.exit_intent }}" data-dismiss-days="{{ section.settings.dismiss_days }}" data-signup-days="{{ section.settings.signup_days }}" data-code="{{ code | escape }}" data-storage-key="{{ storage_key }}" data-copied-label="{{ section.settings.copied_label | escape }}" data-error-text="{{ section.settings.error_text | escape }}">
+<div class="s-email-popup" id="email-popup-{{ sid }}" hidden data-email-popup data-section-id="{{ sid }}" data-enabled="{{ section.settings.enabled }}" data-design-mode="{{ request.design_mode }}" data-delay="{{ section.settings.delay }}" data-exit-intent="{{ section.settings.exit_intent }}" data-dismiss-days="{{ section.settings.dismiss_days }}" data-signup-days="{{ section.settings.signup_days }}" data-code="{{ code | escape }}" data-storage-key="{{ storage_key }}" data-copied-label="{{ section.settings.copied_label | escape }}" data-error-text="{{ section.settings.error_text | escape }}">
   <div class="s-email-popup__overlay" data-popup-close></div>
   <div class="s-email-popup__dialog" role="dialog" aria-modal="true" aria-labelledby="email-popup-title-{{ sid }}" tabindex="-1">
     <button aria-label="Close" class="s-email-popup__close" data-popup-close type="button">
@@ -24,38 +24,7 @@
     </button>
 
     <div class="s-email-popup__media" aria-hidden="true">
-      <div class="s-email-popup__gift">
-        <span class="s-email-popup__sparkle s-email-popup__sparkle--1"></span>
-        <span class="s-email-popup__sparkle s-email-popup__sparkle--2"></span>
-        <span class="s-email-popup__sparkle s-email-popup__sparkle--3"></span>
-        <span class="s-email-popup__sparkle s-email-popup__sparkle--4"></span>
-        <span class="s-email-popup__sparkle s-email-popup__sparkle--5"></span>
-        <span class="s-email-popup__sparkle s-email-popup__sparkle--6"></span>
-        <svg class="s-email-popup__gift-svg" viewBox="0 0 220 220" fill="none">
-          <ellipse class="s-email-popup__gift-shadow" cx="110" cy="200" rx="70" ry="9" fill="rgba(31,31,31,0.18)"/>
-          <g class="s-email-popup__gift-box">
-            <rect x="42" y="98" width="136" height="96" rx="10" fill="#fff"/>
-            <rect x="42" y="98" width="136" height="14" fill="rgba(31,31,31,0.06)"/>
-            <rect x="98" y="98" width="24" height="96" fill="var(--brand-mauve)"/>
-          </g>
-          <g class="s-email-popup__gift-lid">
-            <rect x="30" y="72" width="160" height="34" rx="8" fill="#fff"/>
-            <rect x="98" y="72" width="24" height="34" fill="var(--brand-mauve)"/>
-            <path d="M110 74c-4-18-24-30-36-22-11 8 4 22 36 22z" fill="var(--brand-mauve-dark)"/>
-            <path d="M110 74c4-18 24-30 36-22 11 8-4 22-36 22z" fill="var(--brand-mauve-dark)"/>
-            <path d="M110 74c-9 2-18 12-16 22M110 74c9 2 18 12 16 22" stroke="var(--brand-mauve-dark)" stroke-width="7" stroke-linecap="round"/>
-            <circle cx="110" cy="75" r="8" fill="var(--brand-mauve-dark)"/>
-          </g>
-        </svg>
-        <span class="s-email-popup__stamp s-email-popup__stamp--mystery">
-          {%- if section.settings.badge_small != blank -%}<small>{{ section.settings.badge_small }}</small>{%- endif -%}
-          <strong>{{ section.settings.badge_big }}</strong>
-        </span>
-        <span class="s-email-popup__stamp s-email-popup__stamp--reveal">
-          {%- if section.settings.reveal_small != blank -%}<small>{{ section.settings.reveal_small }}</small>{%- endif -%}
-          <strong>{{ section.settings.reveal_big }}</strong>
-        </span>
-      </div>
+      {%- render 'froya-image', image: section.settings.image, fallback: section.settings.image_fallback, alt: '', class: 's-email-popup__image', width: 900, height: 1100, loading: 'lazy', sizes: '(min-width: 768px) 400px, 100vw' -%}
     </div>
 
     <div class="s-email-popup__content">
@@ -124,10 +93,9 @@
     { "type": "range", "id": "signup_days", "label": "Hide after signing up for", "min": 5, "max": 365, "step": 5, "unit": "d", "default": 60 },
     { "type": "header", "content": "The gift", "info": "The gift is always the same: the discount code below. Only the framing is a mystery." },
     { "type": "text", "id": "discount_code", "label": "Discount code", "default": "EXTRA10", "info": "Create this code in Discounts (10% off, set to combine with product discounts so it stacks on the bundle). It is revealed after sign-up and attached to the cart automatically." },
-    { "type": "text", "id": "badge_small", "label": "Gift tag – small line (before reveal)", "default": "Mystery gift" },
-    { "type": "text", "id": "badge_big", "label": "Gift tag – big line (before reveal)", "default": "?" },
-    { "type": "text", "id": "reveal_small", "label": "Gift tag – small line (after reveal)", "default": "You got" },
-    { "type": "text", "id": "reveal_big", "label": "Gift tag – big line (after reveal)", "default": "10% OFF" },
+    { "type": "header", "content": "Photo" },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Fills the left side on desktop and the top on phones. Portrait or square, about 900 × 1100 px." },
+    { "type": "text", "id": "image_fallback", "label": "Fallback photo URL", "info": "Used only until a photo is uploaded.", "default": "https://cdn.shopify.com/s/files/1/0864/8805/6165/files/science-serum-daisies.png?v=1789651243" },
     { "type": "header", "content": "Sign-up step" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "A gift is waiting for you" },
     { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Unwrap your mystery gift" },
