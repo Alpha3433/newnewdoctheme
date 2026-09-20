@@ -1,0 +1,21 @@
+{%- comment -%}
+  Outputs the URL behind every "Continue shopping" link.
+
+  The store is effectively single-product, so shoppers coming back from checkout
+  should land on a product page, not on the "All products" collection:
+    1. the cart has items       -> the first line item's product page
+    2. the cart is empty        -> the serum's product page
+    3. the serum handle is gone -> the all-products collection (never a dead link)
+
+  Usage: <a href="{% render 'continue-shopping-url' %}">...</a>
+{%- endcomment -%}
+{%- liquid
+  assign continue_url = routes.all_products_collection_url
+  assign serum = all_products['elaren-pumpkin-seed-oil-regrowth-serum']
+  if cart.item_count > 0 and cart.items.first.product.url != blank
+    assign continue_url = cart.items.first.product.url
+  elsif serum != blank and serum.url != blank
+    assign continue_url = serum.url
+  endif
+  echo continue_url
+-%}
