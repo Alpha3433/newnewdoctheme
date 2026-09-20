@@ -1,6 +1,7 @@
 {% comment %}
   Featured product / buy box. Pick the product in the theme editor: the gallery, prices, subscription
-  plan (subscribe & save), variant and add-to-cart form all come from that product. Every piece of copy
+  plan (subscribe & save), variant and add-to-cart form all come from that product. Subscribe & save
+  is off until the shopper switches it on (a setting can pre-select it). Every piece of copy
   around it is an editable setting or block. Adding to cart is done in-page and opens the cart drawer.
   The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
 {% endcomment %}
@@ -83,6 +84,18 @@
     assign media_count = product.media.size
 
     comment
+      Subscribe & save starts switched OFF: the page loads on the one-time price and the shopper
+      opts in with the toggle. "Pre-select Subscribe & save" in the settings flips that. Everything
+      rendered below that differs between the two modes (the big price, the switch, the radios,
+      the selling_plan input, the button total, the savings pill) reads sub_on, and
+      assets/main.js (initBuyBox) picks the same state up from the radios on load.
+    endcomment
+    assign sub_on = false
+    if plan != blank and section.settings.sub_default
+      assign sub_on = true
+    endif
+
+    comment
       Bundle tiers (quantity breaks, mirroring the Kaching Bundles set-up). Every tier is priced off the
       product's own price: the tier discount comes off the unit price, so the per-bottle price falls as the
       bundle grows. The quantity is what gets added to cart - the Kaching Bundles discount applies the
@@ -134,18 +147,26 @@
       assign display_compare_unit = default_compare_basis
       assign display_compare_total = default_compare_basis | times: default_qty
       assign display_save = display_compare_total | minus: display_total_sub
-      if plan == blank
-        assign display_save = display_compare_total | minus: display_total_otp
-      endif
     endif
+    unless sub_on
+      assign display_save = display_compare_total | minus: display_total_otp
+    endunless
 
+    comment
+      The struck-through price on the button is rendered whenever either mode has one, so the
+      element is there for assets/main.js to fill in when the shopper flips the switch; which
+      figure it shows on load follows sub_on.
+    endcomment
     assign show_button_compare = false
-    if plan != blank
-      if display_compare_total > display_total_sub
-        assign show_button_compare = true
-      endif
-    elsif display_compare_total > display_total_otp
+    assign button_compare_sub = ''
+    assign button_compare_otp = ''
+    if plan != blank and display_compare_total > display_total_sub
       assign show_button_compare = true
+      assign button_compare_sub = display_compare_total | money
+    endif
+    if display_compare_total > display_total_otp
+      assign show_button_compare = true
+      assign button_compare_otp = display_compare_total | money
     endif
     if bundles.size > 0
       assign show_button_compare = true
@@ -392,7 +413,7 @@
         {%- endif -%}
 
         <div class="c-product-form js-product-form">
-          <c-subscription class="c-subscribtion c-subscribtion--buybox-toggle igcp-on{% if plan == blank %} c-subscribtion--no-plan{% endif %}{% if bundles.size > 0 %} c-subscribtion--bundles{% endif %}" data-default-selling-plan="{{ plan.id }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
+          <c-subscription class="c-subscribtion c-subscribtion--buybox-toggle igcp-on{% if plan == blank %} c-subscribtion--no-plan{% endif %}{% if bundles.size > 0 %} c-subscribtion--bundles{% endif %}{% unless sub_on %} is-one-time{% endunless %}" data-default-selling-plan="{{ plan.id }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
             {%- form 'product', product, class: 'c-subscribtion__subscription-form js-subscribtion__subscription-form js-ajax-add', id: 'featured-product-form' -%}
               <div class="c-buybox-toggle__priceline">
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--sub">
@@ -406,7 +427,7 @@
 
               {%- if plan != blank -%}
               <div class="c-buybox-toggle__box">
-                <button aria-checked="true" class="c-buybox-toggle__head js-bbt-toggle" role="switch" type="button">
+                <button aria-checked="{{ sub_on }}" class="c-buybox-toggle__head js-bbt-toggle" role="switch" type="button">
                   <span aria-hidden="true" class="c-buybox-toggle__switch"><span class="c-buybox-toggle__knob"></span></span>
                   <span class="c-buybox-toggle__head-text">
                     <span class="c-buybox-toggle__head-title">{{ section.settings.toggle_title | replace: percent_placeholder, sub_percent }}</span>
@@ -567,7 +588,7 @@
               {%- if plan != blank -%}
               <fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--column" id="purchase-type-fieldset">
                 <label>
-                  <input checked name="purchase_type" type="radio" value="subscription">
+                  <input name="purchase_type" type="radio" value="subscription"{% if sub_on %} checked{% endif %}>
                   {%- if section.settings.sub_badge != blank -%}<span class="c-subscribtion__discount-label c-subscribtion__discount-label--orange">{{ section.settings.sub_badge | replace: percent_placeholder, sub_percent }}</span>{%- endif -%}
                   <span class="c-subscribtion__option-name">{{ section.settings.sub_name }}</span>
                   <div class="c-subscribtion__option-price js-subscribtion__option-price">
@@ -579,7 +600,7 @@
                   {%- endif -%}
                 </label>
                 <label>
-                  <input name="purchase_type" type="radio" value="one_time">
+                  <input name="purchase_type" type="radio" value="one_time"{% unless sub_on %} checked{% endunless %}>
                   {%- if section.settings.otp_badge != blank -%}<span class="c-subscribtion__discount-label">{{ section.settings.otp_badge }}</span>{%- endif -%}
                   <span class="c-subscribtion__option-name">{{ section.settings.otp_name }}</span>
                   <div class="c-subscribtion__option-price js-subscribtion__option-price">
@@ -594,7 +615,7 @@
                   {%- endcomment -%}
                   {%- assign delivery_label = section.settings.delivery_label -%}
                   {%- if delivery_label != blank -%}<div class="c-subscribtion__fixed-plan-label">{{ delivery_label }}</div>{%- endif -%}
-                  <input class="js-default-selling-plan" name="selling_plan" type="hidden" value="{{ plan.id }}">
+                  <input class="js-default-selling-plan" name="selling_plan" type="hidden"{% if sub_on %} value="{{ plan.id }}"{% else %} value="" disabled{% endif %}>
                   <div class="c-subscribtion__subscription-info-wrapper">
                     {%- if section.settings.info_1 != blank -%}<div class="s-main-product__subscription-info"><svg fill="none" height="11" viewBox="0 0 9 11" width="9" xmlns="http://www.w3.org/2000/svg"><path d="M1.00049 6.8125L3.50049 9.8125L7.99951 0.8125" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>{{ section.settings.info_1 }}</span></div>{%- endif -%}
                     {%- if section.settings.info_2 != blank -%}<div class="s-main-product__subscription-info"><svg fill="none" height="11" viewBox="0 0 9 11" width="9" xmlns="http://www.w3.org/2000/svg"><path d="M1.00049 6.8125L3.50049 9.8125L7.99951 0.8125" stroke="black" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>{{ section.settings.info_2 }}</span></div>{%- endif -%}
@@ -621,7 +642,7 @@
                   <span class="js-subscribtion__price-wrapper">
                     <span class="c-subscribtion__price js-subscribtion__main-price"><span class="product_price">{% liquid
                       assign button_total = display_total_otp
-                      if plan != blank
+                      if sub_on
                         assign button_total = display_total_sub
                       endif
                       if show_currency_code
@@ -629,7 +650,7 @@
                       else
                         echo button_total | money
                       endif
-                    %}</span></span>{% if show_button_compare %}<s class="igcp">{% if display_compare_total > button_total %}{{ display_compare_total | money }}{% endif %}</s>{% endif %}
+                    %}</span></span>{% if show_button_compare %}<s class="igcp" data-compare-otp="{{ button_compare_otp | escape }}" data-compare-sub="{{ button_compare_sub | escape }}">{% if display_compare_total > button_total %}{{ display_compare_total | money }}{% endif %}</s>{% endif %}
                   </span>
                   {%- endif -%}
                 </span>
@@ -709,6 +730,7 @@
     { "type": "text", "id": "total_text", "label": "Total line", "default": "{total} total", "info": "{total} is replaced with the bundle total." },
     { "type": "text", "id": "save_text", "label": "Savings line", "default": "Save {amount} ({percent}% off)", "info": "{amount} is the money saved, {percent} the tier discount." },
     { "type": "header", "content": "Subscribe & save" },
+    { "type": "checkbox", "id": "sub_default", "label": "Pre-select Subscribe & save", "default": false, "info": "Off: the buy box loads on the one-time price and the shopper switches Subscribe & save on. On: it loads with Subscribe & save already selected." },
     { "type": "text", "id": "toggle_title", "label": "Toggle title", "default": "Save {percent}% with our flexible plan" },
     { "type": "text", "id": "toggle_sub", "label": "Toggle subtitle", "default": "No contracts. Cancel with ease." },
     { "type": "inline_richtext", "id": "benefit_1", "label": "Benefit 1", "default": "<strong>Free Insured Shipping</strong> Every Order" },
