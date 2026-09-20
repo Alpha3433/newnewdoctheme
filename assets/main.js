@@ -928,9 +928,11 @@
   }
 
   /* ========================================================== email popup */
-  /* Mystery gift: trades an email for a 10% code. Opens after a delay (or on exit intent), posts the
-     customer form in the background, reveals the code and attaches it to the session via /discount/CODE
-     so checkout applies it automatically. Remembered per visitor in localStorage. */
+  /* Mystery gift: trades an email for a 10% code. Opens once per visit, after a delay (or on exit
+     intent, whichever comes first), posts the customer form in the background, reveals the code and
+     attaches it to the session via /discount/CODE so checkout applies it automatically. Closing it,
+     with or without signing up, is remembered per visitor in localStorage for the days set in the
+     section, and it never reopens on its own within the same visit. */
   function initEmailPopup(root) {
     var popup = $('[data-email-popup]', root) || (root === document ? $('[data-email-popup]') : null);
     if (!popup || !once(popup, 'init')) return;
@@ -956,6 +958,7 @@
     var dialog = $('.s-email-popup__dialog', popup);
     var timer = null;
     var opened = false;
+    var fired = false; // opened on its own once already on this page: never again, whatever the storage says
     var day = 86400000;
 
     var hiddenUntil = function () {
@@ -992,6 +995,17 @@
       window.setTimeout(function () { if (!opened) popup.setAttribute('hidden', ''); }, 400);
       if (rememberDays && !designMode) remember(rememberDays, 'dismissed');
     };
+    // The popup fires once per visit at most. The delay timer and exit intent both come through
+    // here: the first one to fire wins, and a popup the visitor has already closed (this visit, or
+    // within the remembered days from an earlier one) never comes back on its own. Only the theme
+    // editor (popup.__open) can reopen it.
+    var autoOpen = function () {
+      if (fired || opened || hiddenUntil() > Date.now()) return;
+      fired = true;
+      if (exitIntent) document.removeEventListener('mouseout', exitIntent);
+      open();
+    };
+    var exitIntent = null;
 
     var dismissDays = parseInt(popup.getAttribute('data-dismiss-days') || '7', 10);
     var signupDays = parseInt(popup.getAttribute('data-signup-days') || '60', 10);
@@ -1093,10 +1107,16 @@
       });
     }
 
-    // Returned from a native submit: Shopify redirects back with ?customer_posted=true.
+    // Returned from a native submit: Shopify redirects back with ?customer_posted=true. Drop that
+    // flag from the address bar so a reload or a shared link does not open the popup again.
     if ($('[data-popup-posted]', popup)) {
+      fired = true;
       open();
       succeed();
+      if (window.history && window.history.replaceState && /[?&]customer_posted=/.test(window.location.search)) {
+        var clean = window.location.search.replace(/([?&])customer_posted=[^&]*&?/, '$1').replace(/[?&]$/, '');
+        window.history.replaceState(window.history.state, '', window.location.pathname + clean + window.location.hash);
+      }
       return;
     }
     if (form && $('.s-email-popup__error', popup) && $('.s-email-popup__error', popup).textContent.trim()) {
@@ -1110,11 +1130,12 @@
     if (!enabled || hiddenUntil() > Date.now()) return;
 
     var delay = Math.max(0, parseInt(popup.getAttribute('data-delay') || '6', 10)) * 1000;
-    timer = window.setTimeout(open, delay);
+    timer = window.setTimeout(autoOpen, delay);
     if (popup.getAttribute('data-exit-intent') === 'true' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      document.addEventListener('mouseout', function (e) {
-        if (!e.relatedTarget && e.clientY <= 0 && !document.body.classList.contains('cart-open')) open();
-      });
+      exitIntent = function (e) {
+        if (!e.relatedTarget && e.clientY <= 0 && !document.body.classList.contains('cart-open')) autoOpen();
+      };
+      document.addEventListener('mouseout', exitIntent);
     }
   }
 
