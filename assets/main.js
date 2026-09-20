@@ -740,7 +740,10 @@
     var priceOtp = $('.c-buybox-toggle__price--otp .product_price', sub);
     var buttonPrice = $('.c-subscribtion__add-to-cart .js-subscribtion__main-price .product_price', sub);
     var buttonCompare = $('.c-subscribtion__add-to-cart .igcp', sub);
-    var compareText = buttonCompare ? buttonCompare.innerHTML : '';
+    // Strike-through for each mode, rendered by the section: the page may load in either mode,
+    // so what is on the button at first paint says nothing about what the other mode shows.
+    var compareSub = buttonCompare ? buttonCompare.getAttribute('data-compare-sub') || '' : '';
+    var compareOtp = buttonCompare ? buttonCompare.getAttribute('data-compare-otp') || '' : '';
 
     // Bundle tiers (quantity breaks). The selected tier drives the quantity added to cart and every
     // price in the buy box: the big price is per bottle, the button shows the bundle total.
@@ -802,12 +805,13 @@
       }
       if (tiers.length) { renderTier(); return; }
       if (buttonPrice) buttonPrice.innerHTML = ((subscription ? priceMain : priceOtp) || priceMain || { innerHTML: '' }).innerHTML.trim();
-      // The one-time price has no compare-at price, so only show the strike-through on the subscription price.
-      if (buttonCompare) buttonCompare.innerHTML = subscription ? compareText : '';
+      if (buttonCompare) buttonCompare.innerHTML = subscription ? compareSub : compareOtp;
     };
     if (toggle) toggle.addEventListener('click', function () { setMode(toggle.getAttribute('aria-checked') !== 'true'); });
     radios.forEach(function (r) { r.addEventListener('change', function () { setMode(r.value === 'subscription'); }); });
     if (tier) selectTier(tier);
+    // Start in whatever mode the section rendered (Subscribe & save is off unless the merchant
+    // pre-selects it): the checked purchase_type radio carries that state.
     setMode(!!defaultPlan && (!radios.length || radios.some(function (r) { return r.checked && r.value === 'subscription'; })));
   }
 
