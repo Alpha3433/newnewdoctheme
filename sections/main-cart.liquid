@@ -52,7 +52,7 @@
     </form>
   {%- else -%}
     <p>{{ 'cart.general.empty' | t }}</p>
-    <p style="margin-top: 16px;"><a class="custom-button" href="{{ routes.all_products_collection_url }}">{{ 'cart.general.continue_shopping' | t }}</a></p>
+    <p style="margin-top: 16px;"><a class="custom-button" href="{% render 'continue-shopping-url' %}">{{ 'cart.general.continue_shopping' | t }}</a></p>
   {%- endif -%}
 </div>
 
