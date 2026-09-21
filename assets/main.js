@@ -69,6 +69,10 @@
       var doc = new DOMParser().parseFromString(html, 'text/html');
       var fresh = doc.getElementById('mini-cart');
       if (!fresh) return;
+      // Remember where the free-shipping bar stood so the fresh markup can animate from it.
+      var oldBar = $('[data-cart-shipping]', d);
+      var oldProgress = oldBar ? parseInt(oldBar.getAttribute('data-progress') || '0', 10) : null;
+      var wasReached = !!(oldBar && oldBar.getAttribute('data-reached') === 'true');
       ['[data-cart-title]', '[data-cart-content]', '[data-cart-footer]'].forEach(function (sel) {
         var a = $(sel, d), b = $(sel, fresh);
         if (a && b) {
@@ -80,7 +84,30 @@
       var count = parseInt(fresh.getAttribute('data-cart-count') || '0', 10);
       d.setAttribute('data-cart-count', count);
       this.updateCount(count);
+      this.animateShipping(oldProgress, wasReached);
       initCartDrawer(d);
+    },
+    /* The drawer is re-rendered as a whole after every cart change, which would snap the
+       free-shipping bar straight to its new width. Start it at the previous width and let the CSS
+       transition carry it to the new one, and pop the copy once when the threshold is first
+       crossed so the switch to free EXPRESS shipping is noticed. */
+    animateShipping: function (oldProgress, wasReached) {
+      var bar = $('[data-cart-shipping]', this.drawer());
+      if (!bar) return;
+      var fill = $('.free-shipping__progress', bar);
+      var progress = parseInt(bar.getAttribute('data-progress') || '0', 10);
+      var reached = bar.getAttribute('data-reached') === 'true';
+      if (fill && oldProgress !== null && oldProgress !== progress) {
+        fill.style.transition = 'none';
+        fill.style.width = oldProgress + '%';
+        void fill.offsetWidth; // flush so the next width change transitions
+        fill.style.transition = '';
+        fill.style.width = progress + '%';
+      }
+      if (reached && !wasReached && oldProgress !== null) {
+        bar.classList.add('is-unlocking');
+        window.setTimeout(function () { bar.classList.remove('is-unlocking'); }, 700);
+      }
     },
     request: function (path, options) {
       options = options || {};
