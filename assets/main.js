@@ -90,7 +90,7 @@
     /* The drawer is re-rendered as a whole after every cart change, which would snap the
        free-shipping bar straight to its new width. Start it at the previous width and let the CSS
        transition carry it to the new one, and pop the copy once when the threshold is first
-       crossed so the switch to free EXPRESS shipping is noticed. */
+       crossed so the switch to "eligible for FREE SHIPPING" is noticed. */
     animateShipping: function (oldProgress, wasReached) {
       var bar = $('[data-cart-shipping]', this.drawer());
       if (!bar) return;
