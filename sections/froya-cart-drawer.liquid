@@ -39,7 +39,7 @@
           Free-shipping progress. Shown in both states so the bar is the first thing the shopper sees
           after an add to cart: assets/main.js re-renders this container after every cart change and
           animates the bar from its previous width to the new one. Once the threshold is reached the
-          copy switches to the "unlocked" pair (free EXPRESS shipping) so the upgrade is spelled out.
+          copy switches to the "unlocked" pair ("You’re eligible for FREE SHIPPING").
         endcomment
         assign threshold = section.settings.shipping_threshold | default: 0 | times: 100
         assign remaining = threshold | minus: cart.total_price
@@ -408,9 +408,9 @@
     { "type": "text", "id": "shipping_text", "label": "Progress text", "default": "Spend {amount} and get", "info": "{amount} is replaced with what is left to spend." },
     { "type": "text", "id": "shipping_highlight", "label": "Progress text highlight", "default": "FREE SHIPPING" },
     { "type": "text", "id": "shipping_unlocked", "label": "Text once the threshold is reached", "default": "You’re eligible for" },
-    { "type": "text", "id": "shipping_unlocked_highlight", "label": "Reached text highlight", "default": "FREE EXPRESS SHIPPING", "info": "Shown after the reached text. Spell out the upgrade here so shoppers know their order ships express." },
+    { "type": "text", "id": "shipping_unlocked_highlight", "label": "Reached text highlight", "default": "FREE SHIPPING", "info": "Shown highlighted after the reached text." },
     { "type": "text", "id": "shipping_label", "label": "Bar label", "default": "Free shipping" },
-    { "type": "text", "id": "shipping_label_unlocked", "label": "Bar label once the threshold is reached", "default": "Free express shipping" },
+    { "type": "text", "id": "shipping_label_unlocked", "label": "Bar label once the threshold is reached", "default": "Free shipping" },
     { "type": "text", "id": "reviews_banner", "label": "Reviews banner", "default": "RATED 4.77/5 BY VERIFIED CUSTOMERS", "info": "Shown with five stars under the shipping bar. Leave empty to hide." },
     { "type": "text", "id": "empty_title", "label": "Empty cart title", "default": "Your cart is empty" },
     { "type": "text", "id": "empty_text", "label": "Empty cart text", "info": "Optional line under the title." },
