@@ -12,8 +12,9 @@
   comment
     The free subscription gift the buy box advertises. assets/main.js adds it (one unit, tagged with a
     _free_gift line property) whenever a line on the pinned plan is in the cart and takes it out again
-    when the last such line goes. The theme cannot price it: the gift is only $0 once a free-gift
-    discount exists (Kaching Subscriptions > free gift on the plan, or a Shopify automatic discount).
+    when the last such line goes. The shopper can add more with the quantity buttons: only the first
+    one is free, the rest are charged. The theme cannot price it: the gift is only $0 once a free-gift
+    discount exists (Kaching Subscriptions > free gift on the plan, quantity 1).
   endcomment
   assign gift_product = section.settings.gift_product
   assign gift_variant = blank
@@ -125,6 +126,24 @@
       {%- else -%}
         <form id="mini-cart-form" action="{{ routes.cart_url }}" method="post" novalidate>
           <input type="hidden" name="checkout">
+          {%- liquid
+            comment
+              The gift can sit on two lines: once the free-gift discount covers one unit and the
+              shopper has added more, Shopify splits the line into the $0 unit and the paid extras,
+              both still tagged _free_gift. The gift's quantity buttons act on all of it at once,
+              so they work from the gift's total quantity.
+            endcomment
+            assign gift_total_qty = 0
+            assign gift_discounted = false
+            for item in cart.items
+              if item.properties._free_gift != blank
+                assign gift_total_qty = gift_total_qty | plus: item.quantity
+                if item.final_line_price < item.original_line_price
+                  assign gift_discounted = true
+                endif
+              endif
+            endfor
+          -%}
           {%- for item in cart.items -%}
             {%- liquid
               assign line = forloop.index
@@ -162,12 +181,23 @@
                 assign plan_saving = item.variant.price | minus: plan_price
               endif
               comment
-                A line the theme added as the free subscription gift: no toggle, no quantity, and
-                priced as FREE once the free-gift discount has zeroed it.
+                A line the theme added as the free subscription gift: no subscribe toggle, and priced as
+                FREE once the free-gift discount has zeroed it. Extra units cost the normal price: a line
+                that is only partly free shows its total with the full price struck through, and the
+                paid half of a split gift is labelled like any other product. Until a free-gift discount
+                exists nothing in the cart is discounted, so the label stays on the one gift line.
               endcomment
               assign is_gift = false
+              assign gift_has_free_unit = false
+              assign show_gift_label = false
               if item.properties._free_gift != blank
                 assign is_gift = true
+                if item.final_line_price < item.original_line_price
+                  assign gift_has_free_unit = true
+                  assign show_gift_label = true
+                elsif gift_discounted == false
+                  assign show_gift_label = true
+                endif
               endif
               comment
                 The switch acts on the whole product, not this one line: a bundle's free bottle sits
@@ -204,7 +234,7 @@
             -%}
             <line-item class="line-item{% if is_gift %} line-item--gift{% endif %}" data-line="{{ line }}" data-key="{{ item.key }}"{% if is_gift %} data-gift{% endif %}>
               <div class="line-item__content-wrapper">
-                <button type="button" class="s-mini-cart__remove-btn" data-cart-remove="{{ line }}" aria-label="Remove {{ item.product.title | escape }}">
+                <button type="button" class="s-mini-cart__remove-btn" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: item.quantity }}"{% else %}data-cart-remove="{{ line }}"{% endif %} aria-label="Remove {{ item.product.title | escape }}">
                   <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
                 </button>
                 <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="line-item__image-wrapper" tabindex="-1" aria-hidden="true">
@@ -215,8 +245,11 @@
                 <div class="line-item__info">
                   <div class="product-item-meta">
                     <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="product-item-meta__title text--small">{{ item.product.title }}</a>
-                    {%- if is_gift and section.settings.gift_label != blank -%}
+                    {%- if show_gift_label and section.settings.gift_label != blank -%}
                       <span class="product-item-meta__variant line-item__gift-label">{{ section.settings.gift_label }}</span>
+                      {%- if gift_has_free_unit and gift_total_qty > 1 and section.settings.gift_extra_text != blank -%}
+                        <span class="product-item-meta__variant text--xsmall line-item__gift-note">{{ section.settings.gift_extra_text }}</span>
+                      {%- endif -%}
                     {%- elsif show_variant_title -%}
                       <span class="product-item-meta__variant text--xsmall text--subdued">{{ item.variant.title }}</span>
                     {%- endif -%}
@@ -241,19 +274,18 @@
                       </div>
                     {%- endif -%}
                     <div class="product-item-meta__info">
-                      {%- if is_gift -%}
-                      <span class="line-item__gift-quantity">{{ item.quantity }} ×</span>
-                      {%- else -%}
                       <line-item-quantity class="line-item__quantity"><div class="custom-quantity-selector custom-quantity-selector--small">
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}" aria-label="Decrease quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7" stroke-linecap="round"/></svg></button>
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: 1 }}"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}"{% endif %} aria-label="Decrease quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7" stroke-linecap="round"/></svg></button>
                         <span class="custom-quantity-selector__text">{{ item.quantity }}</span>
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}" aria-label="Increase quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7M9 5.5v7" stroke-linecap="round"/></svg></button>
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | plus: 1 }}"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}"{% endif %} aria-label="Increase quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7M9 5.5v7" stroke-linecap="round"/></svg></button>
                       </div></line-item-quantity>
-                      {%- endif -%}
                       <div class="product-item-meta__price-list-container text--small"><div class="price-list">
                         {%- if is_gift and item.final_line_price == 0 and section.settings.gift_free_text != blank -%}
                         <span class="price price--highlight price--free">{{ section.settings.gift_free_text }}</span>
-                        <span class="price price--compare"><span class="product_price">{{ item.original_price | money }}</span></span>
+                        <span class="price price--compare"><span class="product_price">{{ item.original_line_price | money }}</span></span>
+                        {%- elsif gift_has_free_unit -%}
+                        <span class="price price--highlight"><span class="product_price">{{ item.final_line_price | money }}</span></span>
+                        <span class="price price--compare"><span class="product_price">{{ item.original_line_price | money }}</span></span>
                         {%- else -%}
                         <span class="price price--highlight"><span class="product_price">{{ item.final_price | money }}</span></span>
                         {%- if item.original_price > item.final_price -%}
@@ -424,10 +456,11 @@
     { "type": "text", "id": "selling_plan_id", "label": "Subscription plan ID", "info": "Optional. The plan the line toggle switches a one-time line to. Use the same ID as the Featured product section so the drawer sells the cadence the buy box promised. Leave blank to use the cheapest plan the variant offers." },
     { "type": "text", "id": "subscribe_label", "label": "Subscribe toggle label", "default": "SUBSCRIBE & SAVE" },
     { "type": "text", "id": "subscribe_saving_text", "label": "Saving shown next to the toggle", "default": "Save {amount}", "info": "{amount} is what the plan takes off everything the shopper is paying for that product (all its lines, a free bundle bottle counting for nothing). Leave empty to show no amount." },
-    { "type": "header", "content": "Free subscription gift", "info": "The gift the Featured product section advertises with Subscribe & save. It is added to the cart (one unit, tagged as a free gift) as soon as a line on the plan above is in the cart, and removed when the last such line goes. The theme cannot make it $0 on its own: set the same product up as a free gift on that plan in Kaching Subscriptions, or create a Shopify automatic Buy X get Y discount, so the cart and checkout charge nothing for it." },
+    { "type": "header", "content": "Free subscription gift", "info": "The gift the Featured product section advertises with Subscribe & save. It is added to the cart (one unit, tagged as a free gift) as soon as a line on the plan above is in the cart, and removed when the last such line goes. The shopper can raise its quantity: the first one is free, the rest are charged. The theme cannot make it $0 on its own: in Kaching Subscriptions, add this product as a free gift (quantity 1) on the plan above, so the cart and checkout charge nothing for the first one." },
     { "type": "product", "id": "gift_product", "label": "Gift product", "info": "Pick the same product as Featured product → Free subscription gift. Leave empty to add nothing." },
     { "type": "text", "id": "gift_label", "label": "Gift line label", "default": "FREE GIFT" },
     { "type": "text", "id": "gift_free_text", "label": "Price shown once the gift is free", "default": "FREE" },
+    { "type": "text", "id": "gift_extra_text", "label": "Note when extras are added", "default": "First one free · extras full price", "info": "Shown under the gift label once the shopper has more than one and the first is free." },
     { "type": "header", "content": "Recommendations" },
     { "type": "text", "id": "upsell_title", "label": "Heading", "default": "PAIR WITH:" },
     { "type": "product_list", "id": "upsells", "label": "Products to recommend", "limit": 6 },
