@@ -11,6 +11,24 @@
             "url": "https://www.yuntrack.com/Track/Detail/{number}"
           }
         },
+        "highlight_1": {
+          "type": "highlight",
+          "settings": {
+            "text": "Tracking on every order"
+          }
+        },
+        "highlight_2": {
+          "type": "highlight",
+          "settings": {
+            "text": "Ships within 1–2 business days"
+          }
+        },
+        "highlight_3": {
+          "type": "highlight",
+          "settings": {
+            "text": "Real people reply within 1 business day"
+          }
+        },
         "step_1": {
           "type": "step",
           "settings": {
@@ -70,6 +88,9 @@
       },
       "block_order": [
         "carrier_1",
+        "highlight_1",
+        "highlight_2",
+        "highlight_3",
         "step_1",
         "step_2",
         "step_3",

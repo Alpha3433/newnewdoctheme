@@ -30,7 +30,40 @@
   if section.settings.blog != blank
     assign blog_articles = section.settings.blog.articles
   endif
+  assign show_track = false
+  if section.settings.track_label != blank and track_url != blank
+    assign show_track = true
+  endif
+  assign bar_count = anchors.size | at_most: section.settings.desktop_limit
+  assign bar_total = bar_count
+  if show_track
+    assign bar_total = bar_total | plus: 1
+  endif
+  assign bar_left_count = bar_total | plus: 1 | divided_by: 2 | at_most: bar_count
 -%}
+{%- comment -%}
+  Single-page bar: the section links and Track Order are shared evenly either side of the logo, the
+  left side taking the extra one when the count is odd, so the logo sits between two balanced groups
+  instead of every link crowding the left.
+{%- endcomment -%}
+{%- if simple_menu -%}
+  {%- assign bar_left = '' -%}
+  {%- assign bar_right = '' -%}
+  {%- for block in anchors limit: bar_count -%}
+    {%- liquid
+      assign anchor_target = block.settings.target | default: 'reviews'
+      if anchor_target == 'custom'
+        assign anchor_target = block.settings.custom_target | default: 'top'
+      endif
+    -%}
+    {%- capture bar_item -%}<li class="froya-nav__nav-item" {{ block.shopify_attributes }}><a class="froya-nav__nav-link froya-nav__nav-link--anchor" data-scroll-to="{{ anchor_target }}" href="{{ routes.root_url }}#{{ anchor_target }}"><span class="froya-nav__nav-label">{{ block.settings.label }}</span></a></li>{%- endcapture -%}
+    {%- if forloop.index <= bar_left_count -%}
+      {%- assign bar_left = bar_left | append: bar_item -%}
+    {%- else -%}
+      {%- assign bar_right = bar_right | append: bar_item -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
 {%- capture quiz_panel -%}
   {%- if section.settings.quiz_title != blank -%}
   <div class="froya-nav__mega-quiz" style="background-image: url('{{ quiz_bg_desktop }}');">
@@ -76,17 +109,7 @@
   <div class="froya-nav__bar">
     <button aria-controls="froya-nav-drawer-froya-nav-variant" aria-expanded="false" aria-label="Open menu" class="froya-nav__burger" type="button">
       <svg aria-hidden="true" fill="none" viewBox="0 0 20 14"><path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.5"></path></svg>
-    </button>{%- if simple_menu -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--left froya-nav__desktop-nav--anchors" role="list">
-        {%- for block in anchors limit: section.settings.desktop_limit -%}
-          {%- liquid
-            assign anchor_target = block.settings.target | default: 'reviews'
-            if anchor_target == 'custom'
-              assign anchor_target = block.settings.custom_target | default: 'top'
-            endif
-          -%}
-          <li class="froya-nav__nav-item" {{ block.shopify_attributes }}><a class="froya-nav__nav-link froya-nav__nav-link--anchor" data-scroll-to="{{ anchor_target }}" href="{{ routes.root_url }}#{{ anchor_target }}"><span class="froya-nav__nav-label">{{ block.settings.label }}</span></a></li>
-        {%- endfor -%}
-      </ul>{%- else -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--left" role="list"><li class="froya-nav__nav-item">
+    </button>{%- if simple_menu -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--left froya-nav__desktop-nav--anchors" role="list">{{ bar_left }}</ul>{%- else -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--left" role="list"><li class="froya-nav__nav-item">
           <button aria-controls="froya-nav-mega-default-shop" aria-expanded="false" class="froya-nav__nav-link" data-mega-href="{{ section.settings.shop_all_url | default: '/collections/all' }}" data-mega-kind="shop" data-mega-label="{{ section.settings.shop_label | escape }}" data-mega-target="default-shop" type="button"><span class="froya-nav__nav-label">{{ section.settings.shop_label }}</span></button>
         </li>
         {%- if cards.size > 0 -%}
@@ -107,12 +130,16 @@
     </div>
 
     <div class="froya-nav__right header__icon-list">{%- if simple_menu -%}
+      {%- if bar_right != blank or show_track -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--right froya-nav__desktop-nav--anchors" role="list">{{ bar_right }}
+        {%- if show_track -%}<li class="froya-nav__nav-item"><a class="froya-nav__nav-link froya-nav__nav-link--anchor froya-nav__track-link" href="{{ track_url }}"><span class="froya-nav__nav-label">{{ section.settings.track_label }}</span></a></li>{%- endif -%}
+      </ul>{%- endif -%}
     {%- else -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--right" role="list"><li class="froya-nav__nav-item">
             <button aria-controls="froya-nav-mega-default-more" aria-expanded="false" class="froya-nav__nav-link froya-nav__nav-link--more" data-mega-kind="more" data-mega-label="{{ section.settings.more_label | escape }}" data-mega-target="default-more" type="button"><span class="froya-nav__nav-label">{{ section.settings.more_label }}</span></button>
-          </li></ul>{%- endif -%}
-      {%- if section.settings.track_label != blank and track_url != blank -%}
+          </li></ul>
+      {%- if show_track -%}
         <a class="froya-nav__nav-link froya-nav__nav-link--anchor froya-nav__track-link" href="{{ track_url }}"><span class="froya-nav__nav-label">{{ section.settings.track_label }}</span></a>
       {%- endif -%}
+    {%- endif -%}
 
       <a aria-controls="mini-cart" aria-expanded="false" aria-label="Cart" class="header__icon-wrapper tap-area button header-button cart-button js-cart-toggle" href="{{ routes.cart_url }}">
         {{ section.settings.cart_label }}
@@ -208,7 +235,7 @@
             </a></li>
           {%- endfor -%}
         </ul></nav>
-        {%- if section.settings.track_label != blank and track_url != blank -%}
+        {%- if show_track -%}
           <a class="froya-nav-drawer__track" href="{{ track_url }}">
             <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M1.5 5.5h12v10h-12zM13.5 9h4.5l3.5 3.5v3h-8M6 18.5a2 2 0 1 0 0-.01M17 18.5a2 2 0 1 0 0-.01" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5"/></svg>
             <span>{{ section.settings.track_label }}</span>
@@ -265,7 +292,7 @@
         </div>
         {%- endif -%}
         <ul class="froya-nav-drawer__footer-links" role="list">
-          {%- if section.settings.track_label != blank and track_url != blank -%}<li><a href="{{ track_url }}">{{ section.settings.track_label }}</a></li>{%- endif -%}
+          {%- if show_track -%}<li><a href="{{ track_url }}">{{ section.settings.track_label }}</a></li>{%- endif -%}
           {%- for block in more_links -%}<li><a href="{{ block.settings.url | default: '/' }}">{{ block.settings.label }}</a></li>{%- endfor -%}
           {%- if blog_list != blank -%}
           <li class="froya-nav-blog-li"><details class="froya-nav-blog froya-nav-blog--mobile">
@@ -299,14 +326,14 @@
     { "type": "range", "id": "logo_width", "label": "Logo width", "min": 60, "max": 240, "step": 10, "unit": "px", "default": 100 },
     { "type": "header", "content": "Menu style" },
     { "type": "select", "id": "menu_style", "label": "Menu", "options": [ { "value": "anchors", "label": "Single page (links scroll to sections)" }, { "value": "full", "label": "Full store menu (shop, bestsellers, more)" } ], "default": "anchors", "info": "Single page uses the \"Section link\" blocks; the bar shows the first few, the mobile menu shows them all." },
-    { "type": "range", "id": "desktop_limit", "label": "Section links in the bar (desktop)", "min": 3, "max": 8, "step": 1, "default": 5 },
+    { "type": "range", "id": "desktop_limit", "label": "Section links in the bar (desktop)", "min": 3, "max": 8, "step": 1, "default": 5, "info": "They share the bar evenly either side of the logo, together with Track Order." },
     { "type": "header", "content": "Navigation labels (full menu)" },
     { "type": "text", "id": "shop_label", "label": "Shop menu label", "default": "Shop" },
     { "type": "text", "id": "bestsellers_label", "label": "Bestsellers menu label", "default": "Bestsellers" },
     { "type": "text", "id": "more_label", "label": "More menu label", "default": "More" },
     { "type": "text", "id": "cart_label", "label": "Cart button label", "default": "CART" },
     { "type": "header", "content": "Order tracking link" },
-    { "type": "text", "id": "track_label", "label": "Label", "default": "Track Order", "info": "Shown beside the cart on desktop and in the mobile menu. Leave empty to hide it." },
+    { "type": "text", "id": "track_label", "label": "Label", "default": "Track Order", "info": "Shown on the right of the bar on desktop (the last link before the cart) and in the mobile menu. Leave empty to hide it." },
     { "type": "url", "id": "track_url", "label": "Link", "info": "Leave empty to use the Track your order page from Theme settings → Order tracking." },
     { "type": "header", "content": "Shop menu" },
     { "type": "text", "id": "shop_title", "label": "Products column title", "default": "Shop by Product" },

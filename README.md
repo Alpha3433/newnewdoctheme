@@ -43,11 +43,12 @@ template (`templates/page.froya-landing.json`).
 * **Menu (single page)** – Header → *Menu style*. *Single page* replaces the shop/bestsellers/more mega
   menus and the long mobile drawer with the *Section link* blocks: each one scrolls to a section of
   the landing page (benefits, reviews, science, results, story, guarantee, how to use, FAQ or a custom
-  element id). The bar shows the first few links; the mobile drawer lists them all as numbered rows
+  element id). The bar shows the first few links (*Section links in the bar*), shared evenly either
+  side of the logo together with *Track Order*; the mobile drawer lists them all as numbered rows
   with the note and the testimonial.
   *Full store menu* brings the original mega menus back. Every other link on the page (guarantee
-  buttons, "Shop now" on review and video cards, the cart drawer's product links and empty-cart
-  button, the footer's "About" column) also scrolls to a section instead of leaving the page; only the
+  buttons, "Shop now" on review and video cards, the cart drawer's product links, the footer's
+  "About" column) also scrolls to a section instead of leaving the page; only the
   policies and *Manage Subscription* in the footer, and the checkout, lead off it. A link such as
   `/#faq` from another page lands on the home page and scrolls to that section.
 * **FAQ** – a numbered accordion at the bottom of the page in the "Backed by science" style. Each
@@ -103,7 +104,11 @@ template (`templates/page.froya-landing.json`).
   doctor first" answer always wins, then "Traction", then whichever of pattern / shedding got more
   answers. Clicking a Result block in the editor previews that screen.
 * **Order tracking** – one delivery hub at `/pages/track-order` (template `page.track-order`,
-  section *Track your order*). Shoppers type a tracking number and it opens in a new tab: a
+  section *Track your order*), built from the landing page's pieces: a cream hero with the heading
+  (italic words get the accent), ticked *Highlight* blocks and the tracking-number card; a sign-in
+  card or the shopper's orders; the delivery timeline as numbered circles on a line; the FAQ
+  accordion; and a cream help card whose button emails *Email address*. Shoppers type a tracking
+  number and it opens in a new tab: a
   *Carrier* block whose prefix matches opens that carrier (YunExpress for `YT…` numbers by default),
   and any other number opens the universal tracker set in Theme settings → *Order tracking*
   (17TRACK by default). That fallback matters because US shipments are recorded under the carrier
@@ -113,8 +118,8 @@ template (`templates/page.froya-landing.json`).
   Signed-out visitors get a sign-in button that brings them back to the page. The timeline steps and
   delivery questions are blocks. `/pages/track-order?tracking=YT…` opens the page with the number
   already filled in, so the shipping confirmation email can link straight to it. The page is linked
-  from the header (*Track Order*, beside the cart on desktop and in the mobile menu; Header → *Order
-  tracking link*), the footer and the account page. The account order page shows the same tracker.
+  from the header (*Track Order*, the last link before the cart on desktop and a row in the mobile
+  menu; Header → *Order tracking link*), the footer and the account page. The account order page shows the same tracker.
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
   "Pair with" products, checkout label, country/currency selector and trust badges. The header
   CART button opens it and every add-to-cart button adds in place and opens it.
@@ -155,8 +160,8 @@ template (`templates/page.froya-landing.json`).
 * **Create the tracking page.** In Online Store → Pages, add a page with the handle `track-order`
   and choose the template `page.track-order`. The header, footer and account links go to
   `/pages/track-order`; if you use another handle, update Theme settings → *Order tracking* and the
-  footer link. Check the delivery-timeline copy ("ships within 1–2 business days") against your
-  real handling time.
+  footer link. Check the "ships within 1–2 business days" line (a highlight and a timeline step)
+  against your real handling time.
 * **Imagery and video are still Frøya's placeholders** until you upload your own (product shots,
   before/after photos, press logos, review videos). Alt text already describes each slot.
 * **Testimonials are real Elaren reviews** pulled from the store's review app (43 serum reviews,
