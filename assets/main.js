@@ -954,6 +954,76 @@
     });
   }
 
+  /* ============================================================== track */
+  /* Track your order page: turns a tracking number into its tracking link (a Carrier block whose
+     prefix matches, otherwise the universal tracker) and opens it in a new tab. The link also stays
+     under the field in case the browser blocks the tab. ?tracking=… in the address fills the field
+     in, so the shipping confirmation email can link straight here. */
+  function initTrack(root) {
+    $$('[data-track]', root).forEach(function (el) {
+      if (!once(el, 'init')) return;
+      var form = $('[data-track-form]', el);
+      var input = form && $('input[name="tracking"]', form);
+      var message = $('[data-track-message]', el);
+      var configEl = $('[data-track-config]', el);
+      if (!input || !message || !configEl) return;
+      var config = {};
+      try { config = JSON.parse(configEl.textContent) || {}; } catch (err) { /* defaults below */ }
+      var carriers = config.carriers || [];
+      var universal = config.universal || 'https://t.17track.net/en#nums={number}';
+
+      var clean = function (value) { return String(value || '').toUpperCase().replace(/[\s-]+/g, ''); };
+      var resolve = function (number) {
+        for (var i = 0; i < carriers.length; i++) {
+          var carrier = carriers[i];
+          var prefixes = carrier.prefixes || [];
+          for (var j = 0; j < prefixes.length; j++) {
+            if (prefixes[j] && carrier.url && number.indexOf(prefixes[j]) === 0) return carrier;
+          }
+        }
+        return { name: '', url: universal };
+      };
+      var showError = function () {
+        message.hidden = false;
+        message.classList.add('is-error');
+        message.textContent = config.invalid || '';
+        input.setAttribute('aria-invalid', 'true');
+        input.focus();
+      };
+      var show = function (number) {
+        var carrier = resolve(number);
+        var href = carrier.url.replace(/\{number\}/g, encodeURIComponent(number));
+        var text = config.opening || '';
+        text = carrier.name ? text.replace('{carrier}', carrier.name) : text.replace(/\{carrier\}\s*/, '');
+        text = text.replace('{number}', number);
+        input.removeAttribute('aria-invalid');
+        message.classList.remove('is-error');
+        message.textContent = text ? text + ' ' : '';
+        var link = document.createElement('a');
+        link.className = 'link-underline';
+        link.href = href;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = config.fallback || href;
+        message.appendChild(link);
+        message.hidden = false;
+        window.open(href, '_blank', 'noopener');
+      };
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var number = clean(input.value);
+        if (!/^[A-Z0-9]{6,40}$/.test(number)) { showError(); return; }
+        input.value = number;
+        show(number);
+      });
+
+      var fromUrl = '';
+      try { fromUrl = clean(new URLSearchParams(window.location.search).get('tracking')); } catch (err) { /* old browser */ }
+      if (/^[A-Z0-9]{6,40}$/.test(fromUrl)) input.value = fromUrl;
+    });
+  }
+
   /* ========================================================== email popup */
   /* Mystery gift: trades an email for a 10% code. Opens once per visit, after a delay (or on exit
      intent, whichever comes first), posts the customer form in the background, reveals the code and
@@ -1181,6 +1251,7 @@
     initNewsletter(root);
     initCountdown(root);
     initFaq(root);
+    initTrack(root);
     initEmailPopup(root);
     initCartDrawer($('#mini-cart', root) || (root === document ? Cart.drawer() : null));
   }

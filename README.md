@@ -102,6 +102,19 @@ template (`templates/page.froya-landing.json`).
   and a button that scrolls to the buy box with a bundle tier pre-selected. Precedence: a "See a
   doctor first" answer always wins, then "Traction", then whichever of pattern / shedding got more
   answers. Clicking a Result block in the editor previews that screen.
+* **Order tracking** – one delivery hub at `/pages/track-order` (template `page.track-order`,
+  section *Track your order*). Shoppers type a tracking number and it opens in a new tab: a
+  *Carrier* block whose prefix matches opens that carrier (YunExpress for `YT…` numbers by default),
+  and any other number opens the universal tracker set in Theme settings → *Order tracking*
+  (17TRACK by default). That fallback matters because US shipments are recorded under the carrier
+  "yanyun" with no tracking link, so without it those customers only get a number they can't click.
+  Signed-in customers also see their recent orders, each with a placed → shipped → on its way
+  tracker, every tracking number with a *Track* button, and a link to Shopify's order status page.
+  Signed-out visitors get a sign-in button that brings them back to the page. The timeline steps and
+  delivery questions are blocks. `/pages/track-order?tracking=YT…` opens the page with the number
+  already filled in, so the shipping confirmation email can link straight to it. The page is linked
+  from the header (*Track Order*, beside the cart on desktop and in the mobile menu; Header → *Order
+  tracking link*), the footer and the account page. The account order page shows the same tracker.
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
   "Pair with" products, checkout label, country/currency selector and trust badges. The header
   CART button opens it and every add-to-cart button adds in place and opens it.
@@ -124,6 +137,11 @@ template (`templates/page.froya-landing.json`).
 
 ## Before you publish
 
+* **Create the tracking page.** In Online Store → Pages, add a page with the handle `track-order`
+  and choose the template `page.track-order`. The header, footer and account links go to
+  `/pages/track-order`; if you use another handle, update Theme settings → *Order tracking* and the
+  footer link. Check the delivery-timeline copy ("ships within 1–2 business days") against your
+  real handling time.
 * **Imagery and video are still Frøya's placeholders** until you upload your own (product shots,
   before/after photos, press logos, review videos). Alt text already describes each slot.
 * **Testimonials are real Elaren reviews** pulled from the store's review app (43 serum reviews,

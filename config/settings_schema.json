@@ -59,5 +59,28 @@
         "info": "Anyone opening a /products/… link (Google Shopping, order emails, the Shop app) is taken to the home page, where the buy box is. Untick to show the plain product page instead."
       }
     ]
+  },
+  {
+    "name": "Order tracking",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Used by the Track your order page, the account order history and each order page. Some shipments are recorded without a tracking link (the carrier Shopify can't build a link for), so their tracking number opens this universal tracker instead, which follows the parcel across carriers to the last-mile service."
+      },
+      {
+        "type": "text",
+        "id": "tracking_page_url",
+        "label": "Track your order page",
+        "default": "/pages/track-order",
+        "info": "Create a page in Online Store → Pages with the \"track-order\" template and put its address here."
+      },
+      {
+        "type": "text",
+        "id": "universal_tracker_url",
+        "label": "Universal tracker link",
+        "default": "https://t.17track.net/en#nums={number}",
+        "info": "{number} is replaced by the tracking number."
+      }
+    ]
   }
 ]

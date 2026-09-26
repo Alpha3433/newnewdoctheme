@@ -351,6 +351,8 @@
         "bestsellers_label": "Bestsellers",
         "more_label": "More",
         "cart_label": "CART",
+        "track_label": "Track Order",
+        "track_url": "",
         "shop_title": "Shop by Product",
         "shop_all_label": "Shop All",
         "shop_all_url": "/collections/all",

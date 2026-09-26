@@ -1,6 +1,9 @@
 <div class="page-width">
   <h1 class="page-title">{{ 'customer.account.title' | t }}</h1>
-  <p style="margin-bottom: 24px;"><a class="link-underline" href="{{ routes.account_logout_url }}">{{ 'customer.account.log_out' | t }}</a></p>
+  <p style="margin-bottom: 24px;">
+    {%- if settings.tracking_page_url != blank -%}<a class="link-underline" href="{{ settings.tracking_page_url }}">{{ 'customer.account.track_orders' | t }}</a> · {% endif -%}
+    <a class="link-underline" href="{{ routes.account_logout_url }}">{{ 'customer.account.log_out' | t }}</a>
+  </p>
   <div class="account-grid">
     <div>
       <h2 class="product-card__title" style="margin-bottom: 12px;">{{ 'customer.account.order_history' | t }}</h2>
@@ -13,7 +16,17 @@
                 <tr>
                   <td><a class="link-underline" href="{{ order.customer_url }}">{{ order.name }}</a></td>
                   <td>{{ order.created_at | date: '%B %d, %Y' }}</td>
-                  <td>{{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</td>
+                  <td>
+                    {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}
+                    {%- for line_item in order.line_items -%}
+                      {%- assign tracked = line_item.fulfillment.tracking_numbers.first -%}
+                      {%- if tracked != blank -%}
+                        {%- capture track_href -%}{%- render 'tracking-url', number: tracked, url: line_item.fulfillment.tracking_urls.first -%}{%- endcapture -%}
+                        <br><a class="link-underline" href="{{ track_href | strip | escape }}" target="_blank" rel="noopener">{{ 'customer.tracking.track' | t }} {{ tracked }}</a>
+                        {%- break -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </td>
                   <td>{{ order.total_price | money }}</td>
                 </tr>
               {%- endfor -%}
