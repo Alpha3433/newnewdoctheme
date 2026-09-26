@@ -135,18 +135,23 @@ template (`templates/page.froya-landing.json`).
     Shopify splits the gift into a $0 line (labelled "FREE GIFT" plus *Note when extras are added*)
     and a line for the paid extras; the buttons on either change the gift's total. Switching the
     subscription off removes the free one and keeps any paid extras as a normal line.
-    **The theme does not price the gift**: it is only free once it is set up as a free gift in
-    Kaching Subscriptions (Plans → *Plan #1*, the monthly plan the drawer pins → free gift: Elaren
-    MicroStamp Pro, quantity 1), otherwise the cart and checkout charge its normal price. A Shopify
+    **The theme does not price the gift**: it is free through the free gift set up in Kaching
+    Subscriptions (every plan → free gift: Elaren MicroStamp Pro, quantity 1). Kaching's discount
+    only zeroes a line tagged the way Kaching's own widget tags its gifts, so the drawer adds a
+    hidden `__kaching_subs_gift` property naming the subscription line's plan
+    (`{"sellingPlan":"1039991141"}`). Without it the gift is charged in full; a MicroStamp added
+    any other way (e.g. from "Pair with") has no tag and is charged, and a gift tagged for a plan
+    that is no longer in the cart is charged too. Gift lines already in a cart without the tag are
+    re-tagged on the next page view or cart change. A Shopify
     Buy X get Y discount is not a substitute: it can't tell a subscription from a one-time purchase,
     so anyone adding the MicroStamp from "Pair with" next to the serum would get it free too.
 
 ## Before you publish
 
-* **Make the subscription gift free.** The cart adds the MicroStamp Pro to every subscription,
-  but no discount prices it at $0 yet (Kaching Subscriptions has no free gift configured), so
-  checkout charges full price. Add it as a free gift, quantity 1, on Plan #1 in Kaching
-  Subscriptions, then place a test subscription order to check it is $0 at checkout.
+* **Subscription gift.** The MicroStamp Pro is set up as a free gift (quantity 1) on all three
+  Kaching Subscriptions plans. Keep the Kaching Subscriptions app embed **off**: it brings its own
+  widget and its own gift-adding cart script, which would compete with the theme's. If the gift
+  ever shows full price again, check the free gift still exists on the plan the drawer pins.
 * **Create the tracking page.** In Online Store → Pages, add a page with the handle `track-order`
   and choose the template `page.track-order`. The header, footer and account links go to
   `/pages/track-order`; if you use another handle, update Theme settings → *Order tracking* and the
