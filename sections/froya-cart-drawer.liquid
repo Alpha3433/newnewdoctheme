@@ -122,7 +122,6 @@
               </div>
             </div>
           {%- endif -%}
-          {%- assign buy_box_url = routes.root_url | append: '#shop' -%}{%- assign empty_href = section.settings.empty_url | default: buy_box_url -%}<a class="custom-button s-mini-cart__empty-button" href="{{ empty_href }}"{% if empty_href contains '#' %} data-scroll-to="{{ empty_href | split: '#' | last }}"{% endif %}>{{ section.settings.empty_button }}</a>
         </div>
       {%- else -%}
         <form id="mini-cart-form" action="{{ routes.cart_url }}" method="post" novalidate>
@@ -450,8 +449,6 @@
     { "type": "product", "id": "empty_product", "label": "Bestseller to suggest", "info": "Falls back to the first recommended product below." },
     { "type": "text", "id": "from_label", "label": "Price prefix", "default": "From" },
     { "type": "text", "id": "empty_add_label", "label": "Add button label", "default": "+ Add To Cart" },
-    { "type": "text", "id": "empty_button", "label": "Empty-cart button", "default": "See Bundle Deals" },
-    { "type": "url", "id": "empty_url", "label": "Empty-cart button link", "info": "Leave empty to scroll to the buy box." },
     { "type": "header", "content": "Line items" },
     { "type": "checkbox", "id": "show_subscribe_toggle", "label": "Show subscribe & save toggle on line items", "default": true },
     { "type": "text", "id": "selling_plan_id", "label": "Subscription plan ID", "info": "Optional. The plan the line toggle switches a one-time line to. Use the same ID as the Featured product section so the drawer sells the cadence the buy box promised. Leave blank to use the cheapest plan the variant offers." },
