@@ -1,98 +1,89 @@
 {% comment %}
-  Track your order – the store's one delivery hub (templates/page.track-order.json).
+  Track your order – the store's one delivery hub (templates/page.track-order.json), laid out in the
+  landing page's style: a cream hero with the tracking-number lookup, the delivery journey as a
+  numbered timeline, the FAQ accordion and a help card.
   * Tracking number lookup: opens the carrier whose prefix matches (Carrier blocks), otherwise the
     universal tracker from Theme settings → Order tracking. A link such as
     /pages/track-order?tracking=YT123… (from the shipping confirmation email) fills the number in.
-  * Signed-in customers see their recent orders with a progress tracker and every tracking number;
-    everyone else gets a sign-in button that brings them back here.
-  * Delivery timeline steps, questions and the help line are blocks/settings in the theme editor.
+  * Highlights, delivery timeline steps, questions and the help card are blocks/settings in the
+    theme editor.
 {% endcomment %}
 {%- liquid
   assign carriers = section.blocks | where: 'type', 'carrier'
+  assign highlights = section.blocks | where: 'type', 'highlight'
   assign steps = section.blocks | where: 'type', 'step'
   assign questions = section.blocks | where: 'type', 'question'
   assign universal = settings.universal_tracker_url | default: 'https://t.17track.net/en#nums={number}'
-  assign login_url = routes.account_login_url
-  if login_url contains '?'
-    assign login_url = login_url | append: '&'
-  else
-    assign login_url = login_url | append: '?'
-  endif
-  assign login_url = login_url | append: 'return_url=' | append: request.path
 -%}
 <div class="s-track" data-track data-anchor="track" id="track">
-  <div class="s-track__container">
-    <header class="s-track__header">
-      {%- if section.settings.eyebrow != blank -%}<p class="s-track__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
-      <h1 class="s-track__title">{{ section.settings.title | default: page.title }}</h1>
-      {%- if section.settings.subtitle != blank -%}<p class="s-track__subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
-    </header>
+  <section class="s-track__hero">
+    <div class="s-track__hero-inner">
+      <header class="s-track__intro">
+        {%- if section.settings.eyebrow != blank -%}<p class="s-track__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h1 class="s-track__title">{{ section.settings.title | default: page.title }}</h1>
+        {%- if section.settings.subtitle != blank -%}<p class="s-track__subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+      </header>
 
-    <div class="s-track__grid">
-      <div class="s-track__card">
-        <h2 class="s-track__card-title">{{ section.settings.lookup_title }}</h2>
-        {%- if section.settings.lookup_text != blank -%}<p class="s-track__card-text">{{ section.settings.lookup_text }}</p>{%- endif -%}
+      <div class="s-track__lookup">
+        <h2 class="s-track__lookup-title">{{ section.settings.lookup_title }}</h2>
+        {%- if section.settings.lookup_text != blank -%}<p class="s-track__lookup-text">{{ section.settings.lookup_text }}</p>{%- endif -%}
         <form class="s-track__form" data-track-form novalidate>
           <label class="s-track__label" for="TrackNumber-{{ section.id }}">{{ section.settings.input_label }}</label>
-          <div class="s-track__field">
-            <input class="s-track__input" id="TrackNumber-{{ section.id }}" name="tracking" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="{{ section.settings.placeholder | escape }}" required>
-            <button class="button s-track__button" type="submit">{{ section.settings.button_label }}</button>
-          </div>
+          <input class="s-track__input" id="TrackNumber-{{ section.id }}" name="tracking" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="{{ section.settings.placeholder | escape }}" required>
+          <button class="custom-button s-track__submit" type="submit">{{ section.settings.button_label }}</button>
           <p class="s-track__message" data-track-message role="status" aria-live="polite" hidden></p>
         </form>
-      </div>
-
-      <div class="s-track__card s-track__card--account">
-        {%- if customer -%}
-          <h2 class="s-track__card-title">{{ section.settings.orders_title }}</h2>
-          {%- liquid
-            assign customer_name = customer.first_name | default: customer.email
-            assign signed_in_line = section.settings.signed_in_text | replace: '{name}', customer_name
-          -%}
-          <p class="s-track__card-text">{{ signed_in_line }}</p>
-          {%- if customer.orders.size > 0 -%}
-            <ul class="s-track__orders" role="list">
-              {%- for order in customer.orders limit: section.settings.orders_limit -%}
-                <li class="s-track__order">
-                  <div class="s-track__order-head">
-                    <a class="s-track__order-name" href="{{ order.customer_url }}">{{ order.name }}</a>
-                    <span class="s-track__order-meta">{{ order.created_at | date: '%b %d, %Y' }} · {{ order.fulfillment_status_label }}</span>
-                  </div>
-                  {%- render 'order-tracking', order: order -%}
-                  {%- if order.order_status_url != blank -%}<a class="s-track__order-status" href="{{ order.order_status_url }}">{{ section.settings.status_page_label }}</a>{%- endif -%}
-                </li>
-              {%- endfor -%}
-            </ul>
-            <a class="link-underline" href="{{ routes.account_url }}">{{ section.settings.all_orders_label }}</a>
-          {%- else -%}
-            <p class="s-track__card-text">{{ 'customer.account.no_orders' | t }}</p>
-          {%- endif -%}
-        {%- else -%}
-          <h2 class="s-track__card-title">{{ section.settings.account_title }}</h2>
-          {%- if section.settings.account_text != blank -%}<p class="s-track__card-text">{{ section.settings.account_text }}</p>{%- endif -%}
-          <a class="button s-track__button s-track__button--outline" href="{{ login_url }}">{{ section.settings.account_button }}</a>
+        {%- if section.settings.lookup_note != blank -%}
+          <p class="s-track__lookup-note">
+            <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M1.5 5.5h12v10h-12zM13.5 9h4.5l3.5 3.5v3h-8M6 18.5a2 2 0 1 0 0-.01M17 18.5a2 2 0 1 0 0-.01" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5"/></svg>
+            <span>{{ section.settings.lookup_note }}</span>
+          </p>
         {%- endif -%}
       </div>
-    </div>
 
-    {%- if steps.size > 0 -%}
-    <section class="s-track__timeline" aria-labelledby="s-track-steps-{{ section.id }}">
-      <h2 class="s-track__section-title" id="s-track-steps-{{ section.id }}">{{ section.settings.steps_title }}</h2>
-      <ol class="s-track__steps" role="list">
+      {%- if highlights.size > 0 -%}
+        <ul class="s-track__highlights" role="list">
+          {%- for block in highlights -%}
+            <li class="s-track__highlight" {{ block.shopify_attributes }}>
+              <span class="s-track__highlight-icon" aria-hidden="true"><svg fill="none" viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg></span>
+              <span>{{ block.settings.text }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- if steps.size > 0 -%}
+  <section class="s-track__journey" aria-labelledby="s-track-steps-{{ section.id }}">
+    <div class="s-track__container">
+      <header class="s-track__section-head">
+        {%- if section.settings.steps_eyebrow != blank -%}<p class="s-track__section-eyebrow">{{ section.settings.steps_eyebrow }}</p>{%- endif -%}
+        <h2 class="s-track__section-title" id="s-track-steps-{{ section.id }}">{{ section.settings.steps_title }}</h2>
+        {%- if section.settings.steps_subtitle != blank -%}<p class="s-track__section-subtitle">{{ section.settings.steps_subtitle }}</p>{%- endif -%}
+      </header>
+      <ol class="s-track__steps" role="list" style="--track-steps: {{ steps.size }};">
         {%- for block in steps -%}
           <li class="s-track__step" {{ block.shopify_attributes }}>
             <span class="s-track__step-num" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
-            <p class="s-track__step-title">{{ block.settings.title }}</p>
-            <div class="s-track__step-text">{{ block.settings.text }}</div>
+            <div class="s-track__step-body">
+              <p class="s-track__step-title">{{ block.settings.title }}</p>
+              <div class="s-track__step-text">{{ block.settings.text }}</div>
+            </div>
           </li>
         {%- endfor -%}
       </ol>
-    </section>
-    {%- endif -%}
+    </div>
+  </section>
+  {%- endif -%}
 
-    {%- if questions.size > 0 -%}
-    <section class="s-track__faq" aria-labelledby="s-track-faq-{{ section.id }}">
-      <h2 class="s-track__section-title" id="s-track-faq-{{ section.id }}">{{ section.settings.faq_title }}</h2>
+  {%- if questions.size > 0 -%}
+  <section class="s-faq s-track__faq" aria-labelledby="s-track-faq-{{ section.id }}">
+    <div class="s-faq__container">
+      <header class="s-track__section-head">
+        {%- if section.settings.faq_eyebrow != blank -%}<p class="s-track__section-eyebrow">{{ section.settings.faq_eyebrow }}</p>{%- endif -%}
+        <h2 class="s-track__section-title" id="s-track-faq-{{ section.id }}">{{ section.settings.faq_title }}</h2>
+      </header>
       <div class="s-faq__list">
         {%- for block in questions -%}
           <details class="s-faq__item" {{ block.shopify_attributes }}>
@@ -105,12 +96,26 @@
           </details>
         {%- endfor -%}
       </div>
-    </section>
-    {%- endif -%}
+    </div>
+  </section>
+  {%- endif -%}
 
-    {%- if page.content != blank -%}<div class="rte s-track__page-content">{{ page.content }}</div>{%- endif -%}
-    {%- if section.settings.help_text != blank -%}<div class="s-track__help">{{ section.settings.help_text }}</div>{%- endif -%}
-  </div>
+  {%- if page.content != blank -%}<div class="s-track__container"><div class="rte s-track__page-content">{{ page.content }}</div></div>{%- endif -%}
+
+  {%- if section.settings.help_title != blank or section.settings.help_text != blank -%}
+  <section class="s-track__help-wrap">
+    <div class="s-track__help">
+      <span class="s-track__help-icon" aria-hidden="true"><svg fill="none" viewBox="0 0 24 24"><path d="M3 5.5h18v13H3zM3.5 6l8.5 7 8.5-7" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5"/></svg></span>
+      <div class="s-track__help-content">
+        {%- if section.settings.help_title != blank -%}<h2 class="s-track__help-title">{{ section.settings.help_title }}</h2>{%- endif -%}
+        {%- if section.settings.help_text != blank -%}<div class="s-track__help-text">{{ section.settings.help_text }}</div>{%- endif -%}
+      </div>
+      {%- if section.settings.help_email != blank and section.settings.help_button != blank -%}
+        <a class="custom-button s-track__help-button" href="mailto:{{ section.settings.help_email }}">{{ section.settings.help_button }}</a>
+      {%- endif -%}
+    </div>
+  </section>
+  {%- endif -%}
 
   <script type="application/json" data-track-config>
     {
@@ -132,31 +137,31 @@
   "name": "Track your order",
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Order tracking" },
-    { "type": "text", "id": "title", "label": "Heading", "default": "Where’s My Order?", "info": "Leave empty to use the page title." },
-    { "type": "textarea", "id": "subtitle", "label": "Subheading", "default": "Every Elaren order ships with tracking. Enter your tracking number, or sign in to see all your orders and where they are in one place." },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Where’s My <em>Order?</em>", "info": "Italic words get the landing page's accent. Leave empty to use the page title." },
+    { "type": "textarea", "id": "subtitle", "label": "Subheading", "default": "Every Elaren order ships with tracking. Pop your tracking number in to follow your parcel every step of the way." },
+    { "type": "paragraph", "content": "The ticked lines under the subheading are \"Highlight\" blocks." },
     { "type": "header", "content": "Tracking number lookup" },
-    { "type": "text", "id": "lookup_title", "label": "Title", "default": "Track with your tracking number" },
-    { "type": "textarea", "id": "lookup_text", "label": "Text", "default": "You’ll find it in your shipping confirmation email from us." },
+    { "type": "text", "id": "lookup_title", "label": "Title", "default": "Track your parcel" },
+    { "type": "textarea", "id": "lookup_text", "label": "Text", "default": "You’ll find your tracking number in your shipping confirmation email from us." },
     { "type": "text", "id": "input_label", "label": "Field label", "default": "Tracking number" },
     { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "e.g. YT0000000000000000" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "TRACK MY PARCEL" },
+    { "type": "text", "id": "lookup_note", "label": "Note under the button", "default": "Live tracking opens in a new tab – no account needed." },
     { "type": "text", "id": "opening_text", "label": "Message after tracking", "default": "Opening {carrier} tracking for {number}.", "info": "{carrier} and {number} are filled in." },
     { "type": "text", "id": "fallback_label", "label": "Link when the new tab doesn’t open", "default": "Didn’t open? Tap here" },
     { "type": "text", "id": "invalid_text", "label": "Invalid number message", "default": "Please enter your tracking number (letters and numbers only)." },
-    { "type": "header", "content": "Signed-out customers" },
-    { "type": "text", "id": "account_title", "label": "Title", "default": "See all your orders" },
-    { "type": "textarea", "id": "account_text", "label": "Text", "default": "Sign in with the email you ordered with to see every order, its status and its tracking in one place." },
-    { "type": "text", "id": "account_button", "label": "Button label", "default": "SIGN IN" },
-    { "type": "header", "content": "Signed-in customers" },
-    { "type": "text", "id": "orders_title", "label": "Title", "default": "Your recent orders" },
-    { "type": "text", "id": "signed_in_text", "label": "Text", "default": "Hi {name}, here’s where your orders are.", "info": "{name} is the customer’s first name." },
-    { "type": "range", "id": "orders_limit", "label": "Orders to show", "min": 1, "max": 10, "step": 1, "default": 3 },
-    { "type": "text", "id": "status_page_label", "label": "Order status page link", "default": "Full delivery details" },
-    { "type": "text", "id": "all_orders_label", "label": "All orders link", "default": "View all orders" },
-    { "type": "header", "content": "Delivery timeline and questions" },
-    { "type": "text", "id": "steps_title", "label": "Timeline title", "default": "What happens after you order" },
-    { "type": "text", "id": "faq_title", "label": "Questions title", "default": "Delivery questions" },
-    { "type": "richtext", "id": "help_text", "label": "Help line", "default": "<p>Still need help? Email <a href=\"mailto:support@shopelaren.com\">support@shopelaren.com</a> with your order number and a real person will reply within one business day.</p>" }
+    { "type": "header", "content": "Delivery timeline" },
+    { "type": "text", "id": "steps_eyebrow", "label": "Eyebrow", "default": "From our door to yours" },
+    { "type": "inline_richtext", "id": "steps_title", "label": "Title", "default": "What Happens <em>After You Order</em>" },
+    { "type": "textarea", "id": "steps_subtitle", "label": "Subheading", "default": "Every step your parcel takes on its way to you, and what to expect at each one." },
+    { "type": "header", "content": "Questions" },
+    { "type": "text", "id": "faq_eyebrow", "label": "Eyebrow", "default": "Questions, answered" },
+    { "type": "inline_richtext", "id": "faq_title", "label": "Title", "default": "Delivery Questions" },
+    { "type": "header", "content": "Help card" },
+    { "type": "text", "id": "help_title", "label": "Title", "default": "Still need a hand?" },
+    { "type": "richtext", "id": "help_text", "label": "Text", "default": "<p>Email us with your order number and a real person will reply within one business day.</p>" },
+    { "type": "text", "id": "help_button", "label": "Button label", "default": "EMAIL OUR TEAM" },
+    { "type": "text", "id": "help_email", "label": "Email address", "default": "support@shopelaren.com", "info": "The button opens an email to this address. Leave empty to hide the button." }
   ],
   "blocks": [
     {
@@ -167,6 +172,13 @@
         { "type": "text", "id": "name", "label": "Carrier name", "default": "YunExpress" },
         { "type": "text", "id": "prefixes", "label": "Tracking number prefixes", "default": "YT", "info": "Comma separated, e.g. YT, SYRM" },
         { "type": "text", "id": "url", "label": "Tracking link", "default": "https://www.yuntrack.com/Track/Detail/{number}", "info": "{number} is replaced by the tracking number." }
+      ]
+    },
+    {
+      "type": "highlight",
+      "name": "Highlight",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Tracking on every order" }
       ]
     },
     {
