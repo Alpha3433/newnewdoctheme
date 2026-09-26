@@ -45,8 +45,11 @@
       <div class="s-track__card s-track__card--account">
         {%- if customer -%}
           <h2 class="s-track__card-title">{{ section.settings.orders_title }}</h2>
-          {%- assign customer_name = customer.first_name | default: customer.email -%}
-          <p class="s-track__card-text">{{ section.settings.signed_in_text | replace: '{name}', customer_name }}</p>
+          {%- liquid
+            assign customer_name = customer.first_name | default: customer.email
+            assign signed_in_line = section.settings.signed_in_text | replace: '{name}', customer_name
+          -%}
+          <p class="s-track__card-text">{{ signed_in_line }}</p>
           {%- if customer.orders.size > 0 -%}
             <ul class="s-track__orders" role="list">
               {%- for order in customer.orders limit: section.settings.orders_limit -%}
