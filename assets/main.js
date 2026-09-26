@@ -237,8 +237,9 @@
        subscription: one unit is added (tagged with a _free_gift line property) as soon as a line
        on the drawer's plan is in the cart, and removed when the last such line goes. A shopper who
        takes the gift out themselves is not handed it again until they opt into the plan afresh.
-       Pricing is not the theme's to do: the gift only costs $0 once the merchant's free-gift
-       discount (Kaching Subscriptions, or a Shopify automatic discount) is in place. */
+       The shopper can add more of it; only the first is free. Pricing is not the theme's to do:
+       the gift only costs $0 once the merchant's free-gift discount (Kaching Subscriptions, free
+       gift on the plan, quantity 1) is in place. */
     giftVariantId: function () {
       var d = this.drawer();
       return d ? parseInt(d.getAttribute('data-gift-variant-id') || '0', 10) || 0 : 0;
@@ -268,9 +269,45 @@
           return self.addItems([{ id: giftId, quantity: 1, properties: { _free_gift: 'subscription' } }]);
         }
         if (!subscribed && gifts.length) {
-          return self.update(items.map(function (item) { return self.isGiftLine(item) ? 0 : item.quantity; }));
+          // The free one goes with the plan; extras the shopper chose to pay for stay as a normal line.
+          var extras = gifts.reduce(function (sum, item) { return sum + item.quantity; }, 0) - 1;
+          return self.update(items.map(function (item) { return self.isGiftLine(item) ? 0 : item.quantity; })).then(function () {
+            if (extras > 0) return self.addItems([{ id: gifts[0].variant_id, quantity: extras }]);
+          });
         }
       }).catch(function () { /* a bonus must never break the cart: sold-out gift, offline, etc. */ });
+    },
+    /* The gift's quantity buttons (and its remove button) set the gift's total quantity. Once the
+       free-gift discount covers one unit and there are more, Shopify splits the gift into a $0 line
+       and a paid line, so every gift line is cleared (by position, as a split line shares its key)
+       and the new total goes back in as one line for the discount to split again. Taking it down to
+       zero counts as declining the gift, so it is not added straight back. */
+    setGiftQuantity: function (quantity) {
+      var giftId = this.giftVariantId();
+      if (!giftId) return Promise.resolve();
+      var self = this;
+      quantity = Math.max(0, quantity || 0);
+      if (!quantity) this.setGiftDeclined(true);
+      this.setLoading(true);
+      return this.fetchCart().then(function (cart) {
+        var items = cart.items || [];
+        var gifts = items.filter(function (item) { return self.isGiftLine(item); });
+        var variantId = gifts.length ? gifts[0].variant_id : giftId;
+        return self.request('cart/update.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ updates: items.map(function (item) { return self.isGiftLine(item) ? 0 : item.quantity; }) })
+        }).then(function () {
+          if (quantity) return self.addItems([{ id: variantId, quantity: quantity, properties: { _free_gift: 'subscription' } }]);
+          return self.refresh();
+        });
+      }).then(function () { self.setLoading(false); })
+        .catch(function (err) {
+          // e.g. not enough stock for the new quantity: put the free one back rather than losing it
+          self.setLoading(false);
+          self.announce(err.message);
+          return self.reconcileGift().then(function () { return self.refresh(); });
+        });
     }
   };
   window.ElarenCart = Cart;
@@ -355,11 +392,15 @@
     if (toggle && Cart.drawer()) { e.preventDefault(); Cart.isOpen() ? Cart.close() : Cart.open(); return; }
     if (e.target.closest('[data-cart-close]')) { e.preventDefault(); Cart.close(); return; }
 
+    var giftQty = e.target.closest('[data-cart-gift-qty]');
+    if (giftQty) {
+      e.preventDefault();
+      Cart.setGiftQuantity(parseInt(giftQty.getAttribute('data-cart-gift-qty'), 10));
+      return;
+    }
     var remove = e.target.closest('[data-cart-remove]');
     if (remove) {
       e.preventDefault();
-      var lineItem = remove.closest('.line-item');
-      if (lineItem && lineItem.hasAttribute('data-gift')) Cart.setGiftDeclined(true);
       Cart.change({ line: parseInt(remove.getAttribute('data-cart-remove'), 10), quantity: 0 });
       return;
     }
@@ -954,6 +995,76 @@
     });
   }
 
+  /* ============================================================== track */
+  /* Track your order page: turns a tracking number into its tracking link (a Carrier block whose
+     prefix matches, otherwise the universal tracker) and opens it in a new tab. The link also stays
+     under the field in case the browser blocks the tab. ?tracking=… in the address fills the field
+     in, so the shipping confirmation email can link straight here. */
+  function initTrack(root) {
+    $$('[data-track]', root).forEach(function (el) {
+      if (!once(el, 'init')) return;
+      var form = $('[data-track-form]', el);
+      var input = form && $('input[name="tracking"]', form);
+      var message = $('[data-track-message]', el);
+      var configEl = $('[data-track-config]', el);
+      if (!input || !message || !configEl) return;
+      var config = {};
+      try { config = JSON.parse(configEl.textContent) || {}; } catch (err) { /* defaults below */ }
+      var carriers = config.carriers || [];
+      var universal = config.universal || 'https://t.17track.net/en#nums={number}';
+
+      var clean = function (value) { return String(value || '').toUpperCase().replace(/[\s-]+/g, ''); };
+      var resolve = function (number) {
+        for (var i = 0; i < carriers.length; i++) {
+          var carrier = carriers[i];
+          var prefixes = carrier.prefixes || [];
+          for (var j = 0; j < prefixes.length; j++) {
+            if (prefixes[j] && carrier.url && number.indexOf(prefixes[j]) === 0) return carrier;
+          }
+        }
+        return { name: '', url: universal };
+      };
+      var showError = function () {
+        message.hidden = false;
+        message.classList.add('is-error');
+        message.textContent = config.invalid || '';
+        input.setAttribute('aria-invalid', 'true');
+        input.focus();
+      };
+      var show = function (number) {
+        var carrier = resolve(number);
+        var href = carrier.url.replace(/\{number\}/g, encodeURIComponent(number));
+        var text = config.opening || '';
+        text = carrier.name ? text.replace('{carrier}', carrier.name) : text.replace(/\{carrier\}\s*/, '');
+        text = text.replace('{number}', number);
+        input.removeAttribute('aria-invalid');
+        message.classList.remove('is-error');
+        message.textContent = text ? text + ' ' : '';
+        var link = document.createElement('a');
+        link.className = 'link-underline';
+        link.href = href;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = config.fallback || href;
+        message.appendChild(link);
+        message.hidden = false;
+        window.open(href, '_blank', 'noopener');
+      };
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var number = clean(input.value);
+        if (!/^[A-Z0-9]{6,40}$/.test(number)) { showError(); return; }
+        input.value = number;
+        show(number);
+      });
+
+      var fromUrl = '';
+      try { fromUrl = clean(new URLSearchParams(window.location.search).get('tracking')); } catch (err) { /* old browser */ }
+      if (/^[A-Z0-9]{6,40}$/.test(fromUrl)) input.value = fromUrl;
+    });
+  }
+
   /* ========================================================== email popup */
   /* Mystery gift: trades an email for a 10% code. Opens once per visit, after a delay (or on exit
      intent, whichever comes first), posts the customer form in the background, reveals the code and
@@ -1181,6 +1292,7 @@
     initNewsletter(root);
     initCountdown(root);
     initFaq(root);
+    initTrack(root);
     initEmailPopup(root);
     initCartDrawer($('#mini-cart', root) || (root === document ? Cart.drawer() : null));
   }

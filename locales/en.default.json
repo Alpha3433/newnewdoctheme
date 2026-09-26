@@ -78,14 +78,19 @@
       "log_out": "Log out",
       "order_history": "Order history",
       "no_orders": "You haven't placed any orders yet.",
-      "view_addresses": "View addresses"
+      "view_addresses": "View addresses",
+      "track_orders": "Track your orders"
     },
     "order": {
       "title": "Order {{ name }}",
       "date": "Placed on {{ date }}",
       "product": "Product",
       "quantity": "Quantity",
-      "total": "Total"
+      "total": "Total",
+      "shipping_address": "Shipping address",
+      "billing_address": "Billing address",
+      "delivery": "Delivery",
+      "status_page": "Full delivery details"
     },
     "addresses": {
       "title": "Addresses",
@@ -127,6 +132,18 @@
       "subtext": "We will send you an email to reset your password.",
       "submit": "Submit",
       "cancel": "Cancel"
+    },
+    "tracking": {
+      "step_placed": "Order placed",
+      "step_preparing": "Preparing",
+      "step_shipped": "Shipped",
+      "step_on_way": "On its way",
+      "carrier": "Carrier",
+      "shipped_on": "Shipped {{ date }}",
+      "track": "Track",
+      "partial": "Part of this order has shipped; the rest follows in a separate parcel with its own tracking number.",
+      "no_number": "Your order has shipped. Its tracking number is on its way to your inbox.",
+      "cancelled": "This order was cancelled."
     }
   },
   "gift_cards": {

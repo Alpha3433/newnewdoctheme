@@ -1,0 +1,54 @@
+{%- comment -%}
+  Delivery progress for one order: a three-step tracker (placed → shipped → on its way) and a row for
+  every tracking number, each linking to the carrier or the universal tracker. Used on the Track your
+  order page and the account order page.
+  Usage: {% render 'order-tracking', order: order %}
+{%- endcomment -%}
+{%- liquid
+  assign shipped = false
+  if order.fulfillment_status == 'fulfilled' or order.fulfillment_status == 'partial'
+    assign shipped = true
+  endif
+  assign seen = ''
+-%}
+<div class="order-tracking">
+  {%- if order.cancelled -%}
+    <p class="order-tracking__note order-tracking__note--cancelled">{{ 'customer.tracking.cancelled' | t }}</p>
+  {%- else -%}
+    <ol class="order-tracking__steps" role="list">
+      <li class="order-tracking__step is-done"><span class="order-tracking__dot" aria-hidden="true"></span><span class="order-tracking__label">{{ 'customer.tracking.step_placed' | t }}</span><span class="order-tracking__date">{{ order.created_at | date: '%b %d' }}</span></li>
+      <li class="order-tracking__step{% if shipped %} is-done{% else %} is-current{% endif %}"><span class="order-tracking__dot" aria-hidden="true"></span><span class="order-tracking__label">{% if shipped %}{{ 'customer.tracking.step_shipped' | t }}{% else %}{{ 'customer.tracking.step_preparing' | t }}{% endif %}</span></li>
+      <li class="order-tracking__step{% if shipped %} is-current{% endif %}"><span class="order-tracking__dot" aria-hidden="true"></span><span class="order-tracking__label">{{ 'customer.tracking.step_on_way' | t }}</span></li>
+    </ol>
+    {%- if order.fulfillment_status == 'partial' -%}<p class="order-tracking__note">{{ 'customer.tracking.partial' | t }}</p>{%- endif -%}
+    <ul class="order-tracking__shipments" role="list">
+      {%- for line_item in order.line_items -%}
+        {%- assign fulfillment = line_item.fulfillment -%}
+        {%- if fulfillment -%}
+          {%- for number in fulfillment.tracking_numbers -%}
+            {%- assign key = '|' | append: number | append: '|' -%}
+            {%- unless seen contains key -%}
+              {%- assign seen = seen | append: key -%}
+              {%- liquid
+                assign carrier_name = fulfillment.tracking_company
+                if carrier_name == blank
+                  assign carrier_name = 'customer.tracking.carrier' | t
+                endif
+                assign shipped_date = fulfillment.created_at | date: '%b %d'
+              -%}
+              {%- capture href -%}{%- render 'tracking-url', number: number, url: fulfillment.tracking_urls[forloop.index0] -%}{%- endcapture -%}
+              <li class="order-tracking__shipment">
+                <span class="order-tracking__shipment-info">
+                  <span class="order-tracking__carrier">{{ carrier_name }} · {{ 'customer.tracking.shipped_on' | t: date: shipped_date }}</span>
+                  <span class="order-tracking__number">{{ number }}</span>
+                </span>
+                <a class="order-tracking__link" href="{{ href | strip | escape }}" target="_blank" rel="noopener">{{ 'customer.tracking.track' | t }}</a>
+              </li>
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+    {%- if shipped and seen == blank -%}<p class="order-tracking__note">{{ 'customer.tracking.no_number' | t }}</p>{%- endif -%}
+  {%- endif -%}
+</div>

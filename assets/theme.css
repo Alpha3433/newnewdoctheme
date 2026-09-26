@@ -885,7 +885,7 @@ body.cart-open { overflow: hidden; }
 .mini-cart .s-mini-cart__remove-btn:hover { color: var(--brand-ink); }
 .mini-cart .product-item-meta { display: flex; flex-direction: column; gap: 7px; }
 .mini-cart .line-item__gift-label { color: var(--brand-green); font-weight: 700; }
-.mini-cart .line-item__gift-quantity { font-size: 15px; font-weight: 500; color: var(--brand-muted); }
+.mini-cart .line-item__gift-note { color: var(--brand-green); }
 .mini-cart .price--free { color: var(--brand-green); font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; }
 .mini-cart .product-item-meta__title { font-family: var(--font-sans); font-size: 15px; font-weight: 500; line-height: 1.3; color: inherit; text-decoration: none; }
 .mini-cart .product-item-meta__variant, .mini-cart .product-item-meta__plan { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--brand-muted); margin-top: -4px; }

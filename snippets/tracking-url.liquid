@@ -1,0 +1,15 @@
+{%- comment -%}
+  Outputs the link for one tracking number: the carrier link Shopify stored with the shipment, or,
+  when there is none (a carrier Shopify can't build a link for), the universal tracker from
+  Theme settings → Order tracking.
+  Usage: {% render 'tracking-url', number: number, url: url %}
+{%- endcomment -%}
+{%- liquid
+  if url != blank
+    echo url
+  elsif number != blank
+    assign tracker = settings.universal_tracker_url | default: 'https://t.17track.net/en#nums={number}'
+    assign encoded_number = number | strip | url_encode
+    echo tracker | replace: '{number}', encoded_number
+  endif
+-%}

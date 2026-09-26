@@ -15,6 +15,7 @@
     assign simple_menu = true
   endif
   assign buy_box_url = routes.root_url | append: '#shop'
+  assign track_url = section.settings.track_url | default: settings.tracking_page_url
   assign logo_fallback = 'https://froyaorganics.com/cdn/shop/files/froya-logo-v4.svg'
   assign quiz_fallback_desktop = 'https://cdn.shopify.com/s/files/1/0473/9999/3493/files/quiz_1.png?v=1778647247'
   assign quiz_fallback_mobile = 'https://cdn.shopify.com/s/files/1/0473/9999/3493/files/quiz.png?v=1778644514'
@@ -109,6 +110,9 @@
     {%- else -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--right" role="list"><li class="froya-nav__nav-item">
             <button aria-controls="froya-nav-mega-default-more" aria-expanded="false" class="froya-nav__nav-link froya-nav__nav-link--more" data-mega-kind="more" data-mega-label="{{ section.settings.more_label | escape }}" data-mega-target="default-more" type="button"><span class="froya-nav__nav-label">{{ section.settings.more_label }}</span></button>
           </li></ul>{%- endif -%}
+      {%- if section.settings.track_label != blank and track_url != blank -%}
+        <a class="froya-nav__nav-link froya-nav__nav-link--anchor froya-nav__track-link" href="{{ track_url }}"><span class="froya-nav__nav-label">{{ section.settings.track_label }}</span></a>
+      {%- endif -%}
 
       <a aria-controls="mini-cart" aria-expanded="false" aria-label="Cart" class="header__icon-wrapper tap-area button header-button cart-button js-cart-toggle" href="{{ routes.cart_url }}">
         {{ section.settings.cart_label }}
@@ -204,6 +208,12 @@
             </a></li>
           {%- endfor -%}
         </ul></nav>
+        {%- if section.settings.track_label != blank and track_url != blank -%}
+          <a class="froya-nav-drawer__track" href="{{ track_url }}">
+            <svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><path d="M1.5 5.5h12v10h-12zM13.5 9h4.5l3.5 3.5v3h-8M6 18.5a2 2 0 1 0 0-.01M17 18.5a2 2 0 1 0 0-.01" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5"/></svg>
+            <span>{{ section.settings.track_label }}</span>
+          </a>
+        {%- endif -%}
         {%- if section.settings.drawer_note != blank -%}<div class="froya-nav-drawer__social">{{ section.settings.drawer_note }}</div>{%- endif -%}
         {%- if testimonial != blank -%}
         <div class="froya-nav-drawer__testimonial">
@@ -255,6 +265,7 @@
         </div>
         {%- endif -%}
         <ul class="froya-nav-drawer__footer-links" role="list">
+          {%- if section.settings.track_label != blank and track_url != blank -%}<li><a href="{{ track_url }}">{{ section.settings.track_label }}</a></li>{%- endif -%}
           {%- for block in more_links -%}<li><a href="{{ block.settings.url | default: '/' }}">{{ block.settings.label }}</a></li>{%- endfor -%}
           {%- if blog_list != blank -%}
           <li class="froya-nav-blog-li"><details class="froya-nav-blog froya-nav-blog--mobile">
@@ -294,6 +305,9 @@
     { "type": "text", "id": "bestsellers_label", "label": "Bestsellers menu label", "default": "Bestsellers" },
     { "type": "text", "id": "more_label", "label": "More menu label", "default": "More" },
     { "type": "text", "id": "cart_label", "label": "Cart button label", "default": "CART" },
+    { "type": "header", "content": "Order tracking link" },
+    { "type": "text", "id": "track_label", "label": "Label", "default": "Track Order", "info": "Shown beside the cart on desktop and in the mobile menu. Leave empty to hide it." },
+    { "type": "url", "id": "track_url", "label": "Link", "info": "Leave empty to use the Track your order page from Theme settings → Order tracking." },
     { "type": "header", "content": "Shop menu" },
     { "type": "text", "id": "shop_title", "label": "Products column title", "default": "Shop by Product" },
     { "type": "text", "id": "shop_all_label", "label": "Shop all label", "default": "Shop All" },

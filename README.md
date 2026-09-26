@@ -102,6 +102,19 @@ template (`templates/page.froya-landing.json`).
   and a button that scrolls to the buy box with a bundle tier pre-selected. Precedence: a "See a
   doctor first" answer always wins, then "Traction", then whichever of pattern / shedding got more
   answers. Clicking a Result block in the editor previews that screen.
+* **Order tracking** – one delivery hub at `/pages/track-order` (template `page.track-order`,
+  section *Track your order*). Shoppers type a tracking number and it opens in a new tab: a
+  *Carrier* block whose prefix matches opens that carrier (YunExpress for `YT…` numbers by default),
+  and any other number opens the universal tracker set in Theme settings → *Order tracking*
+  (17TRACK by default). That fallback matters because US shipments are recorded under the carrier
+  "yanyun" with no tracking link, so without it those customers only get a number they can't click.
+  Signed-in customers also see their recent orders, each with a placed → shipped → on its way
+  tracker, every tracking number with a *Track* button, and a link to Shopify's order status page.
+  Signed-out visitors get a sign-in button that brings them back to the page. The timeline steps and
+  delivery questions are blocks. `/pages/track-order?tracking=YT…` opens the page with the number
+  already filled in, so the shipping confirmation email can link straight to it. The page is linked
+  from the header (*Track Order*, beside the cart on desktop and in the mobile menu; Header → *Order
+  tracking link*), the footer and the account page. The account order page shows the same tracker.
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
   "Pair with" products, checkout label, country/currency selector and trust badges. The header
   CART button opens it and every add-to-cart button adds in place and opens it.
@@ -117,13 +130,28 @@ template (`templates/page.froya-landing.json`).
     soon as a line on the drawer's *Subscription plan ID* is in the cart (from the buy box or the
     switch) and removes it when the last such line goes; a shopper who takes the gift out
     themselves is not handed it again until they opt into the plan afresh. The gift line shows
-    "FREE GIFT", no quantity control, and "FREE" once its price is $0. **The theme does not price
-    the gift**: it is only free once the same product is set up as a free gift on that plan in
-    Kaching Subscriptions or as a Shopify automatic Buy X get Y discount, otherwise the cart charges
-    its normal price.
+    "FREE GIFT", the same quantity buttons as every other line, and "FREE" once its price is $0.
+    **Only the first one is free:** extra units are charged. Once the discount covers one unit,
+    Shopify splits the gift into a $0 line (labelled "FREE GIFT" plus *Note when extras are added*)
+    and a line for the paid extras; the buttons on either change the gift's total. Switching the
+    subscription off removes the free one and keeps any paid extras as a normal line.
+    **The theme does not price the gift**: it is only free once it is set up as a free gift in
+    Kaching Subscriptions (Plans → *Plan #1*, the monthly plan the drawer pins → free gift: Elaren
+    MicroStamp Pro, quantity 1), otherwise the cart and checkout charge its normal price. A Shopify
+    Buy X get Y discount is not a substitute: it can't tell a subscription from a one-time purchase,
+    so anyone adding the MicroStamp from "Pair with" next to the serum would get it free too.
 
 ## Before you publish
 
+* **Make the subscription gift free.** The cart adds the MicroStamp Pro to every subscription,
+  but no discount prices it at $0 yet (Kaching Subscriptions has no free gift configured), so
+  checkout charges full price. Add it as a free gift, quantity 1, on Plan #1 in Kaching
+  Subscriptions, then place a test subscription order to check it is $0 at checkout.
+* **Create the tracking page.** In Online Store → Pages, add a page with the handle `track-order`
+  and choose the template `page.track-order`. The header, footer and account links go to
+  `/pages/track-order`; if you use another handle, update Theme settings → *Order tracking* and the
+  footer link. Check the delivery-timeline copy ("ships within 1–2 business days") against your
+  real handling time.
 * **Imagery and video are still Frøya's placeholders** until you upload your own (product shots,
   before/after photos, press logos, review videos). Alt text already describes each slot.
 * **Testimonials are real Elaren reviews** pulled from the store's review app (43 serum reviews,
