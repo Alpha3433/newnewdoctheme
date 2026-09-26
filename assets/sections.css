@@ -1676,25 +1676,6 @@ body.email-popup-open { overflow: hidden; }
 .s-track__lookup-note { display: flex; align-items: center; gap: 8px; margin: 6px 0 0; padding-top: 14px; border-top: 1px solid var(--brand-line); font-size: 13px; line-height: 1.4; }
 .s-track__lookup-note svg { flex: 0 0 auto; width: 20px; height: 20px; color: var(--brand-mauve); }
 
-/* Account: sign-in card, or the shopper's recent orders */
-.s-track__account { padding: 40px 16px 8px; }
-.s-track__account-title { margin: 0; font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.25; }
-.s-track__account-text { margin: 6px 0 0; font-size: 15px; line-height: 1.55; }
-.s-track__account-empty { margin: 16px 0 0; font-size: 15px; }
-.s-track__signin { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; gap: 16px; padding: 24px 20px; border-radius: 18px; background: var(--brand-mauve-tint); }
-.s-track__signin-icon, .s-track__help-icon { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: #fff; color: var(--brand-mauve-dark); }
-.s-track__signin-icon svg, .s-track__help-icon svg { width: 26px; height: 26px; }
-.s-track__outline-button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 14px 32px; border-radius: 4px; background: transparent; box-shadow: inset 0 0 0 2px var(--brand-ink); color: var(--brand-ink); font-size: 16px; font-weight: 600; line-height: 1.1; letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap; transition: background-color .2s ease, color .2s ease; }
-.s-track__outline-button:hover { background: var(--brand-ink); color: #fff; }
-.s-track__account-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 24px; margin-bottom: 20px; }
-.s-track__account-all { font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-.s-track__orders { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; margin: 0; padding: 0; list-style: none; }
-.s-track__order { display: flex; flex-direction: column; gap: 16px; padding: 20px; border: 2px solid var(--faq-card-border); border-radius: 15px; background: var(--faq-card-bg); }
-.s-track__order-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
-.s-track__order-name { font-family: var(--font-serif); font-size: 20px; line-height: 1.2; }
-.s-track__order-meta { font-size: 13px; }
-.s-track__order-status { align-self: flex-start; font-size: 13px; font-weight: 600; color: var(--brand-mauve-dark); text-decoration: underline; text-underline-offset: 3px; }
-
 /* Section headings (timeline and questions) */
 .s-track__section-head { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 0 auto 32px; text-align: center; }
 .s-track__section-eyebrow { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: var(--brand-mauve); }
@@ -1722,6 +1703,8 @@ body.email-popup-open { overflow: hidden; }
 
 /* Help card, like the guarantee on the landing page */
 .s-track__help-wrap { padding: 48px 16px 72px; }
+.s-track__help-icon { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: #fff; color: var(--brand-mauve-dark); }
+.s-track__help-icon svg { width: 26px; height: 26px; }
 .s-track__help { display: flex; flex-direction: column; align-items: center; gap: 16px; max-width: 1120px; margin: 0 auto; padding: 32px 22px; border-radius: 18px; background: var(--brand-cream); text-align: center; }
 .s-track__help-content { display: flex; flex-direction: column; gap: 8px; }
 .s-track__help-title { margin: 0; font-family: var(--font-serif); font-size: 26px; font-weight: 400; line-height: 1.2; letter-spacing: -0.01em; }
@@ -1735,9 +1718,6 @@ body.email-popup-open { overflow: hidden; }
   .s-track__subtitle { font-size: 18px; }
   .s-track__lookup { padding: 36px 34px; }
   .s-track__lookup-title { font-size: 28px; }
-  .s-track__account { padding: 56px 40px 8px; }
-  .s-track__signin { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 24px; padding: 28px 32px; }
-  .s-track__orders { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
   .s-track__section-head { margin-bottom: 44px; gap: 16px; }
   .s-track__section-eyebrow { font-size: 20px; }
   .s-track__section-title { font-size: 40px; }

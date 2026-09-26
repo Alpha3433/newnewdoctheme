@@ -105,21 +105,19 @@ template (`templates/page.froya-landing.json`).
   answers. Clicking a Result block in the editor previews that screen.
 * **Order tracking** – one delivery hub at `/pages/track-order` (template `page.track-order`,
   section *Track your order*), built from the landing page's pieces: a cream hero with the heading
-  (italic words get the accent), ticked *Highlight* blocks and the tracking-number card; a sign-in
-  card or the shopper's orders; the delivery timeline as numbered circles on a line; the FAQ
-  accordion; and a cream help card whose button emails *Email address*. Shoppers type a tracking
-  number and it opens in a new tab: a
+  (italic words get the accent), ticked *Highlight* blocks and the tracking-number card; the
+  delivery timeline as numbered circles on a line; the FAQ accordion; and a cream help card whose
+  button emails *Email address*. Shoppers type a tracking number and it opens in a new tab: a
   *Carrier* block whose prefix matches opens that carrier (YunExpress for `YT…` numbers by default),
   and any other number opens the universal tracker set in Theme settings → *Order tracking*
   (17TRACK by default). That fallback matters because US shipments are recorded under the carrier
   "yanyun" with no tracking link, so without it those customers only get a number they can't click.
-  Signed-in customers also see their recent orders, each with a placed → shipped → on its way
-  tracker, every tracking number with a *Track* button, and a link to Shopify's order status page.
-  Signed-out visitors get a sign-in button that brings them back to the page. The timeline steps and
-  delivery questions are blocks. `/pages/track-order?tracking=YT…` opens the page with the number
-  already filled in, so the shipping confirmation email can link straight to it. The page is linked
-  from the header (*Track Order*, the last link before the cart on desktop and a row in the mobile
-  menu; Header → *Order tracking link*), the footer and the account page. The account order page shows the same tracker.
+  The highlights, timeline steps and delivery questions are blocks. `/pages/track-order?tracking=YT…`
+  opens the page with the number already filled in, so the shipping confirmation email can link
+  straight to it. The page is linked from the header (*Track Order*, the last link before the cart
+  on desktop and a row in the mobile menu; Header → *Order tracking link*), the footer and the
+  account page. The account order page shows a placed → shipped → on its way tracker and every
+  tracking number with a *Track* button.
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
   "Pair with" products, checkout label, country/currency selector and trust badges. The header
   CART button opens it and every add-to-cart button adds in place and opens it.

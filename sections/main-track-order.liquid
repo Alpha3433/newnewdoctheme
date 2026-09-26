@@ -1,12 +1,10 @@
 {% comment %}
   Track your order – the store's one delivery hub (templates/page.track-order.json), laid out in the
-  landing page's style: a cream hero with the tracking-number lookup, the shopper's orders (or a
-  sign-in card), the delivery journey as a numbered timeline, the FAQ accordion and a help card.
+  landing page's style: a cream hero with the tracking-number lookup, the delivery journey as a
+  numbered timeline, the FAQ accordion and a help card.
   * Tracking number lookup: opens the carrier whose prefix matches (Carrier blocks), otherwise the
     universal tracker from Theme settings → Order tracking. A link such as
     /pages/track-order?tracking=YT123… (from the shipping confirmation email) fills the number in.
-  * Signed-in customers see their recent orders with a progress tracker and every tracking number;
-    everyone else gets a sign-in button that brings them back here.
   * Highlights, delivery timeline steps, questions and the help card are blocks/settings in the
     theme editor.
 {% endcomment %}
@@ -16,13 +14,6 @@
   assign steps = section.blocks | where: 'type', 'step'
   assign questions = section.blocks | where: 'type', 'question'
   assign universal = settings.universal_tracker_url | default: 'https://t.17track.net/en#nums={number}'
-  assign login_url = routes.account_login_url
-  if login_url contains '?'
-    assign login_url = login_url | append: '&'
-  else
-    assign login_url = login_url | append: '?'
-  endif
-  assign login_url = login_url | append: 'return_url=' | append: request.path
 -%}
 <div class="s-track" data-track data-anchor="track" id="track">
   <section class="s-track__hero">
@@ -59,49 +50,6 @@
             </li>
           {%- endfor -%}
         </ul>
-      {%- endif -%}
-    </div>
-  </section>
-
-  <section class="s-track__account">
-    <div class="s-track__container">
-      {%- if customer -%}
-        {%- liquid
-          assign customer_name = customer.first_name | default: customer.email
-          assign signed_in_line = section.settings.signed_in_text | replace: '{name}', customer_name
-        -%}
-        <header class="s-track__account-head">
-          <div>
-            <h2 class="s-track__account-title">{{ section.settings.orders_title }}</h2>
-            <p class="s-track__account-text">{{ signed_in_line }}</p>
-          </div>
-          {%- if customer.orders.size > 0 -%}<a class="s-track__account-all" href="{{ routes.account_url }}">{{ section.settings.all_orders_label }}</a>{%- endif -%}
-        </header>
-        {%- if customer.orders.size > 0 -%}
-          <ul class="s-track__orders" role="list">
-            {%- for order in customer.orders limit: section.settings.orders_limit -%}
-              <li class="s-track__order">
-                <div class="s-track__order-head">
-                  <a class="s-track__order-name" href="{{ order.customer_url }}">{{ order.name }}</a>
-                  <span class="s-track__order-meta">{{ order.created_at | date: '%b %d, %Y' }}</span>
-                </div>
-                {%- render 'order-tracking', order: order -%}
-                {%- if order.order_status_url != blank -%}<a class="s-track__order-status" href="{{ order.order_status_url }}">{{ section.settings.status_page_label }}</a>{%- endif -%}
-              </li>
-            {%- endfor -%}
-          </ul>
-        {%- else -%}
-          <p class="s-track__account-empty">{{ 'customer.account.no_orders' | t }}</p>
-        {%- endif -%}
-      {%- else -%}
-        <div class="s-track__signin">
-          <span class="s-track__signin-icon" aria-hidden="true"><svg fill="none" viewBox="0 0 24 24"><path d="M3 7.5l9-4.5 9 4.5v9L12 21l-9-4.5zM3 7.5l9 4.5 9-4.5M12 12v9" stroke="currentColor" stroke-linejoin="round" stroke-width="1.5"/></svg></span>
-          <div class="s-track__signin-content">
-            <h2 class="s-track__account-title">{{ section.settings.account_title }}</h2>
-            {%- if section.settings.account_text != blank -%}<p class="s-track__account-text">{{ section.settings.account_text }}</p>{%- endif -%}
-          </div>
-          <a class="s-track__outline-button" href="{{ login_url }}">{{ section.settings.account_button }}</a>
-        </div>
       {%- endif -%}
     </div>
   </section>
@@ -190,7 +138,7 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Order tracking" },
     { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Where’s My <em>Order?</em>", "info": "Italic words get the landing page's accent. Leave empty to use the page title." },
-    { "type": "textarea", "id": "subtitle", "label": "Subheading", "default": "Every Elaren order ships with tracking. Pop your tracking number in to follow your parcel, or sign in to see all your orders in one place." },
+    { "type": "textarea", "id": "subtitle", "label": "Subheading", "default": "Every Elaren order ships with tracking. Pop your tracking number in to follow your parcel every step of the way." },
     { "type": "paragraph", "content": "The ticked lines under the subheading are \"Highlight\" blocks." },
     { "type": "header", "content": "Tracking number lookup" },
     { "type": "text", "id": "lookup_title", "label": "Title", "default": "Track your parcel" },
@@ -202,16 +150,6 @@
     { "type": "text", "id": "opening_text", "label": "Message after tracking", "default": "Opening {carrier} tracking for {number}.", "info": "{carrier} and {number} are filled in." },
     { "type": "text", "id": "fallback_label", "label": "Link when the new tab doesn’t open", "default": "Didn’t open? Tap here" },
     { "type": "text", "id": "invalid_text", "label": "Invalid number message", "default": "Please enter your tracking number (letters and numbers only)." },
-    { "type": "header", "content": "Signed-out customers" },
-    { "type": "text", "id": "account_title", "label": "Title", "default": "See all your orders" },
-    { "type": "textarea", "id": "account_text", "label": "Text", "default": "Sign in with the email you ordered with to see every order, its status and its tracking in one place." },
-    { "type": "text", "id": "account_button", "label": "Button label", "default": "SIGN IN" },
-    { "type": "header", "content": "Signed-in customers" },
-    { "type": "text", "id": "orders_title", "label": "Title", "default": "Your recent orders" },
-    { "type": "text", "id": "signed_in_text", "label": "Text", "default": "Hi {name}, here’s where your orders are.", "info": "{name} is the customer’s first name." },
-    { "type": "range", "id": "orders_limit", "label": "Orders to show", "min": 1, "max": 10, "step": 1, "default": 4 },
-    { "type": "text", "id": "status_page_label", "label": "Order status page link", "default": "Full delivery details" },
-    { "type": "text", "id": "all_orders_label", "label": "All orders link", "default": "View all orders" },
     { "type": "header", "content": "Delivery timeline" },
     { "type": "text", "id": "steps_eyebrow", "label": "Eyebrow", "default": "From our door to yours" },
     { "type": "inline_richtext", "id": "steps_title", "label": "Title", "default": "What Happens <em>After You Order</em>" },

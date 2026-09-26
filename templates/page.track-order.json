@@ -68,7 +68,7 @@
           "type": "question",
           "settings": {
             "question": "I didn’t get a shipping email",
-            "answer": "<p>Check your spam or promotions folder for an email from Elaren. You can also sign in above with the email you ordered with to see every order and its tracking number.</p>"
+            "answer": "<p>Check your spam or promotions folder for an email from Elaren. Still can’t find it? Email us with your order number and we’ll send your tracking number straight over.</p>"
           }
         },
         "question_3": {
