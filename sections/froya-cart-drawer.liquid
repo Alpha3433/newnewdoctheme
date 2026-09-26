@@ -13,8 +13,9 @@
     The free subscription gift the buy box advertises. assets/main.js adds it (one unit, tagged with a
     _free_gift line property) whenever a line on the pinned plan is in the cart and takes it out again
     when the last such line goes. The shopper can add more with the quantity buttons: only the first
-    one is free, the rest are charged. The theme cannot price it: the gift is only $0 once a free-gift
-    discount exists (Kaching Subscriptions > free gift on the plan, quantity 1).
+    one is free, the rest are charged. The theme cannot price it: the gift is $0 through the free-gift
+    discount in Kaching Subscriptions (free gift on the plan, quantity 1), which only recognises a
+    line that also carries Kaching's __kaching_subs_gift property naming the plan - main.js adds it.
   endcomment
   assign gift_product = section.settings.gift_product
   assign gift_variant = blank

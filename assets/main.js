@@ -24,6 +24,8 @@
   function readStored(key) { try { return window.localStorage.getItem(key); } catch (err) { return null; } }
   function writeStored(key, value) { try { window.localStorage.setItem(key, value); } catch (err) { /* private mode */ } }
   var GIFT_DECLINED_KEY = 'elaren:gift-declined';
+  // The line property Kaching Subscriptions' free-gift discount looks for (see Cart.giftProperties).
+  var KACHING_GIFT_PROP = '__kaching_subs_gift';
 
   /* ================================================================ cart */
   var Cart = {
@@ -241,8 +243,9 @@
        on the drawer's plan is in the cart, and removed when the last such line goes. A shopper who
        takes the gift out themselves is not handed it again until they opt into the plan afresh.
        The shopper can add more of it; only the first is free. Pricing is not the theme's to do:
-       the gift only costs $0 once the merchant's free-gift discount (Kaching Subscriptions, free
-       gift on the plan, quantity 1) is in place. */
+       the gift only costs $0 through the merchant's free-gift discount (Kaching Subscriptions, free
+       gift on the plan, quantity 1), and that discount only recognises a line tagged the way
+       Kaching's own widget tags its gifts - see giftProperties. */
     giftVariantId: function () {
       var d = this.drawer();
       return d ? parseInt(d.getAttribute('data-gift-variant-id') || '0', 10) || 0 : 0;
@@ -254,22 +257,57 @@
     isGiftLine: function (item) {
       return !!(item && item.properties && item.properties._free_gift);
     },
+    /* Kaching's free-gift discount zeroes a line only when it carries __kaching_subs_gift naming the
+       selling plan the gift comes with, and that plan is on a line in the cart - the same tag
+       Kaching's widget puts on the gifts it adds. So a MicroStamp bought from "Pair with", or one
+       tagged for a plan the shopper has since dropped, is charged. The _free_gift property stays:
+       it is how the theme finds its own gift line. */
+    giftProperties: function (planId) {
+      var properties = { _free_gift: 'subscription' };
+      if (planId) properties[KACHING_GIFT_PROP] = JSON.stringify({ sellingPlan: String(planId) });
+      return properties;
+    },
+    giftTagPlan: function (item) {
+      var raw = item && item.properties && item.properties[KACHING_GIFT_PROP];
+      if (!raw) return '';
+      try {
+        var tag = JSON.parse(raw);
+        return tag && tag.sellingPlan ? String(tag.sellingPlan) : '';
+      } catch (err) { return ''; }
+    },
+    // Plans of the subscription lines that earn the gift (only the drawer's pinned plan, when set).
+    giftPlans: function (items) {
+      var pinned = this.giftPlanId();
+      var self = this;
+      return items.reduce(function (plans, item) {
+        if (self.isGiftLine(item) || !item.selling_plan_allocation) return plans;
+        var id = String(item.selling_plan_allocation.selling_plan.id);
+        if ((!pinned || id === pinned) && plans.indexOf(id) === -1) plans.push(id);
+        return plans;
+      }, []);
+    },
     giftDeclined: function () { return readFlag(GIFT_DECLINED_KEY) === '1'; },
     setGiftDeclined: function (declined) { writeFlag(GIFT_DECLINED_KEY, declined ? '1' : ''); },
     reconcileGift: function () {
       var giftId = this.giftVariantId();
       if (!giftId) return Promise.resolve();
       var self = this;
-      var planId = this.giftPlanId();
       return this.fetchCart().then(function (cart) {
         var items = cart.items || [];
-        var subscribed = items.some(function (item) {
-          if (self.isGiftLine(item) || !item.selling_plan_allocation) return false;
-          return !planId || String(item.selling_plan_allocation.selling_plan.id) === planId;
-        });
+        var plans = self.giftPlans(items);
+        var subscribed = plans.length > 0;
         var gifts = items.filter(function (item) { return self.isGiftLine(item); });
         if (subscribed && !gifts.length && !self.giftDeclined()) {
-          return self.addItems([{ id: giftId, quantity: 1, properties: { _free_gift: 'subscription' } }]);
+          return self.addItems([{ id: giftId, quantity: 1, properties: self.giftProperties(plans[0]) }]);
+        }
+        // A gift added before it carried Kaching's tag (or tagged for a plan no longer in the cart)
+        // would stay at full price: put the whole quantity back as one correctly tagged line.
+        var stale = subscribed && gifts.some(function (item) { return plans.indexOf(self.giftTagPlan(item)) === -1; });
+        if (stale) {
+          var total = gifts.reduce(function (sum, item) { return sum + item.quantity; }, 0);
+          return self.update(items.map(function (item) { return self.isGiftLine(item) ? 0 : item.quantity; })).then(function () {
+            return self.addItems([{ id: gifts[0].variant_id, quantity: total, properties: self.giftProperties(plans[0]) }]);
+          });
         }
         if (!subscribed && gifts.length) {
           // The free one goes with the plan; extras the shopper chose to pay for stay as a normal line.
@@ -296,12 +334,13 @@
         var items = cart.items || [];
         var gifts = items.filter(function (item) { return self.isGiftLine(item); });
         var variantId = gifts.length ? gifts[0].variant_id : giftId;
+        var properties = self.giftProperties(self.giftPlans(items)[0]);
         return self.request('cart/update.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ updates: items.map(function (item) { return self.isGiftLine(item) ? 0 : item.quantity; }) })
         }).then(function () {
-          if (quantity) return self.addItems([{ id: variantId, quantity: quantity, properties: { _free_gift: 'subscription' } }]);
+          if (quantity) return self.addItems([{ id: variantId, quantity: quantity, properties: properties }]);
           return self.refresh();
         });
       }).then(function () { self.setLoading(false); })
@@ -1302,7 +1341,12 @@
 
   function boot() {
     initSection(document);
-    if (Cart.drawer()) Cart.updateCount(parseInt(Cart.drawer().getAttribute('data-cart-count') || '0', 10));
+    if (Cart.drawer()) {
+      var cartCount = parseInt(Cart.drawer().getAttribute('data-cart-count') || '0', 10);
+      Cart.updateCount(cartCount);
+      // Carts from before the gift carried Kaching's tag still hold a full-price gift: fix them on arrival.
+      if (cartCount) Cart.reconcileGift();
+    }
     document.documentElement.classList.add('loaded');
     autoLocalize();
     // Arrived from another page with a section key in the hash (e.g. /#faq): scroll to that section.
