@@ -26,6 +26,24 @@
   var GIFT_DECLINED_KEY = 'elaren:gift-declined';
   // The line property Kaching Subscriptions' free-gift discount looks for (see Cart.giftProperties).
   var KACHING_GIFT_PROP = '__kaching_subs_gift';
+  /* The Kaching Bundles deal behind the buy box's bundle tiers ("Bundle", deal 5kg3), bar for bar.
+     Kaching's discount prices one-time bottles from the quantity alone, but bottles on a
+     subscription only get it when they sit in the cart the way Kaching's own widget adds them: the
+     paid bottles and the free ones on two lines, both tagged __kaching_bundles with the deal, the
+     bar and a bundle id they share, the free line also flagged bxgy. Cart.reconcileBundles keeps
+     subscription lines in that shape. The bar ids are Kaching's own and only change if a bar is
+     deleted and re-created in Kaching - then update them here (an order placed through Kaching's
+     widget shows them in its __kaching_bundles line property). */
+  var KACHING_BUNDLE_PROP = '__kaching_bundles';
+  var KACHING_DEAL = {
+    id: '5kg3',
+    productId: 9704313225573, // Elaren Pumpkin Seed Oil Serum
+    // Biggest first: bottles are laid out for the biggest bar they fill.
+    bars: [
+      { id: 'RANr', buy: 3, get: 3 }, // Buy 3, Get 3 Free
+      { id: 'dWFI', buy: 2, get: 1 }  // Buy 2, Get 1 Free
+    ]
+  };
 
   /* ================================================================ cart */
   var Cart = {
@@ -146,8 +164,9 @@
         if (id && json.sections && json.sections[id]) self.render(json.sections[id]);
         else return self.refresh();
       }).then(function () {
-        // The buy box may have added a subscription: the advertised gift comes along with it.
-        return self.reconcileGift();
+        // The buy box may have added a subscription: its bundle is laid out for Kaching and the
+        // advertised gift comes along with it.
+        return self.reconcile();
       }).then(function () {
         self.setLoading(false);
         self.announce('Added to cart');
@@ -196,7 +215,7 @@
       }).then(function (json) {
         if (id && json.sections && json.sections[id]) self.render(json.sections[id]);
         else return self.refresh();
-      }).then(function () { return self.reconcileGift(); })
+      }).then(function () { return self.reconcile(); })
         .then(function () { self.setLoading(false); })
         .catch(function (err) { self.setLoading(false); self.announce(err.message); return self.refresh(); });
     },
@@ -208,7 +227,8 @@
        other bottle behind as a one-time line, two paid bottles moved onto the plan, and the deal
        (three bottles on one line) was gone. Every one-time line of the variant is removed and the
        whole quantity re-enters the cart as a single line on the plan (or, switching off, without
-       one), which the discount then re-splits exactly as it did on the first add. */
+       one). Switching off, the discount re-splits it exactly as it did on the first add; switching
+       on, reconcileBundles lays it out as Kaching's subscription bundle. */
     setLinePlan: function (variantId, planId, on) {
       var self = this;
       this.setLoading(true);
@@ -222,8 +242,11 @@
         var total = matched.reduce(function (sum, item) { return sum + item.quantity; }, 0);
         var line = { id: variantId, quantity: total };
         if (on) line.selling_plan = planId;
-        var properties = matched[0].properties;
-        if (properties && Object.keys(properties).length) line.properties = properties;
+        // Kaching's subscription-bundle tag belongs to the lines reconcileBundles lays out, not to
+        // the merged line: a one-time line never needs it, and one on a plan is re-tagged.
+        var properties = Object.assign({}, matched[0].properties);
+        delete properties[KACHING_BUNDLE_PROP];
+        if (Object.keys(properties).length) line.properties = properties;
         var updates = items.map(function (item) { return matched.indexOf(item) === -1 ? item.quantity : 0; });
         return self.request('cart/update.js', {
           method: 'POST',
@@ -232,9 +255,101 @@
         }).then(function () { return self.addItems([line]); });
       }).then(function () {
         if (on) self.setGiftDeclined(false); // opting in again also brings the gift back
-        return self.reconcileGift();
+        return self.reconcile();
       }).then(function () { self.setLoading(false); })
         .catch(function (err) { self.setLoading(false); self.announce(err.message); return self.refresh(); });
+    },
+
+    // Everything the cart puts right after a change: the subscription bundle layout, then the gift.
+    reconcile: function () {
+      var self = this;
+      return this.reconcileBundles()
+        .catch(function () { /* a discount layout must never break the cart */ })
+        .then(function () { return self.reconcileGift(); });
+    },
+
+    /* Subscription bundles (see KACHING_DEAL).
+       The buy box adds a bundle as one line (3 bottles for Buy 2, Get 1 Free), which is all a
+       one-time purchase needs. On a subscription Kaching's discount ignores that line and the
+       shopper pays for every bottle. So after every cart change, the deal product's bottles on
+       each selling plan are laid out for the biggest bar they fill: the paid bottles on one line,
+       the free ones on another, both tagged exactly as Kaching's widget tags them. Bottles that
+       fill no bar sit untagged on one line. Lines already in that shape are left alone, so this is
+       a single cart read unless something changed. The drawer's quantity buttons act on either
+       line and the layout is redone from the new total: raising the free line to 2 gives 3 paid +
+       1 free, and taking the paid line below 2 drops the deal. */
+    bundleTag: function (item) {
+      var raw = item && item.properties && item.properties[KACHING_BUNDLE_PROP];
+      if (!raw) return null;
+      try { return JSON.parse(raw) || null; } catch (err) { return null; }
+    },
+    bundleBar: function (quantity) {
+      return KACHING_DEAL.bars.filter(function (bar) { return quantity >= bar.buy + bar.get; })[0] || null;
+    },
+    // Laid out for `bar` already: a paid line and a free line of one bundle, or nothing tagged at all.
+    bundleInShape: function (lines, total, bar) {
+      var self = this;
+      var tags = lines.map(function (item) { return self.bundleTag(item); });
+      if (!bar) return tags.every(function (tag) { return !tag; });
+      if (lines.length !== 2) return false;
+      var paid = tags[0] && tags[0].bxgy ? 1 : 0;
+      var free = 1 - paid;
+      var p = tags[paid], f = tags[free];
+      if (!p || !f || p.bxgy || !f.bxgy || !p.main || !f.main || p.id !== f.id) return false;
+      if (p.deal !== KACHING_DEAL.id || f.deal !== KACHING_DEAL.id || p.bar !== bar.id || f.bar !== bar.id) return false;
+      return lines[free].quantity === bar.get && lines[paid].quantity === total - bar.get;
+    },
+    // A fresh id per bundle, like Kaching's own: two bundles in one cart must not share lines.
+    bundleId: function () {
+      var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', id = '';
+      for (var i = 0; i < 4; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
+      return id;
+    },
+    reconcileBundles: function () {
+      var self = this;
+      return this.fetchCart().then(function (cart) {
+        var items = cart.items || [];
+        var groups = [];
+        items.forEach(function (item) {
+          if (item.product_id !== KACHING_DEAL.productId || !item.selling_plan_allocation || self.isGiftLine(item)) return;
+          var planId = item.selling_plan_allocation.selling_plan.id;
+          var group = groups.filter(function (g) { return g.variantId === item.variant_id && g.planId === planId; })[0];
+          if (!group) groups.push(group = { variantId: item.variant_id, planId: planId, lines: [] });
+          group.lines.push(item);
+        });
+        var stale = [], lines = [];
+        groups.forEach(function (group) {
+          var total = group.lines.reduce(function (sum, item) { return sum + item.quantity; }, 0);
+          var bar = self.bundleBar(total);
+          if (self.bundleInShape(group.lines, total, bar)) return;
+          stale = stale.concat(group.lines);
+          var base = Object.assign({}, group.lines[0].properties);
+          delete base[KACHING_BUNDLE_PROP];
+          var line = function (quantity, tag) {
+            var properties = Object.assign({}, base);
+            if (tag) properties[KACHING_BUNDLE_PROP] = JSON.stringify(tag);
+            var l = { id: group.variantId, quantity: quantity, selling_plan: group.planId };
+            if (Object.keys(properties).length) l.properties = properties;
+            return l;
+          };
+          if (!bar) { lines.push(line(total, null)); return; }
+          var id = self.bundleId();
+          lines.push(line(total - bar.get, { deal: KACHING_DEAL.id, pp: KACHING_DEAL.productId, main: true, id: id, bar: bar.id }));
+          lines.push(line(bar.get, { id: id, deal: KACHING_DEAL.id, bar: bar.id, main: true, bxgy: true }));
+        });
+        if (!lines.length) return;
+        // By position, like update(): a line the discount has split shares its key with the rest.
+        return self.update(items.map(function (item) { return stale.indexOf(item) === -1 ? item.quantity : 0; })).then(function () {
+          return self.addItems(lines).catch(function (err) {
+            // e.g. stock ran out in between: put the bottles back as they were rather than lose them
+            return self.addItems(stale.map(function (item) {
+              var l = { id: item.variant_id, quantity: item.quantity, selling_plan: item.selling_plan_allocation.selling_plan.id };
+              if (item.properties && Object.keys(item.properties).length) l.properties = item.properties;
+              return l;
+            })).then(function () { throw err; });
+          });
+        });
+      });
     },
 
     /* Free subscription gift.
@@ -1344,8 +1459,9 @@
     if (Cart.drawer()) {
       var cartCount = parseInt(Cart.drawer().getAttribute('data-cart-count') || '0', 10);
       Cart.updateCount(cartCount);
-      // Carts from before the gift carried Kaching's tag still hold a full-price gift: fix them on arrival.
-      if (cartCount) Cart.reconcileGift();
+      // Carts from before the gift and the subscription bundles carried Kaching's tags are still
+      // charged in full for them: fix them on arrival.
+      if (cartCount) Cart.reconcile();
     }
     document.documentElement.classList.add('loaded');
     autoLocalize();
