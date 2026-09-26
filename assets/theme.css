@@ -980,13 +980,11 @@ body.cart-open { overflow: hidden; }
 .mini-cart .drawer__product--empty .drawer__product-price { font-family: var(--font-sans); font-size: 17px; color: var(--brand-ink); }
 .mini-cart .drawer__product--empty .drawer__product-price strong { font-size: 17px; font-weight: 500; }
 .mini-cart .drawer__product--empty .drawer__product-button { font-size: 15px; padding: 10px 12px; }
-.s-mini-cart__empty-button { display: flex; align-items: center; justify-content: center; margin-top: 40px; min-height: 76px; font-family: var(--font-mono); font-size: 22px; font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 4px; }
 @media screen and (max-width: 740px) {
   .s-mini-cart__shipping { padding: 4px 4px 14px; }
   .s-mini-cart__shipping--empty { padding: 4px 18px 14px; }
   .s-mini-cart__empty { padding: 26px 18px 0; }
   .mini-cart .drawer__product--empty { grid-template-columns: 120px minmax(0, 1fr); gap: 14px; }
-  .s-mini-cart__empty-button { min-height: 64px; font-size: 18px; margin-top: 30px; }
 }
 
 /* Footer */
