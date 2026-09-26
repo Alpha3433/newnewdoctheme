@@ -136,6 +136,9 @@
       var data = new FormData(form);
       if (id) data.append('sections', id);
       var self = this;
+      // Adding on a subscription (the buy box with Subscribe & save on) is opting into the plan
+      // afresh, so it brings the gift back even if it was taken out earlier this visit.
+      if (data.get('selling_plan')) this.setGiftDeclined(false);
       this.setLoading(true);
       return this.request('cart/add.js', { method: 'POST', body: data }).then(function (json) {
         if (id && json.sections && json.sections[id]) self.render(json.sections[id]);
