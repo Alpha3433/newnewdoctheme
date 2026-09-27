@@ -57,7 +57,31 @@
   {% sections 'header-group' %}
 
   <div id="main" class="anchor" role="main">
-    {{ content_for_layout }}
+    {%- if request.page_type == 'policy' and settings.support_email != blank -%}
+      {%- comment -%}
+        Store policies come from Shopify admin (Settings → Policies), where Shopify's templates insert
+        the store's own email and a link can show one address but open another. So on /policies/…
+        pages every mailto: link opens the support email (Theme settings → Customer support) and the
+        store email in the text is replaced with it, leaving the support address as the only one a
+        shopper sees. Emptying that setting shows the policies exactly as written.
+      {%- endcomment -%}
+      {%- assign support_email = settings.support_email | strip | escape -%}
+      {%- assign policy_parts = content_for_layout | split: 'mailto:' -%}
+      {%- capture policy_html -%}
+        {{- policy_parts.first -}}
+        {%- for part in policy_parts offset: 1 -%}
+          {%- comment -%} The old address runs up to the first quote, bracket, "?" or space. {%- endcomment -%}
+          {%- assign old_address = part | split: '"' | first | split: "'" | first | split: '<' | first | split: '>' | first | split: '?' | first | split: ' ' | first -%}
+          mailto:{{ support_email }}{{ part | remove_first: old_address }}
+        {%- endfor -%}
+      {%- endcapture -%}
+      {%- if shop.email != blank -%}
+        {%- assign policy_html = policy_html | replace: shop.email, support_email -%}
+      {%- endif -%}
+      {{ policy_html }}
+    {%- else -%}
+      {{ content_for_layout }}
+    {%- endif -%}
   </div>
 
   {% sections 'footer-group' %}

@@ -82,5 +82,21 @@
         "info": "{number} is replaced by the tracking number."
       }
     ]
+  },
+  {
+    "name": "Customer support",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "The store policies (refund, terms, privacy, contact) come from Settings → Policies, where Shopify's templates insert the store's own email and a link can show one address but open another. On the storefront's policy pages every email link opens this address and the store email in the text is replaced with it, so it is the only address a shopper sees there. Checkout shows the policies straight from Settings → Policies, so correct the addresses there as well. The footer, FAQ and Track your order sections have their own email text."
+      },
+      {
+        "type": "text",
+        "id": "support_email",
+        "label": "Support email",
+        "default": "support@shopelaren.com",
+        "info": "Leave empty to show the policy pages exactly as written in Settings → Policies."
+      }
+    ]
   }
 ]
