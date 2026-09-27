@@ -118,6 +118,13 @@ template (`templates/page.froya-landing.json`).
   on desktop and a row in the mobile menu; Header → *Order tracking link*), the footer and the
   account page. The account order page shows a placed → shipped → on its way tracker and every
   tracking number with a *Track* button.
+* **Support email** – Theme settings → *Customer support*. support@shopelaren.com is the only
+  address the storefront shows. The policy pages (`/policies/…`: refund, terms, privacy, contact)
+  come from Settings → Policies, where Shopify's templates insert the store's own email and a link
+  can show one address but open another, so on those pages the theme points every email link at
+  *Support email* and replaces the store email in the text with it. Empty the setting to show the
+  policies exactly as written. The footer, FAQ and the Track your order help card keep their own
+  email text.
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
   "Pair with" products, checkout label, country/currency selector and trust badges. The header
   CART button opens it and every add-to-cart button adds in place and opens it.
@@ -172,6 +179,18 @@ template (`templates/page.froya-landing.json`).
 * **Guarantee:** the copy promises a 30-day money-back guarantee and fuller hair in 30 days, which
   matches the 30-day return window on the store's refund policy page. The "Our Elaren Story" page
   still says 90 days – update it, or change the guarantee copy back in the theme editor.
+* **One contact address: support@shopelaren.com.** The theme's text, links and policy pages only
+  show that address, but Shopify's checkout shows the policies straight from the admin and
+  Shopify's own pages and emails use the store's email settings, so correct these in the admin too:
+  * Settings → Policies: the email links in the *Refund policy* (3), *Terms of service* (2) and
+    *Contact information* (1) show support@shopelaren.com but open an old Gmail address – edit each
+    link to `mailto:support@shopelaren.com`. The *Privacy policy*'s Contact paragraph names the
+    store owner's address; change it to support@shopelaren.com.
+  * Settings → Notifications → *Sender email*: the address customers see on order confirmations and
+    other notifications and reply to – set it to support@shopelaren.com.
+  * Settings → General → *Store contact details*: the store email, which customers can see on the
+    store and policy pages and which Shopify's policy templates insert – set it to
+    support@shopelaren.com too if that inbox should also receive Shopify's account emails.
 * **Currency and country.** Shopify only pre-selects a visitor's country automatically on Shopify
   Plus; on the store's Basic plan every visitor starts in the primary market's default country, and
   checkout only re-prices the order once it has a shipping address. So the theme does the detection
