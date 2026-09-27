@@ -184,8 +184,10 @@ template (`templates/page.froya-landing.json`).
   Shopify's own pages and emails use the store's email settings, so correct these in the admin too:
   * Settings → Policies: the email links in the *Refund policy* (3), *Terms of service* (2) and
     *Contact information* (1) show support@shopelaren.com but open an old Gmail address – edit each
-    link to `mailto:support@shopelaren.com`. The *Privacy policy*'s Contact paragraph names the
-    store owner's address; change it to support@shopelaren.com.
+    link to `mailto:support@shopelaren.com`. The *Privacy policy* is generated from the store
+    details, so its Contact paragraph prints the store's street address, the only place the store
+    shows it: turn off the policy's automatic management and shorten the sentence to "…please email
+    us at support@shopelaren.com." The theme itself never prints the store address.
   * Settings → Notifications → *Sender email*: the address customers see on order confirmations and
     other notifications and reply to – set it to support@shopelaren.com.
   * Settings → General → *Store contact details*: the store email, which customers can see on the
