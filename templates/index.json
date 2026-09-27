@@ -738,6 +738,7 @@
         "unit_suffix": "per bottle",
         "total_text": "{total} total",
         "save_text": "Save {amount} ({percent}% off)",
+        "sub_default": false,
         "toggle_title": "Save {percent}% with our flexible plan",
         "toggle_sub": "No contracts. Cancel with ease.",
         "benefit_1": "<strong>Free Insured Shipping</strong> Every Order",
@@ -771,7 +772,7 @@
     "founder-story": {
       "type": "froya-founder-story",
       "settings": {
-        "image": "shopify://shop_images/hf_20260918_085600_567495bf-6e21-4eed-bbf2-e57e31be6884_1.png",
+        "image": "shopify://shop_images/hf_20260927_123035_85d8eb2e-562f-484c-b49a-e0406be33468.png",
         "image_alt": "The Elaren founder",
         "image_position": "right",
         "subtitle": "The Story Behind Elaren",
