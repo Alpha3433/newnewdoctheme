@@ -34,6 +34,7 @@
       </button>
     </header>
     <div class="visually-hidden" aria-live="polite" data-cart-status></div>
+    <p class="s-mini-cart__error" role="alert" data-cart-error hidden></p>
 
     <div class="drawer__content{% if cart.item_count == 0 %} drawer__content--empty{% endif %}" data-cart-content>
       {%- liquid
