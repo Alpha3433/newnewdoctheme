@@ -269,12 +269,17 @@ python3 scripts/localize_assets.py --dry-run
   (a bundle split over two lines, Kaching's subscription layout, a Kaching tag that has to come
   off, which `/cart/change.js` cannot do) adds the new lines through `/cart/add.js` first and only
   then takes the old ones out with one positional `/cart/update.js` (positions, not keys: a
-  discount-split line shares its key with the paid line). The cart is never emptied along the
-  way, and a failure takes back whatever went in, so the shopper keeps the cart they had and sees
-  why in the drawer. Cart changes run one at a time, a request that gets no answer within 20
-  seconds fails instead of hanging, and the drawer is redrawn once per change (Section Rendering
-  API), from the finished cart. The newsletter posts to Shopify's customer form. The supporting
-  `main-*` sections use the connected store's own products, cart and customer accounts.
+  discount-split line shares its key with the paid line). Holding both copies for that moment
+  needs stock for both; when Shopify refuses the add for stock, the old lines come out first
+  instead and go back as they were if the new ones still will not go in. Whatever fails, the
+  theme re-reads the cart before acting, takes back what it added and tells the shopper in the
+  drawer; a change the page was left in the middle of (reload, closed tab) is finished or undone
+  on the next page view. If the cart cannot be reached at all for a while, the shopper can be left
+  seeing both copies with the error, and removes the extra ones by hand. Cart changes run one at a
+  time (checkout is disabled meanwhile), a request that gets no answer within 20 seconds fails
+  instead of hanging, and the drawer is redrawn once per change (Section Rendering API), from the
+  finished cart. The newsletter posts to Shopify's customer form. The supporting `main-*` sections
+  use the connected store's own products, cart and customer accounts.
 * Run `shopify theme check` (Shopify CLI) before publishing; the only remaining warnings are the
   remote placeholder images.
 * Hidden/utility parts of the original page (Shopify pixels, cookie consent, chat widget, Klaviyo,

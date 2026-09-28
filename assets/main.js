@@ -50,6 +50,10 @@
   // leave the drawer greyed out for good.
   var CART_TIMEOUT = 20000;
   var CART_ERROR = 'Something went wrong. Please try again.';
+  // A cart rewrite in progress (see Cart.rewrite), so a page left half-way through one is finished
+  // or undone on the next page view.
+  var REWRITE_KEY = 'elaren:cart-rewrite';
+  var wait = function (ms) { return new Promise(function (resolve) { window.setTimeout(resolve, ms); }); };
   var totalQuantity = function (lines) { return lines.reduce(function (total, line) { return total + line.quantity; }, 0); };
   var planOf = function (item) { return item.selling_plan_allocation ? item.selling_plan_allocation.selling_plan.id : ''; };
 
@@ -76,17 +80,20 @@
       $$('.js-cart-toggle').forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
       window.setTimeout(function () { if (!d.hasAttribute('open')) d.setAttribute('hidden', ''); }, 350);
     },
+    // Greys the drawer out while the cart is being changed. Checkout is disabled outright: mid-change
+    // the cart can briefly hold both the old and the new lines (see rewrite).
     setLoading: function (on) {
       var d = this.drawer();
       if (!d) return;
       d.classList.toggle('is-loading', !!on);
       if (on) d.setAttribute('aria-busy', 'true'); else d.removeAttribute('aria-busy');
+      $$('button[name="checkout"]', d).forEach(function (b) { b.disabled = !!on; });
     },
     announce: function (msg) {
       var s = $('[data-cart-status]', this.drawer());
       if (s) s.textContent = msg || '';
     },
-    // A change the drawer could not make is shown under the title until the next change starts.
+    // A change the drawer could not make is shown under the title until the shopper's next change.
     showError: function (msg) {
       var box = $('[data-cart-error]', this.drawer());
       if (!box) return;
@@ -105,6 +112,10 @@
       var doc = new DOMParser().parseFromString(html, 'text/html');
       var fresh = doc.getElementById('mini-cart');
       if (!fresh) return;
+      // The redraw replaces the control the shopper just used (the switch, a quantity button):
+      // focus goes back to its counterpart in the new markup rather than falling out of the dialog.
+      var focused = document.activeElement;
+      var refocus = focused && focused !== d && d.contains(focused) ? this.focusSelector(focused) : null;
       // Remember where the free-shipping bar stood so the fresh markup can animate from it.
       var oldBar = $('[data-cart-shipping]', d);
       var oldProgress = oldBar ? parseInt(oldBar.getAttribute('data-progress') || '0', 10) : null;
@@ -121,7 +132,26 @@
       d.setAttribute('data-cart-count', count);
       this.updateCount(count);
       this.animateShipping(oldProgress, wasReached);
+      if (d.classList.contains('is-loading')) this.setLoading(true); // the new checkout button too
       initCartDrawer(d);
+      if (refocus !== null && !d.contains(focused) && this.isOpen()) {
+        var target = null;
+        try { target = refocus && $(refocus, d); } catch (err) { /* an unusual label: fall back below */ }
+        target = target || $('[data-cart-close].drawer__close-button', d);
+        if (target) target.focus({ preventScroll: true });
+      }
+    },
+    focusSelector: function (el) {
+      var toggle = el.closest('[data-cart-plan-toggle]');
+      if (toggle) return '[data-cart-plan-toggle][data-variant-id="' + toggle.getAttribute('data-variant-id') + '"]';
+      var line = el.closest('line-item');
+      var label = el.getAttribute('aria-label');
+      if (!line || !label || !window.CSS || !window.CSS.escape) return '';
+      return 'line-item[data-key="' + window.CSS.escape(line.getAttribute('data-key') || '') + '"] [aria-label="' + window.CSS.escape(label) + '"]';
+    },
+    count: function () {
+      var d = this.drawer();
+      return d ? parseInt(d.getAttribute('data-cart-count') || '0', 10) || 0 : 0;
     },
     /* The drawer is re-rendered as a whole after every cart change, which would snap the
        free-shipping bar straight to its new width. Start it at the previous width and let the CSS
@@ -160,7 +190,9 @@
           var json = null;
           try { json = reply.text ? JSON.parse(reply.text) : {}; } catch (err) { /* an HTML error page, e.g. too many requests */ }
           if (reply.res.ok && json) return json;
-          throw new Error((json && (json.description || json.message)) || CART_ERROR);
+          var error = new Error((json && (json.description || json.message)) || CART_ERROR);
+          error.status = reply.res.status; // an answer: Shopify refused (a failure without one has no status)
+          throw error;
         }, function () {
           window.clearTimeout(timer);
           throw new Error(CART_ERROR); // offline, or no answer within CART_TIMEOUT
@@ -175,6 +207,14 @@
     fetchCart: function () {
       return this.request('cart.js');
     },
+    // A read that decides what happens next (did the new lines go in? did the old ones come out?)
+    // is worth two more tries before giving up.
+    readCart: function () {
+      var self = this;
+      return this.fetchCart()
+        .catch(function () { return wait(600).then(function () { return self.fetchCart(); }); })
+        .catch(function () { return wait(1500).then(function () { return self.fetchCart(); }); });
+    },
     // Every cart write goes through here. It asks for the drawer's markup along with the change
     // (unless the write is only a step on the way) so the change can draw the drawer from its last
     // write without another request - see run.
@@ -187,6 +227,7 @@
       var self = this;
       this.writes++;
       this.html = null;
+      this.setLoading(true); // the quiet page-load tidy-up too, once it starts changing the cart
       return this.request(path, options).then(function (json) {
         self.html = (id && json.sections && json.sections[id]) || null;
         return json;
@@ -197,32 +238,31 @@
        works on, and some take several requests, so two at once (a second tap on the switch, the
        page-load tidy-up still going when the shopper opens the drawer) would each rewrite a cart the
        other is halfway through - and draw the drawer from it. The drawer is drawn once per change,
-       from the cart as it stands when the change is done, and not at all while another change is
-       waiting behind it, since that one draws it again. A quiet change (the page-load tidy-up) only
-       draws the drawer if it changed the cart. */
+       from the cart as it stands when the change is done (never part-way through one); a quiet
+       change (the page-load tidy-up) only draws it if it changed the cart. The next change only
+       starts once the drawer has been drawn. */
     queue: Promise.resolve(),
     waiting: 0,
     writes: 0,
     html: null,
-    needsDraw: false,
     run: function (task, quiet) {
       var self = this;
       this.waiting++;
-      if (!quiet) this.setLoading(true);
+      if (!quiet) {
+        this.setLoading(true);
+        this.showError(''); // the shopper has moved on from the last failure
+      }
       var job = this.queue.then(function () {
         var writesBefore = self.writes;
         self.html = null;
-        if (!quiet) self.showError('');
         return Promise.resolve().then(task).then(function (value) {
           return { value: value, changed: self.writes !== writesBefore };
         }, function (error) {
           return { error: error || new Error(CART_ERROR), changed: true };
         });
       }).then(function (outcome) {
-        self.needsDraw = self.needsDraw || outcome.changed || !quiet;
         var draw = null, html = self.html;
-        if (self.waiting === 1 && self.needsDraw) {
-          self.needsDraw = false;
+        if (outcome.changed || !quiet) {
           draw = html ? Promise.resolve().then(function () { self.render(html); }) : self.refresh();
         }
         return Promise.resolve(draw).catch(function () { /* the next change draws it */ }).then(function () {
@@ -243,27 +283,46 @@
       // afresh, so it brings the gift back even if it was taken out earlier this visit.
       var subscribing = !!data.get('selling_plan');
       return this.run(function () {
+        var countBefore = self.count();
         if (subscribing) self.setGiftDeclined(false);
-        // The buy box may have added a subscription: its bundle is laid out for Kaching and the
-        // advertised gift comes along with it.
-        return self.write('cart/add.js', data).then(function () { return self.reconcile(); });
+        return self.write('cart/add.js', data).then(function () { return null; }, function (err) {
+          // No answer at all (a timeout, a dropped connection): the add may still have gone through,
+          // and reporting it as failed would invite a second one.
+          if (err.status) throw err;
+          var went = function (cart) { return (cart.item_count || 0) > countBefore; };
+          return self.readCart().then(function (cart) {
+            if (went(cart)) return cart;
+            return wait(1500).then(function () { return self.readCart(); }).then(function (later) {
+              if (went(later)) return later;
+              throw err;
+            });
+          });
+        }).then(function (cart) {
+          // The buy box may have added a subscription: its bundle is laid out for Kaching and the
+          // advertised gift comes along with it.
+          return self.reconcile(cart);
+        });
       }).then(function () {
         self.announce('Added to cart');
         self.open();
       });
     },
-    // Quantity and remove buttons: { line, quantity, key }. Lines are addressed by position, not by
-    // key: when the quantity-break discount splits a bundle's free bottle onto its own $0 line, that
-    // line shares the paid line's key, and a keyed change would hit both.
+    // Quantity and remove buttons: { line, quantity, key, current, nth } (see linePayload). Lines are
+    // addressed by position, not by key: when the quantity-break discount splits a bundle's free
+    // bottle onto its own $0 line, that line shares the paid line's key, and a keyed change would hit
+    // both.
     change: function (payload) {
       var self = this;
-      // Clicked while an earlier change was still running: the positions on screen may be out of date
-      // by the time this one runs, so it only goes ahead if its line is still where it was.
-      var recheck = this.waiting > 0 && !!payload.key;
+      // Clicked while an earlier change was still running: the drawer on screen may be out of date by
+      // the time this one runs, so it only goes ahead if the same line - same key, same part of a
+      // split line, same quantity - is still at that position. Otherwise the drawer is just redrawn.
+      var recheck = this.waiting > 0;
       return this.run(function () {
         var still = recheck ? self.fetchCart().then(function (cart) {
-          var item = (cart.items || [])[payload.line - 1];
-          return !!item && item.key === payload.key;
+          var items = cart.items || [];
+          var item = items[payload.line - 1];
+          if (!item || !payload.key || item.key !== payload.key || item.quantity !== payload.current) return false;
+          return items.slice(0, payload.line - 1).filter(function (i) { return i.key === payload.key; }).length === payload.nth;
         }) : Promise.resolve(true);
         return still.then(function (ok) {
           if (!ok) return null;
@@ -301,62 +360,126 @@
 
     /* Take some lines out of the cart and put others in without the cart ever being short. The new
        lines go in first, in one /cart/add.js, and the old ones only come out once the new ones are
-       there, in one /cart/update.js made from a fresh read of the cart. If the new lines do not go
-       in, whatever part of them did is taken back out and the old lines were never touched; if the
-       old lines will not come out, the new ones are taken back out. Either way a failure leaves the
-       shopper with the cart they had, never an empty one. `out` are cart items, `lines` are
-       /cart/add.js lines; a new line that matches one already in the cart tops it up. Resolves with
-       the cart as it stands afterwards. */
+       confirmed in the cart, in one positional /cart/update.js made from a fresh read. A failure
+       part-way takes back whatever went in and leaves the old lines as they were, and an answer that
+       never arrives is checked against the cart before anything else happens, so a change that did
+       go through is never undone. Holding both copies at once needs stock for both: when Shopify
+       refuses the add for stock the old lines are holding, they come out first instead, and go back
+       exactly as they were if the new ones still will not go in. A rewrite under way is noted in
+       sessionStorage, so a page left half-way through one is put right on the next view (resume).
+       `out` are cart items, `lines` are /cart/add.js lines; a new line that matches one already in
+       the cart tops it up. Resolves with the cart as it stands afterwards. */
     rewrite: function (cart, out, lines) {
       var self = this;
+      var identity = this.itemIdentity.bind(this);
       var before = cart.items || [];
-      // What each identity touched here adds up to once the rewrite is done.
+      // What each identity touched here adds up to once the rewrite is done, and what it was.
       var target = {}, spec = {};
-      out.forEach(function (item) { target[self.itemIdentity(item)] = 0; });
+      out.forEach(function (item) { target[identity(item)] = 0; });
       lines.forEach(function (line) { var id = self.lineIdentity(line); target[id] = 0; spec[id] = line; });
       before.forEach(function (item) {
-        var id = self.itemIdentity(item);
+        var id = identity(item);
         if (id in target && out.indexOf(item) === -1) target[id] += item.quantity;
       });
       lines.forEach(function (line) { target[self.lineIdentity(line)] += line.quantity; });
-      var had = this.totals(before, this.itemIdentity.bind(this));
-      var adds = [], cuts = false;
+      var had = this.totals(before, identity);
+      var was = {}, grown = {}, cutTo = {}, adds = [], restore = [];
       Object.keys(target).forEach(function (id) {
-        var delta = target[id] - (had[id] || 0);
-        if (delta > 0 && spec[id]) adds.push(Object.assign({}, spec[id], { quantity: delta }));
-        if (delta < 0) cuts = true;
+        was[id] = had[id] || 0;
+        if (target[id] > was[id] && spec[id]) {
+          grown[id] = was[id];
+          adds.push(Object.assign({}, spec[id], { quantity: target[id] - was[id] }));
+        }
+        if (target[id] < was[id]) cutTo[id] = target[id];
       });
-      if (!adds.length && !cuts) return Promise.resolve(cart);
-      // Every variant/plan pair the new lines go into, and what it must add up to once they are in.
-      var expected = {}, hadPairs = this.totals(before, this.pairOfItem);
-      adds.forEach(function (line) {
-        var pair = self.pairOfLine(line);
-        if (!(pair in expected)) expected[pair] = hadPairs[pair] || 0;
-        expected[pair] += line.quantity;
+      // The old lines as /cart/add.js lines, to put back what a cut-first rewrite took out.
+      out.forEach(function (item) {
+        var id = identity(item);
+        if (!(id in cutTo) || restore.some(function (line) { return self.lineIdentity(line) === id; })) return;
+        var line = { id: item.variant_id, quantity: was[id] - cutTo[id] };
+        if (planOf(item)) line.selling_plan = planOf(item);
+        if (item.properties && Object.keys(item.properties).length) line.properties = item.properties;
+        restore.push(line);
       });
-      var put = adds.length
-        ? this.write('cart/add.js', { items: adds }, !cuts).then(function () { return null; }, function (err) { return err; })
-        : Promise.resolve(null);
-      return put.then(function (addError) {
-        if (!adds.length) return cart; // nothing was written since the cart was read
-        return self.fetchCart().then(function (now) {
-          var pairs = self.totals(now.items || [], self.pairOfItem);
-          var landed = Object.keys(expected).every(function (pair) { return (pairs[pair] || 0) >= expected[pair]; });
-          if (landed) return now; // a request that timed out may still have gone through
-          var failed = addError || new Error(CART_ERROR);
-          return self.putBack(now, before, adds).then(function () { throw failed; }, function () { throw failed; });
-        });
-      }).then(function (now) {
-        if (!cuts) return now;
-        return self.settle(now, target).catch(function () {
-          // Try once more from a fresh read (the first try may have gone through after all), and
-          // failing that take the new lines back out so the shopper keeps the cart they had.
-          return self.fetchCart().then(function (again) { return self.settle(again, target); }).catch(function (err) {
-            if (!adds.length) throw err;
-            return self.fetchCart().then(function (latest) { return self.putBack(latest, before, adds); })
-              .then(function () { throw err; }, function () { throw err; });
+      var cuts = Object.keys(cutTo).length > 0;
+      if (!adds.length) return cuts ? this.settle(cart, cutTo) : Promise.resolve(cart);
+
+      var addPairs = {};
+      adds.forEach(function (line) { var pair = self.pairOfLine(line); addPairs[pair] = (addPairs[pair] || 0) + line.quantity; });
+      // The new lines are in when every variant/plan pair they go into holds them on top of what it held.
+      var landed = function (c, base) {
+        var now = self.totals(c.items || [], self.pairOfItem), prior = self.totals(base, self.pairOfItem);
+        return Object.keys(addPairs).every(function (pair) { return (now[pair] || 0) >= (prior[pair] || 0) + addPairs[pair]; });
+      };
+      var cutDone = function (c) {
+        var now = self.totals(c.items || [], identity);
+        return Object.keys(cutTo).every(function (id) { return (now[id] || 0) <= cutTo[id]; });
+      };
+      var oldIntact = function (c) {
+        var now = self.totals(c.items || [], identity);
+        return Object.keys(cutTo).every(function (id) { return (now[id] || 0) >= was[id]; });
+      };
+      var addLines = function (withMarkup) {
+        return self.write('cart/add.js', { items: adds }, withMarkup).then(function () { return null; }, function (err) { return err; });
+      };
+      // Stock for one copy only: the old lines come out first, then the new ones go in - or, if they
+      // still will not, the old ones go back.
+      var cutFirst = function (c) {
+        self.note({ target: target, was: was, restore: restore });
+        return self.settle(c, cutTo).then(function (afterCut) {
+          return addLines(true).then(function (addError) {
+            return self.readCart().then(function (now) {
+              if (landed(now, afterCut.items || [])) return now;
+              return self.settle(now, grown).then(function (back) { return self.refill(back, restore, was); }).then(function () {
+                self.note(null);
+                throw addError || new Error(CART_ERROR);
+              });
+            });
           });
         });
+      };
+      var sharesStock = adds.some(function (line) { return restore.some(function (old) { return String(old.id) === String(line.id); }); });
+
+      // The new lines did not (all) go in: take back what did and keep the old lines - or, refused for
+      // stock the old lines are holding, go the other way round.
+      var giveUp = function (now, addError) {
+        var unanswered = !!addError && !addError.status;
+        return self.settle(now, grown).then(function (back) {
+          // An add that got no answer may still land later; the note stays so the next page view
+          // puts the cart right if it does.
+          if (!unanswered) self.note(null);
+          if (addError && addError.status === 422 && cuts && sharesStock) return cutFirst(back);
+          throw addError || new Error(CART_ERROR);
+        });
+      };
+
+      this.note({ target: target, was: was });
+      return addLines(!cuts).then(function (addError) {
+        return self.readCart().then(function (now) {
+          if (landed(now, before)) return now; // an add that timed out may still have gone through
+          if (!addError || addError.status) return giveUp(now, addError);
+          // No answer at all: the add may still be on its way, so look once more before undoing it.
+          return wait(1500).then(function () { return self.readCart(); }).then(function (later) {
+            return landed(later, before) ? later : giveUp(later, addError);
+          });
+        });
+      }).then(function (now) {
+        if (!cuts || cutDone(now)) return now;
+        return self.settle(now, cutTo).catch(function (err) {
+          // The cut may have gone through without its answer arriving: look before doing anything else.
+          return self.readCart().then(function (again) {
+            return cutDone(again) ? again : self.settle(again, cutTo);
+          }).catch(function () {
+            return self.readCart().then(function (latest) {
+              if (cutDone(latest)) return latest;
+              if (!oldIntact(latest)) throw err; // no telling what happened: change nothing more
+              return self.settle(latest, grown).then(function () { self.note(null); throw err; }, function () { throw err; });
+            });
+          });
+        });
+      }).then(function (done) {
+        self.note(null);
+        return done;
       });
     },
     // Brings every identity in `target` down to its total with one positional /cart/update.js (a
@@ -377,13 +500,49 @@
       if (!cut) return Promise.resolve(cart);
       return this.write('cart/update.js', { updates: updates });
     },
-    // Takes the lines a rewrite added back out, leaving every identity they touched at what it was.
-    putBack: function (cart, before, adds) {
+    // Adds back whatever part of `lines` the cart is missing, up to the totals in `was`, with one more
+    // try from a fresh read: these are the shopper's own bottles going back in.
+    refill: function (cart, lines, was, again) {
       var self = this;
-      var had = this.totals(before, this.itemIdentity.bind(this));
-      var target = {};
-      adds.forEach(function (line) { var id = self.lineIdentity(line); target[id] = had[id] || 0; });
-      return this.settle(cart, target);
+      var now = this.totals(cart.items || [], this.itemIdentity.bind(this));
+      var missing = lines.map(function (line) {
+        var id = self.lineIdentity(line);
+        return Object.assign({}, line, { quantity: (was[id] || 0) - (now[id] || 0) });
+      }).filter(function (line) { return line.quantity > 0; });
+      if (!missing.length) return Promise.resolve(null);
+      return this.write('cart/add.js', { items: missing }).catch(function (err) {
+        if (again) throw err;
+        return wait(800).then(function () { return self.readCart(); }).then(function (latest) { return self.refill(latest, lines, was, true); });
+      });
+    },
+    note: function (value) {
+      writeFlag(REWRITE_KEY, value ? JSON.stringify(Object.assign({ at: Date.now() }, value)) : '');
+    },
+    /* A rewrite the page was left in the middle of - a reload, a link, a connection that dropped for
+       good - is put right on the next page view: finished if the new lines made it into the cart,
+       otherwise undone (and the old lines put back if they had already come out). */
+    resume: function () {
+      var raw = readFlag(REWRITE_KEY);
+      if (!raw) return Promise.resolve(null);
+      this.note(null);
+      var note = null;
+      try { note = JSON.parse(raw); } catch (err) { /* unreadable: nothing to put right */ }
+      if (!note || !note.target || !note.was || Date.now() - (note.at || 0) > 600000) return Promise.resolve(null);
+      var self = this;
+      return this.readCart().then(function (cart) {
+        var now = self.totals(cart.items || [], self.itemIdentity.bind(self));
+        var grown = {}, cutTo = {};
+        Object.keys(note.target).forEach(function (id) {
+          if (note.target[id] > (note.was[id] || 0)) grown[id] = note.was[id] || 0;
+          if (note.target[id] < (note.was[id] || 0)) cutTo[id] = note.target[id];
+        });
+        var added = Object.keys(grown).every(function (id) { return (now[id] || 0) >= note.target[id]; });
+        var cut = Object.keys(cutTo).every(function (id) { return (now[id] || 0) <= cutTo[id]; });
+        if (added) return cut ? cart : self.settle(cart, cutTo);
+        return self.settle(cart, grown).then(function (back) {
+          return cut && note.restore ? self.refill(back, note.restore, note.was).then(function () { return null; }) : back;
+        });
+      }).catch(function () { return null; });
     },
 
     /* Subscribe & save on a cart line.
@@ -406,14 +565,18 @@
       return this.run(function () {
         if (on && !planId) return null; // nothing to switch to: the drawer is simply drawn again
         return self.fetchCart().then(function (cart) {
-          return self.switchPlan(cart, variantId, planId, on, true);
+          return self.switchPlan(cart, variantId, planId, on);
         }).then(function (cart) {
           if (on) self.setGiftDeclined(false); // opting in again also brings the gift back
+          self.announce(on ? 'Subscribe & save is on' : 'Switched to a one-time purchase');
           return self.reconcile(cart);
+        }, function () {
+          // Shopify's own wording ("You can't add more ... to the cart") would make no sense here.
+          throw new Error(on ? 'Sorry, this could not be switched to Subscribe & save. Please try again.' : 'Sorry, this could not be switched to a one-time purchase. Please try again.');
         });
       });
     },
-    switchPlan: function (cart, variantId, planId, on, firstTry) {
+    switchPlan: function (cart, variantId, planId, on) {
       var self = this;
       var items = cart.items || [];
       var moved = items.filter(function (item) {
@@ -437,21 +600,23 @@
       var out = moved.concat(bundles.stale.filter(function (item) { return item !== merged; }));
       var lines = (bundles.stale.indexOf(merged) === -1 ? [line] : []).concat(bundles.lines);
       var identity = this.lineIdentity(line);
-      var inPlace = firstTry && moved.length === 1 && !tagged && out.length === 1 && lines.length === 1 && lines[0] === line &&
+      var inPlace = moved.length === 1 && !tagged && out.length === 1 && lines.length === 1 && lines[0] === line &&
         !items.some(function (item) { return self.itemIdentity(item) === identity; });
       if (!inPlace) return this.rewrite(cart, out, lines);
       // /cart/change.js with selling_plan only takes a position, and wants the quantity every time.
-      var from = this.pairOfItem(moved[0]), to = this.pairOfLine(line);
+      var to = this.pairOfLine(line), movedId = this.itemIdentity(moved[0]);
       var had = this.totals(items, this.pairOfItem);
+      // Whatever came of the request - done, half done (the plan changed but not the quantity), not
+      // done, or no answer - finish from the cart as it stands: anything still on the old side comes
+      // off it, and the new side is topped up to what it should hold.
+      var finish = function (next) {
+        var short = (had[to] || 0) + line.quantity - (self.totals(next.items || [], self.pairOfItem)[to] || 0);
+        var left = (next.items || []).filter(function (item) { return self.itemIdentity(item) === movedId; });
+        if (short <= 0 && !left.length) return next;
+        return self.rewrite(next, left, short > 0 ? [Object.assign({}, line, { quantity: short })] : []);
+      };
       return this.write('cart/change.js', { line: items.indexOf(moved[0]) + 1, quantity: moved[0].quantity, selling_plan: on ? planId : null })
-        .then(function (next) {
-          var pairs = self.totals(next.items || [], self.pairOfItem);
-          if ((pairs[from] || 0) === (had[from] || 0) - line.quantity && (pairs[to] || 0) === (had[to] || 0) + line.quantity) return next;
-          // Shopify did not do what was asked: finish the switch from the cart as it now stands.
-          return self.switchPlan(next, variantId, planId, on, false);
-        }, function () {
-          return self.fetchCart().then(function (next) { return self.switchPlan(next, variantId, planId, on, false); });
-        });
+        .then(finish, function () { return self.readCart().then(finish); });
     },
 
     // Everything the cart puts right after a change: the subscription bundle layout, then the gift.
@@ -622,18 +787,24 @@
     /* The gift's quantity buttons (and its remove button) set the gift's total quantity. Once the
        free-gift discount covers one unit and there are more, Shopify splits the gift into a $0 line
        and a paid line; the buttons act on both, as one rewrite towards the new total (see rewrite).
-       Taking it down to zero counts as declining the gift, so it is not added straight back. */
-    setGiftQuantity: function (quantity) {
+       Taking it down to zero counts as declining the gift, so it is not added straight back.
+       `current` is the gift total the drawer showed when the button was pressed: a press that had to
+       wait behind another change only goes ahead if the gift is still what the shopper saw. */
+    setGiftQuantity: function (quantity, current) {
       var giftId = this.giftVariantId();
       if (!giftId) return Promise.resolve();
       var self = this;
+      var recheck = this.waiting > 0;
       quantity = Math.max(0, quantity || 0);
       return this.run(function () {
-        if (!quantity) self.setGiftDeclined(true);
         return self.fetchCart().then(function (cart) {
           var items = cart.items || [];
           var gifts = items.filter(function (item) { return self.isGiftLine(item); });
-          var line = { id: gifts.length ? gifts[0].variant_id : giftId, quantity: quantity, properties: self.giftProperties(self.giftPlans(items)[0]) };
+          var plans = self.giftPlans(items);
+          if (recheck && totalQuantity(gifts) !== current) return cart;
+          if (quantity && !plans.length) return cart; // the gift only comes with a subscription
+          if (!quantity) self.setGiftDeclined(true);
+          var line = { id: gifts.length ? gifts[0].variant_id : giftId, quantity: quantity, properties: self.giftProperties(plans[0]) };
           return self.rewrite(cart, gifts, quantity ? [line] : []);
         }).catch(function (err) {
           // e.g. not enough stock for the new quantity: make sure the free one is still there
@@ -712,8 +883,11 @@
     var button = $('button[type="submit"]', form);
     if (button) { button.disabled = true; button.classList.add('is-loading'); }
     showFormError(form, '');
+    // A form inside the drawer ("Pair with", the empty cart's product) is replaced when the drawer is
+    // redrawn, so its error goes to the drawer's own error line instead.
+    var inDrawer = !!(Cart.drawer() && Cart.drawer().contains(form));
     Cart.addForm(form).catch(function (err) {
-      showFormError(form, err.message);
+      if (inDrawer) Cart.showError(err.message); else showFormError(form, err.message);
     }).then(function () {
       if (button) { button.disabled = false; button.classList.remove('is-loading'); }
     });
@@ -722,9 +896,23 @@
   // A change the drawer could not make: the drawer has been drawn again from the cart as it
   // stands, and the message says why it did not change.
   function cartFailed(err) { Cart.showError((err && err.message) || CART_ERROR); }
-  function lineKey(el) {
-    var line = el.closest('line-item');
-    return line ? line.getAttribute('data-key') : null;
+  // What a quantity or remove button acts on, as the drawer showed it (see Cart.change).
+  function linePayload(button, line, quantity) {
+    var item = button.closest('line-item');
+    var key = item ? item.getAttribute('data-key') : null;
+    var shown = item ? $('.custom-quantity-selector__text', item) : null;
+    var nth = 0;
+    if (item) $$('line-item', item.parentNode).some(function (other) {
+      if (other === item) return true;
+      if (other.getAttribute('data-key') === key) nth++;
+      return false;
+    });
+    return { line: line, quantity: quantity, key: key, current: shown ? parseInt(shown.textContent, 10) : null, nth: nth };
+  }
+  function giftShown() {
+    return $$('line-item[data-gift] .custom-quantity-selector__text', Cart.drawer()).reduce(function (total, el) {
+      return total + (parseInt(el.textContent, 10) || 0);
+    }, 0);
   }
 
   document.addEventListener('click', function (e) {
@@ -735,19 +923,19 @@
     var giftQty = e.target.closest('[data-cart-gift-qty]');
     if (giftQty) {
       e.preventDefault();
-      Cart.setGiftQuantity(parseInt(giftQty.getAttribute('data-cart-gift-qty'), 10)).catch(cartFailed);
+      Cart.setGiftQuantity(parseInt(giftQty.getAttribute('data-cart-gift-qty'), 10), giftShown()).catch(cartFailed);
       return;
     }
     var remove = e.target.closest('[data-cart-remove]');
     if (remove) {
       e.preventDefault();
-      Cart.change({ line: parseInt(remove.getAttribute('data-cart-remove'), 10), quantity: 0, key: lineKey(remove) }).catch(cartFailed);
+      Cart.change(linePayload(remove, parseInt(remove.getAttribute('data-cart-remove'), 10), 0)).catch(cartFailed);
       return;
     }
     var qty = e.target.closest('[data-cart-qty]');
     if (qty) {
       e.preventDefault();
-      Cart.change({ line: parseInt(qty.getAttribute('data-cart-qty'), 10), quantity: parseInt(qty.getAttribute('data-cart-qty-value'), 10), key: lineKey(qty) }).catch(cartFailed);
+      Cart.change(linePayload(qty, parseInt(qty.getAttribute('data-cart-qty'), 10), parseInt(qty.getAttribute('data-cart-qty-value'), 10))).catch(cartFailed);
       return;
     }
     var prev = e.target.closest('[data-rec-prev]'), next = e.target.closest('[data-rec-next]');
@@ -1642,9 +1830,12 @@
     if (Cart.drawer()) {
       var cartCount = parseInt(Cart.drawer().getAttribute('data-cart-count') || '0', 10);
       Cart.updateCount(cartCount);
-      // Carts from before the gift and the subscription bundles carried Kaching's tags are still
-      // charged in full for them: fix them on arrival.
-      if (cartCount) Cart.run(function () { return Cart.reconcile(); }, true).catch(function () {});
+      // A cart change the last page was left in the middle of is put right first. Then carts from
+      // before the gift and the subscription bundles carried Kaching's tags, which are still charged
+      // in full for them, are fixed on arrival.
+      if (cartCount || readFlag(REWRITE_KEY)) {
+        Cart.run(function () { return Cart.resume().then(function (cart) { return Cart.reconcile(cart); }); }, true).catch(function () {});
+      }
     }
     document.documentElement.classList.add('loaded');
     autoLocalize();
