@@ -866,6 +866,7 @@ cart-drawer.mini-cart[open] .drawer__overlay { opacity: 1; }
 cart-drawer.mini-cart[open] .drawer__panel { transform: translateX(0); }
 body.cart-open { overflow: hidden; }
 .mini-cart.is-loading .drawer__content, .mini-cart.is-loading .drawer__footer { opacity: 0.55; pointer-events: none; transition: opacity 0.2s; }
+.mini-cart .s-mini-cart__error { margin: 0; padding: 10px 20px; border-bottom: 1px solid #f0d5d2; background: #fcf1ef; color: #9d2b1f; font-size: 13px; line-height: 1.4; }
 
 /* Header */
 .mini-cart .drawer__header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px 12px 20px; border-bottom: 1px solid #ece8e2; }

@@ -264,12 +264,17 @@ python3 scripts/localize_assets.py --dry-run
   subscribe & save plan (price, discount and savings are computed from the selling plan),
   tracked inventory for the low-stock notice. Submitting adds through `/cart/add.js` and opens
   the cart drawer; the drawer changes quantities and removes lines through `/cart/change.js`,
-  switches a product between subscription and one-time by zeroing its lines with a positional
-  `/cart/update.js` and re-adding the full quantity through `/cart/add.js` (positions, not keys:
-  a discount-split line shares its key with the paid line), adds or removes the free
-  subscription gift after every cart change, and re-renders itself with the Section Rendering
-  API. The newsletter posts to Shopify's customer form. The supporting `main-*`
-  sections use the connected store's own products, cart and customer accounts.
+  and adds or removes the free subscription gift after every cart change. The Subscribe & save
+  switch moves a single line in place with `/cart/change.js` and `selling_plan`; anything more
+  (a bundle split over two lines, Kaching's subscription layout, a Kaching tag that has to come
+  off, which `/cart/change.js` cannot do) adds the new lines through `/cart/add.js` first and only
+  then takes the old ones out with one positional `/cart/update.js` (positions, not keys: a
+  discount-split line shares its key with the paid line). The cart is never emptied along the
+  way, and a failure takes back whatever went in, so the shopper keeps the cart they had and sees
+  why in the drawer. Cart changes run one at a time, a request that gets no answer within 20
+  seconds fails instead of hanging, and the drawer is redrawn once per change (Section Rendering
+  API), from the finished cart. The newsletter posts to Shopify's customer form. The supporting
+  `main-*` sections use the connected store's own products, cart and customer accounts.
 * Run `shopify theme check` (Shopify CLI) before publishing; the only remaining warnings are the
   remote placeholder images.
 * Hidden/utility parts of the original page (Shopify pixels, cookie consent, chat widget, Klaviyo,

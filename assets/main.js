@@ -46,6 +46,13 @@
   };
 
   /* ================================================================ cart */
+  // A cart request that gets no answer within this long fails, so a dropped connection can never
+  // leave the drawer greyed out for good.
+  var CART_TIMEOUT = 20000;
+  var CART_ERROR = 'Something went wrong. Please try again.';
+  var totalQuantity = function (lines) { return lines.reduce(function (total, line) { return total + line.quantity; }, 0); };
+  var planOf = function (item) { return item.selling_plan_allocation ? item.selling_plan_allocation.selling_plan.id : ''; };
+
   var Cart = {
     drawer: function () { return document.getElementById('mini-cart'); },
     sectionId: function () { var d = this.drawer(); return d ? d.getAttribute('data-section-id') : null; },
@@ -71,11 +78,20 @@
     },
     setLoading: function (on) {
       var d = this.drawer();
-      if (d) d.classList.toggle('is-loading', !!on);
+      if (!d) return;
+      d.classList.toggle('is-loading', !!on);
+      if (on) d.setAttribute('aria-busy', 'true'); else d.removeAttribute('aria-busy');
     },
     announce: function (msg) {
       var s = $('[data-cart-status]', this.drawer());
       if (s) s.textContent = msg || '';
+    },
+    // A change the drawer could not make is shown under the title until the next change starts.
+    showError: function (msg) {
+      var box = $('[data-cart-error]', this.drawer());
+      if (!box) return;
+      box.textContent = msg || '';
+      box.hidden = !msg;
     },
     updateCount: function (count) {
       $$('[data-cart-count-bubble]').forEach(function (b) {
@@ -133,91 +149,241 @@
       options = options || {};
       options.headers = Object.assign({ Accept: 'application/json' }, options.headers || {});
       options.credentials = 'same-origin';
-      return fetch(rootUrl() + path, options).then(function (res) {
-        return res.json().then(function (json) {
-          if (!res.ok) throw new Error(json.description || json.message || 'Something went wrong. Please try again.');
-          return json;
+      if (!options.method) options.cache = 'no-store'; // reads must see the cart as it is now
+      var controller = typeof window.AbortController === 'function' ? new window.AbortController() : null;
+      var timer = controller ? window.setTimeout(function () { controller.abort(); }, CART_TIMEOUT) : null;
+      if (controller) options.signal = controller.signal;
+      return fetch(rootUrl() + path, options)
+        .then(function (res) { return res.text().then(function (text) { return { res: res, text: text }; }); })
+        .then(function (reply) {
+          window.clearTimeout(timer);
+          var json = null;
+          try { json = reply.text ? JSON.parse(reply.text) : {}; } catch (err) { /* an HTML error page, e.g. too many requests */ }
+          if (reply.res.ok && json) return json;
+          throw new Error((json && (json.description || json.message)) || CART_ERROR);
+        }, function () {
+          window.clearTimeout(timer);
+          throw new Error(CART_ERROR); // offline, or no answer within CART_TIMEOUT
         });
-      });
     },
     refresh: function () {
       var id = this.sectionId();
       if (!id) return Promise.resolve();
       var self = this;
-      return fetch(rootUrl() + '?sections=' + encodeURIComponent(id), { credentials: 'same-origin' })
-        .then(function (r) { return r.json(); })
-        .then(function (json) { self.render(json[id]); });
+      return this.request('?sections=' + encodeURIComponent(id)).then(function (json) { self.render(json[id]); });
     },
     fetchCart: function () {
-      return this.request('cart.js', { method: 'GET' });
+      return this.request('cart.js');
     },
-    addForm: function (form) {
-      var id = this.sectionId();
-      var data = new FormData(form);
-      if (id) data.append('sections', id);
+    // Every cart write goes through here. It asks for the drawer's markup along with the change
+    // (unless the write is only a step on the way) so the change can draw the drawer from its last
+    // write without another request - see run.
+    write: function (path, body, withMarkup) {
+      var id = withMarkup === false ? null : this.sectionId();
+      var isForm = typeof FormData !== 'undefined' && body instanceof FormData;
+      if (id) { if (isForm) body.append('sections', id); else body.sections = id; }
+      var options = { method: 'POST', body: isForm ? body : JSON.stringify(body) };
+      if (!isForm) options.headers = { 'Content-Type': 'application/json' };
       var self = this;
+      this.writes++;
+      this.html = null;
+      return this.request(path, options).then(function (json) {
+        self.html = (id && json.sections && json.sections[id]) || null;
+        return json;
+      });
+    },
+
+    /* Cart changes run one at a time, in the order they were asked for. Each one reads the cart it
+       works on, and some take several requests, so two at once (a second tap on the switch, the
+       page-load tidy-up still going when the shopper opens the drawer) would each rewrite a cart the
+       other is halfway through - and draw the drawer from it. The drawer is drawn once per change,
+       from the cart as it stands when the change is done, and not at all while another change is
+       waiting behind it, since that one draws it again. A quiet change (the page-load tidy-up) only
+       draws the drawer if it changed the cart. */
+    queue: Promise.resolve(),
+    waiting: 0,
+    writes: 0,
+    html: null,
+    needsDraw: false,
+    run: function (task, quiet) {
+      var self = this;
+      this.waiting++;
+      if (!quiet) this.setLoading(true);
+      var job = this.queue.then(function () {
+        var writesBefore = self.writes;
+        self.html = null;
+        if (!quiet) self.showError('');
+        return Promise.resolve().then(task).then(function (value) {
+          return { value: value, changed: self.writes !== writesBefore };
+        }, function (error) {
+          return { error: error || new Error(CART_ERROR), changed: true };
+        });
+      }).then(function (outcome) {
+        self.needsDraw = self.needsDraw || outcome.changed || !quiet;
+        var draw = null, html = self.html;
+        if (self.waiting === 1 && self.needsDraw) {
+          self.needsDraw = false;
+          draw = html ? Promise.resolve().then(function () { self.render(html); }) : self.refresh();
+        }
+        return Promise.resolve(draw).catch(function () { /* the next change draws it */ }).then(function () {
+          self.waiting--;
+          if (!self.waiting) self.setLoading(false);
+          if (outcome.error) throw outcome.error;
+          return outcome.value;
+        });
+      });
+      this.queue = job.catch(function () {});
+      return job;
+    },
+
+    addForm: function (form) {
+      var self = this;
+      var data = new FormData(form);
       // Adding on a subscription (the buy box with Subscribe & save on) is opting into the plan
       // afresh, so it brings the gift back even if it was taken out earlier this visit.
-      if (data.get('selling_plan')) this.setGiftDeclined(false);
-      this.setLoading(true);
-      return this.request('cart/add.js', { method: 'POST', body: data }).then(function (json) {
-        if (id && json.sections && json.sections[id]) self.render(json.sections[id]);
-        else return self.refresh();
-      }).then(function () {
+      var subscribing = !!data.get('selling_plan');
+      return this.run(function () {
+        if (subscribing) self.setGiftDeclined(false);
         // The buy box may have added a subscription: its bundle is laid out for Kaching and the
         // advertised gift comes along with it.
-        return self.reconcile();
+        return self.write('cart/add.js', data).then(function () { return self.reconcile(); });
       }).then(function () {
-        self.setLoading(false);
         self.announce('Added to cart');
         self.open();
-      }).catch(function (err) {
-        self.setLoading(false);
-        throw err;
       });
     },
-    addItems: function (items) {
-      var id = this.sectionId();
-      var self = this;
-      return this.request('cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: items, sections: id })
-      }).then(function (json) {
-        if (id && json.sections && json.sections[id]) self.render(json.sections[id]);
-        else return self.refresh();
-      });
-    },
-    // Positional quantities, one per cart line, in cart order. Lines are addressed by position
-    // rather than by key: when the quantity-break discount splits a bundle's free bottle onto its
-    // own $0 line, that line shares the paid line's key, and a keyed update would hit both.
-    update: function (updates) {
-      var id = this.sectionId();
-      var self = this;
-      return this.request('cart/update.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ updates: updates, sections: id })
-      }).then(function (json) {
-        if (id && json.sections && json.sections[id]) self.render(json.sections[id]);
-        else return self.refresh();
-      });
-    },
+    // Quantity and remove buttons: { line, quantity, key }. Lines are addressed by position, not by
+    // key: when the quantity-break discount splits a bundle's free bottle onto its own $0 line, that
+    // line shares the paid line's key, and a keyed change would hit both.
     change: function (payload) {
-      var id = this.sectionId();
       var self = this;
-      payload.sections = id;
-      this.setLoading(true);
-      return this.request('cart/change.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }).then(function (json) {
-        if (id && json.sections && json.sections[id]) self.render(json.sections[id]);
-        else return self.refresh();
-      }).then(function () { return self.reconcile(); })
-        .then(function () { self.setLoading(false); })
-        .catch(function (err) { self.setLoading(false); self.announce(err.message); return self.refresh(); });
+      // Clicked while an earlier change was still running: the positions on screen may be out of date
+      // by the time this one runs, so it only goes ahead if its line is still where it was.
+      var recheck = this.waiting > 0 && !!payload.key;
+      return this.run(function () {
+        var still = recheck ? self.fetchCart().then(function (cart) {
+          var item = (cart.items || [])[payload.line - 1];
+          return !!item && item.key === payload.key;
+        }) : Promise.resolve(true);
+        return still.then(function (ok) {
+          if (!ok) return null;
+          return self.write('cart/change.js', { line: payload.line, quantity: payload.quantity }).then(function (cart) {
+            return self.reconcile(cart);
+          });
+        });
+      });
+    },
+
+    /* Lines are the same line to Shopify when variant, plan and properties match (a line the
+       discount has split in two is listed twice with the same identity), and a "pair" is every line
+       of a variant on one plan (or on none) - what the switch moves between. */
+    propertiesKey: function (properties) {
+      var p = properties || {};
+      return JSON.stringify(Object.keys(p).sort().filter(function (k) {
+        return p[k] !== null && p[k] !== undefined && p[k] !== '';
+      }).map(function (k) { return [k, String(p[k])]; }));
+    },
+    itemIdentity: function (item) {
+      return item.variant_id + '|' + planOf(item) + '|' + this.propertiesKey(item.properties);
+    },
+    lineIdentity: function (line) {
+      return line.id + '|' + (line.selling_plan || '') + '|' + this.propertiesKey(line.properties);
+    },
+    totals: function (items, keyOf) {
+      return items.reduce(function (totals, item) {
+        var key = keyOf(item);
+        totals[key] = (totals[key] || 0) + item.quantity;
+        return totals;
+      }, {});
+    },
+    pairOfItem: function (item) { return item.variant_id + '|' + planOf(item); },
+    pairOfLine: function (line) { return line.id + '|' + (line.selling_plan || ''); },
+
+    /* Take some lines out of the cart and put others in without the cart ever being short. The new
+       lines go in first, in one /cart/add.js, and the old ones only come out once the new ones are
+       there, in one /cart/update.js made from a fresh read of the cart. If the new lines do not go
+       in, whatever part of them did is taken back out and the old lines were never touched; if the
+       old lines will not come out, the new ones are taken back out. Either way a failure leaves the
+       shopper with the cart they had, never an empty one. `out` are cart items, `lines` are
+       /cart/add.js lines; a new line that matches one already in the cart tops it up. Resolves with
+       the cart as it stands afterwards. */
+    rewrite: function (cart, out, lines) {
+      var self = this;
+      var before = cart.items || [];
+      // What each identity touched here adds up to once the rewrite is done.
+      var target = {}, spec = {};
+      out.forEach(function (item) { target[self.itemIdentity(item)] = 0; });
+      lines.forEach(function (line) { var id = self.lineIdentity(line); target[id] = 0; spec[id] = line; });
+      before.forEach(function (item) {
+        var id = self.itemIdentity(item);
+        if (id in target && out.indexOf(item) === -1) target[id] += item.quantity;
+      });
+      lines.forEach(function (line) { target[self.lineIdentity(line)] += line.quantity; });
+      var had = this.totals(before, this.itemIdentity.bind(this));
+      var adds = [], cuts = false;
+      Object.keys(target).forEach(function (id) {
+        var delta = target[id] - (had[id] || 0);
+        if (delta > 0 && spec[id]) adds.push(Object.assign({}, spec[id], { quantity: delta }));
+        if (delta < 0) cuts = true;
+      });
+      if (!adds.length && !cuts) return Promise.resolve(cart);
+      // Every variant/plan pair the new lines go into, and what it must add up to once they are in.
+      var expected = {}, hadPairs = this.totals(before, this.pairOfItem);
+      adds.forEach(function (line) {
+        var pair = self.pairOfLine(line);
+        if (!(pair in expected)) expected[pair] = hadPairs[pair] || 0;
+        expected[pair] += line.quantity;
+      });
+      var put = adds.length
+        ? this.write('cart/add.js', { items: adds }, !cuts).then(function () { return null; }, function (err) { return err; })
+        : Promise.resolve(null);
+      return put.then(function (addError) {
+        if (!adds.length) return cart; // nothing was written since the cart was read
+        return self.fetchCart().then(function (now) {
+          var pairs = self.totals(now.items || [], self.pairOfItem);
+          var landed = Object.keys(expected).every(function (pair) { return (pairs[pair] || 0) >= expected[pair]; });
+          if (landed) return now; // a request that timed out may still have gone through
+          var failed = addError || new Error(CART_ERROR);
+          return self.putBack(now, before, adds).then(function () { throw failed; }, function () { throw failed; });
+        });
+      }).then(function (now) {
+        if (!cuts) return now;
+        return self.settle(now, target).catch(function () {
+          // Try once more from a fresh read (the first try may have gone through after all), and
+          // failing that take the new lines back out so the shopper keeps the cart they had.
+          return self.fetchCart().then(function (again) { return self.settle(again, target); }).catch(function (err) {
+            if (!adds.length) throw err;
+            return self.fetchCart().then(function (latest) { return self.putBack(latest, before, adds); })
+              .then(function () { throw err; }, function () { throw err; });
+          });
+        });
+      });
+    },
+    // Brings every identity in `target` down to its total with one positional /cart/update.js (a
+    // line the discount has split shares its key with the rest of it, so keys cannot address it).
+    // Lines not in `target` keep their quantity.
+    settle: function (cart, target) {
+      var self = this;
+      var left = Object.assign({}, target);
+      var cut = false;
+      var updates = (cart.items || []).map(function (item) {
+        var id = self.itemIdentity(item);
+        if (!(id in left)) return item.quantity;
+        var keep = Math.min(item.quantity, left[id]);
+        left[id] -= keep;
+        if (keep !== item.quantity) cut = true;
+        return keep;
+      });
+      if (!cut) return Promise.resolve(cart);
+      return this.write('cart/update.js', { updates: updates });
+    },
+    // Takes the lines a rewrite added back out, leaving every identity they touched at what it was.
+    putBack: function (cart, before, adds) {
+      var self = this;
+      var had = this.totals(before, this.itemIdentity.bind(this));
+      var target = {};
+      adds.forEach(function (line) { var id = self.lineIdentity(line); target[id] = had[id] || 0; });
+      return this.settle(cart, target);
     },
 
     /* Subscribe & save on a cart line.
@@ -225,47 +391,77 @@
        bundle arrives as three bottles on one line and the Kaching quantity-break discount then
        splits the free bottle onto its own $0 line - so changing only the clicked line left the
        other bottle behind as a one-time line, two paid bottles moved onto the plan, and the deal
-       (three bottles on one line) was gone. Every one-time line of the variant is removed and the
-       whole quantity re-enters the cart as a single line on the plan (or, switching off, without
+       (three bottles on one line) was gone. Every line of the variant on the other side of the
+       switch moves: the whole quantity becomes one line on the plan (or, switching off, without
        one). Switching off, the discount re-splits it exactly as it did on the first add; switching
-       on, reconcileBundles lays it out as Kaching's subscription bundle. */
+       on, the bottles are laid out as Kaching's subscription bundle (see reconcileBundles) in the
+       same pass rather than in a second one.
+       A single line that only changes plan is switched in place with /cart/change.js. Anything
+       else - a bundle split over two lines, the Kaching layout, a Kaching tag that has to come off
+       (/cart/change.js cannot remove a property) - is one rewrite: the new lines go in before the
+       old ones come out. Either way the drawer is drawn once, when the whole switch is done. */
     setLinePlan: function (variantId, planId, on) {
       var self = this;
-      this.setLoading(true);
-      return this.fetchCart().then(function (cart) {
-        var items = cart.items || [];
-        var matched = items.filter(function (item) {
-          if (item.variant_id !== variantId || self.isGiftLine(item)) return false;
-          return on ? !item.selling_plan_allocation : !!item.selling_plan_allocation;
+      planId = parseInt(planId, 10) || null;
+      return this.run(function () {
+        if (on && !planId) return null; // nothing to switch to: the drawer is simply drawn again
+        return self.fetchCart().then(function (cart) {
+          return self.switchPlan(cart, variantId, planId, on, true);
+        }).then(function (cart) {
+          if (on) self.setGiftDeclined(false); // opting in again also brings the gift back
+          return self.reconcile(cart);
         });
-        if (!matched.length) return self.refresh();
-        var total = matched.reduce(function (sum, item) { return sum + item.quantity; }, 0);
-        var line = { id: variantId, quantity: total };
-        if (on) line.selling_plan = planId;
-        // Kaching's subscription-bundle tag belongs to the lines reconcileBundles lays out, not to
-        // the merged line: a one-time line never needs it, and one on a plan is re-tagged.
-        var properties = Object.assign({}, matched[0].properties);
-        delete properties[KACHING_BUNDLE_PROP];
-        if (Object.keys(properties).length) line.properties = properties;
-        var updates = items.map(function (item) { return matched.indexOf(item) === -1 ? item.quantity : 0; });
-        return self.request('cart/update.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ updates: updates })
-        }).then(function () { return self.addItems([line]); });
-      }).then(function () {
-        if (on) self.setGiftDeclined(false); // opting in again also brings the gift back
-        return self.reconcile();
-      }).then(function () { self.setLoading(false); })
-        .catch(function (err) { self.setLoading(false); self.announce(err.message); return self.refresh(); });
+      });
+    },
+    switchPlan: function (cart, variantId, planId, on, firstTry) {
+      var self = this;
+      var items = cart.items || [];
+      var moved = items.filter(function (item) {
+        if (item.variant_id !== variantId || self.isGiftLine(item)) return false;
+        return on ? !item.selling_plan_allocation : !!item.selling_plan_allocation;
+      });
+      if (!moved.length) return Promise.resolve(cart); // already switched (a repeated tap)
+      // Kaching's subscription-bundle tag belongs to the lines laid out below, never to the merged line.
+      var properties = Object.assign({}, moved[0].properties);
+      var tagged = KACHING_BUNDLE_PROP in properties;
+      delete properties[KACHING_BUNDLE_PROP];
+      var line = { id: variantId, quantity: totalQuantity(moved) };
+      if (on) line.selling_plan = planId;
+      if (Object.keys(properties).length) line.properties = properties;
+      // Plan Kaching's layout on the cart as it will be once the switch is done.
+      var merged = {
+        variant_id: variantId, product_id: moved[0].product_id, quantity: line.quantity,
+        properties: line.properties || {}, selling_plan_allocation: on ? { selling_plan: { id: planId } } : null
+      };
+      var bundles = this.planBundles(items.filter(function (item) { return moved.indexOf(item) === -1; }).concat([merged]));
+      var out = moved.concat(bundles.stale.filter(function (item) { return item !== merged; }));
+      var lines = (bundles.stale.indexOf(merged) === -1 ? [line] : []).concat(bundles.lines);
+      var identity = this.lineIdentity(line);
+      var inPlace = firstTry && moved.length === 1 && !tagged && out.length === 1 && lines.length === 1 && lines[0] === line &&
+        !items.some(function (item) { return self.itemIdentity(item) === identity; });
+      if (!inPlace) return this.rewrite(cart, out, lines);
+      // /cart/change.js with selling_plan only takes a position, and wants the quantity every time.
+      var from = this.pairOfItem(moved[0]), to = this.pairOfLine(line);
+      var had = this.totals(items, this.pairOfItem);
+      return this.write('cart/change.js', { line: items.indexOf(moved[0]) + 1, quantity: moved[0].quantity, selling_plan: on ? planId : null })
+        .then(function (next) {
+          var pairs = self.totals(next.items || [], self.pairOfItem);
+          if ((pairs[from] || 0) === (had[from] || 0) - line.quantity && (pairs[to] || 0) === (had[to] || 0) + line.quantity) return next;
+          // Shopify did not do what was asked: finish the switch from the cart as it now stands.
+          return self.switchPlan(next, variantId, planId, on, false);
+        }, function () {
+          return self.fetchCart().then(function (next) { return self.switchPlan(next, variantId, planId, on, false); });
+        });
     },
 
     // Everything the cart puts right after a change: the subscription bundle layout, then the gift.
-    reconcile: function () {
+    // Takes the cart when the caller already has it, and saves a read.
+    reconcile: function (cart) {
       var self = this;
-      return this.reconcileBundles()
-        .catch(function () { /* a discount layout must never break the cart */ })
-        .then(function () { return self.reconcileGift(); });
+      return (cart ? Promise.resolve(cart) : this.fetchCart())
+        .then(function (current) { return self.reconcileBundles(current); })
+        .catch(function () { return null; /* a discount layout must never break the cart */ })
+        .then(function (current) { return self.reconcileGift(current); });
     },
 
     /* Subscription bundles (see KACHING_DEAL).
@@ -274,10 +470,10 @@
        shopper pays for every bottle. So after every cart change, the deal product's bottles on
        each selling plan are laid out for the biggest bar they fill: the paid bottles on one line,
        the free ones on another, both tagged exactly as Kaching's widget tags them. Bottles that
-       fill no bar sit untagged on one line. Lines already in that shape are left alone, so this is
-       a single cart read unless something changed. The drawer's quantity buttons act on either
-       line and the layout is redone from the new total: raising the free line to 2 gives 3 paid +
-       1 free, and taking the paid line below 2 drops the deal. */
+       fill no bar sit untagged on one line. Lines already in that shape are left alone, so this
+       costs no request unless something changed. The drawer's quantity buttons act on either line
+       and the layout is redone from the new total: raising the free line to 2 gives 3 paid + 1
+       free, and taking the paid line below 2 drops the deal. */
     bundleTag: function (item) {
       var raw = item && item.properties && item.properties[KACHING_BUNDLE_PROP];
       if (!raw) return null;
@@ -305,51 +501,44 @@
       for (var i = 0; i < 4; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
       return id;
     },
-    reconcileBundles: function () {
+    // The lines out of shape (stale) and the /cart/add.js lines that replace them.
+    planBundles: function (items) {
       var self = this;
-      return this.fetchCart().then(function (cart) {
-        var items = cart.items || [];
-        var groups = [];
-        items.forEach(function (item) {
-          if (item.product_id !== KACHING_DEAL.productId || !item.selling_plan_allocation || self.isGiftLine(item)) return;
-          var planId = item.selling_plan_allocation.selling_plan.id;
-          var group = groups.filter(function (g) { return g.variantId === item.variant_id && g.planId === planId; })[0];
-          if (!group) groups.push(group = { variantId: item.variant_id, planId: planId, lines: [] });
-          group.lines.push(item);
-        });
-        var stale = [], lines = [];
-        groups.forEach(function (group) {
-          var total = group.lines.reduce(function (sum, item) { return sum + item.quantity; }, 0);
-          var bar = self.bundleBar(total);
-          if (self.bundleInShape(group.lines, total, bar)) return;
-          stale = stale.concat(group.lines);
-          var base = Object.assign({}, group.lines[0].properties);
-          delete base[KACHING_BUNDLE_PROP];
-          var line = function (quantity, tag) {
-            var properties = Object.assign({}, base);
-            if (tag) properties[KACHING_BUNDLE_PROP] = JSON.stringify(tag);
-            var l = { id: group.variantId, quantity: quantity, selling_plan: group.planId };
-            if (Object.keys(properties).length) l.properties = properties;
-            return l;
-          };
-          if (!bar) { lines.push(line(total, null)); return; }
-          var id = self.bundleId();
-          lines.push(line(total - bar.get, { deal: KACHING_DEAL.id, pp: KACHING_DEAL.productId, main: true, id: id, bar: bar.id }));
-          lines.push(line(bar.get, { id: id, deal: KACHING_DEAL.id, bar: bar.id, main: true, bxgy: true }));
-        });
-        if (!lines.length) return;
-        // By position, like update(): a line the discount has split shares its key with the rest.
-        return self.update(items.map(function (item) { return stale.indexOf(item) === -1 ? item.quantity : 0; })).then(function () {
-          return self.addItems(lines).catch(function (err) {
-            // e.g. stock ran out in between: put the bottles back as they were rather than lose them
-            return self.addItems(stale.map(function (item) {
-              var l = { id: item.variant_id, quantity: item.quantity, selling_plan: item.selling_plan_allocation.selling_plan.id };
-              if (item.properties && Object.keys(item.properties).length) l.properties = item.properties;
-              return l;
-            })).then(function () { throw err; });
-          });
-        });
+      var groups = [];
+      items.forEach(function (item) {
+        if (item.product_id !== KACHING_DEAL.productId || !item.selling_plan_allocation || self.isGiftLine(item)) return;
+        var planId = String(planOf(item));
+        var group = groups.filter(function (g) { return g.variantId === item.variant_id && g.planId === planId; })[0];
+        if (!group) groups.push(group = { variantId: item.variant_id, planId: planId, lines: [] });
+        group.lines.push(item);
       });
+      var stale = [], lines = [];
+      groups.forEach(function (group) {
+        var total = totalQuantity(group.lines);
+        var bar = self.bundleBar(total);
+        if (self.bundleInShape(group.lines, total, bar)) return;
+        stale = stale.concat(group.lines);
+        var planId = planOf(group.lines[0]);
+        var base = Object.assign({}, group.lines[0].properties);
+        delete base[KACHING_BUNDLE_PROP];
+        var line = function (quantity, tag) {
+          var properties = Object.assign({}, base);
+          if (tag) properties[KACHING_BUNDLE_PROP] = JSON.stringify(tag);
+          var l = { id: group.variantId, quantity: quantity, selling_plan: planId };
+          if (Object.keys(properties).length) l.properties = properties;
+          return l;
+        };
+        if (!bar) { lines.push(line(total, null)); return; }
+        var id = self.bundleId();
+        lines.push(line(total - bar.get, { deal: KACHING_DEAL.id, pp: KACHING_DEAL.productId, main: true, id: id, bar: bar.id }));
+        lines.push(line(bar.get, { id: id, deal: KACHING_DEAL.id, bar: bar.id, main: true, bxgy: true }));
+      });
+      return { stale: stale, lines: lines };
+    },
+    reconcileBundles: function (cart) {
+      var plan = this.planBundles(cart.items || []);
+      if (!plan.lines.length) return Promise.resolve(cart);
+      return this.rewrite(cart, plan.stale, plan.lines);
     },
 
     /* Free subscription gift.
@@ -403,68 +592,54 @@
     },
     giftDeclined: function () { return readFlag(GIFT_DECLINED_KEY) === '1'; },
     setGiftDeclined: function (declined) { writeFlag(GIFT_DECLINED_KEY, declined ? '1' : ''); },
-    reconcileGift: function () {
+    // Takes the cart when the caller already has it. Never fails: a bonus must never break the cart.
+    reconcileGift: function (cart) {
       var giftId = this.giftVariantId();
-      if (!giftId) return Promise.resolve();
+      if (!giftId) return Promise.resolve(cart || null);
       var self = this;
-      return this.fetchCart().then(function (cart) {
-        var items = cart.items || [];
+      return (cart ? Promise.resolve(cart) : this.fetchCart()).then(function (current) {
+        var items = current.items || [];
         var plans = self.giftPlans(items);
         var subscribed = plans.length > 0;
         var gifts = items.filter(function (item) { return self.isGiftLine(item); });
         if (subscribed && !gifts.length && !self.giftDeclined()) {
-          return self.addItems([{ id: giftId, quantity: 1, properties: self.giftProperties(plans[0]) }]);
+          return self.write('cart/add.js', { items: [{ id: giftId, quantity: 1, properties: self.giftProperties(plans[0]) }] }).then(function () { return null; });
         }
         // A gift added before it carried Kaching's tag (or tagged for a plan no longer in the cart)
-        // would stay at full price: put the whole quantity back as one correctly tagged line.
+        // would stay at full price: the whole quantity goes back as one correctly tagged line.
         var stale = subscribed && gifts.some(function (item) { return plans.indexOf(self.giftTagPlan(item)) === -1; });
         if (stale) {
-          var total = gifts.reduce(function (sum, item) { return sum + item.quantity; }, 0);
-          return self.update(items.map(function (item) { return self.isGiftLine(item) ? 0 : item.quantity; })).then(function () {
-            return self.addItems([{ id: gifts[0].variant_id, quantity: total, properties: self.giftProperties(plans[0]) }]);
-          });
+          return self.rewrite(current, gifts, [{ id: gifts[0].variant_id, quantity: totalQuantity(gifts), properties: self.giftProperties(plans[0]) }]);
         }
         if (!subscribed && gifts.length) {
           // The free one goes with the plan; extras the shopper chose to pay for stay as a normal line.
-          var extras = gifts.reduce(function (sum, item) { return sum + item.quantity; }, 0) - 1;
-          return self.update(items.map(function (item) { return self.isGiftLine(item) ? 0 : item.quantity; })).then(function () {
-            if (extras > 0) return self.addItems([{ id: gifts[0].variant_id, quantity: extras }]);
-          });
+          var extras = totalQuantity(gifts) - 1;
+          return self.rewrite(current, gifts, extras > 0 ? [{ id: gifts[0].variant_id, quantity: extras }] : []);
         }
-      }).catch(function () { /* a bonus must never break the cart: sold-out gift, offline, etc. */ });
+        return current;
+      }).catch(function () { return null; /* sold-out gift, offline, etc. */ });
     },
     /* The gift's quantity buttons (and its remove button) set the gift's total quantity. Once the
        free-gift discount covers one unit and there are more, Shopify splits the gift into a $0 line
-       and a paid line, so every gift line is cleared (by position, as a split line shares its key)
-       and the new total goes back in as one line for the discount to split again. Taking it down to
-       zero counts as declining the gift, so it is not added straight back. */
+       and a paid line; the buttons act on both, as one rewrite towards the new total (see rewrite).
+       Taking it down to zero counts as declining the gift, so it is not added straight back. */
     setGiftQuantity: function (quantity) {
       var giftId = this.giftVariantId();
       if (!giftId) return Promise.resolve();
       var self = this;
       quantity = Math.max(0, quantity || 0);
-      if (!quantity) this.setGiftDeclined(true);
-      this.setLoading(true);
-      return this.fetchCart().then(function (cart) {
-        var items = cart.items || [];
-        var gifts = items.filter(function (item) { return self.isGiftLine(item); });
-        var variantId = gifts.length ? gifts[0].variant_id : giftId;
-        var properties = self.giftProperties(self.giftPlans(items)[0]);
-        return self.request('cart/update.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ updates: items.map(function (item) { return self.isGiftLine(item) ? 0 : item.quantity; }) })
-        }).then(function () {
-          if (quantity) return self.addItems([{ id: variantId, quantity: quantity, properties: properties }]);
-          return self.refresh();
+      return this.run(function () {
+        if (!quantity) self.setGiftDeclined(true);
+        return self.fetchCart().then(function (cart) {
+          var items = cart.items || [];
+          var gifts = items.filter(function (item) { return self.isGiftLine(item); });
+          var line = { id: gifts.length ? gifts[0].variant_id : giftId, quantity: quantity, properties: self.giftProperties(self.giftPlans(items)[0]) };
+          return self.rewrite(cart, gifts, quantity ? [line] : []);
+        }).catch(function (err) {
+          // e.g. not enough stock for the new quantity: make sure the free one is still there
+          return self.reconcileGift().then(function () { throw err; });
         });
-      }).then(function () { self.setLoading(false); })
-        .catch(function (err) {
-          // e.g. not enough stock for the new quantity: put the free one back rather than losing it
-          self.setLoading(false);
-          self.announce(err.message);
-          return self.reconcileGift().then(function () { return self.refresh(); });
-        });
+      });
     }
   };
   window.ElarenCart = Cart;
@@ -544,6 +719,14 @@
     });
   });
 
+  // A change the drawer could not make: the drawer has been drawn again from the cart as it
+  // stands, and the message says why it did not change.
+  function cartFailed(err) { Cart.showError((err && err.message) || CART_ERROR); }
+  function lineKey(el) {
+    var line = el.closest('line-item');
+    return line ? line.getAttribute('data-key') : null;
+  }
+
   document.addEventListener('click', function (e) {
     var toggle = e.target.closest('.js-cart-toggle');
     if (toggle && Cart.drawer()) { e.preventDefault(); Cart.isOpen() ? Cart.close() : Cart.open(); return; }
@@ -552,19 +735,19 @@
     var giftQty = e.target.closest('[data-cart-gift-qty]');
     if (giftQty) {
       e.preventDefault();
-      Cart.setGiftQuantity(parseInt(giftQty.getAttribute('data-cart-gift-qty'), 10));
+      Cart.setGiftQuantity(parseInt(giftQty.getAttribute('data-cart-gift-qty'), 10)).catch(cartFailed);
       return;
     }
     var remove = e.target.closest('[data-cart-remove]');
     if (remove) {
       e.preventDefault();
-      Cart.change({ line: parseInt(remove.getAttribute('data-cart-remove'), 10), quantity: 0 });
+      Cart.change({ line: parseInt(remove.getAttribute('data-cart-remove'), 10), quantity: 0, key: lineKey(remove) }).catch(cartFailed);
       return;
     }
     var qty = e.target.closest('[data-cart-qty]');
     if (qty) {
       e.preventDefault();
-      Cart.change({ line: parseInt(qty.getAttribute('data-cart-qty'), 10), quantity: parseInt(qty.getAttribute('data-cart-qty-value'), 10) });
+      Cart.change({ line: parseInt(qty.getAttribute('data-cart-qty'), 10), quantity: parseInt(qty.getAttribute('data-cart-qty-value'), 10), key: lineKey(qty) }).catch(cartFailed);
       return;
     }
     var prev = e.target.closest('[data-rec-prev]'), next = e.target.closest('[data-rec-next]');
@@ -579,7 +762,7 @@
     if (!toggle) return;
     var label = toggle.closest('.subscription-toggle');
     if (label) label.setAttribute('aria-checked', toggle.checked ? 'true' : 'false');
-    Cart.setLinePlan(parseInt(toggle.getAttribute('data-variant-id'), 10), toggle.getAttribute('data-selling-plan-id'), toggle.checked);
+    Cart.setLinePlan(parseInt(toggle.getAttribute('data-variant-id'), 10), toggle.getAttribute('data-selling-plan-id'), toggle.checked).catch(cartFailed);
   });
 
   document.addEventListener('keydown', function (e) {
@@ -1461,7 +1644,7 @@
       Cart.updateCount(cartCount);
       // Carts from before the gift and the subscription bundles carried Kaching's tags are still
       // charged in full for them: fix them on arrival.
-      if (cartCount) Cart.reconcile();
+      if (cartCount) Cart.run(function () { return Cart.reconcile(); }, true).catch(function () {});
     }
     document.documentElement.classList.add('loaded');
     autoLocalize();
