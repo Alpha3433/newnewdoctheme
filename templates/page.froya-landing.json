@@ -235,6 +235,20 @@
             "image_fallback": "https://froyaorganics.com/cdn/shop/files/Lisa.png"
           }
         },
+        "review_5": {
+          "type": "review",
+          "settings": {
+            "image_alt": "",
+            "name": "Pat",
+            "tag_1": "does what it says",
+            "tag_2": "recommended to my daughters",
+            "quote": "\"It really does what it says. I’ve already told my two daughters to buy it.\"",
+            "text": "<p>Have been using this oil for a few weeks and it really does what it says in the advertised article.</p><p>I have already advised my two daughters to purchase the oil. Highly recommend, will be purchasing again.</p><p>– Pat</p>",
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "product_title": "",
+            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Sarah_Jane_Frantz.png"
+          }
+        },
         "review_7": {
           "type": "review",
           "settings": {
@@ -302,6 +316,7 @@
         "review_2",
         "review_3",
         "review_4",
+        "review_5",
         "review_7",
         "review_9",
         "video_1",
