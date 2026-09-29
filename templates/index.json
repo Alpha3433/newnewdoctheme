@@ -259,66 +259,6 @@
             "image_fallback": "https://froyaorganics.com/cdn/shop/files/Lisa.png"
           }
         },
-        "review_5": {
-          "type": "review",
-          "settings": {
-            "image": "shopify://shop_images/hf_20260914_111918_aaa1cbb1-a54d-4128-b485-5e99b106a209.png",
-            "image_alt": "",
-            "name": "Sarah R, 41",
-            "tag_1": "does what it says",
-            "tag_2": "recommended to my daughters",
-            "quote": "\"It really does what it says. I’ve already told my two daughters to buy it.\"",
-            "text": "<p>Have been using this oil for a few weeks and it really does what it says in the advertised article.</p><p>I have already advised my two daughters to purchase the oil. Highly recommend, will be purchasing again.</p><p>– Pat</p>",
-            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
-            "product_title": "",
-            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Sarah_Jane_Frantz.png"
-          }
-        },
-        "review_6": {
-          "type": "review",
-          "settings": {
-            "image": "shopify://shop_images/hf_20260914_112252_5a9fd099-1b8c-4ec0-bedf-45a9cf88883c.png",
-            "image_alt": "",
-            "name": "Joan T, 64",
-            "tag_1": "wider part",
-            "tag_2": "baby hairs",
-            "quote": "\"I’ve stopped shedding as much, and I’m seeing fine baby hairs growing in at a decent rate.\"",
-            "text": "<p>My hairdresser told me all about pumpkin seed oil to help with DHT issues. I’ve been on a GLP1 and lost a lot of weight, and she’s had success with a number of her clients who’ve shed hair due to rapid weight loss. My hair still looks normal to everyone else, but I can feel a difference and my part is a bit wider. I love the idea of taking a vitamin rather than slathering product on my scalp, so I was happy to try these. I have been taking them for two months now. (I couldn’t reorder these because they were unavailable, so month two I was using another product.)</p><p>I can definitely see a benefit to these. I’ve stopped shedding as much, and I’m seeing fine baby hairs growing in at a decent rate, so I’d rate these capsules as very effective. The quality of the bottle and the capsules themselves are topnotch and came well secured and safe. There is no aftertaste, and I am enjoying the health benefits of these vitamins. I notice no difference in my energy level, in case that matters.</p>",
-            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
-            "product_title": "",
-            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Iriel_G.jpg"
-          }
-        },
-        "review_8": {
-          "type": "review",
-          "settings": {
-            "image": "shopify://shop_images/hf_20260914_120544_ba1822c8-62d0-441c-b969-9fd7d8031b01.png",
-            "image_alt": "",
-            "name": "Lisa N, 55",
-            "tag_1": "thicker feel",
-            "tag_2": "less dry scalp",
-            "quote": "\"My hair already feels a bit thicker and looks healthier, and my scalp doesn’t feel as dry.\"",
-            "text": "<p>I’ve been using this for a little while and I’m really happy with it so far. The softgels are easy to take and don’t have any weird taste or aftertaste. I like that it’s made with clean, plant-based ingredients like pumpkin seed oil, and that it’s cold-pressed and third-party tested.</p><p>My hair already feels a bit thicker and looks healthier, and my scalp doesn’t feel as dry. It’s nice to find something simple and natural that actually seems to help. Definitely planning to keep this as part of my routine.</p>",
-            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
-            "product_title": "",
-            "image_fallback": "https://froyaorganics.com/cdn/shop/files/image3.png"
-          }
-        },
-        "review_9": {
-          "type": "review",
-          "settings": {
-            "image": "shopify://shop_images/hf_20260914_120902_febb6da8-cec6-495a-a1ba-e0438b84d72e.png",
-            "image_alt": "",
-            "name": "Traci R, 36",
-            "tag_1": "a little goes a long way",
-            "tag_2": "doesn’t stain",
-            "quote": "\"It only needs a small amount, spreads well and doesn’t stain.\"",
-            "text": "<p>I haven’t used this oil before but it only needs a small amount, spreads well and whilst you see the colour when it goes on it doesn’t stain. I either put it on last in my routine or mix it with moisturiser and it mixes well. Happy with my purchase.</p>",
-            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
-            "product_title": "",
-            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Traci_R.png"
-          }
-        },
         "review_10": {
           "type": "review",
           "settings": {
@@ -340,10 +280,6 @@
         "review_2",
         "review_3",
         "review_4",
-        "review_5",
-        "review_6",
-        "review_8",
-        "review_9",
         "review_10"
       ],
       "settings": {
@@ -426,19 +362,10 @@
         "stat_1": {
           "type": "stat",
           "settings": {
-            "value": "+40%",
-            "width": 40,
-            "title": "PUMPKIN SEED OIL: HAIR COUNT",
-            "text": "Pumpkin seed oil increased hair count by 40% over 24 weeks in a randomised, double-blind, placebo-controlled trial."
-          }
-        },
-        "stat_2": {
-          "type": "stat",
-          "settings": {
-            "value": "4× PLACEBO",
-            "width": 80,
-            "title": "PUMPKIN SEED OIL VS PLACEBO",
-            "text": "In the same trial the pumpkin seed oil group gained four times the hair count of the placebo group (40% vs 10%), with no significant side effects reported."
+            "value": "−30%",
+            "width": 30,
+            "title": "PUMPKIN SEED OIL: FEWER THINNING HAIRS",
+            "text": "In a 3-month randomised trial in 60 women with female pattern hair loss, pumpkin seed oil applied to the scalp reduced fine, miniaturised (vellus) hairs by about 30% and increased new regrowing hairs. 5% minoxidil foam, tested alongside it, worked better overall."
           }
         },
         "stat_3": {
@@ -447,20 +374,19 @@
             "value": "≈ 5% MINOXIDIL",
             "width": 90,
             "title": "CAFFEINE COMPLEX: THE SUPPORTING ACTIVE",
-            "text": "In a 6-month clinical study, a topical caffeine liquid was statistically non-inferior to 5% minoxidil at increasing growth-phase hairs."
+            "text": "In a 6-month randomised study in 210 men with male pattern hair loss, a topical caffeine liquid was statistically non-inferior to 5% minoxidil at increasing growth-phase hairs."
           }
         },
         "note_1": {
           "type": "note",
           "settings": {
-            "text": "*Studies cited were conducted on the ingredients (oral pumpkin seed oil supplementation, Cho et al. 2014, 76 participants over 24 weeks; topical caffeine, Dhurat et al. 2017), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, fuller-looking hair after 30 nights of use, and density that keeps building over 3–6 months."
+            "text": "*Studies cited were conducted on the ingredients, not on Elaren’s finished formula: topical pumpkin seed oil vs 5% minoxidil foam in 60 women with female pattern hair loss over 3 months (Ibrahim et al. 2021; minoxidil was more effective overall), and a topical caffeine liquid vs 5% minoxidil solution in 210 men with male pattern hair loss over 6 months (Dhurat et al. 2017). Individual results vary. Hair grows in cycles: most women notice less shedding first, fuller-looking hair after 30 nights of use, and density that keeps building over 3–6 months."
           }
         }
       },
       "block_order": [
         "intro_1",
         "stat_1",
-        "stat_2",
         "stat_3",
         "note_1"
       ],
@@ -468,7 +394,7 @@
         "image": "shopify://shop_images/hf_20260916_132753_7d52b406-601d-4e6b-84ff-219b33df2182.png",
         "image_mobile": "shopify://shop_images/hf_20260916_132753_7d52b406-601d-4e6b-84ff-219b33df2182.png",
         "image_alt": "Published clinical results for pumpkin seed oil, with caffeine as the supporting active",
-        "label": "Peer-reviewed. Placebo-controlled.",
+        "label": "Peer-reviewed. Randomised.",
         "title": "<p>Pumpkin Seed Oil, With <em>Published Clinical</em> Results</p>"
       }
     },
@@ -1091,7 +1017,7 @@
           "type": "text",
           "settings": {
             "title": "Ingredients",
-            "text": "<p>The <em><strong>ingredients</strong></em> make the product. Most “hair oils” are refined, heat-treated or diluted with mineral oil and fragrance (levels 1 to 3), which strips out the very sterols and vitamins that matter. We use cold-pressed pumpkin seed oil, so its DHT-blocking phytosterols, zinc and vitamin E reach your scalp intact, and we power it with a Caffeine Complex that research shows can rival minoxidil. </p>"
+            "text": "<p>The <em><strong>ingredients</strong></em> make the product. Most “hair oils” are refined, heat-treated or diluted with mineral oil and fragrance (levels 1 to 3), which strips out the very sterols and vitamins that matter. We use cold-pressed pumpkin seed oil, so its DHT-blocking phytosterols, zinc and vitamin E reach your scalp intact, and we power it with a Caffeine Complex that rivalled 5% minoxidil in a study in men. </p>"
           }
         },
         "text_2": {
@@ -1178,7 +1104,7 @@
         "image_position": "left",
         "subtitle": "THE SCIENCE OF THE SEED",
         "title": "Why Pumpkin Seed Oil Is <em>Incredibly</em> Powerful For Thinning Hair",
-        "text": "<p><strong>NATURE’S DHT BLOCKER</strong><br/>DHT is the hormone that shrinks follicles in female pattern hair loss, and it gains the upper hand as oestrogen falls after 35. Pumpkin seed oil’s plant sterols help block the enzyme that makes it. In a 24-week placebo-controlled trial, pumpkin seed oil increased hair count by 40%.</p><p><strong>PACKED WITH FOLLICLE NUTRIENTS</strong><br/>Zinc, magnesium, omega-3, 6 and 9 fatty acids and vitamin E: the exact nutrients a starved follicle needs to build strong, thick keratin. Cold-pressing keeps every one of them intact.</p><p><strong>AMPLIFIED BY CAFFEINE</strong><br/>Caffeine wakes up dormant follicles and extends their growth phase, and it has been shown to rival 5% minoxidil in clinical testing. Together, the two actives work on both the hormonal and the cellular causes of thinning.</p>"
+        "text": "<p><strong>NATURE’S DHT BLOCKER</strong><br/>DHT is the hormone that shrinks follicles in female pattern hair loss, and it gains the upper hand as oestrogen falls after 35. Pumpkin seed oil’s plant sterols help block the enzyme that makes it. In a 3-month randomised trial in 60 women with female pattern hair loss, pumpkin seed oil applied to the scalp reduced fine, miniaturised hairs, though 5% minoxidil foam worked better overall.</p><p><strong>PACKED WITH FOLLICLE NUTRIENTS</strong><br/>Zinc, magnesium, omega-3, 6 and 9 fatty acids and vitamin E: the exact nutrients a starved follicle needs to build strong, thick keratin. Cold-pressing keeps every one of them intact.</p><p><strong>AMPLIFIED BY CAFFEINE</strong><br/>Caffeine wakes up dormant follicles and extends their growth phase, and in a clinical study in men it rivalled 5% minoxidil. Together, the two actives work on both the hormonal and the cellular causes of thinning.</p>"
       }
     },
     "guarantee-2": {

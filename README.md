@@ -175,7 +175,8 @@ template (`templates/page.froya-landing.json`).
 * **Claims to confirm against the formula:** "no parabens, no silicones", "no water, no mineral
   oil", "3rd party tested", "cold-pressed", and the "precision applicator + scalp massager" in the
   what-you-get list (both are mentioned in customer reviews). The research figures quote published
-  ingredient studies (Cho 2014, Dhurat 2017, Otberg 2008) and are footnoted as such.
+  ingredient studies (Ibrahim 2021, topical, in women; Dhurat 2017, topical caffeine, in men;
+  Otberg 2008) and are footnoted as such.
 * **Guarantee:** the copy promises a 30-day money-back guarantee and fuller hair in 30 days, which
   matches the 30-day return window on the store's refund policy page. The "Our Elaren Story" page
   still says 90 days – update it, or change the guarantee copy back in the theme editor.
