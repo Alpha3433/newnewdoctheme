@@ -426,19 +426,19 @@
         "stat_1": {
           "type": "stat",
           "settings": {
-            "value": "+40%",
-            "width": 40,
-            "title": "PUMPKIN SEED OIL: HAIR COUNT",
-            "text": "Pumpkin seed oil increased hair count by 40% over 24 weeks in a randomised, double-blind, placebo-controlled trial."
+            "value": "60 WOMEN",
+            "width": 60,
+            "title": "PUMPKIN SEED OIL: FEMALE PATTERN HAIR LOSS",
+            "text": "In a 3-month randomised trial of 60 women with female pattern hair loss, the half who applied pumpkin seed oil to the scalp had fewer fine, miniaturised hairs and more new regrowing hairs."
           }
         },
         "stat_2": {
           "type": "stat",
           "settings": {
-            "value": "4× PLACEBO",
-            "width": 80,
-            "title": "PUMPKIN SEED OIL VS PLACEBO",
-            "text": "In the same trial the pumpkin seed oil group gained four times the hair count of the placebo group (40% vs 10%), with no significant side effects reported."
+            "value": "VS 5% MINOXIDIL",
+            "width": 75,
+            "title": "PUMPKIN SEED OIL VS MINOXIDIL",
+            "text": "The other half used 5% minoxidil foam, the gold-standard treatment, which did better overall. Pumpkin seed oil still produced measurable improvement on its own."
           }
         },
         "stat_3": {
@@ -447,13 +447,13 @@
             "value": "≈ 5% MINOXIDIL",
             "width": 90,
             "title": "CAFFEINE COMPLEX: THE SUPPORTING ACTIVE",
-            "text": "In a 6-month clinical study, a topical caffeine liquid was statistically non-inferior to 5% minoxidil at increasing growth-phase hairs."
+            "text": "In a 6-month clinical study of 210 men with pattern hair loss, a topical caffeine liquid was statistically non-inferior to 5% minoxidil at increasing growth-phase hairs."
           }
         },
         "note_1": {
           "type": "note",
           "settings": {
-            "text": "*Studies cited were conducted on the ingredients (oral pumpkin seed oil supplementation, Cho et al. 2014, 76 participants over 24 weeks; topical caffeine, Dhurat et al. 2017), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, fuller-looking hair after 30 nights of use, and density that keeps building over 3–6 months."
+            "text": "*Studies cited were conducted on the ingredients (topical pumpkin seed oil in 60 women with female pattern hair loss, Ibrahim et al. 2021; topical caffeine in 210 men with male pattern hair loss, Dhurat et al. 2017), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, fuller-looking hair after 30 nights of use, and density that keeps building over 3–6 months."
           }
         }
       },
@@ -468,7 +468,7 @@
         "image": "shopify://shop_images/hf_20260916_132753_7d52b406-601d-4e6b-84ff-219b33df2182.png",
         "image_mobile": "shopify://shop_images/hf_20260916_132753_7d52b406-601d-4e6b-84ff-219b33df2182.png",
         "image_alt": "Published clinical results for pumpkin seed oil, with caffeine as the supporting active",
-        "label": "Peer-reviewed. Placebo-controlled.",
+        "label": "Peer-reviewed. Randomised.",
         "title": "<p>Pumpkin Seed Oil, With <em>Published Clinical</em> Results</p>"
       }
     },
@@ -1178,7 +1178,7 @@
         "image_position": "left",
         "subtitle": "THE SCIENCE OF THE SEED",
         "title": "Why Pumpkin Seed Oil Is <em>Incredibly</em> Powerful For Thinning Hair",
-        "text": "<p><strong>NATURE’S DHT BLOCKER</strong><br/>DHT is the hormone that shrinks follicles in female pattern hair loss, and it gains the upper hand as oestrogen falls after 35. Pumpkin seed oil’s plant sterols help block the enzyme that makes it. In a 24-week placebo-controlled trial, pumpkin seed oil increased hair count by 40%.</p><p><strong>PACKED WITH FOLLICLE NUTRIENTS</strong><br/>Zinc, magnesium, omega-3, 6 and 9 fatty acids and vitamin E: the exact nutrients a starved follicle needs to build strong, thick keratin. Cold-pressing keeps every one of them intact.</p><p><strong>AMPLIFIED BY CAFFEINE</strong><br/>Caffeine wakes up dormant follicles and extends their growth phase, and it has been shown to rival 5% minoxidil in clinical testing. Together, the two actives work on both the hormonal and the cellular causes of thinning.</p>"
+        "text": "<p><strong>NATURE’S DHT BLOCKER</strong><br/>DHT is the hormone that shrinks follicles in female pattern hair loss, and it gains the upper hand as oestrogen falls after 35. Pumpkin seed oil’s plant sterols help block the enzyme that makes it. In a 3-month trial of 60 women with female pattern hair loss, pumpkin seed oil applied to the scalp reduced fine, miniaturised hairs and increased regrowing hairs, though 5% minoxidil foam did better overall.</p><p><strong>PACKED WITH FOLLICLE NUTRIENTS</strong><br/>Zinc, magnesium, omega-3, 6 and 9 fatty acids and vitamin E: the exact nutrients a starved follicle needs to build strong, thick keratin. Cold-pressing keeps every one of them intact.</p><p><strong>AMPLIFIED BY CAFFEINE</strong><br/>Caffeine wakes up dormant follicles and extends their growth phase, and in a 6-month clinical study of men it rivalled 5% minoxidil. Together, the two actives work on both the hormonal and the cellular causes of thinning.</p>"
       }
     },
     "guarantee-2": {
