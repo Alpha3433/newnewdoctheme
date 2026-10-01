@@ -19,6 +19,18 @@
     return r.charAt(r.length - 1) === '/' ? r : r + '/';
   };
 
+  /* An amount in the subunit Shopify uses for every currency (cents), formatted for the shopper's
+     currency the way money_without_trailing_zeros would: no decimals when it is a whole amount. */
+  function formatMoneyIn(cents, currencyCode) {
+    var amount = cents / 100;
+    var digits = Math.round(amount) === amount ? 0 : 2;
+    try {
+      return new Intl.NumberFormat(document.documentElement.lang || undefined, { style: 'currency', currency: currencyCode, minimumFractionDigits: digits, maximumFractionDigits: digits }).format(amount);
+    } catch (err) {
+      return amount.toFixed(digits) + ' ' + currencyCode;
+    }
+  }
+
   function readFlag(key) { try { return window.sessionStorage.getItem(key); } catch (err) { return null; } }
   function writeFlag(key, value) { try { window.sessionStorage.setItem(key, value); } catch (err) { /* private mode */ } }
   function readStored(key) { try { return window.localStorage.getItem(key); } catch (err) { return null; } }
@@ -105,10 +117,13 @@
       var doc = new DOMParser().parseFromString(html, 'text/html');
       var fresh = doc.getElementById('mini-cart');
       if (!fresh) return;
-      // Remember where the free-shipping bar stood so the fresh markup can animate from it.
+      // Remember where the goals bar stood so the fresh markup can animate from it.
       var oldBar = $('[data-cart-shipping]', d);
-      var oldProgress = oldBar ? parseInt(oldBar.getAttribute('data-progress') || '0', 10) : null;
-      var wasReached = !!(oldBar && oldBar.getAttribute('data-reached') === 'true');
+      var before = null;
+      if (oldBar) {
+        before = { fills: {}, reached: oldBar.getAttribute('data-reached') === 'true', gift: oldBar.getAttribute('data-gift-reached') === 'true' };
+        $$('[data-goal-fill]', oldBar).forEach(function (fill) { before.fills[fill.getAttribute('data-goal-fill')] = fill.style.width; });
+      }
       ['[data-cart-title]', '[data-cart-content]', '[data-cart-footer]'].forEach(function (sel) {
         var a = $(sel, d), b = $(sel, fresh);
         if (a && b) {
@@ -120,30 +135,66 @@
       var count = parseInt(fresh.getAttribute('data-cart-count') || '0', 10);
       d.setAttribute('data-cart-count', count);
       this.updateCount(count);
-      this.animateShipping(oldProgress, wasReached);
+      this.localizeGoals();
+      this.animateShipping(before);
       initCartDrawer(d);
     },
-    /* The drawer is re-rendered as a whole after every cart change, which would snap the
-       free-shipping bar straight to its new width. Start it at the previous width and let the CSS
-       transition carry it to the new one, and pop the copy once when the threshold is first
-       crossed so the switch to "eligible for FREE SHIPPING" is noticed. */
-    animateShipping: function (oldProgress, wasReached) {
+    /* The drawer is re-rendered as a whole after every cart change, which would snap each fill of
+       the goals bar straight to its new width. Start each at its previous width and let the CSS
+       transition carry it to the new one, and pop the bar once when a goal is first reached so the
+       new message ("You've unlocked FREE EXPRESS SHIPPING") is noticed. */
+    animateShipping: function (before) {
       var bar = $('[data-cart-shipping]', this.drawer());
-      if (!bar) return;
-      var fill = $('.free-shipping__progress', bar);
-      var progress = parseInt(bar.getAttribute('data-progress') || '0', 10);
-      var reached = bar.getAttribute('data-reached') === 'true';
-      if (fill && oldProgress !== null && oldProgress !== progress) {
+      if (!bar || !before) return;
+      $$('[data-goal-fill]', bar).forEach(function (fill) {
+        var from = before.fills[fill.getAttribute('data-goal-fill')];
+        var to = fill.style.width;
+        if (from === undefined || from === to) return;
         fill.style.transition = 'none';
-        fill.style.width = oldProgress + '%';
+        fill.style.width = from;
         void fill.offsetWidth; // flush so the next width change transitions
         fill.style.transition = '';
-        fill.style.width = progress + '%';
-      }
-      if (reached && !wasReached && oldProgress !== null) {
+        fill.style.width = to;
+      });
+      var reached = bar.getAttribute('data-reached') === 'true';
+      var gift = bar.getAttribute('data-gift-reached') === 'true';
+      if ((reached && !before.reached) || (gift && !before.gift)) {
         bar.classList.add('is-unlocking');
         window.setTimeout(function () { bar.classList.remove('is-unlocking'); }, 700);
       }
+    },
+    /* The free express shipping threshold is set in the store currency (USD) and Liquid has no
+       exchange rate, so the drawer renders it as if the cart were in USD. For a shopper in another
+       currency, convert it with the rate Shopify prices the storefront at and redo what depends on
+       it: what is left to spend, the fill, and the bar's data-reached / data-goal-state, which
+       theme.css uses to light the milestone and pick the message. Safe to run more than once:
+       everything is worked out from the data attributes Liquid wrote. */
+    localizeGoals: function () {
+      var bar = $('[data-cart-shipping]', this.drawer());
+      var currency = window.Shopify && window.Shopify.currency;
+      if (!bar || !currency || !currency.active || currency.active === bar.getAttribute('data-shop-currency')) return;
+      var rate = parseFloat(currency.rate);
+      var threshold = Math.round((parseInt(bar.getAttribute('data-threshold'), 10) || 0) * rate);
+      if (!(rate > 0) || !(threshold > 0)) return;
+      var total = parseInt(bar.getAttribute('data-total'), 10) || 0;
+      var remaining = threshold - total;
+      var reached = remaining <= 0;
+      var progress = Math.min(100, Math.floor(total * 100 / threshold));
+      bar.setAttribute('data-progress', progress);
+      bar.setAttribute('data-reached', reached ? 'true' : 'false');
+      var fill = $('[data-goal-fill="shipping"]', bar);
+      if (fill) {
+        fill.style.width = progress + '%';
+        var meter = fill.closest('[role="progressbar"]');
+        if (meter) meter.setAttribute('aria-valuenow', progress);
+      }
+      var label = $('[data-label-reached]', bar);
+      if (label) label.textContent = label.getAttribute(reached ? 'data-label-reached' : 'data-label-pending');
+      var amount = $('[data-goal-amount]', bar);
+      if (amount && !reached) amount.textContent = formatMoneyIn(remaining, currency.active);
+      var giftGoal = !!$('[data-goal-msg="gift"]', bar);
+      var state = !reached ? 'shipping' : (giftGoal && bar.getAttribute('data-gift-reached') !== 'true' ? 'gift' : 'done');
+      bar.setAttribute('data-goal-state', state); // theme.css shows the matching message
     },
     request: function (path, options) {
       options = options || {};
@@ -771,6 +822,7 @@
 
   function initCartDrawer(drawer) {
     if (!drawer) return;
+    Cart.localizeGoals();
     var scroller = $('[data-rec-scroller]', drawer);
     var arrows = $$('[data-rec-prev], [data-rec-next]', drawer);
     if (scroller && arrows.length) {

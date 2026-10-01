@@ -951,14 +951,14 @@ body.cart-open { overflow: hidden; }
 .free-shipping__text { margin: 0; font-size: 17px; font-weight: 500; line-height: 1.4; }
 .free-shipping__text span { font-weight: 400; }
 .free-shipping__text .free-shipping__highlight { font-weight: 600; color: var(--brand-mauve); }
-.free-shipping.is-reached .free-shipping__label { color: var(--brand-mauve); }
+.free-shipping[data-reached="true"] .free-shipping__label { color: var(--brand-mauve); }
 /* A bar that has just crossed the threshold (assets/main.js adds the class after an add) pops once */
 .free-shipping.is-unlocking .free-shipping__text { animation: free-shipping-pop 0.6s ease; }
 .free-shipping.is-unlocking .free-shipping__dot--end { animation: free-shipping-dot 0.6s ease; }
 @keyframes free-shipping-pop { 0% { transform: scale(1); } 40% { transform: scale(1.06); } 100% { transform: scale(1); } }
 @keyframes free-shipping-dot { 0% { box-shadow: 0 0 0 0 rgba(175, 137, 152, 0.45); } 100% { box-shadow: 0 0 0 12px rgba(175, 137, 152, 0); } }
 @media (prefers-reduced-motion: reduce) {
-  .free-shipping.is-unlocking .free-shipping__text, .free-shipping.is-unlocking .free-shipping__dot--end { animation: none; }
+  .free-shipping.is-unlocking .free-shipping__text, .free-shipping.is-unlocking .free-shipping__dot--end, .free-shipping.is-unlocking .free-shipping__milestone { animation: none; }
   .free-shipping__progress { transition: none; }
 }
 .free-shipping__bar { position: relative; height: 8px; margin: 14px 8px 0; border-radius: 999px; background: #eadfe4; }
@@ -966,8 +966,30 @@ body.cart-open { overflow: hidden; }
 .free-shipping__dot { position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: #d9cfd4; transform: translate(-50%, -50%); }
 .free-shipping__dot--start { left: 0; }
 .free-shipping__dot--end { left: 100%; }
-.free-shipping__dot--end.is-reached { background: var(--brand-mauve); }
+.free-shipping[data-reached="true"] .free-shipping__dot--end { background: var(--brand-mauve); }
 .free-shipping__label { display: block; margin-top: 10px; text-align: right; font-size: 15px; color: #b3b3b3; }
+/* One message per goal state; the bar's data-goal-state (Liquid, then main.js) shows the next open goal. */
+.free-shipping__text [data-goal-msg] { display: none; font-weight: inherit; }
+.free-shipping[data-goal-state="shipping"] [data-goal-msg="shipping"],
+.free-shipping[data-goal-state="gift"] [data-goal-msg="gift"],
+.free-shipping[data-goal-state="done"] [data-goal-msg="done"] { display: inline; }
+.free-shipping__text [data-goal-amount] { font-weight: 600; }
+/* Two goals: free express shipping, then the free subscription gift, each on its own segment. */
+.free-shipping__bar--goals { display: grid; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr) 28px; align-items: center; column-gap: 4px; height: auto; margin: 14px 4px 0; border-radius: 0; background: none; }
+.free-shipping__segment { position: relative; display: block; height: 8px; overflow: hidden; border-radius: 999px; background: #eadfe4; }
+.free-shipping__milestone { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: #eadfe4; color: #9a8a91; transition: background-color 0.3s ease, color 0.3s ease; }
+.free-shipping[data-reached="true"] [data-goal-mark="shipping"], .free-shipping[data-gift-reached="true"] [data-goal-mark="gift"] { background: var(--brand-mauve); color: #fff; }
+.free-shipping.is-unlocking .free-shipping__milestone { animation: free-shipping-dot 0.6s ease; }
+.free-shipping__goal-labels { display: grid; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr) 28px; column-gap: 4px; margin: 8px 4px 0; font-size: 13px; line-height: 1.3; color: #9b9b9b; }
+.free-shipping__goal-label { text-align: right; }
+.free-shipping__goal-label:first-child { grid-column: 1 / 3; }
+.free-shipping__goal-label:last-child { grid-column: 3 / 5; }
+.free-shipping[data-reached="true"] [data-goal-label="shipping"], .free-shipping[data-gift-reached="true"] [data-goal-label="gift"] { color: var(--brand-mauve); font-weight: 600; }
+/* Discount-code reminder, on the shared offer gradient (Theme settings → Offer colours). */
+.free-shipping__callout { margin: 14px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--offer-gradient-soft); color: var(--brand-ink); font-size: 14px; line-height: 1.4; text-align: center; }
+.free-shipping__callout strong { font-weight: 700; }
+.free-shipping__code { padding: 1px 6px; border: 1px dashed currentColor; border-radius: 4px; font-family: var(--font-mono); letter-spacing: 0.04em; white-space: nowrap; }
+.free-shipping__callout.is-applied { background: var(--brand-green-tint); }
 .s-mini-cart__reviews-banner { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 20px; background: #f8f4ec; font-size: 16px; font-weight: 500; letter-spacing: 0.02em; text-transform: uppercase; }
 .s-mini-cart__reviews-stars { display: inline-flex; color: var(--brand-orange); }
 .s-mini-cart__empty { padding: 34px 28px 0; display: flex; flex-direction: column; align-items: stretch; gap: 0; }
@@ -1026,3 +1048,8 @@ body.cart-open { overflow: hidden; }
   .mini-cart .drawer__footer { padding: 14px 16px 18px; }
   .mini-cart .line-item__content-wrapper { grid-template-columns: 92px minmax(0, 1fr); gap: 12px; }
 }
+
+/* Mobile menu: short review quotes under the testimonial (Header → Mobile quote blocks). */
+.froya-nav-drawer__quotes { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.froya-nav-drawer__quote { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-radius: 12px; background: var(--brand-cream); }
+.froya-nav-drawer__quote-text { margin: 0; font-family: var(--font-serif); font-size: 13px; line-height: 1.4; }

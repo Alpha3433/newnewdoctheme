@@ -40,6 +40,25 @@
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   {{ 'sections-inline.css' | asset_url | stylesheet_tag }}
   {{ 'sections.css' | asset_url | stylesheet_tag }}
+  {%- liquid
+    comment
+      Theme settings → Offer colours: one gradient shared by the hero pill, the scrolling offer
+      banner and the cart's code reminder. The soft version keeps the hues at partial strength so
+      dark text stays readable on it.
+    endcomment
+    assign offer_1 = settings.offer_color_1 | default: '#dfb142'
+    assign offer_2 = settings.offer_color_2 | default: '#e98044'
+    assign offer_3 = settings.offer_color_3 | default: '#af8998'
+    assign offer_soft = settings.offer_soft_strength | default: 45 | divided_by: 100.0
+  -%}
+  <style>
+    :root {
+      --offer-gradient: linear-gradient(92deg, {{ offer_1 }} 10%, {{ offer_2 }} 49.5%, {{ offer_3 }} 100%);
+      --offer-gradient-soft: linear-gradient(92deg, {{ offer_1 | color_modify: 'alpha', offer_soft }} 10%, {{ offer_2 | color_modify: 'alpha', offer_soft }} 49.5%, {{ offer_3 | color_modify: 'alpha', offer_soft }} 100%);
+      --offer-text: {{ settings.offer_text_color | default: '#ffffff' }};
+      --offer-accent: {{ offer_2 }};
+    }
+  </style>
 
   <script>
     window.Shopify = window.Shopify || {};
