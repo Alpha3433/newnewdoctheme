@@ -175,10 +175,12 @@ template (`templates/page.froya-landing.json`).
 * **Claims to confirm against the formula:** "no parabens, no silicones", "no water, no mineral
   oil", "3rd party tested", "cold-pressed", and the "precision applicator + scalp massager" in the
   what-you-get list (both are mentioned in customer reviews). The research figures quote published
-  ingredient studies (Ibrahim 2021, Dhurat 2017, Otberg 2008) and are footnoted as such, including
-  who was studied: the pumpkin seed oil trial was topical oil in 60 women with female pattern hair
-  loss, where 5% minoxidil foam did better; the caffeine study was in men. Don't swap back to the
-  "+40% hair count" figure: that came from oral 400 mg capsules taken by men (Cho 2014).
+  ingredient studies (Ibrahim 2021, Fischer 2014) and are footnoted as such, including who was
+  studied: the pumpkin seed oil trial was topical oil in 60 women with female pattern hair loss,
+  where 5% minoxidil foam did better; the caffeine figure is laboratory research on hair follicles
+  from women's scalps (Fischer 2014, Br J Dermatol). The copy speaks only to women, so it quotes
+  only research done on women: don't bring back the caffeine-vs-minoxidil trial (Dhurat 2017, 210
+  men) or the "+40% hair count" figure (oral pumpkin seed oil capsules in men, Cho 2014).
 * **Guarantee:** the copy promises a 30-day money-back guarantee and fuller hair in 30 days, which
   matches the 30-day return window on the store's refund policy page. The "Our Elaren Story" page
   still says 90 days – update it, or change the guarantee copy back in the theme editor.
