@@ -423,13 +423,13 @@
             "value": "≈ 5% MINOXIDIL",
             "width": 90,
             "title": "CAFFEINE COMPLEX: THE SUPPORTING ACTIVE",
-            "text": "In a 6-month clinical study of 210 men with pattern hair loss, a topical caffeine liquid was statistically non-inferior to 5% minoxidil at increasing growth-phase hairs."
+            "text": "In laboratory research on hair follicles from women’s scalps, caffeine lengthened the growth (anagen) phase and increased hair-shaft growth, and women’s follicles proved especially responsive to it."
           }
         },
         "note_1": {
           "type": "note",
           "settings": {
-            "text": "*Studies cited were conducted on the ingredients (topical pumpkin seed oil in 60 women with female pattern hair loss, Ibrahim et al. 2021; topical caffeine in 210 men with male pattern hair loss, Dhurat et al. 2017), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, fuller-looking hair after 30 nights of use, and density that keeps building over 3–6 months. Still shedding after 30 nights? Tell us and we’ll refund every cent."
+            "text": "*Studies cited were conducted on the ingredients (topical pumpkin seed oil in 60 women with female pattern hair loss, Ibrahim et al. 2021; caffeine on hair follicles from women’s scalps in the laboratory, Fischer et al. 2014), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, fuller-looking hair after 30 nights of use, and density that keeps building over 3–6 months. Still shedding after 30 nights? Tell us and we’ll refund every cent."
           }
         }
       },
@@ -685,7 +685,7 @@
         "selling_plan_id": "1039991141",
         "product_title": "Pumpkin Seed Regrowth Oil",
         "badge_text": "Formulated for women’s hair loss,",
-        "badge_underline": "not adapted from men’s",
+        "badge_underline": "from postpartum to menopause",
         "badge_bg": "#e5f3fa",
         "badge_color": "#54585a",
         "reviews_count": 43,
@@ -745,7 +745,7 @@
         "image_position": "right",
         "subtitle": "The Story Behind Elaren",
         "title": "Why We Started Elaren",
-        "text": "<p><strong>If you’ve tried everything, we understand.<br>We have too.<br><br></strong>Thickening shampoos, biotin gummies, rosemary oil from the internet, a doctor who shrugged and said “it’s just your age”...<strong> only to find more hair in the shower drain, a wider part in every photo, and one more bottle on the shelf that didn’t work.</strong></p><p><strong>Hair loss isn’t just about hair.<br>It changes how you feel walking into a room, how you look in photos, and how you see yourself in the mirror every morning.</strong></p><p><strong>That’s why we created Elaren.<br>Our founder started losing his hair at 31 and went to the clinical research instead of the marketing. Pumpkin seed oil kept coming up as a natural DHT blocker. When his partner’s crown thinning started improving on the same routine, we realised the women in our lives were being ignored by an industry built for men and sold to them in prettier packaging.</strong></p><p><strong>So we built the regrowth oil we wished existed: cold-pressed pumpkin seed oil, powered by a Caffeine Complex, made for a woman’s scalp and a woman’s hair loss. No prescriptions. No side effects. No $3,000 clinic visits.</strong> And 10% of every purchase goes to hair-loss research.</p><p><strong>We don’t expect you to take our word for it. That’s why every bottle comes with a </strong>30-day money-back guarantee.<strong><br>If you don’t see a difference, just let us know. No hassle, no awkward questions.</strong></p><p><strong>If you’re ready to finally see a change, take a photo of your part today. In a few months you might be sending it to us with the message we hear most: “I can’t believe I didn’t start sooner.”</strong></p>"
+        "text": "<p><strong>If you’ve tried everything, we understand.<br>We have too.<br><br></strong>Thickening shampoos, biotin gummies, rosemary oil from the internet, a doctor who shrugged and said “it’s just your age”...<strong> only to find more hair in the shower drain, a wider part in every photo, and one more bottle on the shelf that didn’t work.</strong></p><p><strong>Hair loss isn’t just about hair.<br>It changes how you feel walking into a room, how you look in photos, and how you see yourself in the mirror every morning.</strong></p><p><strong>That’s why we created Elaren.<br>Our founder started losing her hair at 31 and went to the clinical research instead of the marketing. Pumpkin seed oil kept coming up as a natural DHT blocker. When her own crown thinning started improving on that routine, we realised how many women were quietly going through the same thing, and how little had ever been made for them.</strong></p><p><strong>So we built the regrowth oil we wished existed: cold-pressed pumpkin seed oil, powered by a Caffeine Complex, made for a woman’s scalp and a woman’s hair loss. No prescriptions. No side effects. No $3,000 clinic visits.</strong> And 10% of every purchase goes to hair-loss research.</p><p><strong>We don’t expect you to take our word for it. That’s why every bottle comes with a </strong>30-day money-back guarantee.<strong><br>If you don’t see a difference, just let us know. No hassle, no awkward questions.</strong></p><p><strong>If you’re ready to finally see a change, take a photo of your part today. In a few months you might be sending it to us with the message we hear most: “I can’t believe I didn’t start sooner.”</strong></p>"
       }
     },
     "arctic-plants": {
@@ -1053,7 +1053,7 @@
           "type": "text",
           "settings": {
             "title": "Ingredients",
-            "text": "<p>The <em><strong>ingredients</strong></em> make the product. Most “hair oils” are refined, heat-treated or diluted with mineral oil and fragrance (levels 1 to 3), which strips out the very sterols and vitamins that matter. We use cold-pressed pumpkin seed oil, so its DHT-blocking phytosterols, zinc and vitamin E reach your scalp intact, and we power it with a Caffeine Complex that research shows can rival minoxidil. </p>"
+            "text": "<p>The <em><strong>ingredients</strong></em> make the product. Most “hair oils” are refined, heat-treated or diluted with mineral oil and fragrance (levels 1 to 3), which strips out the very sterols and vitamins that matter. We use cold-pressed pumpkin seed oil, so its DHT-blocking phytosterols, zinc and vitamin E reach your scalp intact, and we power it with a Caffeine Complex that research on women’s hair follicles shows can extend the growth phase. </p>"
           }
         },
         "text_2": {
@@ -1138,7 +1138,7 @@
         "image_position": "left",
         "subtitle": "THE SCIENCE OF THE SEED",
         "title": "Why Pumpkin Seed Oil Is <em>Incredibly</em> Powerful For Thinning Hair",
-        "text": "<p>NATURE’S DHT BLOCKER<br><strong>DHT is the hormone that shrinks follicles in female pattern hair loss, and it gains the upper hand as oestrogen falls after 35. Pumpkin seed oil’s plant sterols help block the enzyme that makes it. In a 3-month trial of 60 women with female pattern hair loss, pumpkin seed oil applied to the scalp reduced fine, miniaturised hairs and increased regrowing hairs, though 5% minoxidil foam did better overall.</strong></p><p>PACKED WITH FOLLICLE NUTRIENTS<br><strong>Zinc, magnesium, omega-3, 6 and 9 fatty acids and vitamin E: the exact nutrients a starved follicle needs to build strong, thick keratin. Cold-pressing keeps every one of them intact.</strong></p><p>AMPLIFIED BY CAFFEINE<br><strong>Caffeine wakes up dormant follicles and extends their growth phase, and in a 6-month clinical study of men it rivalled 5% minoxidil. Together, the two actives work on both the hormonal and the cellular causes of thinning.</strong></p>"
+        "text": "<p>NATURE’S DHT BLOCKER<br><strong>DHT is the hormone that shrinks follicles in female pattern hair loss, and it gains the upper hand as oestrogen falls after 35. Pumpkin seed oil’s plant sterols help block the enzyme that makes it. In a 3-month trial of 60 women with female pattern hair loss, pumpkin seed oil applied to the scalp reduced fine, miniaturised hairs and increased regrowing hairs, though 5% minoxidil foam did better overall.</strong></p><p>PACKED WITH FOLLICLE NUTRIENTS<br><strong>Zinc, magnesium, omega-3, 6 and 9 fatty acids and vitamin E: the exact nutrients a starved follicle needs to build strong, thick keratin. Cold-pressing keeps every one of them intact.</strong></p><p>AMPLIFIED BY CAFFEINE<br><strong>Caffeine wakes up dormant follicles and extends their growth phase. In laboratory research on hair follicles from women’s scalps, it kept follicles growing for longer and increased hair-shaft growth. Together, the two actives work on both the hormonal and the cellular causes of thinning.</strong></p>"
       }
     },
     "guarantee-2": {
@@ -1199,7 +1199,7 @@
           "type": "question",
           "settings": {
             "question": "Is it safe? Can I use it with other treatments?",
-            "answer": "<p>The formula is drug-free and hormone-free: cold-pressed pumpkin seed oil, caffeine and plant-based actives, no minoxidil. Most people can use it alongside their usual products. If you are pregnant, breastfeeding or under medical treatment for hair loss, check with your doctor first.</p>"
+            "answer": "<p>The formula is drug-free and hormone-free: cold-pressed pumpkin seed oil, caffeine and plant-based actives, no minoxidil. Most women can use it alongside their usual products. If you are pregnant, breastfeeding or under medical treatment for hair loss, check with your doctor first.</p>"
           }
         },
         "q_6": {
