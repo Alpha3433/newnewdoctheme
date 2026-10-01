@@ -23,7 +23,7 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "One gradient for every offer, so a deal looks the same wherever it appears: the hero promo pill, the scrolling offer banner under the benefits strip and the discount-code reminder in the cart drawer all use it."
+        "content": "One gradient for every offer, so a deal looks the same wherever it appears: the hero promo pill and the scrolling offer banner under the benefits strip both use it."
       },
       {
         "type": "color",
@@ -59,7 +59,7 @@
         "step": 5,
         "unit": "%",
         "default": 45,
-        "info": "How strong the gradient is behind the scrolling offer banner and the cart's code reminder."
+        "info": "How strong the gradient is behind the scrolling offer banner."
       }
     ]
   },
