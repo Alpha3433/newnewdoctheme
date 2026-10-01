@@ -46,7 +46,10 @@
 .s-hero-aging-lp__title p em { font-style: italic; }
 .s-hero-aging-lp__button.custom-button { border-radius: 4px; }
 .s-hero-aging-lp__highlight-label { background: var(--hero-pill-bg, #b3173a); color: var(--hero-pill-color, #fff); border-radius: 6px; font-weight: 700; font-size: 17px; line-height: 22px; padding: 7px 12px; }
-@media screen and (max-width: 767px) { .s-hero-aging-lp__highlight-label { font-size: 13px; line-height: 18px; padding: 6px 10px; } }
+/* Offer gradient pill: the shared gradient from Theme settings → Offer colours, fully rounded like the reference. */
+.s-hero-aging-lp__highlight-label--offer { background: var(--offer-gradient); color: var(--offer-text, #fff); border-radius: 48px; padding: 7px 16px; }
+.s-hero-aging-lp__highlight-icon { flex: 0 0 auto; width: 16px; height: 16px; }
+@media screen and (max-width: 767px) { .s-hero-aging-lp__highlight-label { font-size: 13px; line-height: 18px; padding: 6px 10px; } .s-hero-aging-lp__highlight-label--offer { padding: 6px 14px; } .s-hero-aging-lp__highlight-icon { width: 14px; height: 14px; } }
 @media screen and (min-width: 768px) {
   .s-hero-aging-lp__content-wrapper { padding: 40px 40px 40px 60px; }
   .s-hero-aging-lp__review-text { font-family: var(--font-mono); letter-spacing: 0.02em; }
@@ -1778,4 +1781,22 @@ body.email-popup-open { overflow: hidden; }
 .froya-nav-drawer__track svg { flex: 0 0 auto; width: 22px; height: 22px; color: var(--brand-mauve-dark); }
 @media screen and (max-width: 999px) {
   .froya-nav__track-link { display: none; }
+}
+
+/* ---- Scrolling offer banner (Benefits strip). Colours: Theme settings → Offer colours (layout/theme.liquid). ---- */
+.s-offer-marquee { display: block; position: relative; width: 100%; overflow: hidden; padding: 17px 0; background: var(--offer-gradient-soft); color: #000; text-decoration: none; }
+.s-offer-marquee--full { background: var(--offer-gradient); color: var(--offer-text); }
+.s-offer-marquee__track { display: flex; width: max-content; animation: s-offer-marquee var(--offer-marquee-duration, 40s) linear infinite; }
+.s-offer-marquee:hover .s-offer-marquee__track, .s-offer-marquee:focus-visible .s-offer-marquee__track { animation-play-state: paused; }
+.s-offer-marquee__run { display: flex; flex-shrink: 0; align-items: center; white-space: nowrap; }
+.s-offer-marquee__item { padding: 0 1.5rem; font-family: var(--font-mono); font-size: 16px; line-height: 1.2; letter-spacing: 0; text-transform: uppercase; }
+.s-offer-marquee__item strong { font-weight: 700; }
+.s-offer-marquee__separator { opacity: 0.5; font-size: 14px; }
+@keyframes s-offer-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media screen and (max-width: 767px) {
+  .s-offer-marquee { padding: 13px 0; }
+  .s-offer-marquee__item { padding: 0 1rem; font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-offer-marquee__track { animation: none; }
 }

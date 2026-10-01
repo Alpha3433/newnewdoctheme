@@ -12,6 +12,34 @@
         </picture></div><div class="s-icons-with-text-custom__small-icon-text" style="--small-icon-text-color: {{ section.settings.text_color }};--small-icon-font-weight: 500;--small-icon-line-height: 1.2;"><h5>{{ block.settings.text }}</h5></div></div>
     {%- endfor -%}
   </div></div></section>
+  {%- comment -%}
+    Scrolling offer banner. Two identical runs of the message slide left together and the animation
+    loops when the first run has moved out of view, so the band never shows a gap. Screen readers get
+    the message once (the moving copies are hidden from them); visitors who ask for reduced motion
+    see it standing still. Colours come from Theme settings → Offer colours.
+  {%- endcomment -%}
+  {%- if section.settings.marquee_text != blank -%}
+    {%- liquid
+      assign marquee_tag = 'div'
+      if section.settings.marquee_link != blank
+        assign marquee_tag = 'a'
+      endif
+      assign marquee_repeat = section.settings.marquee_repeat | default: 6
+    -%}
+    <{{ marquee_tag }} class="s-offer-marquee s-offer-marquee--{{ section.settings.marquee_style | default: 'soft' }}"{% if marquee_tag == 'a' %} href="{{ section.settings.marquee_link }}"{% endif %} style="--offer-marquee-duration: {{ section.settings.marquee_speed | default: 40 }}s;">
+      <span class="visually-hidden">{{ section.settings.marquee_text | strip_html }}</span>
+      <span class="s-offer-marquee__track" aria-hidden="true">
+        {%- for run in (1..2) -%}
+        <span class="s-offer-marquee__run">
+          {%- for i in (1..marquee_repeat) -%}
+            <span class="s-offer-marquee__item">{{ section.settings.marquee_text }}</span>
+            {%- if section.settings.marquee_separator != blank -%}<span class="s-offer-marquee__separator">{{ section.settings.marquee_separator }}</span>{%- endif -%}
+          {%- endfor -%}
+        </span>
+        {%- endfor -%}
+      </span>
+    </{{ marquee_tag }}>
+  {%- endif -%}
 </section>
 
 {% schema %}
@@ -19,7 +47,17 @@
   "name": "Benefits strip",
   "tag": "section",
   "settings": [
-    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#1f1f1f" }
+    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#1f1f1f" },
+    { "type": "header", "content": "Scrolling offer banner", "info": "A band under the benefits that keeps repeating the offer. Its colours are the shared offer gradient in Theme settings → Offer colours." },
+    { "type": "inline_richtext", "id": "marquee_text", "label": "Offer text", "default": "BUY 2 GET 1 FREE + <strong>FREE GIFT</strong> WITH SUBSCRIPTION", "info": "Leave empty to hide the banner." },
+    { "type": "text", "id": "marquee_separator", "label": "Separator", "default": "✦" },
+    { "type": "text", "id": "marquee_link", "label": "Link", "default": "#product-section", "info": "Where a tap on the banner goes. #product-section scrolls to the buy box. Leave empty for no link." },
+    { "type": "select", "id": "marquee_style", "label": "Style", "options": [
+      { "value": "soft", "label": "Soft gradient, dark text" },
+      { "value": "full", "label": "Full gradient, light text" }
+    ], "default": "soft" },
+    { "type": "range", "id": "marquee_speed", "label": "Time for one loop", "min": 10, "max": 90, "step": 5, "unit": "s", "default": 40, "info": "Higher is slower." },
+    { "type": "range", "id": "marquee_repeat", "label": "Copies per loop", "min": 3, "max": 10, "step": 1, "default": 6, "info": "Raise it if a short message leaves a gap on very wide screens." }
   ],
   "blocks": [
     {

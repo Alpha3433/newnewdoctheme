@@ -65,6 +65,16 @@ template (`templates/page.froya-landing.json`).
   the popup only opens in the editor when the section is selected.
 * **Backed by science photo** – the landscape photo beside the steps is a *Photo* picker (with a
   fallback URL until one is uploaded); it stays in view while the steps scroll on desktop.
+* **Offer colours** – Theme settings → *Offer colours*: one gold → orange → mauve gradient shared by
+  every offer, so a deal looks the same wherever it appears: the hero's promo pill (Hero → *Pill
+  colour*: offer gradient or a solid colour, plus an optional gift icon), the scrolling offer banner
+  and the cart drawer's discount-code reminder.
+* **Scrolling offer banner** – Benefits strip → *Scrolling offer banner*: a band under the benefits
+  that keeps repeating the offer ("BUY 2 GET 1 FREE + FREE GIFT WITH SUBSCRIPTION"), on the soft or
+  full offer gradient. A tap scrolls to the buy box (*Link*). It pauses on hover and stands still
+  for visitors who ask their device for reduced motion. Empty the text to hide it.
+* **Mobile menu quotes** – Header → *Mobile quote* blocks: short review quotes listed under the
+  testimonial in the mobile menu, each with the reviewer's name and age as the review gives them.
 * **Announcement bar** – Header group → Announcement bar: message and countdown text sizes
   (message, label before the timer, numbers and unit labels are separate sliders, with a mobile
   size for the message) and *Position*: a desktop layout (message left / countdown left / both
@@ -128,6 +138,18 @@ template (`templates/page.froya-landing.json`).
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
   "Pair with" products, checkout label, country/currency selector and trust badges. The header
   CART button opens it and every add-to-cart button adds in place and opens it.
+  * **Goals bar.** Goal 1 is free express shipping: standard shipping is always free and
+    Settings → Shipping and delivery makes Express free from US$50, so *Free express shipping from*
+    must match that rate's minimum. Goal 2 is the free subscription gift, reached as soon as a line
+    on the subscription plan is in the cart (the rule that adds the MicroStamp Pro); untick *Free
+    subscription gift as a second goal* for a one-goal bar. The message names the next open goal.
+    Liquid has no exchange rate, so for a shopper in another currency `assets/main.js`
+    (`Cart.localizeGoals`) converts the threshold with Shopify's rate (`Shopify.currency.rate`) and
+    redoes the amount, the fill and the message.
+  * **Discount code reminder.** A line under the bar with the email popup's code (EXTRA10). It
+    shows the code to every shopper, not only those who signed up, so empty *Code* if the popup
+    should stay the only way to get it. Once Shopify reports the code on the cart, the line says it
+    is applied instead.
   * The line's **Subscribe & save switch acts on the whole product**, not on the one line it sits
     on. A "Buy 2, Get 1 Free" bundle goes into the cart as three bottles on one line and Kaching
     Bundles then splits the free bottle onto its own $0 line; the switch gathers every line of that

@@ -304,6 +304,20 @@
             "title": "Alopecia Areata in Women: What a Regrowth Oil Can and Can’t Do",
             "url": "/blogs/news"
           }
+        },
+        "quote_1": {
+          "type": "drawer_quote",
+          "settings": {
+            "quote": "\"My scalp feels noticeably healthier, and it sinks in without that heavy, greasy feeling.\"",
+            "author": "- Emily L, 61"
+          }
+        },
+        "quote_2": {
+          "type": "drawer_quote",
+          "settings": {
+            "quote": "\"I’ve stopped shedding as much, and I’m seeing fine baby hairs growing in at a decent rate.\"",
+            "author": "- Joan T, 64"
+          }
         }
       },
       "block_order": [
@@ -340,7 +354,9 @@
         "post_4",
         "post_5",
         "post_6",
-        "post_7"
+        "post_7",
+        "quote_1",
+        "quote_2"
       ],
       "settings": {
         "logo": "shopify://shop_images/hf_20260509_170327_c83b61e7-455e-4c70-94eb-e812328a9e2a.png",
@@ -361,7 +377,7 @@
         "pill_new": "New",
         "goals_title": "Shop by Goal",
         "testimonial_quote": "\"I have alopecia and it didn’t feel greasy once applied. <strong>From the oil to the scalp massager, 10 out of 10!</strong>\"",
-        "testimonial_author": "- Tamara I., verified buyer",
+        "testimonial_author": "- Tamara I, 54",
         "quiz_title": "Not Sure Where To Start?",
         "quiz_cta": "TALK TO US",
         "quiz_url": "/pages/contact",
@@ -369,7 +385,7 @@
         "blog": "",
         "blog_limit": 7,
         "read_more_label": "Read more",
-        "drawer_note": "Women’s hair wellness · Rated 4.77/5 by verified customers"
+        "drawer_note": "Women’s hair wellness · Rated 4.77/5 by women with thinning hair"
       }
     },
     "cart-drawer": {
@@ -386,7 +402,7 @@
           "type": "badge",
           "settings": {
             "default_icon": "bag",
-            "text": "<p>4.77/5 From<br>Verified Buyers</p>"
+            "text": "<p>Rated 4.77/5<br>By Women</p>"
           }
         },
         "badge_3": {
@@ -405,14 +421,22 @@
       "settings": {
         "title": "Cart",
         "show_shipping_bar": true,
-        "shipping_threshold": 30,
-        "shipping_text": "Spend {amount} and get",
-        "shipping_highlight": "FREE SHIPPING",
-        "shipping_unlocked": "You’re eligible for",
-        "shipping_unlocked_highlight": "FREE SHIPPING",
-        "shipping_label": "Free shipping",
-        "shipping_label_unlocked": "Free shipping",
-        "reviews_banner": "RATED 4.77/5 BY VERIFIED CUSTOMERS",
+        "shipping_threshold": 50,
+        "shipping_text": "Spend {amount} more and get",
+        "shipping_highlight": "FREE EXPRESS SHIPPING",
+        "shipping_unlocked": "You’ve unlocked",
+        "shipping_unlocked_highlight": "FREE EXPRESS SHIPPING",
+        "shipping_label": "Free express shipping",
+        "shipping_label_unlocked": "Free express shipping",
+        "gift_goal": true,
+        "gift_goal_label": "Free gift",
+        "gift_goal_text": "Express shipping is free! Subscribe & save to add a",
+        "gift_goal_highlight": "FREE MICROSTAMP PRO",
+        "goals_done_highlight": "FREE EXPRESS SHIPPING + A FREE GIFT",
+        "reminder_code": "EXTRA10",
+        "reminder_text": "🎁 Get an <strong>extra 10% off</strong> with code {code} at checkout.",
+        "reminder_applied_text": "✓ Code {code} is applied: an <strong>extra 10%</strong> comes off at checkout.",
+        "reviews_banner": "RATED 4.77/5 BY WOMEN WITH THINNING HAIR",
         "empty_title": "Your cart is empty",
         "empty_text": "",
         "empty_product": "elaren-pumpkin-seed-oil-regrowth-serum",

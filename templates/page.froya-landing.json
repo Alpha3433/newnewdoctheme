@@ -14,7 +14,7 @@
       "settings": {
         "image_alt": "Woman over 35 parting her hair to show fuller regrowth along her part after using Elaren Pumpkin Seed Regrowth Oil",
         "mobile_text_color": "#ffffff",
-        "review_text": "4.77/5 from verified customers · Women 35+",
+        "review_text": "Rated 4.77/5 by women with thinning hair",
         "title": "Less Shedding in <em>Weeks.</em> Real Regrowth in Months.",
         "subtitle": "Pumpkin seed oil and caffeine feed tired follicles, calm shedding and help hair grow back thicker. For the part, crown and edges, postpartum and menopausal shedding.",
         "button_label": "SEE HOW IT WORKS",
@@ -154,7 +154,7 @@
           "type": "slide",
           "settings": {
             "logo_alt": "",
-            "quote": "\"Rated 4.77/5 by verified customers.\"",
+            "quote": "\"Rated 4.77/5 by women with thinning hair.\"",
             "logo_fallback": "https://froyaorganics.com/cdn/shop/files/yahoo.png?v=1733254162"
           }
         }
@@ -442,7 +442,7 @@
       ],
       "settings": {
         "image_alt": "Published clinical results for pumpkin seed oil, with caffeine as the supporting active",
-        "label": "Peer-reviewed. Randomised.",
+        "label": "60 women. 3 months.",
         "title": "<p>Pumpkin Seed Oil, With<br><em>Published Clinical</em> Results</p>"
       }
     },
@@ -690,7 +690,7 @@
         "badge_color": "#54585a",
         "reviews_count": 43,
         "rating": "4.8",
-        "rating_text": "4.77/5 FROM VERIFIED BUYERS",
+        "rating_text": "RATED 4.77/5 BY WOMEN",
         "reviews_anchor": "reviews-section",
         "label_1": "",
         "label_2": "",

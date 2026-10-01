@@ -1,0 +1,30 @@
+{%- comment -%}
+  Discount-code reminder under the cart drawer's goals bar (the email popup's code), on the shared
+  offer gradient. Once Shopify reports the code on the cart it says so instead of asking for it again.
+
+  Accepts:
+  - code {string} - the discount code; nothing is rendered when it is blank
+  - text {string} - the reminder, {code} is replaced with the styled code
+  - applied_text {string} - shown instead once the code is on the cart
+{%- endcomment -%}
+{%- liquid
+  assign reminder_code = code | strip
+  assign code_upcase = reminder_code | upcase
+  assign code_applied = false
+  if reminder_code != blank
+    for application in cart.discount_applications
+      assign application_title = application.title | upcase
+      if application.type == 'discount_code' and application_title == code_upcase
+        assign code_applied = true
+      endif
+    endfor
+  endif
+  assign reminder_copy = text
+  if code_applied and applied_text != blank
+    assign reminder_copy = applied_text
+  endif
+-%}
+{%- if reminder_code != blank and reminder_copy != blank -%}
+  {%- capture code_html -%}<strong class="free-shipping__code">{{ reminder_code | escape }}</strong>{%- endcapture -%}
+  <p class="free-shipping__callout{% if code_applied %} is-applied{% endif %}">{{ reminder_copy | replace: '{code}', code_html }}</p>
+{%- endif -%}

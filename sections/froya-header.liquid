@@ -10,6 +10,7 @@
   assign more_links = section.blocks | where: 'type', 'more_link'
   assign posts = section.blocks | where: 'type', 'post'
   assign anchors = section.blocks | where: 'type', 'anchor_link'
+  assign drawer_quotes = section.blocks | where: 'type', 'drawer_quote'
   assign simple_menu = false
   if section.settings.menu_style == 'anchors'
     assign simple_menu = true
@@ -102,6 +103,24 @@
       <span aria-hidden="true" class="froya-nav-drawer__testimonial-stars">★★★★★</span>
       {{ section.settings.testimonial_author }}
     </span>
+  {%- endif -%}
+{%- endcapture -%}
+{%- comment -%} Short review quotes listed under the testimonial in the mobile menu (Mobile quote blocks). {%- endcomment -%}
+{%- capture drawer_quotes_html -%}
+  {%- if drawer_quotes.size > 0 -%}
+    <ul class="froya-nav-drawer__quotes" role="list">
+      {%- for block in drawer_quotes -%}
+        {%- if block.settings.quote != blank -%}
+        <li class="froya-nav-drawer__quote" {{ block.shopify_attributes }}>
+          <p class="froya-nav-drawer__quote-text">{{ block.settings.quote }}</p>
+          <span class="froya-nav-drawer__testimonial-meta">
+            <span aria-hidden="true" class="froya-nav-drawer__testimonial-stars">★★★★★</span>
+            {{ block.settings.author }}
+          </span>
+        </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
   {%- endif -%}
 {%- endcapture -%}
 <div class="shopify-section froya-nav-section" id="shopify-section-froya-nav-variant">
@@ -250,6 +269,7 @@
           <div class="froya-nav-drawer__testimonial-content">{{ testimonial | replace: 'froya-nav__mega-testimonial-quote', 'froya-nav-drawer__testimonial-quote' | replace: 'froya-nav__mega-testimonial-meta', 'froya-nav-drawer__testimonial-meta' }}</div>
         </div>
         {%- endif -%}
+        {{ drawer_quotes_html }}
       </div>
       {%- else -%}
       <div class="froya-nav-drawer__body">
@@ -310,6 +330,7 @@
           <div class="froya-nav-drawer__testimonial-content">{{ testimonial | replace: 'froya-nav__mega-testimonial-quote', 'froya-nav-drawer__testimonial-quote' | replace: 'froya-nav__mega-testimonial-meta', 'froya-nav-drawer__testimonial-meta' }}</div>
         </div>
         {%- endif -%}
+        {{ drawer_quotes_html }}
       </div>
       {%- endif -%}
     </div>
@@ -346,7 +367,7 @@
     { "type": "header", "content": "Testimonial" },
     { "type": "image_picker", "id": "testimonial_image", "label": "Testimonial image", "info": "Before/after photo, about 240 × 144 px." },
     { "type": "inline_richtext", "id": "testimonial_quote", "label": "Quote", "default": "\"I have alopecia and it didn’t feel greasy once applied. <strong>From the oil to the scalp massager, 10 out of 10!</strong>\"" },
-    { "type": "text", "id": "testimonial_author", "label": "Author", "default": "- Tamara I., verified buyer" },
+    { "type": "text", "id": "testimonial_author", "label": "Author", "default": "- Tamara I, 54" },
     { "type": "header", "content": "Help panel" },
     { "type": "image_picker", "id": "quiz_image", "label": "Background image", "info": "About 600 × 300 px." },
     { "type": "text", "id": "quiz_title", "label": "Title", "default": "Not Sure Where To Start?" },
@@ -358,7 +379,7 @@
     { "type": "range", "id": "blog_limit", "label": "Articles to show", "min": 3, "max": 10, "step": 1, "default": 7 },
     { "type": "text", "id": "read_more_label", "label": "Read more label", "default": "Read more" },
     { "type": "header", "content": "Mobile menu" },
-    { "type": "text", "id": "drawer_note", "label": "Note under the links", "default": "Women’s hair wellness · Rated 4.77/5 by verified customers" }
+    { "type": "text", "id": "drawer_note", "label": "Note under the links", "default": "Women’s hair wellness · Rated 4.77/5 by women with thinning hair" }
   ],
   "blocks": [
     {
@@ -422,6 +443,15 @@
       "settings": [
         { "type": "text", "id": "label", "label": "Label", "default": "Reviews" },
         { "type": "url", "id": "url", "label": "Link" }
+      ]
+    },
+    {
+      "type": "drawer_quote",
+      "name": "Mobile quote",
+      "settings": [
+        { "type": "paragraph", "content": "A short review quote listed under the testimonial in the mobile menu. Use the reviewer's name and age as the review gives them." },
+        { "type": "inline_richtext", "id": "quote", "label": "Quote", "default": "\"My scalp feels noticeably healthier, and it sinks in without that heavy, greasy feeling.\"" },
+        { "type": "text", "id": "author", "label": "Name and age", "default": "- Emily L, 61" }
       ]
     },
     {

@@ -19,6 +19,51 @@
     ]
   },
   {
+    "name": "Offer colours",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "One gradient for every offer, so a deal looks the same wherever it appears: the hero promo pill, the scrolling offer banner under the benefits strip and the discount-code reminder in the cart drawer all use it."
+      },
+      {
+        "type": "color",
+        "id": "offer_color_1",
+        "label": "Gradient start",
+        "default": "#dfb142"
+      },
+      {
+        "type": "color",
+        "id": "offer_color_2",
+        "label": "Gradient middle",
+        "default": "#e98044"
+      },
+      {
+        "type": "color",
+        "id": "offer_color_3",
+        "label": "Gradient end",
+        "default": "#af8998"
+      },
+      {
+        "type": "color",
+        "id": "offer_text_color",
+        "label": "Text on the full gradient",
+        "default": "#ffffff",
+        "info": "The hero pill. The scrolling banner uses a softer gradient with dark text."
+      },
+      {
+        "type": "range",
+        "id": "offer_soft_strength",
+        "label": "Soft gradient strength",
+        "min": 20,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "default": 45,
+        "info": "How strong the gradient is behind the scrolling offer banner and the cart's code reminder."
+      }
+    ]
+  },
+  {
     "name": "Currency format",
     "settings": [
       {

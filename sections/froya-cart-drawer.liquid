@@ -39,45 +39,97 @@
     <div class="drawer__content{% if cart.item_count == 0 %} drawer__content--empty{% endif %}" data-cart-content>
       {%- liquid
         comment
-          Free-shipping progress. Shown in both states so the bar is the first thing the shopper sees
-          after an add to cart: assets/main.js re-renders this container after every cart change and
-          animates the bar from its previous width to the new one. Once the threshold is reached the
-          copy switches to the "unlocked" pair ("You’re eligible for FREE SHIPPING").
+          Goals bar, shown in both states so it is the first thing the shopper sees after an add to
+          cart. Goal 1 is free express shipping: standard shipping is always free and Settings →
+          Shipping and delivery makes express free from a cart total, so the bar tracks the total
+          against that threshold. Goal 2 (optional) is the free subscription gift, reached as soon as
+          a line on the subscription plan is in the cart - the same rule that adds the gift line.
+          The message always names the next goal still open: the container's data-goal-state picks
+          which message shows and data-reached / data-gift-reached light the milestones (theme.css).
+          The threshold is in the store currency and Liquid has no exchange rate, so for a shopper in
+          another currency assets/main.js (Cart.localizeGoals) converts it with Shopify's rate and
+          rewrites the amount, the fill and which message shows. main.js re-renders this container
+          after every cart change and animates each fill from its previous width.
         endcomment
         assign threshold = section.settings.shipping_threshold | default: 0 | times: 100
         assign remaining = threshold | minus: cart.total_price
         assign remaining_money = remaining | money_without_trailing_zeros
-        assign progress = 0
-        if threshold > 0
-          assign progress = cart.total_price | times: 100 | divided_by: threshold | at_most: 100
-        endif
+        assign threshold_divisor = threshold | at_least: 1
+        assign progress = cart.total_price | times: 100 | divided_by: threshold_divisor | at_most: 100
         assign reached = false
         if remaining <= 0
           assign reached = true
         endif
+        assign gift_goal = false
+        if section.settings.gift_goal and gift_variant != blank
+          assign gift_goal = true
+        endif
+        assign gift_reached = false
+        if gift_goal
+          for item in cart.items
+            if item.selling_plan_allocation
+              assign item_plan_id = item.selling_plan_allocation.selling_plan.id | append: ''
+              if pinned_plan_id == blank or item_plan_id == pinned_plan_id
+                assign gift_reached = true
+              endif
+            endif
+          endfor
+        endif
+        assign goal_state = 'done'
+        if reached == false
+          assign goal_state = 'shipping'
+        elsif gift_goal and gift_reached == false
+          assign goal_state = 'gift'
+        endif
+        assign done_highlight = section.settings.shipping_unlocked_highlight
+        if gift_goal
+          assign done_highlight = section.settings.goals_done_highlight
+        endif
+        assign amount_html = '<span data-goal-amount>' | append: remaining_money | append: '</span>'
       -%}
+      {%- capture code_reminder -%}
+        {%- if cart.item_count > 0 -%}
+          {%- render 'cart-code-reminder', code: section.settings.reminder_code, text: section.settings.reminder_text, applied_text: section.settings.reminder_applied_text -%}
+        {%- endif -%}
+      {%- endcapture -%}
       {%- if section.settings.show_shipping_bar and threshold > 0 -%}
-      <div class="s-mini-cart__shipping free-shipping{% if cart.item_count == 0 %} s-mini-cart__shipping--empty{% endif %}{% if reached %} is-reached{% endif %}" data-cart-shipping data-progress="{{ progress }}" data-reached="{{ reached }}">
-        <p class="free-shipping__text" data-cart-shipping-text>
-          {%- if reached -%}
-            {{ section.settings.shipping_unlocked }}{% if section.settings.shipping_unlocked_highlight != blank %} <span class="free-shipping__highlight">{{ section.settings.shipping_unlocked_highlight }}</span>{% endif %}
-          {%- else -%}
-            {{ section.settings.shipping_text | replace: amount_placeholder, remaining_money }} <span>{{ section.settings.shipping_highlight }}</span>
+      <div class="s-mini-cart__shipping free-shipping{% if gift_goal %} free-shipping--goals{% endif %}{% if cart.item_count == 0 %} s-mini-cart__shipping--empty{% endif %}" data-cart-shipping data-progress="{{ progress }}" data-reached="{{ reached }}" data-gift-reached="{{ gift_reached }}" data-goal-state="{{ goal_state }}" data-total="{{ cart.total_price }}" data-threshold="{{ threshold }}" data-shop-currency="{{ shop.currency }}">
+        <p class="free-shipping__text">
+          <span data-goal-msg="shipping">{{ section.settings.shipping_text | replace: amount_placeholder, amount_html }} <span class="free-shipping__highlight">{{ section.settings.shipping_highlight }}</span></span>
+          {%- if gift_goal -%}
+          <span data-goal-msg="gift">{{ section.settings.gift_goal_text }} <span class="free-shipping__highlight">{{ section.settings.gift_goal_highlight }}</span></span>
           {%- endif -%}
+          <span data-goal-msg="done">{{ section.settings.shipping_unlocked }} <span class="free-shipping__highlight">{{ done_highlight }}</span></span>
         </p>
-        <div class="free-shipping__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}">
-          <div class="free-shipping__progress" style="width: {{ progress }}%;"></div>
-          <span class="free-shipping__dot free-shipping__dot--start" aria-hidden="true"></span>
-          <span class="free-shipping__dot free-shipping__dot--end{% if reached %} is-reached{% endif %}" aria-hidden="true"></span>
-        </div>
-        {%- liquid
-          assign bar_label = section.settings.shipping_label
-          if reached and section.settings.shipping_label_unlocked != blank
-            assign bar_label = section.settings.shipping_label_unlocked
-          endif
-        -%}
-        {%- if bar_label != blank -%}<span class="free-shipping__label">{{ bar_label }}</span>{%- endif -%}
+        {%- if gift_goal -%}
+          <div class="free-shipping__bar free-shipping__bar--goals">
+            <span class="free-shipping__segment" role="progressbar" aria-label="{{ section.settings.shipping_label | escape }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}"><span class="free-shipping__progress" data-goal-fill="shipping" style="width: {{ progress }}%;"></span></span>
+            <span class="free-shipping__milestone" data-goal-mark="shipping" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg></span>
+            <span class="free-shipping__segment"><span class="free-shipping__progress" data-goal-fill="gift" style="width: {% if gift_reached %}100{% else %}0{% endif %}%;"></span></span>
+            <span class="free-shipping__milestone" data-goal-mark="gift" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8M12 8v13M12 8c-1.5-3-5.5-3.5-5.5-1S9 8 12 8zm0 0c1.5-3 5.5-3.5 5.5-1S15 8 12 8z"/></svg></span>
+          </div>
+          <div class="free-shipping__goal-labels" aria-hidden="true">
+            <span class="free-shipping__goal-label" data-goal-label="shipping">{{ section.settings.shipping_label }}</span>
+            <span class="free-shipping__goal-label" data-goal-label="gift">{{ section.settings.gift_goal_label }}</span>
+          </div>
+        {%- else -%}
+          <div class="free-shipping__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}">
+            <div class="free-shipping__progress" data-goal-fill="shipping" style="width: {{ progress }}%;"></div>
+            <span class="free-shipping__dot free-shipping__dot--start" aria-hidden="true"></span>
+            <span class="free-shipping__dot free-shipping__dot--end" data-goal-mark="shipping" aria-hidden="true"></span>
+          </div>
+          {%- liquid
+            assign bar_label = section.settings.shipping_label
+            if reached and section.settings.shipping_label_unlocked != blank
+              assign bar_label = section.settings.shipping_label_unlocked
+            endif
+          -%}
+          {%- if bar_label != blank -%}<span class="free-shipping__label" data-goal-label="shipping" data-label-pending="{{ section.settings.shipping_label | escape }}" data-label-reached="{{ section.settings.shipping_label_unlocked | default: section.settings.shipping_label | escape }}">{{ bar_label }}</span>{%- endif -%}
+        {%- endif -%}
+        {{ code_reminder }}
       </div>
+      {%- elsif code_reminder != blank -%}
+      <div class="s-mini-cart__shipping">{{ code_reminder }}</div>
       {%- endif -%}
       {%- if cart.item_count == 0 -%}
         {%- liquid
@@ -435,16 +487,26 @@
   "name": "Cart drawer",
   "settings": [
     { "type": "text", "id": "title", "label": "Title", "default": "Cart" },
+    { "type": "header", "content": "Goals bar", "info": "Goal 1 is free express shipping: standard shipping is always free, and Settings → Shipping and delivery makes express free from a cart total. Goal 2 is the free subscription gift. The message always names the next goal still open." },
+    { "type": "checkbox", "id": "show_shipping_bar", "label": "Show the goals bar", "default": true },
+    { "type": "number", "id": "shipping_threshold", "label": "Free express shipping from (store currency)", "default": 50, "info": "Keep it equal to the free Express Shipping rate's minimum in Settings → Shipping and delivery (US$50). Shoppers in another currency see it converted at Shopify's exchange rate." },
+    { "type": "text", "id": "shipping_text", "label": "Text before the goal", "default": "Spend {amount} more and get", "info": "{amount} is replaced with what is left to spend." },
+    { "type": "text", "id": "shipping_highlight", "label": "Goal (highlighted)", "default": "FREE EXPRESS SHIPPING" },
+    { "type": "text", "id": "shipping_label", "label": "Label under the bar", "default": "Free express shipping" },
+    { "type": "text", "id": "shipping_unlocked", "label": "Text once every goal is reached", "default": "You’ve unlocked" },
+    { "type": "text", "id": "shipping_unlocked_highlight", "label": "Reached text highlight", "default": "FREE EXPRESS SHIPPING", "info": "Shown highlighted after the text above when the gift goal is off." },
+    { "type": "text", "id": "shipping_label_unlocked", "label": "Label once reached", "default": "Free express shipping", "info": "Used when the gift goal below is off." },
+    { "type": "checkbox", "id": "gift_goal", "label": "Free subscription gift as a second goal", "default": true, "info": "Reached when a line on the subscription plan (Line items → Subscription plan ID) is in the cart, the same rule that adds the gift. Needs a Gift product below." },
+    { "type": "text", "id": "gift_goal_label", "label": "Gift goal label", "default": "Free gift" },
+    { "type": "text", "id": "gift_goal_text", "label": "Text once shipping is free", "default": "Express shipping is free! Subscribe & save to add a" },
+    { "type": "text", "id": "gift_goal_highlight", "label": "Gift (highlighted)", "default": "FREE MICROSTAMP PRO", "info": "Update it if you change the gift product." },
+    { "type": "text", "id": "goals_done_highlight", "label": "Both goals reached (highlighted)", "default": "FREE EXPRESS SHIPPING + A FREE GIFT", "info": "Shown after \"Text once every goal is reached\"." },
+    { "type": "header", "content": "Discount code reminder", "info": "A line under the goals bar, on the shared offer gradient, once the cart has something in it. Note that it shows the code to every shopper, not only those who signed up in the email popup." },
+    { "type": "text", "id": "reminder_code", "label": "Code", "default": "EXTRA10", "info": "The email popup's code (Discounts → EXTRA10). Leave empty to hide the reminder." },
+    { "type": "inline_richtext", "id": "reminder_text", "label": "Reminder", "default": "🎁 Get an <strong>extra 10% off</strong> with code {code} at checkout.", "info": "{code} is replaced with the code." },
+    { "type": "inline_richtext", "id": "reminder_applied_text", "label": "Once the code is on the cart", "default": "✓ Code {code} is applied: an <strong>extra 10%</strong> comes off at checkout." },
     { "type": "header", "content": "Empty cart" },
-    { "type": "checkbox", "id": "show_shipping_bar", "label": "Show free-shipping progress bar", "default": true },
-    { "type": "number", "id": "shipping_threshold", "label": "Free-shipping threshold (in your store currency)", "default": 30 },
-    { "type": "text", "id": "shipping_text", "label": "Progress text", "default": "Spend {amount} and get", "info": "{amount} is replaced with what is left to spend." },
-    { "type": "text", "id": "shipping_highlight", "label": "Progress text highlight", "default": "FREE SHIPPING" },
-    { "type": "text", "id": "shipping_unlocked", "label": "Text once the threshold is reached", "default": "You’re eligible for" },
-    { "type": "text", "id": "shipping_unlocked_highlight", "label": "Reached text highlight", "default": "FREE SHIPPING", "info": "Shown highlighted after the reached text." },
-    { "type": "text", "id": "shipping_label", "label": "Bar label", "default": "Free shipping" },
-    { "type": "text", "id": "shipping_label_unlocked", "label": "Bar label once the threshold is reached", "default": "Free shipping" },
-    { "type": "text", "id": "reviews_banner", "label": "Reviews banner", "default": "RATED 4.77/5 BY VERIFIED CUSTOMERS", "info": "Shown with five stars under the shipping bar. Leave empty to hide." },
+    { "type": "text", "id": "reviews_banner", "label": "Reviews banner", "default": "RATED 4.77/5 BY WOMEN WITH THINNING HAIR", "info": "Shown with five stars under the shipping bar. Leave empty to hide." },
     { "type": "text", "id": "empty_title", "label": "Empty cart title", "default": "Your cart is empty" },
     { "type": "text", "id": "empty_text", "label": "Empty cart text", "info": "Optional line under the title." },
     { "type": "product", "id": "empty_product", "label": "Bestseller to suggest", "info": "Falls back to the first recommended product below." },
