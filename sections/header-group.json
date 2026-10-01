@@ -402,7 +402,7 @@
           "type": "badge",
           "settings": {
             "default_icon": "bag",
-            "text": "<p>Rated 4.77/5<br>By Women</p>"
+            "text": "<p>4.77/5 From<br>Verified Buyers</p>"
           }
         },
         "badge_3": {
@@ -421,22 +421,14 @@
       "settings": {
         "title": "Cart",
         "show_shipping_bar": true,
-        "shipping_threshold": 50,
-        "shipping_text": "Spend {amount} more and get",
-        "shipping_highlight": "FREE EXPRESS SHIPPING",
-        "shipping_unlocked": "You’ve unlocked",
-        "shipping_unlocked_highlight": "FREE EXPRESS SHIPPING",
-        "shipping_label": "Free express shipping",
-        "shipping_label_unlocked": "Free express shipping",
-        "gift_goal": true,
-        "gift_goal_label": "Free gift",
-        "gift_goal_text": "Express shipping is free! Subscribe & save to add a",
-        "gift_goal_highlight": "FREE MICROSTAMP PRO",
-        "goals_done_highlight": "FREE EXPRESS SHIPPING + A FREE GIFT",
-        "reminder_code": "EXTRA10",
-        "reminder_text": "🎁 Get an <strong>extra 10% off</strong> with code {code} at checkout.",
-        "reminder_applied_text": "✓ Code {code} is applied: an <strong>extra 10%</strong> comes off at checkout.",
-        "reviews_banner": "RATED 4.77/5 BY WOMEN WITH THINNING HAIR",
+        "shipping_threshold": 30,
+        "shipping_text": "Spend {amount} and get",
+        "shipping_highlight": "FREE SHIPPING",
+        "shipping_unlocked": "You’re eligible for",
+        "shipping_unlocked_highlight": "FREE SHIPPING",
+        "shipping_label": "Free shipping",
+        "shipping_label_unlocked": "Free shipping",
+        "reviews_banner": "RATED 4.77/5 BY VERIFIED CUSTOMERS",
         "empty_title": "Your cart is empty",
         "empty_text": "",
         "empty_product": "elaren-pumpkin-seed-oil-regrowth-serum",

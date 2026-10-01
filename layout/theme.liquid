@@ -42,9 +42,8 @@
   {{ 'sections.css' | asset_url | stylesheet_tag }}
   {%- liquid
     comment
-      Theme settings → Offer colours: one gradient shared by the hero pill, the scrolling offer
-      banner and the cart's code reminder. The soft version keeps the hues at partial strength so
-      dark text stays readable on it.
+      Theme settings → Offer colours: one gradient shared by the hero pill and the scrolling offer
+      banner. The soft version keeps the hues at partial strength so dark text stays readable on it.
     endcomment
     assign offer_1 = settings.offer_color_1 | default: '#dfb142'
     assign offer_2 = settings.offer_color_2 | default: '#e98044'
