@@ -282,6 +282,36 @@
             "image_fallback": "https://froyaorganics.com/cdn/shop/files/Sarah_Jane_Frantz.png"
           }
         },
+        "review_6": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260914_112252_5a9fd099-1b8c-4ec0-bedf-45a9cf88883c.png",
+            "image_alt": "",
+            "name": "Joan T, 64",
+            "tag_1": "wider part",
+            "tag_2": "baby hairs",
+            "quote": "\"I’ve stopped shedding as much, and I’m seeing fine baby hairs growing in at a decent rate.\"",
+            "text": "<p>My hairdresser told me all about pumpkin seed oil to help with DHT issues. I’ve been on a GLP1 and lost a lot of weight, and she’s had success with a number of her clients who’ve shed hair due to rapid weight loss. My hair still looks normal to everyone else, but I can feel a difference and my part is a bit wider. I love the idea of taking a vitamin rather than slathering product on my scalp, so I was happy to try these. I have been taking them for two months now. (I couldn’t reorder these because they were unavailable, so month two I was using another product.)</p><p>I can definitely see a benefit to these. I’ve stopped shedding as much, and I’m seeing fine baby hairs growing in at a decent rate, so I’d rate these capsules as very effective. The quality of the bottle and the capsules themselves are topnotch and came well secured and safe. There is no aftertaste, and I am enjoying the health benefits of these vitamins. I notice no difference in my energy level, in case that matters.</p>",
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "product_title": "",
+            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Iriel_G.jpg"
+          }
+        },
+        "review_8": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260914_120544_ba1822c8-62d0-441c-b969-9fd7d8031b01.png",
+            "image_alt": "",
+            "name": "Lisa N, 55",
+            "tag_1": "thicker feel",
+            "tag_2": "less dry scalp",
+            "quote": "\"My hair already feels a bit thicker and looks healthier, and my scalp doesn’t feel as dry.\"",
+            "text": "<p>I’ve been using this for a little while and I’m really happy with it so far. The softgels are easy to take and don’t have any weird taste or aftertaste. I like that it’s made with clean, plant-based ingredients like pumpkin seed oil, and that it’s cold-pressed and third-party tested.</p><p>My hair already feels a bit thicker and looks healthier, and my scalp doesn’t feel as dry. It’s nice to find something simple and natural that actually seems to help. Definitely planning to keep this as part of my routine.</p>",
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "product_title": "",
+            "image_fallback": "https://froyaorganics.com/cdn/shop/files/image3.png"
+          }
+        },
         "review_9": {
           "type": "review",
           "settings": {
@@ -296,6 +326,21 @@
             "product_title": "",
             "image_fallback": "https://froyaorganics.com/cdn/shop/files/Traci_R.png"
           }
+        },
+        "review_10": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260914_120622_e66ed5b0-cc7c-431d-b45e-d7e5c71166ce.png",
+            "image_alt": "",
+            "name": "Jennifer W, 55",
+            "tag_1": "hair quality",
+            "tag_2": "visible difference",
+            "quote": "\"I have already seen a difference in the quality of my hair.\"",
+            "text": "",
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "product_title": "",
+            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Jennifer_M.png"
+          }
         }
       },
       "block_order": [
@@ -304,7 +349,10 @@
         "review_3",
         "review_4",
         "review_5",
-        "review_9"
+        "review_6",
+        "review_8",
+        "review_9",
+        "review_10"
       ],
       "settings": {
         "title": "Verified Reviews From Real Elaren Customers",
