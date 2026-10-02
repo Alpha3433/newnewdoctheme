@@ -112,7 +112,7 @@
             "product": "pumpkin-seed-oil-capsules",
             "label": "Pumpkin Seed Oil Capsules",
             "url": "",
-            "pill": "bestseller"
+            "pill": "none"
           }
         },
         "shop_3": {
@@ -140,33 +140,6 @@
             "label": "SleepSilk Pillowcase",
             "url": "",
             "pill": "none"
-          }
-        },
-        "shop_6": {
-          "type": "shop_item",
-          "settings": {
-            "product": "elaren-rosemary-scalp-elixir",
-            "label": "Rosemary Scalp Elixir",
-            "url": "",
-            "pill": "new"
-          }
-        },
-        "shop_7": {
-          "type": "shop_item",
-          "settings": {
-            "product": "elaren-gentlehold-satin-set",
-            "label": "GentleHold Satin Set",
-            "url": "",
-            "pill": "new"
-          }
-        },
-        "shop_8": {
-          "type": "shop_item",
-          "settings": {
-            "product": "elaren-instafull-thickening-fibers",
-            "label": "InstaFull Thickening Fibers",
-            "url": "",
-            "pill": "new"
           }
         },
         "goal_1": {
@@ -232,14 +205,14 @@
           "type": "more_link",
           "settings": {
             "label": "Our Story",
-            "url": "/pages/about-us"
+            "url": "/#story"
           }
         },
         "more_3": {
           "type": "more_link",
           "settings": {
             "label": "FAQ",
-            "url": "/pages/faq"
+            "url": "/#faq"
           }
         },
         "more_4": {
@@ -253,7 +226,7 @@
           "type": "more_link",
           "settings": {
             "label": "Manage Subscription",
-            "url": "/account"
+            "url": "mailto:support@shopelaren.com?subject=Manage%20my%20subscription"
           }
         },
         "post_1": {
@@ -311,13 +284,6 @@
             "quote": "\"My scalp feels noticeably healthier, and it sinks in without that heavy, greasy feeling.\"",
             "author": "- Emily L, 61"
           }
-        },
-        "quote_2": {
-          "type": "drawer_quote",
-          "settings": {
-            "quote": "\"I’ve stopped shedding as much, and I’m seeing fine baby hairs growing in at a decent rate.\"",
-            "author": "- Joan T, 64"
-          }
         }
       },
       "block_order": [
@@ -334,9 +300,6 @@
         "shop_3",
         "shop_4",
         "shop_5",
-        "shop_6",
-        "shop_7",
-        "shop_8",
         "goal_1",
         "goal_2",
         "goal_3",
@@ -355,8 +318,7 @@
         "post_5",
         "post_6",
         "post_7",
-        "quote_1",
-        "quote_2"
+        "quote_1"
       ],
       "settings": {
         "logo": "shopify://shop_images/hf_20260509_170327_c83b61e7-455e-4c70-94eb-e812328a9e2a.png",
@@ -381,7 +343,7 @@
         "quiz_title": "Not Sure Where To Start?",
         "quiz_cta": "TALK TO US",
         "quiz_url": "/pages/contact",
-        "blog_label": "The Elaren Journal · Blog",
+        "blog_label": "",
         "blog": "",
         "blog_limit": 7,
         "read_more_label": "Read more",
@@ -421,7 +383,7 @@
       "settings": {
         "title": "Cart",
         "show_shipping_bar": true,
-        "shipping_threshold": 30,
+        "shipping_threshold": 1,
         "shipping_text": "Spend {amount} and get",
         "shipping_highlight": "FREE SHIPPING",
         "shipping_unlocked": "You’re eligible for",

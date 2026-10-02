@@ -61,7 +61,7 @@
           "type": "question",
           "settings": {
             "question": "My tracking hasn’t updated for a few days",
-            "answer": "<p>Parcels are scanned when they change hands, so a few quiet days while it travels between countries are normal. If nothing has changed for 7 business days, email us with your order number and we’ll chase it with the carrier.</p>"
+            "answer": "<p>Parcels are scanned when they change hands, so a few quiet days while it travels between countries are normal. If nothing has changed for 7 business days, email us with your order number and we’ll chase it with the carrier. If it still hasn’t moved after 10 business days, we’ll send a replacement or refund you in full.</p>"
           }
         },
         "question_2": {

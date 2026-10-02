@@ -29,7 +29,7 @@
         "review_text": "Rated 4.77/5 by women with thinning hair",
         "title": "Less Shedding in <em>2 Weeks.</em>",
         "subtitle": "Pumpkin seed oil and caffeine feed tired follicles, calm shedding and help hair grow back thicker. For the part, crown and edges, postpartum and menopausal shedding.",
-        "button_label": "Try it risk-free - save 50%",
+        "button_label": "Try it risk-free - save up to 50%",
         "button_link": "#product-section",
         "stat_1": "FOR EVERY TEXTURE & TYPE OF HAIR LOSS",
         "stat_2": "",
@@ -282,36 +282,6 @@
             "image_fallback": "https://froyaorganics.com/cdn/shop/files/Sarah_Jane_Frantz.png"
           }
         },
-        "review_6": {
-          "type": "review",
-          "settings": {
-            "image": "shopify://shop_images/hf_20260914_112252_5a9fd099-1b8c-4ec0-bedf-45a9cf88883c.png",
-            "image_alt": "",
-            "name": "Joan T, 64",
-            "tag_1": "wider part",
-            "tag_2": "baby hairs",
-            "quote": "\"I’ve stopped shedding as much, and I’m seeing fine baby hairs growing in at a decent rate.\"",
-            "text": "<p>My hairdresser told me all about pumpkin seed oil to help with DHT issues. I’ve been on a GLP1 and lost a lot of weight, and she’s had success with a number of her clients who’ve shed hair due to rapid weight loss. My hair still looks normal to everyone else, but I can feel a difference and my part is a bit wider. I love the idea of taking a vitamin rather than slathering product on my scalp, so I was happy to try these. I have been taking them for two months now. (I couldn’t reorder these because they were unavailable, so month two I was using another product.)</p><p>I can definitely see a benefit to these. I’ve stopped shedding as much, and I’m seeing fine baby hairs growing in at a decent rate, so I’d rate these capsules as very effective. The quality of the bottle and the capsules themselves are topnotch and came well secured and safe. There is no aftertaste, and I am enjoying the health benefits of these vitamins. I notice no difference in my energy level, in case that matters.</p>",
-            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
-            "product_title": "",
-            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Iriel_G.jpg"
-          }
-        },
-        "review_8": {
-          "type": "review",
-          "settings": {
-            "image": "shopify://shop_images/hf_20260914_120544_ba1822c8-62d0-441c-b969-9fd7d8031b01.png",
-            "image_alt": "",
-            "name": "Lisa N, 55",
-            "tag_1": "thicker feel",
-            "tag_2": "less dry scalp",
-            "quote": "\"My hair already feels a bit thicker and looks healthier, and my scalp doesn’t feel as dry.\"",
-            "text": "<p>I’ve been using this for a little while and I’m really happy with it so far. The softgels are easy to take and don’t have any weird taste or aftertaste. I like that it’s made with clean, plant-based ingredients like pumpkin seed oil, and that it’s cold-pressed and third-party tested.</p><p>My hair already feels a bit thicker and looks healthier, and my scalp doesn’t feel as dry. It’s nice to find something simple and natural that actually seems to help. Definitely planning to keep this as part of my routine.</p>",
-            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
-            "product_title": "",
-            "image_fallback": "https://froyaorganics.com/cdn/shop/files/image3.png"
-          }
-        },
         "review_9": {
           "type": "review",
           "settings": {
@@ -326,21 +296,6 @@
             "product_title": "",
             "image_fallback": "https://froyaorganics.com/cdn/shop/files/Traci_R.png"
           }
-        },
-        "review_10": {
-          "type": "review",
-          "settings": {
-            "image": "shopify://shop_images/hf_20260914_120622_e66ed5b0-cc7c-431d-b45e-d7e5c71166ce.png",
-            "image_alt": "",
-            "name": "Jennifer W, 55",
-            "tag_1": "hair quality",
-            "tag_2": "visible difference",
-            "quote": "\"I have already seen a difference in the quality of my hair.\"",
-            "text": "",
-            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
-            "product_title": "",
-            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Jennifer_M.png"
-          }
         }
       },
       "block_order": [
@@ -349,10 +304,7 @@
         "review_3",
         "review_4",
         "review_5",
-        "review_6",
-        "review_8",
-        "review_9",
-        "review_10"
+        "review_9"
       ],
       "settings": {
         "title": "Verified Reviews From Real Elaren Customers",
@@ -452,7 +404,7 @@
         "stat_3": {
           "type": "stat",
           "settings": {
-            "value": "≈ 5% MINOXIDIL",
+            "value": "LAB STUDY",
             "width": 90,
             "title": "CAFFEINE COMPLEX: THE SUPPORTING ACTIVE",
             "text": "In laboratory research on hair follicles from women’s scalps, caffeine lengthened the growth (anagen) phase and increased hair-shaft growth, and women’s follicles proved especially responsive to it."
@@ -907,7 +859,7 @@
         "anchor": true,
         "image": "shopify://shop_images/hf_20260915_124844_5df67bf1-e85f-44b6-8421-9d2ed47ced81.png",
         "title": "Fuller hair in 30 days or your money back",
-        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br/>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
+        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Not happy with what you see?<br/>Email us within 60 days of your order and we’ll refund every cent. No photos, no awkward questions, nothing to send back. Hair loss is personal, and so is our promise.</p>",
         "link_label": "Learn More",
         "link_url": "/#faq",
         "button_label": "TRY IT RISK-FREE",
@@ -1066,7 +1018,7 @@
             "label": "PUMPKIN SEED OIL CAPSULES",
             "text": "<p><strong>Support regrowth from the inside with the same DHT-blocking pumpkin seed oil in a daily softgel. Ideal when your thinning is hormonal: perimenopause, postpartum or PCOS.</strong></p>",
             "label_2": "MICROSTAMP PRO",
-            "text_2": "<p><strong>Use two or three times a week before your oil. Its 140 micro-points create tiny channels so the Caffeine Complex reaches the follicle instead of sitting on the surface.</strong></p>"
+            "text_2": "<p><strong>Use once or twice a week (0.5mm depth maximum) before your oil. Its 140 micro-points create tiny channels so the Caffeine Complex reaches the follicle instead of sitting on the surface.</strong></p>"
           }
         },
         "step_9": {
@@ -1196,7 +1148,7 @@
         "anchor": false,
         "image": "shopify://shop_images/hf_20260915_124844_5df67bf1-e85f-44b6-8421-9d2ed47ced81.png",
         "title": "Fuller hair in 30 days or your money back",
-        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Still shedding, still no baby hairs along your part or hairline?<br/>Tell us and we’ll refund every cent. No photos required, no awkward questions. Hair loss is personal, and so is our promise.</p>",
+        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Not happy with what you see?<br/>Email us within 60 days of your order and we’ll refund every cent. No photos, no awkward questions, nothing to send back. Hair loss is personal, and so is our promise.</p>",
         "link_label": "",
         "link_url": "/#faq",
         "button_label": "TRY IT RISK-FREE",
@@ -1245,21 +1197,21 @@
           "type": "question",
           "settings": {
             "question": "How does the 30-day money-back guarantee work?",
-            "answer": "<p>Use it every night for 30 days. Still shedding, still no baby hairs along your part or hairline? Email <a href=\"mailto:support@shopelaren.com\">support@shopelaren.com</a> within 30 days of purchase and we refund every cent. No photos, no awkward questions.</p>"
+            "answer": "<p>Use it every night for 30 days. Not happy with your results? Email <a href=\"mailto:support@shopelaren.com\">support@shopelaren.com</a> within 60 days of placing your order and we’ll refund every cent, including any shipping charge. No photos, no awkward questions and nothing to send back. The guarantee covers one order per customer; the details are in our <a href=\"/policies/refund-policy\">Refund Policy</a>.</p>"
           }
         },
         "q_7": {
           "type": "question",
           "settings": {
             "question": "How does Subscribe &amp; Save work, and can I cancel?",
-            "answer": "<p>Subscribe and every delivery is 10% off, shipped on the schedule you choose so you never run out mid-cycle. Pause, skip or cancel any time from your account in two clicks. No lock-in, no cancellation fee.</p>"
+            "answer": "<p>Subscribe and every delivery is 10% off, shipped on the schedule you choose so you never run out mid-cycle. Pause, skip or cancel any time by emailing <a href=\"mailto:support@shopelaren.com\">support@shopelaren.com</a> before your next renewal date. No lock-in, no cancellation fee.</p>"
           }
         },
         "q_8": {
           "type": "question",
           "settings": {
             "question": "What does shipping cost, and how long does it take?",
-            "answer": "<p>Shipping is free and insured on every order, with free express shipping on orders over $50. Orders leave our warehouse within one business day and you get tracking by email as soon as they do.</p>"
+            "answer": "<p>Shipping is free and insured on every order, and Express Shipping is free on orders of US$50 or more (US$4.99 otherwise). Orders ship within 1–2 business days and you get tracking by email as soon as they do. Delivery then usually takes 3–5 business days in the US (1–2 with Express), 5–11 in the EU, UK, Switzerland and Norway (2–5 with Express) and 7–10 everywhere else (3–5 with Express). The full details are in our <a href=\"/policies/shipping-policy\">Shipping Policy</a>.</p>"
           }
         }
       },
