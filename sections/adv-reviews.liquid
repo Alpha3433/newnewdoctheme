@@ -1,0 +1,84 @@
+{% comment %}
+  Comparison advertorial – reader reviews carousel. Each review block is a card with a photo,
+  name and age, the review and a bold closing line. Swipe on phones; arrow buttons on desktop.
+{% endcomment %}
+{{ 'advertorial.css' | asset_url | stylesheet_tag }}
+<section class="adv" data-anchor="{{ section.settings.anchor | default: 'reviews' | handle }}" id="adv-{{ section.id }}">
+  <div class="adv__read">
+    {%- if section.settings.rule -%}<hr class="adv__rule">{%- endif -%}
+    {%- if section.settings.eyebrow != blank -%}<p class="adv__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2 class="adv__h2">{{ section.settings.title }}</h2>{%- endif -%}
+  </div>
+  <div class="adv-reviews__wrap" data-adv-reviews>
+    <button type="button" class="adv-reviews__arrow adv-reviews__arrow--prev" data-dir="-1" aria-label="Previous reviews" hidden>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <div class="adv-reviews__track" data-track>
+      {%- for block in section.blocks -%}
+        <figure class="adv-review" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 480 | image_tag: class: 'adv-review__img', alt: block.settings.name, loading: 'lazy', sizes: '(min-width: 768px) 196px, 70vw', widths: '240, 360, 480' }}
+          {%- endif -%}
+          <figcaption>
+            <p class="adv-review__name">{{ block.settings.name }}{% if block.settings.age != blank %}, <span>{{ block.settings.age }}</span>{% endif %}</p>
+            <p class="adv-review__text">{{ block.settings.text }}{% if block.settings.ending != blank %} <strong>{{ block.settings.ending }}</strong>{% endif %}</p>
+          </figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+    <button type="button" class="adv-reviews__arrow adv-reviews__arrow--next" data-dir="1" aria-label="More reviews">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+  </div>
+</section>
+<script>
+  (function () {
+    var wrap = document.querySelector('#adv-{{ section.id }} [data-adv-reviews]');
+    if (!wrap) return;
+    var track = wrap.querySelector('[data-track]');
+    var prev = wrap.querySelector('[data-dir="-1"]');
+    var next = wrap.querySelector('[data-dir="1"]');
+    var sync = function () {
+      prev.hidden = track.scrollLeft < 8;
+      next.hidden = track.scrollLeft + track.clientWidth >= track.scrollWidth - 8;
+    };
+    [prev, next].forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var card = track.querySelector('.adv-review');
+        var step = card ? card.getBoundingClientRect().width + 16 : track.clientWidth;
+        track.scrollBy({ left: step * Number(btn.getAttribute('data-dir')), behavior: 'smooth' });
+      });
+    });
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Reader reviews",
+  "tag": "section",
+  "class": "shopify-section--adv",
+  "settings": [
+    { "type": "checkbox", "id": "rule", "label": "Line above this section", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Testimonials" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "What Women Are Saying" },
+    { "type": "text", "id": "anchor", "label": "Anchor name", "default": "reviews" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo", "info": "Square, about 480 × 480 px." },
+        { "type": "text", "id": "name", "label": "Name", "default": "Verified customer" },
+        { "type": "text", "id": "age", "label": "Age", "default": "age 45" },
+        { "type": "textarea", "id": "text", "label": "Review" },
+        { "type": "text", "id": "ending", "label": "Bold closing line" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Reader reviews", "blocks": [ { "type": "review" }, { "type": "review" }, { "type": "review" } ] } ]
+}
+{% endschema %}

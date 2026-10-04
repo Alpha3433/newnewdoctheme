@@ -1,69 +1,105 @@
 {% comment %}
-  Comparison advertorial – "Our top pick" summary near the top of the article: product photo,
-  name, star rating and score, reason blocks with ticks and a button that scrolls on (to the
-  comparison table or the buy box). Photo and name come from the product unless overridden.
+  Comparison advertorial – "The Rankings": the #1 pick. Badge, then a coral-edged card with the
+  name, subtitle, feature chips, a spec table, a photo, the write-up and a verdict box, followed by
+  a button and guarantee line. Chips go one per line; spec rows are "Label | Value", one per line.
 {% endcomment %}
 {{ 'advertorial.css' | asset_url | stylesheet_tag }}
 {%- liquid
   assign product = section.settings.product
   assign name = section.settings.name | default: product.title
-  assign btn_href = section.settings.button_url | default: '#shop'
+  assign photo = section.settings.image
+  if photo == blank
+    assign photo = product.featured_image
+  endif
 -%}
-<section class="adv adv--{{ section.settings.background }}" id="adv-{{ section.id }}">
+<section class="adv" data-anchor="{{ section.settings.anchor | default: 'rankings' | handle }}" id="adv-{{ section.id }}">
   <div class="adv__read">
-    <div class="adv-pick">
-      {%- if section.settings.ribbon != blank -%}<span class="adv-pick__ribbon">{{ section.settings.ribbon }}</span>{%- endif -%}
-      <div class="adv-pick__media">
-        {%- if section.settings.image != blank -%}
-          {{ section.settings.image | image_url: width: 520 | image_tag: alt: name, loading: 'lazy', sizes: '260px' }}
-        {%- elsif product.featured_image != blank -%}
-          {{ product.featured_image | image_url: width: 520 | image_tag: alt: name, loading: 'lazy', sizes: '260px' }}
-        {%- endif -%}
+    {%- if section.settings.rule -%}<hr class="adv__rule">{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2 class="adv__h2">{{ section.settings.title }}</h2>{%- endif -%}
+    {%- if section.settings.badge != blank -%}<p class="adv-pick__badge">{{ section.settings.badge }}</p>{%- endif -%}
+
+    <article class="adv-pick">
+      <div class="adv-pick__top">
+        <div>
+          <h3 class="adv-pick__name">{{ name }}</h3>
+          {%- if section.settings.subtitle != blank -%}<p class="adv-pick__sub">{{ section.settings.subtitle }}</p>{%- endif -%}
+
+          {%- assign chips = section.settings.chips | newline_to_br | split: '<br />' -%}
+          {%- if section.settings.chips != blank -%}
+            <ul class="adv-pick__chips">
+              {%- for chip in chips -%}
+                {%- assign c = chip | strip -%}
+                {%- if c != blank -%}<li>{{ c }}</li>{%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          {%- if section.settings.specs != blank -%}
+            {%- assign rows = section.settings.specs | newline_to_br | split: '<br />' -%}
+            <table class="adv-pick__specs">
+              <tbody>
+                {%- for row in rows -%}
+                  {%- assign r = row | strip -%}
+                  {%- if r != blank -%}
+                    {%- assign parts = r | split: '|' -%}
+                    <tr><th scope="row">{{ parts[0] | strip }}</th><td>{{ parts[1] | strip }}</td></tr>
+                  {%- endif -%}
+                {%- endfor -%}
+              </tbody>
+            </table>
+          {%- endif -%}
+        </div>
+
+        <div class="adv-pick__media">
+          {%- if photo != blank -%}
+            {{ photo | image_url: width: 760 | image_tag: alt: name, loading: 'lazy', sizes: '(min-width: 768px) 290px, 100vw', widths: '360, 580, 760' }}
+          {%- else -%}
+            {%- render 'adv-placeholder', label: name, tone: 1 -%}
+          {%- endif -%}
+        </div>
       </div>
-      <div>
-        <h2 class="adv-pick__title">{{ name }}</h2>
-        <p class="adv-pick__rating">
-          {%- render 'adv-stars', rating: section.settings.rating -%}
-          {%- if section.settings.rating_text != blank -%}<span>{{ section.settings.rating_text }}</span>{%- endif -%}
-          {%- if section.settings.score != blank -%}<span class="adv-pick__score">{{ section.settings.score }}</span>{%- endif -%}
-        </p>
-        {%- if section.blocks.size > 0 -%}
-          <ul class="adv-pick__list">
-            {%- for block in section.blocks -%}
-              <li {{ block.shopify_attributes }}>{%- render 'adv-mark', value: 'yes' -%}<span>{{ block.settings.text }}</span></li>
-            {%- endfor -%}
-          </ul>
-        {%- endif -%}
-        {%- if section.settings.button_label != blank -%}
-          <a class="adv-btn adv-btn--full" href="{{ btn_href }}"{% if btn_href contains '#' %} data-scroll-to="{{ btn_href | split: '#' | last }}"{% endif %}>
-            {{ section.settings.button_label }} <span class="adv-btn__arrow" aria-hidden="true">→</span>
-          </a>
-        {%- endif -%}
-      </div>
-    </div>
+
+      {%- if section.settings.text != blank -%}<div class="adv-rte adv-pick__text">{{ section.settings.text }}</div>{%- endif -%}
+
+      {%- if section.settings.verdict != blank -%}
+        <div class="adv-verdict-box">
+          {%- if section.settings.verdict_label != blank -%}<p class="adv-verdict-box__label">{{ section.settings.verdict_label }}</p>{%- endif -%}
+          <p>{{ section.settings.verdict }}</p>
+        </div>
+      {%- endif -%}
+    </article>
+
+    {%- if section.settings.button_label != blank -%}
+      {%- render 'adv-cta', class: 'adv-pick-cta', label: section.settings.button_label, url: section.settings.button_url, note: section.settings.note -%}
+    {%- endif -%}
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Top pick summary",
+  "name": "#1 pick",
   "tag": "section",
+  "class": "shopify-section--adv",
   "settings": [
-    { "type": "select", "id": "background", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "cream", "label": "Cream" }, { "value": "tint", "label": "Mauve tint" } ], "default": "white" },
-    { "type": "text", "id": "ribbon", "label": "Ribbon", "default": "Our #1 pick" },
+    { "type": "checkbox", "id": "rule", "label": "Line above this section", "default": true },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "The Rankings" },
+    { "type": "text", "id": "badge", "label": "Badge", "default": "#1 Best overall: editor’s pick" },
+    { "type": "text", "id": "anchor", "label": "Anchor name", "default": "rankings" },
+    { "type": "header", "content": "Product" },
     { "type": "product", "id": "product", "label": "Product" },
-    { "type": "image_picker", "id": "image", "label": "Photo override", "info": "Square, about 520 × 520 px. The product's main photo is used when empty." },
-    { "type": "text", "id": "name", "label": "Name override", "info": "The product title is used when empty." },
-    { "type": "text", "id": "rating", "label": "Star rating (out of 5)", "default": "4.77" },
-    { "type": "text", "id": "rating_text", "label": "Rating text", "default": "4.77/5 from verified buyers" },
-    { "type": "text", "id": "score", "label": "Score badge", "default": "9.8/10" },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "See how it compares" },
-    { "type": "text", "id": "button_url", "label": "Button link", "default": "#comparison", "info": "#comparison scrolls to the table, #shop to the buy box. A full URL also works." }
+    { "type": "text", "id": "name", "label": "Name", "info": "The product title is used when empty." },
+    { "type": "text", "id": "subtitle", "label": "Subtitle" },
+    { "type": "textarea", "id": "chips", "label": "Feature chips", "info": "One per line." },
+    { "type": "textarea", "id": "specs", "label": "Spec table", "info": "One row per line, written as Label | Value." },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Landscape, about 760 × 430 px. The product photo is used until one is uploaded." },
+    { "type": "richtext", "id": "text", "label": "Write-up" },
+    { "type": "text", "id": "verdict_label", "label": "Verdict label", "default": "The verdict" },
+    { "type": "inline_richtext", "id": "verdict", "label": "Verdict" },
+    { "type": "header", "content": "Button" },
+    { "type": "text", "id": "button_label", "label": "Label", "default": "Shop now" },
+    { "type": "text", "id": "button_url", "label": "Link", "default": "#shop", "info": "#shop scrolls to the buy box on this page." },
+    { "type": "text", "id": "note", "label": "Guarantee line", "default": "30-day money-back guarantee" }
   ],
-  "blocks": [
-    { "type": "reason", "name": "Reason", "settings": [ { "type": "text", "id": "text", "label": "Text", "default": "Cold-pressed pumpkin seed oil with a Caffeine Complex" } ] }
-  ],
-  "max_blocks": 6,
-  "presets": [ { "name": "Top pick summary", "blocks": [ { "type": "reason" } ] } ]
+  "presets": [ { "name": "#1 pick" } ]
 }
 {% endschema %}

@@ -1,0 +1,26 @@
+{% comment %}
+  Comparison advertorial – small-print disclaimer at the foot of the article. "Hide the store
+  footer" removes the theme footer on pages that use this section, so the page ends here.
+{% endcomment %}
+{{ 'advertorial.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.hide_store_footer -%}
+  <style>.shopify-section-group-footer-group, .shopify-section--footer { display: none !important; }</style>
+{%- endif -%}
+<section class="adv adv-disclaimer" id="adv-{{ section.id }}">
+  {%- if section.settings.title != blank -%}<h2 class="adv-disclaimer__title">{{ section.settings.title }}</h2>{%- endif -%}
+  <div class="adv-disclaimer__text">{{ section.settings.text }}</div>
+</section>
+
+{% schema %}
+{
+  "name": "Disclaimer",
+  "tag": "section",
+  "class": "shopify-section--adv",
+  "settings": [
+    { "type": "checkbox", "id": "hide_store_footer", "label": "Hide the store footer", "info": "Ends the page with this disclaimer.", "default": true },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Disclaimer" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>This page is an advertisement.</p>" }
+  ],
+  "presets": [ { "name": "Disclaimer" } ]
+}
+{% endschema %}

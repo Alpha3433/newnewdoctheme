@@ -128,20 +128,25 @@ template (`templates/page.froya-landing.json`).
   on desktop and a row in the mobile menu; Header → *Order tracking link*), the footer and the
   account page. The account order page shows a placed → shipped → on its way tracker and every
   tracking number with a *Track* button.
-* **Serum comparison advertorial** – a long-form "we compared the pumpkin seed oil serums on the
-  market" article for paid traffic, template `page.serum-comparison` (create a page in Online
-  Store → Pages and choose that template). It is built from the `adv-*` sections, all styled by
-  `assets/advertorial.css` with the landing page's colours and fonts: *Article header* (disclosure
-  label, headline, byline, lead photo; by default it also hides the store's announcement bar and
-  menu on this page and shows a slim masthead instead, while the cart drawer keeps working), *Top pick summary*, *Article text* (heading, paragraph,
-  photo, pull quote, callout, tick list, button and footnote blocks; add it as often as the story
-  needs), *Comparison criteria*, *Comparison table* (column 1 is the winner; each row is a block
-  where `yes`, `no` or `partial` show a mark and `yes: note` adds a short note under it),
-  *Ranked contenders*, *Verdict & offer* and *Sticky buy bar (phones)*, which appears once the
-  reader scrolls past the header and hides while the buy box is on screen. The reviews slider,
-  guarantee, buy box and FAQ are the landing page's own sections, so the Kaching bundles,
-  subscription and free gift work the same here. Every button scrolls to the buy box (`#shop`).
-  The alternatives in the table and ranking are generic product types, not named brands.
+* **Serum comparison advertorial** – a long-form "we compared 10 types of hair growth serum"
+  review article for paid traffic, template `page.serum-comparison` (create a page in Online
+  Store → Pages and choose that template). Its layout follows an editorial review page: warm
+  off-white background, coral accents, Instrument Serif headings and Poppins text (loaded from
+  Google Fonts by `assets/advertorial.css`). It is built from the `adv-*` sections: *Article
+  header* (masthead, eyebrow, headline, byline, lead photo; by default it hides the store's
+  announcement bar and menu on this page, while the cart drawer keeps working), *Article text*
+  (story box, key-insight banner, heading, paragraph, photo, button and footnote blocks),
+  *Criteria cards*, *#1 pick* (feature chips one per line, spec rows written `Label | Value`),
+  *Rest of the field* (one card per product type with "what it gets right" and "falls short"
+  lists, plus "Still reading?" button and honourable-mention blocks; cards without a photo show a
+  soft placeholder tile until one is uploaded), *Side-by-side table* (one row per product; `yes`,
+  `no`, `yes: text`, `no: text` or `~ text` in each cell), *Reader reviews*, *Closing pick*,
+  *Disclaimer* (by default it also hides the store footer so the page ends there) and *Reader
+  offer bar*, which appears once the reader scrolls past the header and hides while the buy box
+  is on screen. The buy box is the landing page's own section, so the Kaching bundles,
+  subscription and free gift work the same here, and every button scrolls to it (`#shop`).
+  The alternatives are generic product types, not named brands, the masthead says
+  "Advertorial", and the copy speaks as "we" rather than inventing a personal test.
 * **Support email** – Theme settings → *Customer support*. support@shopelaren.com is the only
   address the storefront shows. The policy pages (`/policies/…`: refund, terms, privacy, contact)
   come from Settings → Policies, where Shopify's templates insert the store's own email and a link
