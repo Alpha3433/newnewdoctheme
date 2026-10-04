@@ -128,6 +128,19 @@ template (`templates/page.froya-landing.json`).
   on desktop and a row in the mobile menu; Header → *Order tracking link*), the footer and the
   account page. The account order page shows a placed → shipped → on its way tracker and every
   tracking number with a *Track* button.
+* **Serum comparison advertorial** – a long-form "we compared the pumpkin seed oil serums on the
+  market" article for paid traffic, template `page.serum-comparison` (create a page in Online
+  Store → Pages and choose that template). It is built from the `adv-*` sections, all styled by
+  `assets/advertorial.css` with the landing page's colours and fonts: *Article header* (disclosure
+  label, headline, byline, lead photo), *Top pick summary*, *Article text* (heading, paragraph,
+  photo, pull quote, callout, tick list, button and footnote blocks; add it as often as the story
+  needs), *Comparison criteria*, *Comparison table* (column 1 is the winner; each row is a block
+  where `yes`, `no` or `partial` show a mark and `yes: note` adds a short note under it),
+  *Ranked contenders*, *Verdict & offer* and *Sticky buy bar (phones)*, which appears once the
+  reader scrolls past the header and hides while the buy box is on screen. The reviews slider,
+  guarantee, buy box and FAQ are the landing page's own sections, so the Kaching bundles,
+  subscription and free gift work the same here. Every button scrolls to the buy box (`#shop`).
+  The alternatives in the table and ranking are generic product types, not named brands.
 * **Support email** – Theme settings → *Customer support*. support@shopelaren.com is the only
   address the storefront shows. The policy pages (`/policies/…`: refund, terms, privacy, contact)
   come from Settings → Policies, where Shopify's templates insert the store's own email and a link

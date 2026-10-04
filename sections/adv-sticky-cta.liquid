@@ -1,0 +1,51 @@
+{% comment %}
+  Comparison advertorial – phone-only bar pinned to the bottom of the screen once the reader has
+  scrolled past the article header. It hides again while the buy box is on screen so it never
+  covers the add-to-cart button. Hidden on desktop.
+{% endcomment %}
+{{ 'advertorial.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign product = section.settings.product
+  assign btn_href = section.settings.button_url | default: '#shop'
+-%}
+<div class="adv adv-sticky" data-adv-sticky data-hide-near="{{ btn_href | split: '#' | last }}">
+  {%- if product.featured_image != blank -%}
+    {{ product.featured_image | image_url: width: 96, height: 96, crop: 'center' | image_tag: class: 'adv-sticky__thumb', alt: '', loading: 'lazy', width: 48, height: 48 }}
+  {%- endif -%}
+  <span class="adv-sticky__info">
+    <span class="adv-sticky__title">{{ section.settings.title | default: product.title }}</span>
+    {%- if section.settings.subtitle != blank -%}<span class="adv-sticky__sub">{%- render 'adv-stars', rating: section.settings.rating -%} {{ section.settings.subtitle }}</span>{%- endif -%}
+  </span>
+  <a class="adv-btn" href="{{ btn_href }}"{% if btn_href contains '#' %} data-scroll-to="{{ btn_href | split: '#' | last }}"{% endif %}>{{ section.settings.button_label }}</a>
+</div>
+<script>
+  (function () {
+    var bar = document.querySelector('[data-adv-sticky]');
+    if (!bar || !('IntersectionObserver' in window)) return;
+    var pastTop = false, nearBuy = false;
+    var update = function () { bar.classList.toggle('is-visible', pastTop && !nearBuy); };
+    var header = document.querySelector('.adv-header');
+    if (header) {
+      new IntersectionObserver(function (e) { pastTop = !e[0].isIntersecting && e[0].boundingClientRect.top < 0; update(); }).observe(header);
+    } else { pastTop = true; update(); }
+    var id = bar.getAttribute('data-hide-near');
+    var buy = id && (document.getElementById(id) || document.querySelector('[data-anchor="' + id + '"]'));
+    if (buy) new IntersectionObserver(function (e) { nearBuy = e[0].isIntersecting; update(); }).observe(buy);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sticky buy bar (phones)",
+  "tag": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "text", "id": "title", "label": "Title", "info": "The product title is used when empty." },
+    { "type": "text", "id": "rating", "label": "Star rating (out of 5)", "default": "4.77" },
+    { "type": "text", "id": "subtitle", "label": "Line under the title", "default": "4.77/5 rating" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Get offer" },
+    { "type": "text", "id": "button_url", "label": "Button link", "default": "#shop", "info": "The bar also hides while this element is on screen." }
+  ],
+  "presets": [ { "name": "Sticky buy bar (phones)" } ]
+}
+{% endschema %}

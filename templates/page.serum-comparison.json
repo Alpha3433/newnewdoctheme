@@ -1,0 +1,1026 @@
+{
+  "sections": {
+    "header": {
+      "type": "adv-article-header",
+      "settings": {
+        "background": "white",
+        "disclosure": "Advertorial",
+        "category": "Hair health · Product comparison",
+        "title": "We Compared the Pumpkin Seed Oil Serums on the Market. <em>Only One Ticked Every Box.</em>",
+        "dek": "Pumpkin seed oil is everywhere now, from pharmacy shelves to your social feed. But a bottle that says “pumpkin seed oil” on the front can be mostly filler on the back. Here’s what we found when we put the most common types side by side.",
+        "author": "Elaren Editorial Team",
+        "updated": "Updated October 2026",
+        "read_time": "6 min read",
+        "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+        "image": "shopify://shop_images/science-serum-daisies.png",
+        "image_alt": "Elaren Pumpkin Seed Oil Serum with daisies",
+        "caption": "Elaren Pumpkin Seed Oil Serum: cold-pressed pumpkin seed oil with a Caffeine Complex."
+      }
+    },
+    "top-pick": {
+      "type": "adv-top-pick",
+      "settings": {
+        "background": "white",
+        "ribbon": "Our #1 pick",
+        "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+        "name": "Elaren Pumpkin Seed Oil Serum",
+        "rating": "4.77",
+        "rating_text": "4.77/5 from verified buyers",
+        "score": "9.8/10",
+        "button_label": "See how it compares",
+        "button_url": "#comparison"
+      },
+      "blocks": {
+        "reason_1": {
+          "type": "reason",
+          "settings": {
+            "text": "Cold-pressed pumpkin seed oil, so the DHT-blocking sterols arrive intact"
+          }
+        },
+        "reason_2": {
+          "type": "reason",
+          "settings": {
+            "text": "Caffeine Complex to wake tired, dormant follicles"
+          }
+        },
+        "reason_3": {
+          "type": "reason",
+          "settings": {
+            "text": "Lightweight and non-greasy, made for every hair texture"
+          }
+        },
+        "reason_4": {
+          "type": "reason",
+          "settings": {
+            "text": "30-day money-back guarantee and free insured shipping"
+          }
+        }
+      },
+      "block_order": [
+        "reason_1",
+        "reason_2",
+        "reason_3",
+        "reason_4"
+      ]
+    },
+    "intro": {
+      "type": "adv-article-body",
+      "settings": {
+        "background": "white",
+        "tight_top": true
+      },
+      "blocks": {
+        "text_1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>If your part looks wider in photos, your ponytail feels thinner, or there’s more hair in the shower drain than there used to be, you’ve probably come across pumpkin seed oil. It’s one of the most talked-about natural options for women’s thinning hair, and for good reason: it’s rich in plant sterols that help block DHT, the hormone behind female pattern thinning.</p><p>The problem is that “pumpkin seed oil serum” on a label can mean very different things. Some are mostly water, silicones and fragrance with a splash of oil. Some use refined, heat-treated oil that has lost the very compounds that matter. Others are so heavy they sit on the hair instead of the scalp.</p><p>So we looked at the four types of pumpkin seed oil serum women are most likely to come across, and judged them on the five things that decide whether a serum is worth your money.</p>"
+          }
+        },
+        "callout_2": {
+          "type": "callout",
+          "settings": {
+            "style": "tint",
+            "title": "The short version",
+            "text": "<p>Pumpkin seed oil only helps if it reaches your scalp with its sterols intact, alongside something that supports the growth phase, in a formula light enough to use every night. Of the four types we compared, <strong>Elaren</strong> was the only one that does all three, and it comes with a 30-day money-back guarantee.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_1",
+        "callout_2"
+      ]
+    },
+    "criteria": {
+      "type": "adv-criteria",
+      "settings": {
+        "background": "cream",
+        "eyebrow": "How we judged them",
+        "title": "5 Things That Separate a Serum That Works From One That Doesn’t",
+        "subtitle": "Before you compare prices, compare these."
+      },
+      "blocks": {
+        "criterion_1": {
+          "type": "criterion",
+          "settings": {
+            "title": "Cold-pressed pumpkin seed oil",
+            "text": "<p>Heat and solvents strip out the phytosterols, zinc and vitamin E that make pumpkin seed oil worth using. Cold-pressed oil keeps them intact, and you can see it in the deep green-gold colour.</p>"
+          }
+        },
+        "criterion_2": {
+          "type": "criterion",
+          "settings": {
+            "title": "A supporting active, not just oil",
+            "text": "<p>Pumpkin seed oil works on DHT. Pairing it with caffeine, one of the most-studied topical actives for hair, also supports the growth phase of the follicle.</p>"
+          }
+        },
+        "criterion_3": {
+          "type": "criterion",
+          "settings": {
+            "title": "No filler",
+            "text": "<p>Water, mineral oil and silicones bulk out a bottle and make hair look shiny, but do nothing for the follicle. Every drop should be doing a job.</p>"
+          }
+        },
+        "criterion_4": {
+          "type": "criterion",
+          "settings": {
+            "title": "Light enough to use every night",
+            "text": "<p>Regrowth comes from consistency. A serum that leaves your hair greasy or flat is a serum you’ll stop using by week three.</p>"
+          }
+        },
+        "criterion_5": {
+          "type": "criterion",
+          "settings": {
+            "title": "Honest research and a real guarantee",
+            "text": "<p>Look for a brand that cites studies done on women, says exactly what was studied, and stands behind results with a money-back guarantee.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "criterion_1",
+        "criterion_2",
+        "criterion_3",
+        "criterion_4",
+        "criterion_5"
+      ]
+    },
+    "comparison": {
+      "type": "adv-comparison-table",
+      "settings": {
+        "background": "white",
+        "eyebrow": "Side by side",
+        "title": "How Elaren Compares to Other Pumpkin Seed Oil Serums",
+        "subtitle": "We checked each type against the five criteria. Here’s how they stack up.",
+        "feature_label": "Feature",
+        "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+        "badge": "Our pick",
+        "col_1_name": "Elaren",
+        "col_1_sub": "Pumpkin Seed Oil Serum",
+        "col_2_name": "Drugstore serum",
+        "col_2_sub": "Water & silicone base",
+        "col_3_name": "DIY rosemary blend",
+        "col_3_sub": "Mixed at home",
+        "col_4_name": "Luxury salon serum",
+        "col_4_sub": "Premium price tag",
+        "show_placeholders": true,
+        "button_label": "Try Elaren risk-free",
+        "button_url": "#shop",
+        "note": "Columns 2–4 describe common types of pumpkin seed oil hair products, not specific brands. Individual products vary, so always check the label."
+      },
+      "blocks": {
+        "row_1": {
+          "type": "row",
+          "settings": {
+            "label": "Cold-pressed pumpkin seed oil",
+            "v1": "yes",
+            "v2": "no: Usually refined",
+            "v3": "partial: Varies",
+            "v4": "partial: Varies"
+          }
+        },
+        "row_2": {
+          "type": "row",
+          "settings": {
+            "label": "Caffeine Complex for the growth phase",
+            "v1": "yes",
+            "v2": "partial: Sometimes",
+            "v3": "no",
+            "v4": "partial: Sometimes"
+          }
+        },
+        "row_3": {
+          "type": "row",
+          "settings": {
+            "label": "No water, mineral oil or silicones",
+            "v1": "yes",
+            "v2": "no",
+            "v3": "partial: Depends on recipe",
+            "v4": "no: Often silicone-based"
+          }
+        },
+        "row_4": {
+          "type": "row",
+          "settings": {
+            "label": "Lightweight and non-greasy",
+            "v1": "yes",
+            "v2": "yes",
+            "v3": "no: Heavy on fine hair",
+            "v4": "yes"
+          }
+        },
+        "row_5": {
+          "type": "row",
+          "settings": {
+            "label": "Formulated for women’s hair loss",
+            "v1": "yes",
+            "v2": "partial: Usually unisex",
+            "v3": "no",
+            "v4": "partial: Usually unisex"
+          }
+        },
+        "row_6": {
+          "type": "row",
+          "settings": {
+            "label": "No minoxidil, no hormones",
+            "v1": "yes",
+            "v2": "partial: Check the label",
+            "v3": "yes",
+            "v4": "partial: Check the label"
+          }
+        },
+        "row_7": {
+          "type": "row",
+          "settings": {
+            "label": "30-day money-back guarantee",
+            "v1": "yes",
+            "v2": "partial: Store policy",
+            "v3": "no",
+            "v4": "partial: Varies"
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5",
+        "row_6",
+        "row_7"
+      ]
+    },
+    "ranking": {
+      "type": "adv-contenders",
+      "settings": {
+        "background": "cream",
+        "eyebrow": "The ranking",
+        "title": "Every Type We Compared, Ranked",
+        "subtitle": "Scores are our editorial assessment against the five criteria above.",
+        "score_label": "Our score",
+        "pros_label": "What we liked",
+        "cons_label": "Watch out for"
+      },
+      "blocks": {
+        "contender_1": {
+          "type": "contender",
+          "settings": {
+            "rank": "1",
+            "badge": "Best overall",
+            "highlight": true,
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "name": "Elaren Pumpkin Seed Oil Serum",
+            "subtitle": "Cold-pressed pumpkin seed oil + Caffeine Complex",
+            "score": "9.8/10",
+            "pros": "Cold-pressed pumpkin seed oil keeps the DHT-blocking sterols intact\nCaffeine Complex supports the hair’s growth phase\nNo water, mineral oil or silicones\nLightweight, non-greasy and made for every texture\nNo minoxidil, no hormones, no prescription\n30-day money-back guarantee and free insured shipping",
+            "cons": "Hair grows in cycles, so plan on at least 30 nights before you judge\nWorks best with nightly use and a 60-second scalp massage",
+            "verdict": "<p><strong>Our verdict:</strong> The only type we compared that pairs cold-pressed pumpkin seed oil with a Caffeine Complex in a filler-free, lightweight formula. Customers rate it 4.77/5, and the 30-day guarantee takes the risk out of trying it.</p>",
+            "show_price": true,
+            "price_note": "per bottle (30-day supply), less with bundles",
+            "button_label": "Check availability",
+            "button_url": "#shop"
+          }
+        },
+        "contender_2": {
+          "type": "contender",
+          "settings": {
+            "rank": "2",
+            "badge": "Runner-up",
+            "highlight": false,
+            "name": "Luxury salon serum",
+            "subtitle": "Premium packaging, premium price",
+            "score": "7.2/10",
+            "pros": "Pleasant texture and scent\nOften includes a supporting active",
+            "cons": "Pumpkin seed oil is rarely the star ingredient\nSilicones can coat the scalp\nMuch of the price pays for the brand and the bottle",
+            "verdict": "<p><strong>Our verdict:</strong> A nice ritual, but pumpkin seed oil tends to be a minor ingredient, and you pay a premium for the packaging.</p>"
+          }
+        },
+        "contender_3": {
+          "type": "contender",
+          "settings": {
+            "rank": "3",
+            "badge": "Budget pick",
+            "highlight": false,
+            "name": "Typical drugstore serum",
+            "subtitle": "Water-and-silicone base",
+            "score": "5.9/10",
+            "pros": "Easy to find\nLow price per bottle",
+            "cons": "Usually refined oil, low in the sterols that matter\nWater and silicones dilute the formula\nRarely formulated for women’s hair loss",
+            "verdict": "<p><strong>Our verdict:</strong> Cheap to try, but most of what you pay for is water and silicone, not pumpkin seed oil.</p>"
+          }
+        },
+        "contender_4": {
+          "type": "contender",
+          "settings": {
+            "rank": "4",
+            "badge": "Not recommended",
+            "highlight": false,
+            "name": "DIY rosemary & oil blend",
+            "subtitle": "Mixed at home from online recipes",
+            "score": "4.5/10",
+            "pros": "Inexpensive\nYou choose the ingredients",
+            "cons": "Hard to get a consistent, effective mix\nHeavy carrier oils can weigh hair down and build up on the scalp\nNo guarantee if it doesn’t work",
+            "verdict": "<p><strong>Our verdict:</strong> Well-meaning, but it’s guesswork. Most home blends are too heavy to use every night, and consistency is what regrows hair.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "contender_1",
+        "contender_2",
+        "contender_3",
+        "contender_4"
+      ]
+    },
+    "why-elaren": {
+      "type": "adv-article-body",
+      "settings": {
+        "background": "white",
+        "anchor": "why-elaren"
+      },
+      "blocks": {
+        "heading_1": {
+          "type": "heading",
+          "settings": {
+            "text": "Why Elaren Came Out on Top"
+          }
+        },
+        "text_2": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Elaren was formulated for the way women’s hair thins after 35, when falling oestrogen lets DHT gain the upper hand and the follicles along the part and crown slowly shrink.</p><p>It starts with <strong>cold-pressed pumpkin seed oil</strong>, which keeps its phytosterols (beta-sitosterol and delta-7-sterine), zinc and vitamin E intact. Those sterols help inhibit 5-alpha-reductase, the enzyme that turns testosterone into DHT. Then it adds a <strong>Caffeine Complex</strong>, which counteracts DHT’s effect on the follicle and helps extend the growth phase.</p><p>Nothing else in the bottle is filler: no water, no mineral oil, no silicones. It sinks in overnight without a greasy residue, and it works on coils, curls, waves and straight hair, under wigs and braids.</p>"
+          }
+        },
+        "quote_3": {
+          "type": "quote",
+          "settings": {
+            "text": "“My scalp feels noticeably healthier, and it sinks in without that heavy, greasy feeling.”",
+            "cite": "Emily L, 61, verified Elaren customer"
+          }
+        },
+        "subheading_4": {
+          "type": "subheading",
+          "settings": {
+            "text": "What the research says"
+          }
+        },
+        "text_5": {
+          "type": "text",
+          "settings": {
+            "text": "<p>In a 3-month randomised trial of 60 women with female pattern hair loss, those who applied pumpkin seed oil to the scalp had fewer fine, miniaturised hairs and more new regrowing hairs.* The other half used 5% minoxidil foam, which did better overall, but pumpkin seed oil still produced measurable improvement on its own, without a drug.</p><p>In laboratory research on hair follicles from women’s scalps, caffeine lengthened the growth phase and increased hair-shaft growth, and women’s follicles proved especially responsive to it.*</p>"
+          }
+        },
+        "checklist_6": {
+          "type": "checklist",
+          "settings": {
+            "mark": "yes",
+            "items": "No minoxidil, no hormones, no prescription\nCold-pressed pumpkin seed oil + Caffeine Complex\nNon-greasy, works under wigs and braids\n10% of every order funds hair-loss research"
+          }
+        },
+        "button_7": {
+          "type": "button",
+          "settings": {
+            "label": "See today’s offer",
+            "url": "#shop",
+            "full": true,
+            "note": "30-day money-back guarantee | Free insured shipping"
+          }
+        },
+        "footnote_8": {
+          "type": "footnote",
+          "settings": {
+            "text": "<p>*Studies cited were conducted on the ingredients (topical pumpkin seed oil in 60 women with female pattern hair loss, Ibrahim et al. 2021; caffeine on hair follicles from women’s scalps in the laboratory, Fischer et al. 2014), not on Elaren’s finished formula. Individual results vary. Hair grows in cycles: most women notice less shedding first, fuller-looking hair after 30 nights of use, and density that keeps building over 3–6 months.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_1",
+        "text_2",
+        "quote_3",
+        "subheading_4",
+        "text_5",
+        "checklist_6",
+        "button_7",
+        "footnote_8"
+      ]
+    },
+    "reviews-slider": {
+      "type": "froya-reviews-slider",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260914_110006_4239e67c-fde9-44f7-81ef-e5bf610de7b3.png",
+            "image_alt": "",
+            "name": "Tamara I,  54",
+            "tag_1": "alopecia",
+            "tag_2": "non-greasy",
+            "quote": "\"I have alopecia and it didn’t feel greasy once applied. From the oil to the scalp massager, 10 out of 10!\"",
+            "text": "",
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "product_title": "",
+            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Joan_Woody.png"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260914_111147_ce53d50c-fbb1-4feb-915b-59e826610067.png",
+            "image_alt": "",
+            "name": "Emily L, 61",
+            "tag_1": "healthier scalp",
+            "tag_2": "lightweight",
+            "quote": "\"My scalp feels noticeably healthier, and it sinks in without that heavy, greasy feeling.\"",
+            "text": "<p>I’ve recently been using this pumpkin seed oil, and it works great. The oil itself feels lightweight but still super nourishing, it sinks in without that heavy, greasy feeling that some hair oils leave behind. My scalp feels noticeably healthier and more hydrated, and I’ve had way less dryness since using it.</p><p>I really like the bottle because it makes it easy to get the oil right onto my scalp instead of wasting it on the top of my hair. And the scalp massager that comes with it is surprisingly good, it really helps distribute the oil evenly and gets the circulation going. It feels amazing, honestly.</p><p>I’ve been using it pretty consistently and I can already see a difference in softness and overall shine! Definitely a solid option if your scalp needs a little extra love or you’re trying to strengthen your hair. I’d buy this again.</p>",
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "product_title": "",
+            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Karen_Kelly.png"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260914_111651_476192fd-87d6-4f29-a5c3-3739e7e80007_1.png",
+            "image_alt": "",
+            "name": "Artistry W, 43",
+            "tag_1": "herbalist approved",
+            "tag_2": "fast absorbing",
+            "quote": "\"I’m a certified herbalist and aromatherapist and I trust Elaren as part of my morning routine.\"",
+            "text": "<p>I’m a certified herbalist and aromatherapist and trust Elaren for a lot of their pumpkin seed oil products as part of my morning routine. I absolutely love their pumpkin seed oil serum. Has a lovely, earthy scent, and as far as oiliness goes, it’s fast absorbing into the skin. Great value for the cost!</p>",
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "product_title": "",
+            "image_fallback": "https://froyaorganics.com/cdn/shop/files/imagw2.png"
+          }
+        },
+        "review_4": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260914_111816_1f871d23-4d69-44f6-925a-f9f27d2ec58c.png",
+            "image_alt": "",
+            "name": "Mary T, 54",
+            "tag_1": "hair growth",
+            "tag_2": "moisturised scalp",
+            "quote": "\"Helps stimulate hair growth and keeps my scalp moisturised. Not too thick and smells great.\"",
+            "text": "",
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "product_title": "",
+            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Lisa.png"
+          }
+        },
+        "review_5": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260914_111918_aaa1cbb1-a54d-4128-b485-5e99b106a209.png",
+            "image_alt": "",
+            "name": "Pat C, 39",
+            "tag_1": "does what it says",
+            "tag_2": "recommended to my daughters",
+            "quote": "\"It really does what it says. I’ve already told my two daughters to buy it.\"",
+            "text": "<p>Have been using this oil for a few weeks and it really does what it says in the advertised article.</p><p>I have already advised my two daughters to purchase the oil. Highly recommend, will be purchasing again.</p><p>– Pat</p>",
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "product_title": "",
+            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Sarah_Jane_Frantz.png"
+          }
+        },
+        "review_9": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260914_120902_febb6da8-cec6-495a-a1ba-e0438b84d72e.png",
+            "image_alt": "",
+            "name": "Sarah R, 35",
+            "tag_1": "a little goes a long way",
+            "tag_2": "doesn’t stain",
+            "quote": "\"It only needs a small amount, spreads well and doesn’t stain.\"",
+            "text": "<p>I haven’t used this oil before but it only needs a small amount, spreads well and whilst you see the colour when it goes on it doesn’t stain. I either put it on last in my routine or mix it with moisturiser and it mixes well. Happy with my purchase.</p>",
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "product_title": "",
+            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Traci_R.png"
+          }
+        },
+        "review_10": {
+          "type": "review",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260914_120622_e66ed5b0-cc7c-431d-b45e-d7e5c71166ce.png",
+            "image_alt": "",
+            "name": "Jennifer W, 55",
+            "tag_1": "hair quality",
+            "tag_2": "visible difference",
+            "quote": "\"I have already seen a difference in the quality of my hair.\"",
+            "text": "",
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "product_title": "",
+            "image_fallback": "https://froyaorganics.com/cdn/shop/files/Jennifer_M.png"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4",
+        "review_5",
+        "review_9",
+        "review_10"
+      ],
+      "settings": {
+        "title": "What Women Say After Switching to Elaren",
+        "from_label": "From",
+        "shop_label": "Shop now",
+        "shop_url": "",
+        "read_more": "Read more",
+        "read_less": "Read less"
+      }
+    },
+    "how-to": {
+      "type": "adv-article-body",
+      "settings": {
+        "background": "cream"
+      },
+      "blocks": {
+        "heading_1": {
+          "type": "heading",
+          "settings": {
+            "text": "How to Use It, and What to Expect"
+          }
+        },
+        "text_2": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Every night, two minutes.</strong> Part your hair and apply a few drops directly to the scalp where it’s thinning: your part, crown, temples or edges. Massage in with your fingertips for 60 seconds, then leave it in overnight and wash as normal in the morning.</p><p><strong>Be patient, hair grows in cycles.</strong> Most women notice less hair in the brush and the shower drain within the first 2–4 weeks, and fuller-looking hair by day 30. Fine new baby hairs along the hairline and part usually show up around month 2 or 3, and density keeps building the longer you stay consistent.</p>"
+          }
+        },
+        "callout_3": {
+          "type": "callout",
+          "settings": {
+            "style": "card",
+            "title": "Our tip",
+            "text": "<p>Don’t stop at week three. Consistency is the whole secret, which is why most women start with a 3-month supply.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_1",
+        "text_2",
+        "callout_3"
+      ]
+    },
+    "verdict": {
+      "type": "adv-verdict",
+      "settings": {
+        "background": "tint",
+        "eyebrow": "The verdict",
+        "title": "Our Pick: <em>Elaren Pumpkin Seed Oil Serum</em>",
+        "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+        "name": "Elaren Pumpkin Seed Oil Serum",
+        "rating": "4.77",
+        "rating_text": "4.77/5 from verified buyers",
+        "text": "<p>If you want a pumpkin seed oil serum that reaches the follicle with its sterols intact, and that you’ll actually enjoy using every night, Elaren is the one we’d choose.</p>",
+        "offer": "<p>Today: <strong>Buy 2, Get 1 Free</strong>, plus a free gift with subscription</p>",
+        "show_price": true,
+        "price_prefix": "",
+        "price_suffix": "per bottle, less with bundles",
+        "button_label": "Claim the offer",
+        "button_url": "#shop",
+        "note": "30-day money-back guarantee | Free insured shipping | Cancel anytime",
+        "stock_text": ""
+      },
+      "blocks": {
+        "reason_1": {
+          "type": "reason",
+          "settings": {
+            "text": "Cold-pressed pumpkin seed oil + Caffeine Complex"
+          }
+        },
+        "reason_2": {
+          "type": "reason",
+          "settings": {
+            "text": "No water, mineral oil or silicones"
+          }
+        },
+        "reason_3": {
+          "type": "reason",
+          "settings": {
+            "text": "Non-greasy, for every hair texture"
+          }
+        },
+        "reason_4": {
+          "type": "reason",
+          "settings": {
+            "text": "Fuller hair in 30 days or your money back"
+          }
+        }
+      },
+      "block_order": [
+        "reason_1",
+        "reason_2",
+        "reason_3",
+        "reason_4"
+      ]
+    },
+    "guarantee": {
+      "type": "froya-guarantee",
+      "settings": {
+        "background": true,
+        "anchor": true,
+        "image": "shopify://shop_images/hf_20260915_124844_5df67bf1-e85f-44b6-8421-9d2ed47ced81.png",
+        "title": "Fuller hair in 30 days or your money back",
+        "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 days. Not happy with what you see?<br/>Email us within 60 days of your order and we’ll refund every cent. No photos, no awkward questions, nothing to send back. Hair loss is personal, and so is our promise.</p>",
+        "link_label": "Learn More",
+        "link_url": "#faq",
+        "button_label": "TRY IT RISK-FREE",
+        "button_url": "#shop"
+      }
+    },
+    "featured-product": {
+      "type": "froya-featured-product",
+      "blocks": {
+        "bundle_1": {
+          "type": "bundle",
+          "settings": {
+            "quantity": 1,
+            "free_quantity": 0,
+            "discount": 0,
+            "title": "1 Bottle",
+            "subtitle": "30-day supply",
+            "badge": "",
+            "gift": "",
+            "perks": "",
+            "highlight": false,
+            "selected": false
+          }
+        },
+        "bundle_2": {
+          "type": "bundle",
+          "settings": {
+            "quantity": 2,
+            "free_quantity": 1,
+            "discount": 0,
+            "title": "Buy 2, Get 1 Free",
+            "subtitle": "3-month supply",
+            "badge": "MOST POPULAR",
+            "gift": "",
+            "perks": "A full growth cycle, start to finish",
+            "highlight": true,
+            "selected": true
+          }
+        },
+        "bundle_3": {
+          "type": "bundle",
+          "settings": {
+            "quantity": 3,
+            "free_quantity": 3,
+            "discount": 0,
+            "title": "Buy 3, Get 3 Free",
+            "subtitle": "6-month supply",
+            "badge": "BEST VALUE",
+            "gift": "",
+            "perks": "Lowest price per bottle",
+            "highlight": false,
+            "selected": false
+          }
+        },
+        "ingredient_1": {
+          "type": "ingredient",
+          "settings": {
+            "tag": "Blocks DHT",
+            "title": "Pumpkin seed phytosterols",
+            "text": "Beta-sitosterol and delta-7-sterine, the plant sterols in pumpkin seed oil, help inhibit 5-alpha-reductase so less testosterone becomes follicle-shrinking DHT.",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/s1.svg?v=1734379965"
+          }
+        },
+        "ingredient_2": {
+          "type": "ingredient",
+          "settings": {
+            "tag": "Wakes follicles",
+            "title": "Caffeine Complex",
+            "text": "Counteracts DHT’s effect on the follicle and helps extend the growth phase, so more of your hairs are growing and fewer are shedding.",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/sunflower.png?v=1755540611"
+          }
+        },
+        "ingredient_3": {
+          "type": "ingredient",
+          "settings": {
+            "tag": "Feeds the root",
+            "title": "Omega-3, 6 & 9 fatty acids",
+            "text": "Linoleic, oleic and alpha-linolenic acids nourish the follicle, condition the scalp and reduce the dryness that leads to breakage.",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/beeswax.svg?v=1734705438"
+          }
+        },
+        "ingredient_4": {
+          "type": "ingredient",
+          "settings": {
+            "tag": "Supports growth",
+            "title": "Zinc & magnesium",
+            "text": "Minerals naturally present in pumpkin seed oil that support keratin production and healthy follicle cycling.",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/calendula.svg?v=1734705438"
+          }
+        },
+        "ingredient_5": {
+          "type": "ingredient",
+          "settings": {
+            "tag": "Protects the follicle",
+            "title": "Vitamin E (tocopherols)",
+            "text": "A powerful antioxidant that neutralises the oxidative stress linked to premature follicle ageing and thinning.",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/arnica.svg?v=1734966132"
+          }
+        },
+        "ingredient_6": {
+          "type": "ingredient",
+          "settings": {
+            "tag": "Calms the scalp",
+            "title": "Carotenoids",
+            "text": "The pigments that give pumpkin seed oil its deep green-gold colour are anti-inflammatory, soothing the itchy, irritated scalp that so often comes with hair loss.",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/sea_buckthorn_smaller.svg?v=1755736503"
+          }
+        },
+        "legend_1": {
+          "type": "legend",
+          "settings": {
+            "color": "#4a90e2",
+            "label": "CAFFEINE COMPLEX"
+          }
+        },
+        "legend_2": {
+          "type": "legend",
+          "settings": {
+            "color": "#b8e77f",
+            "label": "NATURAL"
+          }
+        },
+        "legend_3": {
+          "type": "legend",
+          "settings": {
+            "color": "#5a9512",
+            "label": "COLD-PRESSED"
+          }
+        },
+        "active_1": {
+          "type": "active",
+          "settings": {
+            "color": "#5a9512",
+            "label": "COLD-PRESSED CUCURBITA PEPO (PUMPKIN) SEED OIL"
+          }
+        },
+        "active_2": {
+          "type": "active",
+          "settings": {
+            "color": "#4a90e2",
+            "label": "CAFFEINE COMPLEX"
+          }
+        },
+        "active_3": {
+          "type": "active",
+          "settings": {
+            "color": "#b8e77f",
+            "label": "NATURALLY OCCURRING PHYTOSTEROLS, ZINC, OMEGA-3/6/9 & VITAMIN E"
+          }
+        },
+        "tag_1": {
+          "type": "tag",
+          "settings": {
+            "text": "reduce shedding",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/tag_icon_1.svg"
+          }
+        },
+        "tag_2": {
+          "type": "tag",
+          "settings": {
+            "text": "block DHT naturally",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/tag_icon_4.svg"
+          }
+        },
+        "tag_3": {
+          "type": "tag",
+          "settings": {
+            "text": "regrow thin areas",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/tag_icon_3.svg"
+          }
+        },
+        "tag_4": {
+          "type": "tag",
+          "settings": {
+            "text": "thicken strands",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/glow.svg"
+          }
+        },
+        "tag_5": {
+          "type": "tag",
+          "settings": {
+            "text": "strengthen edges",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/tag_icon_6.svg"
+          }
+        },
+        "tag_6": {
+          "type": "tag",
+          "settings": {
+            "text": "calm the scalp",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/moisturise.svg"
+          }
+        },
+        "usp_1": {
+          "type": "usp",
+          "settings": {
+            "text": "<p>10% of every order<br>funds hair-loss research</p>",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/product_icon_1.svg"
+          }
+        },
+        "usp_2": {
+          "type": "usp",
+          "settings": {
+            "text": "<p>fuller hair in 30 days or your money back</p>",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/product_icon_2.svg"
+          }
+        },
+        "usp_3": {
+          "type": "usp",
+          "settings": {
+            "text": "<p>free insured shipping on every order</p>",
+            "icon_fallback": "https://froyaorganics.com/cdn/shop/files/product_icon_3.svg"
+          }
+        }
+      },
+      "block_order": [
+        "bundle_1",
+        "bundle_2",
+        "bundle_3",
+        "ingredient_1",
+        "ingredient_2",
+        "ingredient_3",
+        "ingredient_4",
+        "ingredient_5",
+        "ingredient_6",
+        "legend_1",
+        "legend_2",
+        "legend_3",
+        "active_1",
+        "active_2",
+        "active_3",
+        "tag_1",
+        "tag_2",
+        "tag_3",
+        "tag_4",
+        "tag_5",
+        "tag_6",
+        "usp_1",
+        "usp_2",
+        "usp_3"
+      ],
+      "settings": {
+        "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+        "selling_plan_id": "1039991141",
+        "product_title": "",
+        "badge_text": "Formulated for women’s hair loss",
+        "badge_underline": "",
+        "badge_bg": "#e5f3fa",
+        "badge_color": "#54585a",
+        "reviews_count": 43,
+        "rating": "4.77",
+        "rating_text": "RATED 4.77/5 BY WOMEN",
+        "reviews_anchor": "reviews-section",
+        "label_1": "",
+        "label_2": "",
+        "save_tag": "Save {percent}%",
+        "ships_free_text": "THIS ORDER SHIPS FREE",
+        "includes": "",
+        "ingredients_button": "View Ingredients",
+        "ingredients_title": "6 Key Actives, Chosen to Work Together",
+        "ingredients_close": "Close",
+        "badge_1": "0 minoxidil",
+        "badge_2": "0 hormones",
+        "badge_3": "100% natural",
+        "badge_4": "3rd party tested",
+        "legend_title": "INGREDIENT LEVELS",
+        "actives_title": "KEY ACTIVES – PUMPKIN SEED REGROWTH OIL",
+        "bundle_title": "Choose your bundle",
+        "price_style": "unit",
+        "compare_basis": "price",
+        "unit_suffix": "per bottle",
+        "total_text": "{total} total",
+        "save_text": "Save {amount} ({percent}% off)",
+        "sub_default": false,
+        "toggle_title": "Save {percent}% with our flexible plan",
+        "toggle_sub": "No contracts. Cancel with ease.",
+        "benefit_1": "<strong>Free Insured Shipping</strong> Every Order",
+        "benefit_2": "<strong>{percent}% Off</strong> Every Order",
+        "benefit_3": "30-Day <strong>Money-Back Guarantee</strong>",
+        "benefit_4": "<strong>Skip</strong>, <strong>Pause</strong> or <strong>Cancel</strong> Anytime",
+        "benefit_5": "Consistency Is <strong>What Regrows Hair</strong>",
+        "benefit_6": "<strong>Never Miss</strong> a Night of Regrowth",
+        "gift_product": "elaren-microstamp-pro",
+        "gift_badge": "FREE GIFT WORTH {price}",
+        "gift_text": "<p>Complete your routine with our <strong>&lcub;product&rcub;</strong>.</p>",
+        "congrats_text": "Congrats! You’re saving",
+        "sub_badge": "SAVE {percent}% ON EVERY ORDER",
+        "sub_name": "Subscribe & save",
+        "sub_perks": "<p><strong>LOWEST PRICE</strong> every month<br/><strong>&lcub;percent&rcub;% OFF</strong> every order<br/><strong>FREE INSURED SHIPPING</strong> always<br/><strong>CANCEL, PAUSE, EDIT</strong> anytime<br/><strong>RESERVED</strong> stock<br/><strong>LONG-TERM</strong> fuller hair</p>",
+        "otp_badge": "NO COMMITMENT",
+        "otp_name": "One-Time Purchase",
+        "delivery_label": "",
+        "info_1": "",
+        "info_2": "",
+        "button_label": "Add to Cart",
+        "button_price": "total",
+        "sold_out_label": "Sold out",
+        "show_low_stock": true,
+        "low_stock_source": "fixed",
+        "low_stock_threshold": 150,
+        "low_stock_count": 14,
+        "low_stock_text": "Low Stock: only {count} left"
+      }
+    },
+    "faq": {
+      "type": "froya-faq",
+      "blocks": {
+        "q_compare": {
+          "type": "question",
+          "settings": {
+            "question": "How is Elaren different from other pumpkin seed oil serums?",
+            "answer": "<p>Most serums use refined pumpkin seed oil diluted with water, mineral oil or silicones. Elaren uses cold-pressed pumpkin seed oil, so its DHT-blocking sterols, zinc and vitamin E stay intact, and adds a Caffeine Complex to support the growth phase. There is no filler in the bottle, and it is light enough to use every night.</p>"
+          }
+        },
+        "q_1": {
+          "type": "question",
+          "settings": {
+            "question": "How soon will I see results?",
+            "answer": "<p>Hair grows in cycles, so give it a full 30 days of nightly use. Most customers notice less shedding in the first weeks and fuller-looking hair around day 30, with new baby hairs along the part and hairline in the months after. Consistency matters more than anything: two minutes a night, every night.</p>"
+          }
+        },
+        "q_2": {
+          "type": "question",
+          "settings": {
+            "question": "How do I use it?",
+            "answer": "<p>Part dry or towel-dried hair, apply a few drops directly to the scalp where you are thinning (the part, crown, temples or hairline) and massage in for about 60 seconds to get the blood flowing. Leave it in overnight and wash as normal in the morning. One tube is a one-month supply.</p>"
+          }
+        },
+        "q_3": {
+          "type": "question",
+          "settings": {
+            "question": "Will it make my hair greasy?",
+            "answer": "<p>No. The oil is lightweight and goes on the scalp, not the lengths, so it absorbs while you sleep. Customers with fine hair and with alopecia tell us it does not feel greasy once applied, and your normal morning wash takes care of the rest.</p>"
+          }
+        },
+        "q_4": {
+          "type": "question",
+          "settings": {
+            "question": "Which kinds of hair loss does it help with?",
+            "answer": "<p>It was made for the ways women’s hair thins after 35: female pattern thinning at the part and crown, postpartum and menopausal shedding, traction and breakage along the edges, and stress shedding. Pumpkin seed oil targets DHT at the follicle while the Caffeine Complex wakes dormant follicles. It is a cosmetic scalp treatment, not a medicine, so it cannot cure medical conditions such as alopecia areata, though many customers use it to support the hair they have.</p>"
+          }
+        },
+        "q_5": {
+          "type": "question",
+          "settings": {
+            "question": "Is it safe? Can I use it with other treatments?",
+            "answer": "<p>The formula is drug-free and hormone-free: cold-pressed pumpkin seed oil, caffeine and plant-based actives, no minoxidil. Most women can use it alongside their usual products. If you are pregnant, breastfeeding or under medical treatment for hair loss, check with your doctor first.</p>"
+          }
+        },
+        "q_6": {
+          "type": "question",
+          "settings": {
+            "question": "How does the 30-day money-back guarantee work?",
+            "answer": "<p>Use it every night for 30 days. Not happy with your results? Email <a href=\"mailto:support@shopelaren.com\">support@shopelaren.com</a> within 60 days of placing your order and we’ll refund every cent, including any shipping charge. No photos, no awkward questions and nothing to send back. The guarantee covers one order per customer; the details are in our <a href=\"/policies/refund-policy\">Refund Policy</a>.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q_compare",
+        "q_1",
+        "q_2",
+        "q_3",
+        "q_4",
+        "q_5",
+        "q_6"
+      ],
+      "settings": {
+        "eyebrow": "Questions, Answered",
+        "title": "Everything You Want To Know Before You Start",
+        "subtitle": "Straight answers on results, routine, safety and our guarantee. Anything else, our team is one email away.",
+        "open_first": true,
+        "footer_text": "<p>Still wondering about something? Email <a href=\"mailto:support@shopelaren.com\">support@shopelaren.com</a> and a real person will reply within one business day.</p>"
+      }
+    },
+    "sticky-cta": {
+      "type": "adv-sticky-cta",
+      "settings": {
+        "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+        "title": "Elaren Serum",
+        "rating": "4.77",
+        "subtitle": "4.77/5 rating",
+        "button_label": "Get offer",
+        "button_url": "#shop"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "top-pick",
+    "intro",
+    "criteria",
+    "comparison",
+    "ranking",
+    "why-elaren",
+    "reviews-slider",
+    "how-to",
+    "verdict",
+    "guarantee",
+    "featured-product",
+    "faq",
+    "sticky-cta"
+  ]
+}

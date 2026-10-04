@@ -1,0 +1,138 @@
+{% comment %}
+  Comparison advertorial – ranked reviews. Each contender is a block: rank, badge, name, line under
+  the name, score, photo (or a product, which also supplies name, photo and price), pros, cons,
+  verdict and an optional button. "Highlight" gives the card the winner's mauve frame.
+{% endcomment %}
+{{ 'advertorial.css' | asset_url | stylesheet_tag }}
+<section class="adv adv--{{ section.settings.background }}" data-anchor="ranking" id="adv-{{ section.id }}">
+  <div class="adv__wide">
+    <div class="adv__read adv__center">
+      {%- if section.settings.eyebrow != blank -%}<p class="adv__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="adv__h2">{{ section.settings.title }}</h2>
+      {%- if section.settings.subtitle != blank -%}<p class="adv__lede">{{ section.settings.subtitle }}</p>{%- endif -%}
+    </div>
+
+    <div class="adv-rank__list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign p = block.settings.product
+          assign name = block.settings.name | default: p.title
+          assign image = block.settings.image
+          if image == blank
+            assign image = p.featured_image
+          endif
+          assign has_media = false
+          if image != blank or block.settings.placeholder != blank
+            assign has_media = true
+          endif
+          assign pros = block.settings.pros | newline_to_br | split: '<br />'
+          assign cons = block.settings.cons | newline_to_br | split: '<br />'
+          assign btn_href = block.settings.button_url | default: '#shop'
+        -%}
+        <article class="adv-rank__card{% if block.settings.highlight %} adv-rank__card--win{% endif %}" {{ block.shopify_attributes }}>
+          <div class="adv-rank__top">
+            <span class="adv-rank__num" aria-hidden="true">{{ block.settings.rank | default: forloop.index }}</span>
+            <div class="adv-rank__heading">
+              {%- if block.settings.badge != blank -%}<span class="adv-rank__badge">{{ block.settings.badge }}</span>{%- endif -%}
+              <h3 class="adv-rank__name"><span class="visually-hidden">#{{ block.settings.rank | default: forloop.index }}: </span>{{ name }}</h3>
+              {%- if block.settings.subtitle != blank -%}<p class="adv-rank__sub">{{ block.settings.subtitle }}</p>{%- endif -%}
+            </div>
+            {%- if block.settings.score != blank -%}
+              <div class="adv-rank__score">
+                <span class="adv-rank__score-num">{{ block.settings.score }}</span>
+                <span class="adv-rank__score-label">{{ section.settings.score_label }}</span>
+              </div>
+            {%- endif -%}
+          </div>
+
+          <div class="adv-rank__body{% unless has_media %} adv-rank__body--no-media{% endunless %}">
+            {%- if image != blank -%}
+              <div class="adv-rank__media">
+                {{ image | image_url: width: 480, height: 480, crop: 'center' | image_tag: alt: name, loading: 'lazy', sizes: '(min-width: 768px) 240px, 100vw', widths: '240, 360, 480, 720' }}
+              </div>
+            {%- elsif block.settings.placeholder != blank -%}
+              <div class="adv-rank__media adv-rank__media--blank" aria-hidden="true">{{ block.settings.placeholder }}</div>
+            {%- endif -%}
+
+            <div class="adv-body">
+              <div class="adv-rank__cols">
+                {%- if block.settings.pros != blank -%}
+                  <div>
+                    <p class="adv-rank__col-title">{{ section.settings.pros_label }}</p>
+                    <ul class="adv-rank__points">
+                      {%- for line in pros -%}{%- assign item = line | strip -%}{%- if item != blank -%}<li>{%- render 'adv-mark', value: 'yes' -%}<span>{{ item }}</span></li>{%- endif -%}{%- endfor -%}
+                    </ul>
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.cons != blank -%}
+                  <div>
+                    <p class="adv-rank__col-title">{{ section.settings.cons_label }}</p>
+                    <ul class="adv-rank__points">
+                      {%- for line in cons -%}{%- assign item = line | strip -%}{%- if item != blank -%}<li>{%- render 'adv-mark', value: 'no' -%}<span>{{ item }}</span></li>{%- endif -%}{%- endfor -%}
+                    </ul>
+                  </div>
+                {%- endif -%}
+              </div>
+              {%- if block.settings.verdict != blank -%}<div class="adv-rank__verdict">{{ block.settings.verdict }}</div>{%- endif -%}
+              {%- if p != blank and block.settings.show_price -%}
+                {%- assign v = p.selected_or_first_available_variant -%}
+                <p class="adv-rank__price">
+                  <span class="adv-rank__price-now">{{ v.price | money }}</span>
+                  {%- if v.compare_at_price > v.price -%}<span class="adv-rank__price-was">{{ v.compare_at_price | money }}</span>{%- endif -%}
+                  {%- if block.settings.price_note != blank -%}<span>{{ block.settings.price_note }}</span>{%- endif -%}
+                </p>
+              {%- endif -%}
+              {%- if block.settings.button_label != blank -%}
+                <a class="adv-btn adv-btn--full" href="{{ btn_href }}"{% if btn_href contains '#' %} data-scroll-to="{{ btn_href | split: '#' | last }}"{% endif %}>
+                  {{ block.settings.button_label }} <span class="adv-btn__arrow" aria-hidden="true">→</span>
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ranked contenders",
+  "tag": "section",
+  "settings": [
+    { "type": "select", "id": "background", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "cream", "label": "Cream" }, { "value": "tint", "label": "Mauve tint" } ], "default": "cream" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The ranking" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "The Pumpkin Seed Oil Serums We Compared, Ranked" },
+    { "type": "textarea", "id": "subtitle", "label": "Subheading" },
+    { "type": "text", "id": "score_label", "label": "Score label", "default": "Our score" },
+    { "type": "text", "id": "pros_label", "label": "Pros heading", "default": "What we liked" },
+    { "type": "text", "id": "cons_label", "label": "Cons heading", "default": "Watch out for" }
+  ],
+  "blocks": [
+    {
+      "type": "contender",
+      "name": "Contender",
+      "settings": [
+        { "type": "text", "id": "rank", "label": "Rank", "info": "Leave empty to number in sidebar order." },
+        { "type": "text", "id": "badge", "label": "Badge", "default": "Runner-up" },
+        { "type": "checkbox", "id": "highlight", "label": "Highlight as the winner", "default": false },
+        { "type": "product", "id": "product", "label": "Product", "info": "For your own product: supplies the photo and price, and the name when Name is empty." },
+        { "type": "text", "id": "name", "label": "Name", "default": "Typical drugstore serum", "info": "Leave empty to use the product title." },
+        { "type": "text", "id": "subtitle", "label": "Line under the name" },
+        { "type": "text", "id": "score", "label": "Score", "default": "6.1/10" },
+        { "type": "image_picker", "id": "image", "label": "Photo", "info": "Square, about 480 × 480 px." },
+        { "type": "text", "id": "placeholder", "label": "Text tile when there is no photo", "info": "Leave empty to show no tile." },
+        { "type": "textarea", "id": "pros", "label": "Pros", "info": "One per line." },
+        { "type": "textarea", "id": "cons", "label": "Cons", "info": "One per line." },
+        { "type": "richtext", "id": "verdict", "label": "Verdict" },
+        { "type": "checkbox", "id": "show_price", "label": "Show the product's price", "default": false },
+        { "type": "text", "id": "price_note", "label": "Text after the price" },
+        { "type": "text", "id": "button_label", "label": "Button label" },
+        { "type": "text", "id": "button_url", "label": "Button link", "default": "#shop" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [ { "name": "Ranked contenders", "blocks": [ { "type": "contender" }, { "type": "contender" } ] } ]
+}
+{% endschema %}

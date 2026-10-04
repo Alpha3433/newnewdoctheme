@@ -1,0 +1,49 @@
+{% comment %}
+  Comparison advertorial – "what we looked for": numbered criteria cards. Each criterion is a block.
+{% endcomment %}
+{{ 'advertorial.css' | asset_url | stylesheet_tag }}
+<section class="adv adv--{{ section.settings.background }}" data-anchor="criteria" id="adv-{{ section.id }}">
+  <div class="adv__wide">
+    <div class="adv__read adv__center">
+      {%- if section.settings.eyebrow != blank -%}<p class="adv__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="adv__h2">{{ section.settings.title }}</h2>
+      {%- if section.settings.subtitle != blank -%}<p class="adv__lede">{{ section.settings.subtitle }}</p>{%- endif -%}
+    </div>
+    <ol class="adv-criteria__grid">
+      {%- for block in section.blocks -%}
+        <li class="adv-criteria__item" {{ block.shopify_attributes }}>
+          <span class="adv-criteria__num" aria-hidden="true">{{ forloop.index }}</span>
+          <div>
+            <h3 class="adv-criteria__title">{{ block.settings.title }}</h3>
+            <div class="adv-criteria__text">{{ block.settings.text }}</div>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Comparison criteria",
+  "tag": "section",
+  "settings": [
+    { "type": "select", "id": "background", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "cream", "label": "Cream" }, { "value": "tint", "label": "Mauve tint" } ], "default": "cream" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How we judged them" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "What Separates a Serum That Works From One That Doesn’t" },
+    { "type": "textarea", "id": "subtitle", "label": "Subheading" }
+  ],
+  "blocks": [
+    {
+      "type": "criterion",
+      "name": "Criterion",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Cold-pressed pumpkin seed oil" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Heat and solvents destroy the sterols that do the work.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [ { "name": "Comparison criteria", "blocks": [ { "type": "criterion" }, { "type": "criterion" } ] } ]
+}
+{% endschema %}

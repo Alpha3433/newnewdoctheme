@@ -1,0 +1,9 @@
+{%- comment -%}
+  Tick, cross or half mark for the comparison advertorial.
+  {% render 'adv-mark', value: 'yes' %}   yes | no | partial
+{%- endcomment -%}
+{%- case value -%}
+  {%- when 'yes' -%}<span class="adv-mark adv-mark--yes" role="img" aria-label="Yes">✓</span>
+  {%- when 'no' -%}<span class="adv-mark adv-mark--no" role="img" aria-label="No">✕</span>
+  {%- when 'partial' -%}<span class="adv-mark adv-mark--partial" role="img" aria-label="Partly">~</span>
+{%- endcase -%}
