@@ -128,7 +128,7 @@ template (`templates/page.froya-landing.json`).
   on desktop and a row in the mobile menu; Header → *Order tracking link*), the footer and the
   account page. The account order page shows a placed → shipped → on its way tracker and every
   tracking number with a *Track* button.
-* **Serum comparison advertorial** – a long-form "we compared 10 types of hair growth serum"
+* **Serum comparison advertorial** – a long-form "we compared 10 pumpkin seed hair serums"
   review article for paid traffic, template `page.serum-comparison` (create a page in Online
   Store → Pages and choose that template). Its layout follows an editorial review page: warm
   off-white background, coral accents, Instrument Serif headings and Poppins text (loaded from
@@ -137,7 +137,7 @@ template (`templates/page.froya-landing.json`).
   announcement bar and menu on this page, while the cart drawer keeps working), *Article text*
   (story box, key-insight banner, heading, paragraph, photo, button and footnote blocks),
   *Criteria cards*, *#1 pick* (feature chips one per line, spec rows written `Label | Value`),
-  *Rest of the field* (one card per product type with "what it gets right" and "falls short"
+  *Rest of the field* (one card per product with "what it gets right" and "falls short"
   lists, plus "Still reading?" button and honourable-mention blocks; cards without a photo show a
   soft placeholder tile until one is uploaded), *Side-by-side table* (one row per product; `yes`,
   `no`, `yes: text`, `no: text` or `~ text` in each cell), *Reader reviews*, *Closing pick*,
@@ -145,8 +145,11 @@ template (`templates/page.froya-landing.json`).
   offer bar*, which appears once the reader scrolls past the header and hides while the buy box
   is on screen. The buy box is the landing page's own section, so the Kaching bundles,
   subscription and free gift work the same here, and every button scrolls to it (`#shop`).
-  The alternatives are generic product types, not named brands, the masthead says
-  "Advertorial", and the copy speaks as "we" rather than inventing a personal test.
+  The other nine serums are named products. What the page says about each one comes from the
+  brand's own site or retailer listings as of October 2026, and the table note and disclaimer
+  say so; check those details before reusing the page later. Their card photos are picked per
+  card in *Rest of the field*. The masthead says "Advertorial", and the copy speaks as "we"
+  rather than inventing a personal test.
 * **Support email** – Theme settings → *Customer support*. support@shopelaren.com is the only
   address the storefront shows. The policy pages (`/policies/…`: refund, terms, privacy, contact)
   come from Settings → Policies, where Shopify's templates insert the store's own email and a link
