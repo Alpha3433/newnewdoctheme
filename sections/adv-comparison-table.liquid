@@ -1,0 +1,149 @@
+{% comment %}
+  Comparison advertorial – side-by-side table. Column 1 is the winner (tinted, with a badge, its
+  photo from the product picker); columns 2–4 are the alternatives. Each row is a block with one
+  value per column. A value of yes, no or partial shows a tick, cross or half mark; "yes: text"
+  shows the mark with a short note under it; anything else is shown as text. On phones the table
+  scrolls sideways with the feature names pinned on the left.
+{% endcomment %}
+{{ 'advertorial.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign product = section.settings.product
+  assign col_count = 3
+  if section.settings.col_4_name != blank
+    assign col_count = 4
+  endif
+  assign btn_href = section.settings.button_url | default: '#shop'
+-%}
+<section class="adv adv--{{ section.settings.background }}" data-anchor="comparison" id="adv-{{ section.id }}">
+  <div class="adv__wide">
+    <div class="adv__read adv__center">
+      {%- if section.settings.eyebrow != blank -%}<p class="adv__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="adv__h2">{{ section.settings.title }}</h2>
+      {%- if section.settings.subtitle != blank -%}<p class="adv__lede">{{ section.settings.subtitle }}</p>{%- endif -%}
+    </div>
+
+    <div class="adv-table__scroller">
+      <table class="adv-table">
+        <colgroup><col class="adv-table__feature-col">{%- for i in (1..col_count) -%}<col>{%- endfor -%}</colgroup>
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">{{ section.settings.feature_label }}</span></th>
+            {%- for i in (1..col_count) -%}
+              {%- liquid
+                assign name_key = 'col_' | append: i | append: '_name'
+                assign sub_key = 'col_' | append: i | append: '_sub'
+                assign img_key = 'col_' | append: i | append: '_image'
+                assign col_name = section.settings[name_key]
+                assign col_image = section.settings[img_key]
+                if i == 1
+                  assign col_name = col_name | default: product.title
+                  if col_image == blank
+                    assign col_image = product.featured_image
+                  endif
+                endif
+              -%}
+              <th scope="col"{% if i == 1 %} class="adv-table__win"{% endif %}>
+                {%- if i == 1 and section.settings.badge != blank -%}<span class="adv-table__badge">{{ section.settings.badge }}</span>{%- endif -%}
+                {%- if col_image != blank -%}
+                  {{ col_image | image_url: width: 168, height: 168, crop: 'center' | image_tag: class: 'adv-table__thumb', alt: col_name, loading: 'lazy', width: 84, height: 84 }}
+                {%- elsif section.settings.show_placeholders -%}
+                  <span class="adv-table__thumb adv-table__thumb--blank" aria-hidden="true">{{ col_name | slice: 0 }}</span>
+                {%- endif -%}
+                <span class="adv-table__product-name">{{ col_name }}</span>
+                {%- if section.settings[sub_key] != blank -%}<span class="adv-table__product-sub">{{ section.settings[sub_key] }}</span>{%- endif -%}
+              </th>
+            {%- endfor -%}
+          </tr>
+        </thead>
+        <tbody>
+          {%- for block in section.blocks -%}
+            <tr {{ block.shopify_attributes }}>
+              <th scope="row">{{ block.settings.label }}</th>
+              {%- for i in (1..col_count) -%}
+                {%- liquid
+                  assign v_key = 'v' | append: i
+                  assign raw = block.settings[v_key] | strip
+                  assign head = raw | split: ':' | first | strip | downcase
+                  assign mark = ''
+                  assign note = raw
+                  if head == 'yes' or head == 'no' or head == 'partial'
+                    assign mark = head
+                    assign note = raw | remove_first: ':' | slice: head.size, 200 | strip
+                  endif
+                -%}
+                <td{% if i == 1 %} class="adv-table__win"{% endif %}>
+                  <span class="adv-table__cell">
+                    {%- if mark != '' -%}{%- render 'adv-mark', value: mark -%}{%- endif -%}
+                    {%- if note != blank -%}<span class="adv-table__text">{{ note }}</span>{%- endif -%}
+                  </span>
+                </td>
+              {%- endfor -%}
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="adv-table__cta adv__read">
+        <a class="adv-btn adv-btn--full" href="{{ btn_href }}"{% if btn_href contains '#' %} data-scroll-to="{{ btn_href | split: '#' | last }}"{% endif %}>
+          {{ section.settings.button_label }} <span class="adv-btn__arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    {%- endif -%}
+    {%- if section.settings.note != blank -%}<p class="adv-table__note">{{ section.settings.note }}</p>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Comparison table",
+  "tag": "section",
+  "settings": [
+    { "type": "select", "id": "background", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "cream", "label": "Cream" }, { "value": "tint", "label": "Mauve tint" } ], "default": "white" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Side by side" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "How Elaren Compares" },
+    { "type": "textarea", "id": "subtitle", "label": "Subheading" },
+    { "type": "text", "id": "feature_label", "label": "Feature column label", "default": "Feature", "info": "Read by screen readers only." },
+    { "type": "header", "content": "Column 1 (winner)" },
+    { "type": "product", "id": "product", "label": "Product", "info": "Supplies the photo and name unless overridden below." },
+    { "type": "text", "id": "badge", "label": "Badge", "default": "Our pick" },
+    { "type": "text", "id": "col_1_name", "label": "Name override" },
+    { "type": "text", "id": "col_1_sub", "label": "Line under the name", "default": "Elaren" },
+    { "type": "image_picker", "id": "col_1_image", "label": "Photo override" },
+    { "type": "header", "content": "Column 2" },
+    { "type": "text", "id": "col_2_name", "label": "Name", "default": "Typical drugstore serum" },
+    { "type": "text", "id": "col_2_sub", "label": "Line under the name" },
+    { "type": "image_picker", "id": "col_2_image", "label": "Photo" },
+    { "type": "header", "content": "Column 3" },
+    { "type": "text", "id": "col_3_name", "label": "Name", "default": "Rosemary & oil blend" },
+    { "type": "text", "id": "col_3_sub", "label": "Line under the name" },
+    { "type": "image_picker", "id": "col_3_image", "label": "Photo" },
+    { "type": "header", "content": "Column 4" },
+    { "type": "text", "id": "col_4_name", "label": "Name", "info": "Leave empty to show three columns.", "default": "Luxury salon serum" },
+    { "type": "text", "id": "col_4_sub", "label": "Line under the name" },
+    { "type": "image_picker", "id": "col_4_image", "label": "Photo" },
+    { "type": "checkbox", "id": "show_placeholders", "label": "Show a letter tile when a column has no photo", "default": true },
+    { "type": "header", "content": "Under the table" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Try Elaren risk-free" },
+    { "type": "text", "id": "button_url", "label": "Button link", "default": "#shop", "info": "#shop scrolls to the buy box on this page." },
+    { "type": "textarea", "id": "note", "label": "Note", "default": "Columns 2–4 describe common types of pumpkin seed oil hair products, not specific brands." }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Row",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Feature", "default": "Cold-pressed pumpkin seed oil" },
+        { "type": "paragraph", "content": "Type yes, no or partial for a mark. Add a short note after a colon, e.g. yes: 30-day." },
+        { "type": "text", "id": "v1", "label": "Column 1", "default": "yes" },
+        { "type": "text", "id": "v2", "label": "Column 2", "default": "no" },
+        { "type": "text", "id": "v3", "label": "Column 3", "default": "partial" },
+        { "type": "text", "id": "v4", "label": "Column 4", "default": "no" }
+      ]
+    }
+  ],
+  "max_blocks": 16,
+  "presets": [ { "name": "Comparison table", "blocks": [ { "type": "row" }, { "type": "row" }, { "type": "row" } ] } ]
+}
+{% endschema %}

@@ -1,0 +1,129 @@
+{% comment %}
+  Comparison advertorial – article copy in a reading column. Everything is a block, in sidebar
+  order: heading, subheading, paragraph, photo, pull quote, callout box, tick/cross list, button
+  and footnote. Add the section as many times as the article needs between the other sections.
+{% endcomment %}
+{{ 'advertorial.css' | asset_url | stylesheet_tag }}
+<section class="adv adv--{{ section.settings.background }}{% if section.settings.tight_top %} adv--tight-top{% endif %}{% if section.settings.tight_bottom %} adv--tight-bottom{% endif %}"{% if section.settings.anchor != blank %} data-anchor="{{ section.settings.anchor | handle }}"{% endif %} id="adv-{{ section.id }}">
+  <div class="adv__read adv-body">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'heading' -%}
+          <h2 class="adv-body__heading" {{ block.shopify_attributes }}>{{ block.settings.text }}</h2>
+        {%- when 'subheading' -%}
+          <h3 class="adv-body__subheading" {{ block.shopify_attributes }}>{{ block.settings.text }}</h3>
+        {%- when 'text' -%}
+          <div class="adv-rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+        {%- when 'image' -%}
+          {%- if block.settings.image != blank or block.settings.product.featured_image != blank -%}
+            <figure class="adv-body__figure" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 1520 | image_tag: alt: block.settings.alt, loading: 'lazy', sizes: '(min-width: 800px) 760px, 100vw', widths: '400, 600, 800, 1000, 1200, 1520' }}
+              {%- else -%}
+                {{ block.settings.product.featured_image | image_url: width: 1520 | image_tag: alt: block.settings.alt, loading: 'lazy', sizes: '(min-width: 800px) 760px, 100vw', widths: '400, 600, 800, 1000, 1200, 1520' }}
+              {%- endif -%}
+              {%- if block.settings.caption != blank -%}<figcaption class="adv-body__caption">{{ block.settings.caption }}</figcaption>{%- endif -%}
+            </figure>
+          {%- endif -%}
+        {%- when 'quote' -%}
+          <blockquote class="adv-body__quote" {{ block.shopify_attributes }}>
+            {{ block.settings.text }}
+            {%- if block.settings.cite != blank -%}<cite>{{ block.settings.cite }}</cite>{%- endif -%}
+          </blockquote>
+        {%- when 'callout' -%}
+          <div class="adv-body__callout adv-body__callout--{{ block.settings.style }}" {{ block.shopify_attributes }}>
+            {%- if block.settings.title != blank -%}<p class="adv-body__callout-title">{{ block.settings.title }}</p>{%- endif -%}
+            <div class="adv-rte">{{ block.settings.text }}</div>
+          </div>
+        {%- when 'checklist' -%}
+          {%- assign lines = block.settings.items | newline_to_br | split: '<br />' -%}
+          <ul class="adv-body__checks" {{ block.shopify_attributes }}>
+            {%- for line in lines -%}
+              {%- assign item = line | strip -%}
+              {%- if item != blank -%}
+                <li>{%- render 'adv-mark', value: block.settings.mark -%}<span>{{ item }}</span></li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- when 'button' -%}
+          {%- assign btn_href = block.settings.url | default: '#shop' -%}
+          <div class="adv-body__button" {{ block.shopify_attributes }}>
+            <a class="adv-btn{% if block.settings.full %} adv-btn--full{% endif %}" href="{{ btn_href }}"{% if btn_href contains '#' %} data-scroll-to="{{ btn_href | split: '#' | last }}"{% endif %}>
+              {{ block.settings.label }} <span class="adv-btn__arrow" aria-hidden="true">→</span>
+            </a>
+            {%- if block.settings.note != blank -%}
+              {%- assign notes = block.settings.note | split: '|' -%}
+              <p class="adv-btn-note">{%- for n in notes -%}<span>{{ n | strip }}</span>{%- endfor -%}</p>
+            {%- endif -%}
+          </div>
+        {%- when 'footnote' -%}
+          <div class="adv-body__footnote" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Article text",
+  "tag": "section",
+  "settings": [
+    { "type": "select", "id": "background", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "cream", "label": "Cream" }, { "value": "tint", "label": "Mauve tint" } ], "default": "white" },
+    { "type": "checkbox", "id": "tight_top", "label": "Less space above", "default": false },
+    { "type": "checkbox", "id": "tight_bottom", "label": "Less space below", "default": false },
+    { "type": "text", "id": "anchor", "label": "Anchor name", "info": "Optional. Links to #name scroll here (for example: why-elaren)." }
+  ],
+  "blocks": [
+    { "type": "heading", "name": "Heading", "settings": [ { "type": "inline_richtext", "id": "text", "label": "Heading", "default": "Why most pumpkin seed oil serums disappoint" } ] },
+    { "type": "subheading", "name": "Subheading", "settings": [ { "type": "inline_richtext", "id": "text", "label": "Subheading", "default": "What the label doesn’t tell you" } ] },
+    { "type": "text", "name": "Paragraph", "settings": [ { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Write the article copy here.</p>" } ] },
+    {
+      "type": "image",
+      "name": "Photo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo", "info": "Landscape, about 1520 × 1000 px." },
+        { "type": "product", "id": "product", "label": "Or use a product photo", "info": "Its main photo is shown when no photo is uploaded." },
+        { "type": "text", "id": "alt", "label": "Alt text" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    },
+    {
+      "type": "quote",
+      "name": "Pull quote",
+      "settings": [
+        { "type": "inline_richtext", "id": "text", "label": "Quote", "default": "“I’ve stopped shedding as much, and I’m seeing fine baby hairs growing in.”" },
+        { "type": "text", "id": "cite", "label": "Attribution", "default": "Joan T, 64, verified buyer" }
+      ]
+    },
+    {
+      "type": "callout",
+      "name": "Callout box",
+      "settings": [
+        { "type": "select", "id": "style", "label": "Style", "options": [ { "value": "card", "label": "Cream card" }, { "value": "tint", "label": "Mauve tint" }, { "value": "warning", "label": "Warning" } ], "default": "card" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Good to know" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Callout text.</p>" }
+      ]
+    },
+    {
+      "type": "checklist",
+      "name": "Tick list",
+      "settings": [
+        { "type": "select", "id": "mark", "label": "Mark", "options": [ { "value": "yes", "label": "Green tick" }, { "value": "no", "label": "Red cross" }, { "value": "partial", "label": "Amber half" } ], "default": "yes" },
+        { "type": "textarea", "id": "items", "label": "Items", "info": "One per line.", "default": "First point\nSecond point" }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Check availability" },
+        { "type": "text", "id": "url", "label": "Link", "default": "#shop", "info": "#shop scrolls to the buy box on this page." },
+        { "type": "checkbox", "id": "full", "label": "Full width", "default": true },
+        { "type": "text", "id": "note", "label": "Reassurance line", "info": "Separate items with |", "default": "30-day money-back guarantee | Free insured shipping" }
+      ]
+    },
+    { "type": "footnote", "name": "Footnote", "settings": [ { "type": "richtext", "id": "text", "label": "Text", "default": "<p>*Footnote.</p>" } ] }
+  ],
+  "presets": [ { "name": "Article text", "blocks": [ { "type": "heading" }, { "type": "text" } ] } ]
+}
+{% endschema %}

@@ -1,0 +1,8 @@
+{%- comment -%}
+  Five stars filled to the nearest whole star, for the comparison advertorial.
+  {% render 'adv-stars', rating: 4.77 %}
+{%- endcomment -%}
+{%- assign adv_full = rating | default: 5 | plus: 0.5 | floor -%}
+<span class="adv-stars" role="img" aria-label="{{ rating | default: 5 }} out of 5 stars">
+  {%- for i in (1..5) -%}<span aria-hidden="true"{% if i > adv_full %} class="adv-stars__off"{% endif %}>★</span>{%- endfor -%}
+</span>
