@@ -132,7 +132,8 @@ template (`templates/page.froya-landing.json`).
   market" article for paid traffic, template `page.serum-comparison` (create a page in Online
   Store → Pages and choose that template). It is built from the `adv-*` sections, all styled by
   `assets/advertorial.css` with the landing page's colours and fonts: *Article header* (disclosure
-  label, headline, byline, lead photo), *Top pick summary*, *Article text* (heading, paragraph,
+  label, headline, byline, lead photo; by default it also hides the store's announcement bar and
+  menu on this page and shows a slim masthead instead, while the cart drawer keeps working), *Top pick summary*, *Article text* (heading, paragraph,
   photo, pull quote, callout, tick list, button and footnote blocks; add it as often as the story
   needs), *Comparison criteria*, *Comparison table* (column 1 is the winner; each row is a block
   where `yes`, `no` or `partial` show a mark and `yes: note` adds a short note under it),
