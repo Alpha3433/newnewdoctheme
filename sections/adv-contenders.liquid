@@ -1,7 +1,7 @@
 {% comment %}
   Comparison advertorial – "the rest of the field". Contender blocks are white cards: rank, name,
-  subtitle, write-up, photo (a soft placeholder tile until one is uploaded), "what it gets right"
-  and "falls short" lists (one point per line) and a bold one-line verdict. Button blocks drop a
+  subtitle, write-up, product photo (shown whole on a grey tile; a soft placeholder until one is
+  picked), "what it gets right" and "falls short" lists (one point per line) and a bold one-line verdict. Button blocks drop a
   "Still reading?" call to action between cards; an honourable mention closes the list.
 {% endcomment %}
 {{ 'advertorial.css' | asset_url | stylesheet_tag }}
@@ -24,7 +24,7 @@
                   {%- if b.subtitle != blank -%}<p class="adv-field__sub">{{ b.subtitle }}</p>{%- endif -%}
                   {%- if b.text != blank -%}<div class="adv-field__text">{{ b.text }}</div>{%- endif -%}
                 </div>
-                <div class="adv-field__media">
+                <div class="adv-field__media{% if b.image != blank %} adv-field__media--photo{% endif %}">
                   {%- if b.image != blank -%}
                     {{ b.image | image_url: width: 640 | image_tag: alt: b.name, loading: 'lazy', sizes: '(min-width: 768px) 210px, 100vw', widths: '320, 480, 640' }}
                   {%- else -%}
@@ -98,7 +98,7 @@
         { "type": "text", "id": "name", "label": "Name", "default": "Rosemary oil serum" },
         { "type": "text", "id": "subtitle", "label": "Subtitle" },
         { "type": "richtext", "id": "text", "label": "Write-up" },
-        { "type": "image_picker", "id": "image", "label": "Photo", "info": "Landscape, about 640 × 360 px." },
+        { "type": "image_picker", "id": "image", "label": "Photo", "info": "A product photo works best. It is shown whole on a soft grey tile." },
         { "type": "text", "id": "placeholder", "label": "Text on the placeholder tile", "info": "Shown until a photo is uploaded." },
         { "type": "textarea", "id": "pros", "label": "What it gets right", "info": "One point per line." },
         { "type": "textarea", "id": "cons", "label": "Falls short", "info": "One point per line." },

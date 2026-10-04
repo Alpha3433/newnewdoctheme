@@ -139,17 +139,19 @@ template (`templates/page.froya-landing.json`).
   *Criteria cards*, *#1 pick* (feature chips one per line, spec rows written `Label | Value`),
   *Rest of the field* (one card per product with "what it gets right" and "falls short"
   lists, plus "Still reading?" button and honourable-mention blocks; cards without a photo show a
-  soft placeholder tile until one is uploaded), *Side-by-side table* (one row per product; `yes`,
-  `no`, `yes: text`, `no: text` or `~ text` in each cell), *Reader reviews*, *Closing pick*,
+  soft placeholder tile until one is uploaded), *Side-by-side table* (one row per product with an
+  optional small photo; `yes`, `no`, `yes: text`, `no: text` or `~ text` in each cell), *Reader reviews*, *Closing pick*,
   *Disclaimer* (by default it also hides the store footer so the page ends there) and *Reader
-  offer bar*, which appears once the reader scrolls past the header and hides while the buy box
-  is on screen. The buy box is the landing page's own section, so the Kaching bundles,
-  subscription and free gift work the same here, and every button scrolls to it (`#shop`).
-  The other nine serums are named products. What the page says about each one comes from the
-  brand's own site or retailer listings as of October 2026, and the table note and disclaimer
-  say so; check those details before reusing the page later. Their card photos are picked per
-  card in *Rest of the field*. The masthead says "Advertorial", and the copy speaks as "we"
-  rather than inventing a personal test.
+  offer bar*, which appears once the reader scrolls past the header. As on the reference page,
+  every button links to the store home page (https://shopelaren.com/). The landing page's buy
+  box is still in the template but hidden; if it is shown again and the buttons link to `#shop`,
+  they scroll to it and the offer bar hides while it is on screen. The other nine serums are
+  named products. What the page says about each one comes from the brand's own site or retailer
+  listings as of October 2026, and the page no longer shows that date, so check prices and
+  labels before reusing it later. Their photos are in Shopify Files (`adv-…`) and are picked per
+  card in *Rest of the field* and per row in *Side-by-side table*, where the Elaren row uses the
+  product's own photo. The masthead says "Advertorial", and the copy speaks as "we" rather than
+  inventing a personal test.
 * **Support email** – Theme settings → *Customer support*. support@shopelaren.com is the only
   address the storefront shows. The policy pages (`/policies/…`: refund, terms, privacy, contact)
   come from Settings → Policies, where Shopify's templates insert the store's own email and a link
