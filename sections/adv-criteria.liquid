@@ -1,22 +1,24 @@
 {% comment %}
-  Comparison advertorial – "what we looked for": numbered criteria cards. Each criterion is a block.
+  Comparison advertorial – "what separates what works" cards. Each criterion block is a white card
+  with a coral top edge, an icon (emoji or uploaded image), its number, a title and a short text.
 {% endcomment %}
 {{ 'advertorial.css' | asset_url | stylesheet_tag }}
-<section class="adv adv--{{ section.settings.background }}" data-anchor="criteria" id="adv-{{ section.id }}">
-  <div class="adv__wide">
-    <div class="adv__read adv__center">
-      {%- if section.settings.eyebrow != blank -%}<p class="adv__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
-      <h2 class="adv__h2">{{ section.settings.title }}</h2>
-      {%- if section.settings.subtitle != blank -%}<p class="adv__lede">{{ section.settings.subtitle }}</p>{%- endif -%}
-    </div>
+<section class="adv{% if section.settings.flush_top %} adv--flush-top{% endif %}" data-anchor="{{ section.settings.anchor | default: 'criteria' | handle }}" id="adv-{{ section.id }}">
+  <div class="adv__read">
+    {%- if section.settings.rule -%}<hr class="adv__rule">{%- endif -%}
+    {%- if section.settings.eyebrow != blank -%}<p class="adv__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2 class="adv__h2">{{ section.settings.title }}</h2>{%- endif -%}
     <ol class="adv-criteria__grid">
       {%- for block in section.blocks -%}
-        <li class="adv-criteria__item" {{ block.shopify_attributes }}>
-          <span class="adv-criteria__num" aria-hidden="true">{{ forloop.index }}</span>
-          <div>
-            <h3 class="adv-criteria__title">{{ block.settings.title }}</h3>
-            <div class="adv-criteria__text">{{ block.settings.text }}</div>
-          </div>
+        <li class="adv-criteria__card" {{ block.shopify_attributes }}>
+          {%- if block.settings.icon_image != blank -%}
+            <span class="adv-criteria__icon">{{ block.settings.icon_image | image_url: width: 88 | image_tag: alt: '', loading: 'lazy', width: 22, height: 22 }}</span>
+          {%- elsif block.settings.icon != blank -%}
+            <span class="adv-criteria__icon" aria-hidden="true">{{ block.settings.icon }}</span>
+          {%- endif -%}
+          <p class="adv-criteria__num">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</p>
+          <h3 class="adv-criteria__title">{{ block.settings.title }}</h3>
+          <p class="adv-criteria__text">{{ block.settings.text }}</p>
         </li>
       {%- endfor -%}
     </ol>
@@ -25,25 +27,28 @@
 
 {% schema %}
 {
-  "name": "Comparison criteria",
+  "name": "Criteria cards",
   "tag": "section",
+  "class": "shopify-section--adv",
   "settings": [
-    { "type": "select", "id": "background", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "cream", "label": "Cream" }, { "value": "tint", "label": "Mauve tint" } ], "default": "cream" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How we judged them" },
-    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "What Separates a Serum That Works From One That Doesn’t" },
-    { "type": "textarea", "id": "subtitle", "label": "Subheading" }
+    { "type": "checkbox", "id": "rule", "label": "Line above this section", "default": true },
+    { "type": "checkbox", "id": "flush_top", "label": "No space above", "default": false },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "What makes a hair serum work" },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "info": "Italic text shows in coral.", "default": "Three Things Separate <em>What Works</em> From What Doesn’t" },
+    { "type": "text", "id": "anchor", "label": "Anchor name", "default": "criteria" }
   ],
   "blocks": [
     {
       "type": "criterion",
-      "name": "Criterion",
+      "name": "Card",
       "settings": [
-        { "type": "text", "id": "title", "label": "Title", "default": "Cold-pressed pumpkin seed oil" },
-        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Heat and solvents destroy the sterols that do the work.</p>" }
+        { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "🎃" },
+        { "type": "image_picker", "id": "icon_image", "label": "Or icon image", "info": "Square, shown at 22 × 22 px. Replaces the emoji." },
+        { "type": "text", "id": "title", "label": "Title", "default": "The Formula" },
+        { "type": "inline_richtext", "id": "text", "label": "Text", "default": "Why this matters, in a sentence or two." }
       ]
     }
   ],
-  "max_blocks": 8,
-  "presets": [ { "name": "Comparison criteria", "blocks": [ { "type": "criterion" }, { "type": "criterion" } ] } ]
+  "presets": [ { "name": "Criteria cards", "blocks": [ { "type": "criterion" }, { "type": "criterion" }, { "type": "criterion" } ] } ]
 }
 {% endschema %}

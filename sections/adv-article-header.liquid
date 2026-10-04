@@ -1,15 +1,11 @@
 {% comment %}
-  Comparison advertorial – article header: disclosure label, category line, headline, dek, byline
-  (author photo or initial, name, updated date, read time) and the lead photo. The photo falls back
-  to the chosen product's featured image until one is uploaded.
+  Comparison advertorial – masthead and article header: eyebrow, headline, italic dek, byline and
+  the lead photo. The photo falls back to the chosen product's main image until one is uploaded.
   "Hide the store header" removes the announcement bar and the store menu on pages that use this
-  section (the cart drawer stays, so add to cart still works) and shows a slim masthead instead.
+  section (the cart drawer stays, so add to cart still works).
 {% endcomment %}
 {{ 'advertorial.css' | asset_url | stylesheet_tag }}
-{%- liquid
-  assign product = section.settings.product
-  assign author = section.settings.author | default: 'Elaren Editorial Team'
--%}
+{%- assign product = section.settings.product -%}
 {%- if section.settings.hide_store_header -%}
   <style>.froya-nav-section, .shopify-section--announcement-bar { display: none !important; }</style>
 {%- endif -%}
@@ -21,37 +17,22 @@
     </div>
   </div>
 {%- endif -%}
-<section class="adv adv-header adv--{{ section.settings.background }}" id="adv-{{ section.id }}">
+<section class="adv adv-header" id="adv-{{ section.id }}">
   <div class="adv__read">
-    {%- if section.settings.disclosure != blank -%}<p class="adv-header__disclosure">{{ section.settings.disclosure }}</p>{%- endif -%}
-    {%- if section.settings.category != blank -%}<p class="adv-header__crumbs">{{ section.settings.category }}</p>{%- endif -%}
+    {%- if section.settings.eyebrow != blank -%}<p class="adv__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
     <h1 class="adv__h1">{{ section.settings.title }}</h1>
     {%- if section.settings.dek != blank -%}<p class="adv-header__dek">{{ section.settings.dek }}</p>{%- endif -%}
+    {%- if section.settings.byline != blank -%}<p class="adv-header__byline">{{ section.settings.byline }}</p>{%- endif -%}
 
-    <div class="adv-header__byline">
-      <span class="adv-header__avatar">
-        {%- if section.settings.author_image != blank -%}
-          {{ section.settings.author_image | image_url: width: 96 | image_tag: alt: author, loading: 'eager', width: 44, height: 44 }}
-        {%- else -%}
-          <span aria-hidden="true">{{ author | slice: 0 }}</span>
-        {%- endif -%}
-      </span>
-      <span>
-        <span class="adv-header__author">By {{ author }}</span><br>
-        <span class="adv-header__meta">
-          {%- if section.settings.updated != blank -%}<span>{{ section.settings.updated }}</span>{%- endif -%}
-          {%- if section.settings.read_time != blank -%}<span>{{ section.settings.read_time }}</span>{%- endif -%}
-        </span>
-      </span>
-    </div>
-
-    {%- if section.settings.image != blank or product.featured_image != blank -%}
+    {%- liquid
+      assign lead_image = section.settings.image
+      if lead_image == blank
+        assign lead_image = product.featured_image
+      endif
+    -%}
+    {%- if lead_image != blank -%}
       <figure class="adv-header__figure">
-        {%- if section.settings.image != blank -%}
-          {{ section.settings.image | image_url: width: 1520 | image_tag: alt: section.settings.image_alt, loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 800px) 760px, 100vw', widths: '400, 600, 800, 1000, 1200, 1520' }}
-        {%- else -%}
-          {{ product.featured_image | image_url: width: 1520 | image_tag: alt: section.settings.image_alt, loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 800px) 760px, 100vw', widths: '400, 600, 800, 1000, 1200, 1520' }}
-        {%- endif -%}
+        {{ lead_image | image_url: width: 1520 | image_tag: alt: section.settings.image_alt, loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 800px) 760px, 100vw', widths: '400, 600, 800, 1000, 1200, 1520' }}
         {%- if section.settings.caption != blank -%}<figcaption class="adv-header__caption">{{ section.settings.caption }}</figcaption>{%- endif -%}
       </figure>
     {%- endif -%}
@@ -65,20 +46,17 @@
   "class": "shopify-section--adv",
   "settings": [
     { "type": "checkbox", "id": "hide_store_header", "label": "Hide the store header", "info": "Removes the announcement bar and the store menu on this page. The cart drawer still opens on add to cart.", "default": true },
-    { "type": "text", "id": "masthead_left", "label": "Masthead left text", "default": "Elaren Hair Journal", "info": "Slim bar above the article. Empty both texts to hide it." },
-    { "type": "text", "id": "masthead_right", "label": "Masthead right text", "default": "Product comparison" },
-    { "type": "select", "id": "background", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "cream", "label": "Cream" }, { "value": "tint", "label": "Mauve tint" } ], "default": "white" },
-    { "type": "text", "id": "disclosure", "label": "Disclosure label", "info": "Paid comparison pages should say they are advertising. Shown above the headline.", "default": "Advertorial" },
-    { "type": "text", "id": "category", "label": "Category line", "default": "Hair health · Product comparison" },
-    { "type": "inline_richtext", "id": "title", "label": "Headline", "default": "We Compared the Pumpkin Seed Oil Serums on the Market. <em>Only One Ticked Every Box.</em>" },
-    { "type": "textarea", "id": "dek", "label": "Subheadline" },
-    { "type": "text", "id": "author", "label": "Author", "default": "Elaren Editorial Team" },
-    { "type": "image_picker", "id": "author_image", "label": "Author photo", "info": "Square, about 96 × 96 px. The first letter of the author is shown until one is uploaded." },
-    { "type": "text", "id": "updated", "label": "Date line", "default": "Updated October 2026" },
-    { "type": "text", "id": "read_time", "label": "Read time", "default": "6 min read" },
+    { "type": "header", "content": "Masthead" },
+    { "type": "text", "id": "masthead_left", "label": "Left text", "default": "Elaren Hair Journal", "info": "Slim bar above the article. Empty both texts to hide it." },
+    { "type": "text", "id": "masthead_right", "label": "Right text", "default": "Advertorial", "info": "Paid comparison pages should say they are advertising." },
+    { "type": "header", "content": "Article" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Hair serum comparison · 2026" },
+    { "type": "inline_richtext", "id": "title", "label": "Headline", "info": "Italic text shows in coral.", "default": "We Compared 10 Hair Growth Serums for Thinning Hair. <em>Here’s the Truth.</em>" },
+    { "type": "textarea", "id": "dek", "label": "Subheadline", "default": "Most serums are selling you water and silicone in a nice bottle. One actually built a formula for women’s hair loss." },
+    { "type": "text", "id": "byline", "label": "Byline", "default": "By the Elaren Hair Journal team · 5 min read" },
     { "type": "header", "content": "Lead photo" },
-    { "type": "product", "id": "product", "label": "Product", "info": "Its main photo is used until a lead photo is uploaded." },
-    { "type": "image_picker", "id": "image", "label": "Lead photo", "info": "Landscape, about 1520 × 1000 px." },
+    { "type": "image_picker", "id": "image", "label": "Lead photo", "info": "Landscape, about 1520 × 860 px." },
+    { "type": "product", "id": "product", "label": "Or use a product photo", "info": "Its main photo is shown until a lead photo is uploaded." },
     { "type": "text", "id": "image_alt", "label": "Photo alt text", "default": "Elaren Pumpkin Seed Oil Serum" },
     { "type": "text", "id": "caption", "label": "Caption" }
   ],

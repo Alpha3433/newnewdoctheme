@@ -1,95 +1,54 @@
 {% comment %}
-  Comparison advertorial – the final verdict and offer: product photo, heading, stars, verdict text,
-  ticked reasons (blocks), the product's live price, an offer strip on the offer gradient, the
-  button to the buy box, a reassurance line and an optional low-stock line.
+  Comparison advertorial – the closing pick ("here is where we'd spend our money"): coral heading,
+  a photo with a soft coral glow beside the closing copy, then the button and guarantee line.
+  The photo falls back to the chosen product's main image until one is uploaded.
 {% endcomment %}
 {{ 'advertorial.css' | asset_url | stylesheet_tag }}
 {%- liquid
   assign product = section.settings.product
-  assign variant = product.selected_or_first_available_variant
-  assign btn_href = section.settings.button_url | default: '#shop'
+  assign photo = section.settings.image
+  if photo == blank
+    assign photo = product.featured_image
+  endif
 -%}
-<section class="adv adv--{{ section.settings.background }}" data-anchor="verdict" id="adv-{{ section.id }}">
-  <div class="adv__wide">
-    {%- if section.settings.eyebrow != blank or section.settings.title != blank -%}
-      <div class="adv__read adv__center">
-        {%- if section.settings.eyebrow != blank -%}<p class="adv__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
-        {%- if section.settings.title != blank -%}<h2 class="adv__h2">{{ section.settings.title }}</h2>{%- endif -%}
-      </div>
-    {%- endif -%}
-    <div class="adv-verdict__card">
-      <div class="adv-verdict__media">
-        {%- if section.settings.image != blank -%}
-          {{ section.settings.image | image_url: width: 1000 | image_tag: alt: product.title, loading: 'lazy', sizes: '(min-width: 768px) 500px, 100vw', widths: '400, 600, 800, 1000' }}
-        {%- elsif product.featured_image != blank -%}
-          {{ product.featured_image | image_url: width: 1000 | image_tag: alt: product.title, loading: 'lazy', sizes: '(min-width: 768px) 500px, 100vw', widths: '400, 600, 800, 1000' }}
+<section class="adv adv-final" data-anchor="{{ section.settings.anchor | default: 'verdict' | handle }}" id="adv-{{ section.id }}">
+  <div class="adv__read">
+    {%- if section.settings.rule -%}<hr class="adv__rule">{%- endif -%}
+    {%- if section.settings.title != blank -%}<h2 class="adv-final__title">{{ section.settings.title }}</h2>{%- endif -%}
+    <div class="adv-final__grid">
+      <div class="adv-final__media">
+        {%- if photo != blank -%}
+          {{ photo | image_url: width: 900 | image_tag: alt: section.settings.image_alt, loading: 'lazy', sizes: '(min-width: 768px) 300px, 100vw', widths: '400, 600, 900' }}
+        {%- else -%}
+          {%- render 'adv-placeholder', label: section.settings.image_alt, tone: 1 -%}
         {%- endif -%}
       </div>
-      <div>
-        <h3 class="adv-pick__title">{{ section.settings.name | default: product.title }}</h3>
-        <p class="adv-verdict__rating">
-          {%- render 'adv-stars', rating: section.settings.rating -%}
-          {%- if section.settings.rating_text != blank -%}<span>{{ section.settings.rating_text }}</span>{%- endif -%}
-        </p>
-        {%- if section.settings.text != blank -%}<div class="adv-rte adv-verdict__text">{{ section.settings.text }}</div>{%- endif -%}
-        {%- if section.blocks.size > 0 -%}
-          <ul class="adv-verdict__list">
-            {%- for block in section.blocks -%}
-              <li {{ block.shopify_attributes }}>{%- render 'adv-mark', value: 'yes' -%}<span>{{ block.settings.text }}</span></li>
-            {%- endfor -%}
-          </ul>
-        {%- endif -%}
-        {%- if section.settings.offer != blank -%}<div class="adv-verdict__offer">{{ section.settings.offer }}</div>{%- endif -%}
-        {%- if variant and section.settings.show_price -%}
-          <p class="adv-verdict__price">
-            {%- if section.settings.price_prefix != blank -%}<span class="adv-verdict__price-label">{{ section.settings.price_prefix }}</span>{%- endif -%}
-            <span class="adv-verdict__price-now">{{ variant.price | money }}</span>
-            {%- if variant.compare_at_price > variant.price -%}<span class="adv-rank__price-was">{{ variant.compare_at_price | money }}</span>{%- endif -%}
-            {%- if section.settings.price_suffix != blank -%}<span class="adv-verdict__price-label">{{ section.settings.price_suffix }}</span>{%- endif -%}
-          </p>
-        {%- endif -%}
-        {%- if section.settings.button_label != blank -%}
-          <a class="adv-btn adv-btn--full" href="{{ btn_href }}"{% if btn_href contains '#' %} data-scroll-to="{{ btn_href | split: '#' | last }}"{% endif %}>
-            {{ section.settings.button_label }} <span class="adv-btn__arrow" aria-hidden="true">→</span>
-          </a>
-        {%- endif -%}
-        {%- if section.settings.note != blank -%}
-          {%- assign notes = section.settings.note | split: '|' -%}
-          <p class="adv-btn-note">{%- for n in notes -%}<span>{{ n | strip }}</span>{%- endfor -%}</p>
-        {%- endif -%}
-        {%- if section.settings.stock_text != blank -%}<p class="adv-verdict__stock">{{ section.settings.stock_text }}</p>{%- endif -%}
-      </div>
+      <div class="adv-rte adv-final__text">{{ section.settings.text }}</div>
     </div>
+    {%- if section.settings.button_label != blank -%}
+      {%- render 'adv-cta', label: section.settings.button_label, url: section.settings.button_url, note: section.settings.note -%}
+    {%- endif -%}
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Verdict & offer",
+  "name": "Closing pick",
   "tag": "section",
+  "class": "shopify-section--adv",
   "settings": [
-    { "type": "select", "id": "background", "label": "Background", "options": [ { "value": "white", "label": "White" }, { "value": "cream", "label": "Cream" }, { "value": "tint", "label": "Mauve tint" } ], "default": "tint" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The verdict" },
-    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Our Pick: Elaren Pumpkin Seed Oil Serum" },
+    { "type": "checkbox", "id": "rule", "label": "Line above this section", "default": true },
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "After Comparing All 10: Here’s Where We’d Spend Our Money" },
+    { "type": "text", "id": "anchor", "label": "Anchor name", "default": "verdict" },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Landscape, about 900 × 500 px. The product photo is used until one is uploaded." },
     { "type": "product", "id": "product", "label": "Product" },
-    { "type": "image_picker", "id": "image", "label": "Photo override", "info": "About 1000 × 1000 px. The product's main photo is used when empty." },
-    { "type": "text", "id": "name", "label": "Name override" },
-    { "type": "text", "id": "rating", "label": "Star rating (out of 5)", "default": "4.77" },
-    { "type": "text", "id": "rating_text", "label": "Rating text", "default": "4.77/5 from verified buyers" },
-    { "type": "richtext", "id": "text", "label": "Verdict text" },
-    { "type": "richtext", "id": "offer", "label": "Offer strip", "default": "<p>Today: <strong>Buy 2, Get 1 Free</strong> + a free gift with subscription</p>" },
-    { "type": "checkbox", "id": "show_price", "label": "Show the product's price", "default": true },
-    { "type": "text", "id": "price_prefix", "label": "Text before the price", "default": "From" },
-    { "type": "text", "id": "price_suffix", "label": "Text after the price", "default": "per bottle" },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "Claim the offer" },
-    { "type": "text", "id": "button_url", "label": "Button link", "default": "#shop", "info": "#shop scrolls to the buy box on this page." },
-    { "type": "text", "id": "note", "label": "Reassurance line", "info": "Separate items with |", "default": "30-day money-back guarantee | Free insured shipping" },
-    { "type": "text", "id": "stock_text", "label": "Stock line", "info": "Optional. Leave empty to hide." }
+    { "type": "text", "id": "image_alt", "label": "Photo alt text", "default": "Elaren Pumpkin Seed Oil Serum" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "header", "content": "Button" },
+    { "type": "text", "id": "button_label", "label": "Label", "default": "Start today risk free" },
+    { "type": "text", "id": "button_url", "label": "Link", "default": "#shop", "info": "#shop scrolls to the buy box on this page." },
+    { "type": "text", "id": "note", "label": "Guarantee line", "default": "30-day money-back guarantee" }
   ],
-  "blocks": [
-    { "type": "reason", "name": "Reason", "settings": [ { "type": "text", "id": "text", "label": "Text", "default": "Cold-pressed pumpkin seed oil" } ] }
-  ],
-  "max_blocks": 8,
-  "presets": [ { "name": "Verdict & offer", "blocks": [ { "type": "reason" }, { "type": "reason" } ] } ]
+  "presets": [ { "name": "Closing pick" } ]
 }
 {% endschema %}
