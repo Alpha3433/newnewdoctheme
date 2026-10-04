@@ -92,11 +92,11 @@
         "subtitle": "With Caffeine Complex, Formulated for Women",
         "chips": "PSO + Caffeine Complex\nCold-pressed\nWomen-specific\n3rd-party tested\nNo silicones or fillers",
         "specs": "Formula | Pumpkin seed oil + Caffeine Complex\nExtraction | Cold-pressed\nBuilt for women | Yes\n3rd-party tested | Yes\nResults timeline | Less shedding in 2 to 4 weeks\nFillers | None: no water, mineral oil or silicones",
-        "text": "<p>This is the one women keep coming back to. It’s rated <strong>4.77 out of 5</strong> by verified buyers, and the reviews say the same things again and again: less shedding, a healthier scalp, and no greasy feeling.</p><p><strong>It combines pumpkin seed oil with a Caffeine Complex.</strong> Pumpkin seed oil’s sterols help block the enzyme that makes DHT. Caffeine helps keep follicles in their growth phase. A couple of others pair pumpkin seed with caffeine too, but with water first on the label and pumpkin seed as a minor ingredient.</p><p><strong>The oil is cold-pressed.</strong> That keeps its sterols, zinc and vitamin E intact. Several serums on this list use pumpkin seed extract instead, or list the oil far down the label. Cheaper, weaker, and you’d never know from the front of the bottle.</p><p><strong>The research is on women.</strong> In a 3-month trial of 60 women with female pattern hair loss, pumpkin seed oil on the scalp reduced fine, thinning hairs and increased regrowing hairs (Ibrahim et al., 2021). In the lab, caffeine lengthened the growth phase of hair follicles from women’s scalps (Fischer et al., 2014).*</p><p><strong>Built for women.</strong> Not men. Not general hair care. The formula was designed around the hormonal reason women lose hair, and it’s light enough to use every night on any texture. That’s the whole difference.</p>",
+        "text": "<p>This is the one women keep coming back to. It’s rated <strong>4.77 out of 5</strong> by verified buyers, and the reviews say the same things again and again: less shedding, a healthier scalp, and no greasy feeling.</p><p><strong>It combines pumpkin seed oil with a Caffeine Complex.</strong> Pumpkin seed oil’s sterols help block the enzyme that makes DHT. Caffeine helps keep follicles in their growth phase. A couple of others pair pumpkin seed with caffeine too, but with water first on the label and pumpkin seed as a minor ingredient.</p><p><strong>The oil is cold-pressed.</strong> That keeps its sterols, zinc and vitamin E intact. Several serums on this list use pumpkin seed extract instead, or list the oil far down the label. Cheaper, weaker, and you’d never know from the front of the bottle.</p><p><strong>The research is on women.</strong> In a 3-month trial of 60 women with female pattern hair loss, pumpkin seed oil on the scalp reduced fine, thinning hairs and increased regrowing hairs (Ibrahim et al., 2021). In the lab, caffeine lengthened the growth phase of hair follicles from women’s scalps (Fischer et al., 2014).</p><p><strong>Built for women.</strong> Not men. Not general hair care. The formula was designed around the hormonal reason women lose hair, and it’s light enough to use every night on any texture. That’s the whole difference.</p>",
         "verdict_label": "The verdict",
         "verdict": "The only serum on this list that pairs cold-pressed pumpkin seed oil with caffeine in a nightly leave-in made for women. <strong>If your hair is thinning, start here.</strong>",
         "button_label": "Shop now",
-        "button_url": "#shop",
+        "button_url": "https://shopelaren.com/",
         "note": "30-day money-back guarantee"
       }
     },
@@ -117,10 +117,10 @@
             "name": "rhute Triple Density Complex",
             "subtitle": "Dermatologist-developed pre-wash oil",
             "text": "<p>The closest formula on this list. Developed by dermatologist Dr Aamna Adel, it lists pumpkin seed oil first, alongside black seed oil, saw palmetto, beta-sitosterol and ceramides. The catch is how you use it: it’s a pre-wash oil you rinse out, two to three times a week, so it only sits on your scalp for a short while. It also contains phenyl trimethicone, which is a silicone, plus fragrance. Its claims come from a 4-week consumer study of 34 women. It’s £35 from a UK brand, and it’s currently sold out with a waitlist.</p>",
-            "image": "",
+            "image": "shopify://shop_images/adv-rhute-triple-density-complex.png",
             "placeholder": "rhute Triple Density Complex",
-            "pros": "Pumpkin seed oil is the first ingredient\nSaw palmetto and beta-sitosterol\nDeveloped by a dermatologist",
-            "cons": "Rinse-off, used 2 to 3 times a week\nContains a silicone (phenyl trimethicone)\nAdded fragrance\nClaims based on a 4-week study of 34 women\nSold out, with a waitlist",
+            "pros": "Pumpkin seed oil is the first ingredient\nAdds black seed oil, saw palmetto and beta-sitosterol\nDeveloped by a dermatologist",
+            "cons": "Rinses off, so it only sits on the scalp briefly\nUsed 2 to 3 times a week, not nightly\nContains a silicone and added fragrance\nResults come from a short 4-week study\nCurrently sold out, with a waitlist",
             "verdict": "Strong ingredients, held back by a rinse-off format."
           }
         },
@@ -131,10 +131,10 @@
             "name": "MONPURE Follicle Boost Hair Density Serum",
             "subtitle": "Premium nightly leave-in, 50 ml",
             "text": "<p>The luxury pick, with a Good Housekeeping best-serum award to its name. It’s a nightly leave-in that pairs pumpkin seed extract with vitamin A and lactic acid, it’s silicone-free, and it’s sold as pregnancy-safe. But water leads the label, pumpkin sits 10th, and it’s an extract rather than the oil. At $113 list price ($96.05 on the US site today, £83 in the UK) for 50 ml, it’s the most expensive bottle on this list.</p>",
-            "image": "",
+            "image": "shopify://shop_images/adv-monpure-follicle-boost.png",
             "placeholder": "MONPURE Follicle Boost Hair Density Serum",
-            "pros": "Nightly leave-in\nSilicone-free\nGood Housekeeping award",
-            "cons": "Water is the first ingredient\nPumpkin seed extract sits 10th\nAn extract, not the oil\n$113 list price for 50 ml",
+            "pros": "Nightly leave-in, so it stays on the scalp\nSilicone-free and sold as pregnancy-safe\nGood Housekeeping best-serum award",
+            "cons": "Water is the first ingredient\nPumpkin seed is an extract, 10th on the label\n$113 for 50 ml, the priciest here",
             "verdict": "Beautifully made, but you pay luxury prices for a little pumpkin."
           }
         },
@@ -143,7 +143,7 @@
           "settings": {
             "lead": "Still reading?",
             "label": "Shop the best version",
-            "url": "#shop",
+            "url": "https://shopelaren.com/",
             "note": ""
           }
         },
@@ -154,10 +154,10 @@
             "name": "Hair Thickness Maximizer Pumpkin Seed Oil",
             "subtitle": "100% organic cold-pressed pumpkin seed oil",
             "text": "<p>The purist’s choice: nothing but organic, cold-pressed pumpkin seed oil. It’s unscented, preservative-free and affordable at $17.95 for 2 oz ($14.95 for 1 oz). But a single oil is only half the formula. There’s nothing alongside it to support the growth phase, it’s sold to men and women alike, and the directions say to use it two to four times a week rather than every night.</p>",
-            "image": "",
+            "image": "shopify://shop_images/adv-hair-thickness-maximizer.jpg",
             "placeholder": "Hair Thickness Maximizer Pumpkin Seed Oil",
-            "pros": "Organic, cold-pressed pumpkin seed oil\nUnscented and preservative-free\nAffordable",
-            "cons": "Single ingredient, no caffeine\nSold to men and women, not made for women\nUsed 2 to 4 times a week, not nightly",
+            "pros": "100% organic, cold-pressed pumpkin seed oil\nUnscented and preservative-free\n$17.95 for 2 oz",
+            "cons": "Pumpkin seed oil alone, with no caffeine\nSold to men and women, not made for women\nDirections say 2 to 4 times a week, not nightly",
             "verdict": "The right oil, on its own. Half the formula."
           }
         },
@@ -168,10 +168,10 @@
             "name": "IGK SPONSORED Hair Density Scalp Treatment",
             "subtitle": "Daily spray with biotin and peptides",
             "text": "<p>A salon-brand favourite stocked at Sephora and Ulta, built around biotin and peptides. IGK cites a clinician-measured 37% reduction in the look of sparseness at 12 weeks, which is more evidence than most. But the label starts with water, then denatured alcohol, which can dry out the scalp. Pumpkin seed oil sits seventh, and there’s added fragrance. It’s $45 (currently $38.25) for 2.1 oz.</p>",
-            "image": "",
+            "image": "shopify://shop_images/adv-igk-sponsored.jpg",
             "placeholder": "IGK SPONSORED Hair Density Scalp Treatment",
-            "pros": "Clinician-measured results at 12 weeks\nEasy daily spray\nStocked at Sephora and Ulta",
-            "cons": "Water first, then denatured alcohol\nPumpkin seed oil is seventh\nAdded fragrance\nBuilt around biotin and peptides, not pumpkin seed\n$45 for 2.1 oz",
+            "pros": "Clinician-measured: 37% less visible sparseness at 12 weeks\nQuick daily spray",
+            "cons": "Denatured alcohol is the second ingredient\nPumpkin seed oil is only seventh\nAdded fragrance\n$45 for 2.1 oz",
             "verdict": "Real data, but pumpkin seed is a supporting act."
           }
         },
@@ -182,10 +182,10 @@
             "name": "California Naturals Re:GRO Anti-Thinning Scalp Serum",
             "subtitle": "5% Capixyl, caffeine and biotin",
             "text": "<p>Good value with a recognisable active: 5% Capixyl, with caffeine and biotin, and it’s silicone-free. Rosemary, castor and pumpkin seed oil play supporting roles, and water is the first ingredient. At $19.99 for 3 fl oz ($13.99 at Ulta right now) it’s easy to try, but pumpkin seed oil isn’t what this formula is built on.</p>",
-            "image": "",
+            "image": "shopify://shop_images/adv-california-naturals-regro.png",
             "placeholder": "California Naturals Re:GRO Anti-Thinning Scalp Serum",
-            "pros": "5% Capixyl with caffeine\nSilicone-free\nLow price",
-            "cons": "Water is the first ingredient\nPumpkin seed oil is a supporting oil only\nBuilt around Capixyl, not pumpkin seed",
+            "pros": "5% Capixyl with caffeine and biotin\nSilicone-free\n$19.99 for 3 fl oz",
+            "cons": "Water is the first ingredient\nBuilt around Capixyl; pumpkin seed oil is a supporting oil",
             "verdict": "Decent value. Pumpkin seed is an afterthought."
           }
         },
@@ -196,10 +196,10 @@
             "name": "LIVA Rejuvenating Scalp Serum",
             "subtitle": "New at Walmart, $15.99",
             "text": "<p>A new mass-market brand from IBG, launched in March 2026 in more than 700 Walmart stores and sold on pumpkin seed extract, caffeine and rosemary. Turn the bottle around and the story changes: water is first, caffeine is sixth, and pumpkin seed extract is 26th of 27 ingredients, with fragrance and peppermint oil also in the mix. For $15.99 you get 1.69 fl oz.</p>",
-            "image": "",
+            "image": "shopify://shop_images/adv-liva-scalp-serum.png",
             "placeholder": "LIVA Rejuvenating Scalp Serum",
-            "pros": "Contains caffeine\nCheap and easy to find",
-            "cons": "Water is the first ingredient\nPumpkin seed extract is 26th of 27\nAn extract, not the oil\nAdded fragrance and peppermint oil",
+            "pros": "Caffeine is in the formula\n$15.99, sold in 700+ Walmart stores",
+            "cons": "Water is the first ingredient\nPumpkin seed is an extract, 26th of 27 ingredients\nFragrance and peppermint oil can bother a sensitive scalp",
             "verdict": "Pumpkin seed on the front, near the bottom of the label."
           }
         },
@@ -212,8 +212,8 @@
             "text": "<p>Popular and affordable: $14.99 for a big 6.7 fl oz bottle, with more than 1,100 ratings at Walmart. It’s a rosemary and pumpkin seed oil blend for men and women, silicone-free, and pitched as a pre-wash, an overnight mask or a leave-in. It’s a general hair oil rather than a formula for women’s thinning, and the Amazon listing also includes castor oil, so check which version you’re buying.</p>",
             "image": "",
             "placeholder": "Botanic Hearth Pumpkin Seed & Rosemary Hair Oil",
-            "pros": "Big bottle, low price\nSilicone-free\nPumpkin seed and rosemary oils",
-            "cons": "Sold to men and women, not made for women\nA general hair oil, not a thinning treatment\nIngredients differ between listings",
+            "pros": "Pumpkin seed and rosemary oils\nSilicone-free\n6.7 fl oz for $14.99",
+            "cons": "A general hair oil for men and women, not a thinning formula\nThe Amazon listing adds castor oil, so versions may differ",
             "verdict": "A nice everyday hair oil. Not a thinning treatment."
           }
         },
@@ -226,8 +226,8 @@
             "text": "<p>Batana is the lead oil here, with pumpkin seed oil, bhringraj, jojoba, castor, vitamin E and rosemary alongside it. It’s sold to men and women, and the copy centres on receding hairlines and bald spots, which isn’t how thinning usually shows up for women. It’s applied nightly with a derma roller upsell, it’s shown at $35.95 as 50% off $71.95, and the page lists key ingredients but no full ingredient list.</p>",
             "image": "",
             "placeholder": "Viorine Advanced Batana Hair Regrowth Therapy",
-            "pros": "Nightly use\nSeveral nourishing oils",
-            "cons": "Batana leads, pumpkin seed is supporting\nCopy aimed at receding hairlines and bald spots\nNo full ingredient list on the page\nDerma roller upsell",
+            "pros": "Applied nightly\nBatana, pumpkin seed, bhringraj and rosemary oils in one",
+            "cons": "Batana leads; pumpkin seed is a supporting oil\nMarketed for receding hairlines and bald spots\nSold to men and women\nNo full ingredient list on the product page",
             "verdict": "Lots of oils, not much clarity."
           }
         },
@@ -240,8 +240,8 @@
             "text": "<p>Batana blended with rosemary, castor and pumpkin seed oil in a 5 oz bottle, $19.99 at Walmart and also sold on TikTok Shop. It’s a multi-purpose oil rather than a targeted formula: batana leads, and pumpkin seed oil is one of four oils in the blend.</p>",
             "image": "",
             "placeholder": "Arctic Beauty 4-in-1 Batana Oil",
-            "pros": "Affordable\nEasy to find",
-            "cons": "Batana-led, pumpkin seed is one of four oils\nMulti-purpose rather than targeted",
+            "pros": "$19.99 for a 5 oz bottle\nRosemary, castor and pumpkin seed oils in one",
+            "cons": "Batana leads; pumpkin seed is one of four oils\nA multi-purpose 4-in-1 oil, not aimed at thinning",
             "verdict": "A bargain blend. Not a plan for thinning hair."
           }
         }
@@ -266,13 +266,13 @@
         "title": "Side-by-Side Comparison",
         "anchor": "comparison",
         "col_product": "Product",
-        "col_1": "Pumpkin seed",
-        "col_2": "First ingredient",
-        "col_3": "How you use it",
-        "col_4": "Price",
-        "col_5": "",
+        "col_1": "What it is",
+        "col_2": "Key ingredients",
+        "col_3": "Pumpkin seed",
+        "col_4": "First ingredient",
+        "col_5": "Price",
         "hint": "Swipe to see every column →",
-        "note": "Product details and prices are taken from each brand’s own website and retailer listings in October 2026 and may change."
+        "note": ""
       },
       "blocks": {
         "row_1": {
@@ -280,11 +280,12 @@
           "settings": {
             "name": "Elaren",
             "highlight": true,
-            "v1": "yes: Cold-pressed oil",
-            "v2": "yes: Pumpkin seed oil",
-            "v3": "yes: Nightly leave-in",
-            "v4": "$34.99 / 30 days",
-            "v5": ""
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "v1": "yes: Nightly leave-in serum",
+            "v2": "Pumpkin seed oil, caffeine",
+            "v3": "yes: Cold-pressed oil",
+            "v4": "yes: Pumpkin seed oil",
+            "v5": "$34.99 / 30 days"
           }
         },
         "row_2": {
@@ -292,11 +293,12 @@
           "settings": {
             "name": "rhute",
             "highlight": false,
-            "v1": "yes: Oil, 1st",
-            "v2": "yes: Pumpkin seed oil",
-            "v3": "no: Rinse-off, 2–3× a week",
-            "v4": "£35",
-            "v5": ""
+            "image": "shopify://shop_images/adv-rhute-triple-density-complex.png",
+            "v1": "no: Rinse-off pre-wash oil",
+            "v2": "Pumpkin seed, black seed, saw palmetto",
+            "v3": "yes: Oil, 1st",
+            "v4": "yes: Pumpkin seed oil",
+            "v5": "£35"
           }
         },
         "row_3": {
@@ -304,11 +306,12 @@
           "settings": {
             "name": "MONPURE",
             "highlight": false,
-            "v1": "~ Extract, 10th",
-            "v2": "no: Water",
-            "v3": "yes: Nightly leave-in",
-            "v4": "$113 / 50 ml",
-            "v5": ""
+            "image": "shopify://shop_images/adv-monpure-follicle-boost.png",
+            "v1": "yes: Nightly leave-in serum",
+            "v2": "Vitamin A, lactic acid",
+            "v3": "~ Extract, 10th",
+            "v4": "no: Water",
+            "v5": "$113 / 50 ml"
           }
         },
         "row_4": {
@@ -316,11 +319,12 @@
           "settings": {
             "name": "Hair Thickness Maximizer",
             "highlight": false,
-            "v1": "yes: Only ingredient",
-            "v2": "yes: Pumpkin seed oil",
-            "v3": "~ 2–4× a week",
-            "v4": "$17.95 / 2 oz",
-            "v5": ""
+            "image": "shopify://shop_images/adv-hair-thickness-maximizer.jpg",
+            "v1": "~ Plain oil, 2–4× a week",
+            "v2": "Pumpkin seed oil only",
+            "v3": "yes: The only ingredient",
+            "v4": "yes: Pumpkin seed oil",
+            "v5": "$17.95 / 2 oz"
           }
         },
         "row_5": {
@@ -328,11 +332,12 @@
           "settings": {
             "name": "IGK",
             "highlight": false,
-            "v1": "~ Oil, 7th",
-            "v2": "no: Water",
-            "v3": "yes: Daily spray",
-            "v4": "$45 / 2.1 oz",
-            "v5": ""
+            "image": "shopify://shop_images/adv-igk-sponsored.jpg",
+            "v1": "yes: Daily scalp spray",
+            "v2": "Biotin, peptides",
+            "v3": "~ Oil, 7th",
+            "v4": "no: Water",
+            "v5": "$45 / 2.1 oz"
           }
         },
         "row_6": {
@@ -340,11 +345,12 @@
           "settings": {
             "name": "California Naturals",
             "highlight": false,
-            "v1": "~ Supporting oil",
-            "v2": "no: Water",
-            "v3": "Scalp serum",
-            "v4": "$19.99 / 3 fl oz",
-            "v5": ""
+            "image": "shopify://shop_images/adv-california-naturals-regro.png",
+            "v1": "Scalp serum",
+            "v2": "5% Capixyl, caffeine, biotin",
+            "v3": "~ Supporting oil",
+            "v4": "no: Water",
+            "v5": "$19.99 / 3 fl oz"
           }
         },
         "row_7": {
@@ -352,11 +358,12 @@
           "settings": {
             "name": "LIVA",
             "highlight": false,
-            "v1": "~ Extract, 26th of 27",
-            "v2": "no: Water",
-            "v3": "Scalp serum",
-            "v4": "$15.99 / 1.69 fl oz",
-            "v5": ""
+            "image": "shopify://shop_images/adv-liva-scalp-serum.png",
+            "v1": "Scalp serum",
+            "v2": "Caffeine, rosemary",
+            "v3": "~ Extract, 26th of 27",
+            "v4": "no: Water",
+            "v5": "$15.99 / 1.69 fl oz"
           }
         },
         "row_8": {
@@ -364,11 +371,11 @@
           "settings": {
             "name": "Botanic Hearth",
             "highlight": false,
-            "v1": "yes: Oil, with rosemary",
-            "v2": "~ Oil blend",
-            "v3": "~ Pre-wash or leave-in",
-            "v4": "$14.99 / 6.7 fl oz",
-            "v5": ""
+            "v1": "~ General hair oil",
+            "v2": "Pumpkin seed, rosemary",
+            "v3": "yes: Oil, with rosemary",
+            "v4": "~ Oil blend",
+            "v5": "$14.99 / 6.7 fl oz"
           }
         },
         "row_9": {
@@ -376,11 +383,11 @@
           "settings": {
             "name": "Viorine",
             "highlight": false,
-            "v1": "~ Supporting oil",
-            "v2": "~ Batana oil",
-            "v3": "yes: Nightly",
-            "v4": "$35.95",
-            "v5": ""
+            "v1": "~ Batana oil blend",
+            "v2": "Batana, bhringraj, castor",
+            "v3": "~ Supporting oil",
+            "v4": "~ Batana oil",
+            "v5": "$35.95"
           }
         },
         "row_10": {
@@ -388,11 +395,11 @@
           "settings": {
             "name": "Arctic Beauty",
             "highlight": false,
-            "v1": "~ 1 of 4 oils",
-            "v2": "~ Batana oil",
-            "v3": "4-in-1 oil",
-            "v4": "$19.99 / 5 oz",
-            "v5": ""
+            "v1": "~ 4-in-1 batana oil",
+            "v2": "Batana, rosemary, castor",
+            "v3": "~ 1 of 4 oils",
+            "v4": "~ Batana oil",
+            "v5": "$19.99 / 5 oz"
           }
         }
       },
@@ -509,7 +516,7 @@
         "image_alt": "Elaren Pumpkin Seed Oil Serum",
         "text": "<p>If you’ve already tried a hair serum and it didn’t work, that’s not the idea failing you. It’s the formula. Most of what’s on this list treats pumpkin seed as a supporting ingredient behind water, alcohol or batana, sells the oil on its own, or rinses off before it has time to work.</p><p>Pumpkin seed oil is the right ingredient. It just needs to be cold-pressed, used as the base of the formula and paired with caffeine, in a serum light enough to use every night.</p><p><strong>Elaren is the only serum on this list built around that.</strong> Everything else is a general hair oil, a serum where pumpkin seed plays a supporting role, or missing something critical.</p><p>If thinning hair is what you’re trying to fix, this is where we’d start.</p>",
         "button_label": "Start today risk free",
-        "button_url": "#shop",
+        "button_url": "https://shopelaren.com/",
         "note": "30-day money-back guarantee"
       }
     },
@@ -808,14 +815,15 @@
         "low_stock_threshold": 150,
         "low_stock_count": 14,
         "low_stock_text": "Low Stock: only {count} left"
-      }
+      },
+      "disabled": true
     },
     "disclaimer": {
       "type": "adv-disclaimer",
       "settings": {
         "hide_store_footer": true,
         "title": "Disclaimer",
-        "text": "<p>These statements have not been evaluated by the Food and Drug Administration or MHRA. These products are not intended to diagnose, treat, cure or prevent any disease. Testimonials found at shopelaren.com are unverified results, and may not reflect the typical purchaser’s experience, may not apply to the average person and are not intended to represent or guarantee that anyone will achieve the same or similar results.</p><p>Information on the Elaren site is provided for informational purposes only. It is not meant to substitute for medical advice from your physician or other medical professional. You should not use the information contained herein for diagnosing or treating a health problem or disease, or prescribing any medication. Carefully read all product packaging and labels prior to use. If you have or suspect that you have a medical problem, promptly contact your health care provider.</p><p>*Studies cited were conducted on the ingredients, not on Elaren’s finished formula: topical pumpkin seed oil in 60 women with female pattern hair loss, where 5% minoxidil foam did better overall (Ibrahim et al., 2021), and caffeine on hair follicles from women’s scalps in the laboratory (Fischer et al., 2014). Details of other brands’ products are taken from their own websites and retailer listings in October 2026 and may change. All trademarks belong to their respective owners.</p>"
+        "text": "<p>These statements have not been evaluated by the Food and Drug Administration or MHRA. These products are not intended to diagnose, treat, cure or prevent any disease. Testimonials found at shopelaren.com are unverified results, and may not reflect the typical purchaser’s experience, may not apply to the average person and are not intended to represent or guarantee that anyone will achieve the same or similar results.</p><p>Information on the Elaren site is provided for informational purposes only. It is not meant to substitute for medical advice from your physician or other medical professional. You should not use the information contained herein for diagnosing or treating a health problem or disease, or prescribing any medication. Carefully read all product packaging and labels prior to use. If you have or suspect that you have a medical problem, promptly contact your health care provider.</p>"
       }
     },
     "sticky-cta": {
@@ -824,7 +832,7 @@
         "label": "Reader offer",
         "offer": "Buy 2, <em>Get 1 Free</em>",
         "button_label": "Claim offer",
-        "button_url": "#shop"
+        "button_url": "https://shopelaren.com/"
       }
     }
   },

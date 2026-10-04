@@ -1,11 +1,11 @@
 {% comment %}
   Comparison advertorial – reader-offer bar pinned to the bottom of the screen once the reader has
-  scrolled past the article header. It hides again while the buy box is on screen so it never
-  covers the add-to-cart button.
+  scrolled past the article header. When the button scrolls to a buy box on the page, the bar
+  hides while that buy box is on screen so it never covers the add-to-cart button.
 {% endcomment %}
 {{ 'advertorial.css' | asset_url | stylesheet_tag }}
 {%- assign btn_href = section.settings.button_url | default: '#shop' -%}
-<div class="adv adv-sticky" data-adv-sticky data-hide-near="{{ btn_href | split: '#' | last }}">
+<div class="adv adv-sticky" data-adv-sticky data-hide-near="{% if btn_href contains '#' %}{{ btn_href | split: '#' | last }}{% endif %}">
   <div class="adv-sticky__inner">
     <span>
       {%- if section.settings.label != blank -%}<span class="adv-sticky__label">{{ section.settings.label }}</span>{%- endif -%}

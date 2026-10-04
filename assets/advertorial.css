@@ -22,6 +22,7 @@
   --adv-coral-soft: #e78d79;
   --adv-tint: #f7efe9;
   --adv-tint-2: #f8ede8;
+  --adv-tile: #f4f1ee;
   --adv-line: #ece6e2;
   --adv-taupe: #a99d97;
   --adv-green: #3c8a4f;
@@ -328,6 +329,8 @@
 .adv-field__text p:last-child { margin-bottom: 0; }
 .adv-field__media img, .adv-field__media .adv-ph { width: 100%; border-radius: 8px; }
 .adv-field__media img { display: block; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.adv-field__media--photo { border-radius: 8px; background: var(--adv-tile); }
+.adv-field__media--photo img { box-sizing: border-box; padding: 12px; border-radius: 0; object-fit: contain; mix-blend-mode: multiply; }
 .adv-field__media .adv-ph { aspect-ratio: 3 / 1; }
 .adv-field__cols { display: grid; gap: 12px; margin: 18px 0 0; }
 .adv-field__col {
@@ -392,6 +395,9 @@
   text-transform: uppercase;
 }
 .adv-table tbody th { color: var(--adv-ink); font-weight: 500; }
+.adv-table__prod { display: flex; gap: 8px; align-items: center; }
+.adv-table__thumb { flex: 0 0 auto; width: 34px; height: 34px; overflow: hidden; border-radius: 6px; background: var(--adv-tile); }
+.adv-table__thumb img { display: block; box-sizing: border-box; width: 100%; height: 100%; padding: 3px; object-fit: contain; mix-blend-mode: multiply; }
 .adv-table th:first-child { position: sticky; left: 0; z-index: 1; background: var(--adv-page); }
 .adv-table thead th:first-child { background: var(--adv-tint-2); }
 .adv-table tr.is-win th, .adv-table tr.is-win td { background: var(--adv-tint-2); }
@@ -532,11 +538,13 @@
   .adv-field__top { grid-template-columns: minmax(0, 1fr) 210px; gap: 24px; align-items: center; }
   .adv-field__name { font-size: 26px; }
   .adv-field__media .adv-ph { aspect-ratio: 16 / 9; }
+  .adv-field__media--photo img { aspect-ratio: 1; }
   .adv-field__cols { grid-template-columns: 1fr 1fr; }
   .adv-field__mention { padding: 18px 20px; }
   .adv-table__scroller { margin: 0; padding: 0; overflow: visible; }
   .adv-table { min-width: 0; font-size: 12px; }
   .adv-table th, .adv-table td { padding: 12px 10px; }
+  .adv-table__thumb { width: 42px; height: 42px; }
   .adv-table__hint { display: none; }
   .adv-reviews__track { margin: 0; padding: 6px 4px 18px; scroll-padding: 0 4px; }
   .adv-review { flex-basis: 196px; max-width: none; }
@@ -546,4 +554,8 @@
   .adv-sticky { padding: 10px 40px; }
   .adv-sticky__offer { font-size: 20px; }
   .adv-sticky .adv-btn { padding: 11px 26px; }
+}
+
+@media screen and (min-width: 1100px) {
+  .adv-table__scroller { margin: 0 -110px; }
 }
