@@ -35,14 +35,32 @@
      deleted and re-created in Kaching - then update them here (an order placed through Kaching's
      widget shows them in its __kaching_bundles line property). */
   var KACHING_BUNDLE_PROP = '__kaching_bundles';
+  /* Each bar also names the Kaching Subscriptions plan its bottles renew on, so a bundle sold as a
+     3- or 6-month supply is billed and shipped every 3 or 6 months, not every month. Bottles that
+     fill no bar renew on basePlan. The buy box and the cart both take the plan from here
+     (dealPlanFor), whichever way the subscription went in: the buy box, the drawer's Subscribe &
+     save switch, or a quantity change in the drawer. Plan ids are in the plan URLs in Kaching
+     Subscriptions; every one must be attached to the serum and carry the free gift. */
   var KACHING_DEAL = {
     id: '5kg3',
     productId: 9704313225573, // Elaren Pumpkin Seed Oil Serum
+    basePlan: '1039991141', // Plan #1: every month, 10% off
     // Biggest first: bottles are laid out for the biggest bar they fill.
     bars: [
-      { id: 'RANr', buy: 3, get: 3 }, // Buy 3, Get 3 Free
-      { id: 'dWFI', buy: 2, get: 1 }  // Buy 2, Get 1 Free
+      { id: 'RANr', buy: 3, get: 3, plan: '1052803429' }, // Buy 3, Get 3 Free -> Plan #3: every 6 months
+      { id: 'dWFI', buy: 2, get: 1, plan: '1052770661' }  // Buy 2, Get 1 Free -> Plan #2: every 3 months
     ]
+  };
+  var dealBar = function (quantity) {
+    return KACHING_DEAL.bars.filter(function (bar) { return quantity >= bar.buy + bar.get; })[0] || null;
+  };
+  // The plan a subscription of `quantity` bottles of the deal product renews on.
+  var dealPlanFor = function (quantity) {
+    var bar = dealBar(quantity);
+    return String(bar ? bar.plan : KACHING_DEAL.basePlan);
+  };
+  var dealPlans = function () {
+    return [String(KACHING_DEAL.basePlan)].concat(KACHING_DEAL.bars.map(function (bar) { return String(bar.plan); }));
   };
 
   /* ================================================================ cart */
@@ -479,9 +497,7 @@
       if (!raw) return null;
       try { return JSON.parse(raw) || null; } catch (err) { return null; }
     },
-    bundleBar: function (quantity) {
-      return KACHING_DEAL.bars.filter(function (bar) { return quantity >= bar.buy + bar.get; })[0] || null;
-    },
+    bundleBar: function (quantity) { return dealBar(quantity); },
     // Laid out for `bar` already: a paid line and a free line of one bundle, or nothing tagged at all.
     bundleInShape: function (lines, total, bar) {
       var self = this;
@@ -502,23 +518,28 @@
       return id;
     },
     // The lines out of shape (stale) and the /cart/add.js lines that replace them.
+    // Every subscription bottle of a variant is one subscription, whatever plan it went in on: the
+    // total decides both the bar and the plan (dealPlanFor), so 3 bottles always renew every 3
+    // months and 6 every 6 months, even when the drawer's switch or a quantity change put them on
+    // another plan.
     planBundles: function (items) {
       var self = this;
       var groups = [];
       items.forEach(function (item) {
         if (item.product_id !== KACHING_DEAL.productId || !item.selling_plan_allocation || self.isGiftLine(item)) return;
-        var planId = String(planOf(item));
-        var group = groups.filter(function (g) { return g.variantId === item.variant_id && g.planId === planId; })[0];
-        if (!group) groups.push(group = { variantId: item.variant_id, planId: planId, lines: [] });
+        var group = groups.filter(function (g) { return g.variantId === item.variant_id; })[0];
+        if (!group) groups.push(group = { variantId: item.variant_id, lines: [] });
         group.lines.push(item);
       });
       var stale = [], lines = [];
       groups.forEach(function (group) {
         var total = totalQuantity(group.lines);
         var bar = self.bundleBar(total);
-        if (self.bundleInShape(group.lines, total, bar)) return;
+        var planId = dealPlanFor(total);
+        var onPlan = group.lines.every(function (item) { return String(planOf(item)) === planId; });
+        if (onPlan && self.bundleInShape(group.lines, total, bar)) return;
         stale = stale.concat(group.lines);
-        var planId = planOf(group.lines[0]);
+        planId = parseInt(planId, 10);
         var base = Object.assign({}, group.lines[0].properties);
         delete base[KACHING_BUNDLE_PROP];
         var line = function (quantity, tag) {
@@ -579,14 +600,16 @@
         return tag && tag.sellingPlan ? String(tag.sellingPlan) : '';
       } catch (err) { return ''; }
     },
-    // Plans of the subscription lines that earn the gift (only the drawer's pinned plan, when set).
+    // Plans of the subscription lines that earn the gift: the drawer's pinned plan, when set, and
+    // the bundle plans (every 3 and every 6 months), which carry the same free gift in Kaching.
     giftPlans: function (items) {
       var pinned = this.giftPlanId();
+      var allowed = pinned ? [pinned].concat(dealPlans()) : null;
       var self = this;
       return items.reduce(function (plans, item) {
         if (self.isGiftLine(item) || !item.selling_plan_allocation) return plans;
         var id = String(item.selling_plan_allocation.selling_plan.id);
-        if ((!pinned || id === pinned) && plans.indexOf(id) === -1) plans.push(id);
+        if ((!allowed || allowed.indexOf(id) !== -1) && plans.indexOf(id) === -1) plans.push(id);
         return plans;
       }, []);
     },
@@ -1144,6 +1167,14 @@
     var radios = $$('input[name="purchase_type"]', sub);
     var sellingPlan = $('.js-default-selling-plan', sub);
     var defaultPlan = sub.getAttribute('data-default-selling-plan') || (sellingPlan && sellingPlan.value) || '';
+    // On the bundle deal's product the plan follows the selected tier (3 bottles every 3 months,
+    // 6 every 6 months - see KACHING_DEAL); any other product keeps the section's plan.
+    var isDealProduct = parseInt(sub.getAttribute('data-product-id'), 10) === KACHING_DEAL.productId;
+    var planFor = function () {
+      if (!isDealProduct || !defaultPlan) return defaultPlan;
+      var qty = parseInt((quantityInput && quantityInput.value) || (tier && tier.getAttribute('data-qty')) || '1', 10) || 1;
+      return dealPlanFor(qty);
+    };
     var priceMain = $('.c-buybox-toggle__price--sub .product_price', sub);
     var priceOtp = $('.c-buybox-toggle__price--otp .product_price', sub);
     var buttonPrice = $('.c-subscribtion__add-to-cart .js-subscribtion__main-price .product_price', sub);
@@ -1193,6 +1224,7 @@
         if (input) input.checked = on;
       });
       if (quantityInput) quantityInput.value = card.getAttribute('data-qty') || '1';
+      if (sellingPlan && isSubscription && !sellingPlan.disabled) sellingPlan.value = planFor();
       renderTier();
     };
 
@@ -1206,7 +1238,7 @@
       if (toggle) toggle.setAttribute('aria-checked', subscription ? 'true' : 'false');
       radios.forEach(function (r) { r.checked = (r.value === 'subscription') === subscription; });
       if (sellingPlan) {
-        sellingPlan.value = subscription ? defaultPlan : '';
+        sellingPlan.value = subscription ? planFor() : '';
         // A disabled input is left out of FormData altogether, so a one-time purchase posts no
         // selling_plan key at all rather than an empty one - nothing for the cart to interpret.
         sellingPlan.disabled = !subscription;

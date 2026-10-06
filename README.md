@@ -36,6 +36,14 @@ template (`templates/page.froya-landing.json`).
   comes off the price per bottle, so the per-bottle price falls as the bundle grows. The theme only
   displays that price: the real discount is applied at checkout by the Kaching Bundles app, so the
   tier quantities and discounts here must match the quantity breaks configured there.
+* **Subscription cadence follows the bundle** – with Subscribe & save on, 1 bottle renews every
+  month (Kaching Plan #1, `1039991141`), Buy 2 Get 1 Free every 3 months (Plan #2, `1052770661`) and
+  Buy 3 Get 3 Free every 6 months (Plan #3, `1052803429`). The mapping sits next to the Kaching bars
+  in `assets/main.js` (`KACHING_DEAL`): the buy box takes the plan from the selected tier, and the
+  cart moves any subscription onto the plan its bottle count calls for, so the drawer's switch and
+  quantity changes land on the right cadence too. The *Subscription plan ID* settings on the buy box
+  and the cart drawer now only matter for single bottles. Every plan must stay attached to the serum
+  and carry the MicroStamp free gift in Kaching Subscriptions.
 * **Reviews / videos** – Review slider and Video reviews are block lists: add, remove, reorder,
   upload a photo/video and poster, or paste an mp4 URL.
 * **Lists** – benefits, science steps, research bars, hair-loss pillars/badges, how-to steps,
