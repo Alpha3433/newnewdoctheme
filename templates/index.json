@@ -774,7 +774,7 @@
         "low_stock_source": "fixed",
         "low_stock_threshold": 150,
         "low_stock_count": 14,
-        "low_stock_text": "Low Stock: only {count} left"
+        "low_stock_text": "Low Stock: SOLD OUT"
       }
     },
     "founder-story": {
