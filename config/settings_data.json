@@ -25,6 +25,11 @@
         "type": "shopify://apps/microsoft-clarity/blocks/brandAgents_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea",
         "disabled": false,
         "settings": {}
+      },
+      "8924815989287078155": {
+        "type": "shopify://apps/early-bird/blocks/app-embed/5e02e264-328a-43b1-b83b-d997dd7938d0",
+        "disabled": false,
+        "settings": {}
       }
     }
   }
