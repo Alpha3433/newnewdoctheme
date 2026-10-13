@@ -765,16 +765,16 @@
         "otp_badge": "NO COMMITMENT",
         "otp_name": "One-Time Purchase",
         "delivery_label": "",
-        "info_1": "Restocking: orders placed now ship by 23 Oct. Cancel any time before it ships for a full refund.",
+        "info_1": "",
         "info_2": "",
         "button_label": "Add to Cart",
         "button_price": "total",
         "sold_out_label": "Sold out",
-        "show_low_stock": true,
+        "show_low_stock": false,
         "low_stock_source": "fixed",
         "low_stock_threshold": 150,
         "low_stock_count": 14,
-        "low_stock_text": "SOLD OUT"
+        "low_stock_text": "Low Stock: only {count} left"
       }
     },
     "founder-story": {
