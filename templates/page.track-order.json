@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -20,7 +29,7 @@
         "highlight_2": {
           "type": "highlight",
           "settings": {
-            "text": "Ships within 1–2 business days"
+            "text": "Ships within 1–3 business days"
           }
         },
         "highlight_3": {
@@ -40,7 +49,7 @@
           "type": "step",
           "settings": {
             "title": "Packed & shipped",
-            "text": "<p>Orders ship within 1–2 business days. Your tracking number arrives by email the moment your parcel leaves us.</p>"
+            "text": "<p>Orders ship within 1–3 business days, and Express orders go out first. Your tracking number arrives by email the moment your parcel leaves us.</p>"
           }
         },
         "step_3": {
@@ -100,7 +109,29 @@
         "question_3",
         "question_4"
       ],
-      "settings": {}
+      "settings": {
+        "eyebrow": "Order tracking",
+        "title": "Where’s My <em>Order?</em>",
+        "subtitle": "Every Elaren order ships with tracking. Pop your tracking number in to follow your parcel every step of the way.",
+        "lookup_title": "Track your parcel",
+        "lookup_text": "You’ll find your tracking number in your shipping confirmation email from us.",
+        "input_label": "Tracking number",
+        "placeholder": "e.g. YT0000000000000000",
+        "button_label": "TRACK MY PARCEL",
+        "lookup_note": "Live tracking opens in a new tab – no account needed.",
+        "opening_text": "Opening {carrier} tracking for {number}.",
+        "fallback_label": "Didn’t open? Tap here",
+        "invalid_text": "Please enter your tracking number (letters and numbers only).",
+        "steps_eyebrow": "From our door to yours",
+        "steps_title": "What Happens <em>After You Order</em>",
+        "steps_subtitle": "Every step your parcel takes on its way to you, and what to expect at each one.",
+        "faq_eyebrow": "Questions, answered",
+        "faq_title": "Delivery Questions",
+        "help_title": "Still need a hand?",
+        "help_text": "<p>Email us with your order number and a real person will reply within one business day.</p>",
+        "help_button": "EMAIL OUR TEAM",
+        "help_email": "support@shopelaren.com"
+      }
     }
   },
   "order": [
