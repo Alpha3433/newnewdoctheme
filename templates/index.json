@@ -1259,7 +1259,7 @@
           "type": "question",
           "settings": {
             "question": "What does shipping cost, and how long does it take?",
-            "answer": "<p>Shipping is free and insured on every order, and Express Shipping is free on orders of US$50 or more (US$4.99 otherwise). Orders ship within 1–2 business days and you get tracking by email as soon as they do. Delivery then usually takes 3–5 business days in the US (1–2 with Express), 5–11 in the EU, UK, Switzerland and Norway (2–5 with Express) and 7–10 everywhere else (3–5 with Express). The full details are in our <a href=\"/policies/shipping-policy\">Shipping Policy</a>.</p>"
+            "answer": "<p>Shipping is free and insured on every order, and Express Shipping is free on orders of US$50 or more (US$4.99 otherwise). Orders ship within 1–3 business days, Express orders first, and you get tracking by email as soon as they do. Delivery then usually takes 6–10 business days in the US, 5–9 in the EU, UK, Switzerland and Norway and 7–14 everywhere else, and Express orders usually arrive about a business day sooner. The full details are in our <a href=\"/policies/shipping-policy\" title=\"/policies/shipping-policy\">Shipping Policy</a>.</p>"
           }
         }
       },
