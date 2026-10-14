@@ -770,10 +770,10 @@
         "button_label": "Add to Cart",
         "button_price": "total",
         "sold_out_label": "Sold out",
-        "show_low_stock": false,
+        "show_low_stock": true,
         "low_stock_source": "fixed",
         "low_stock_threshold": 150,
-        "low_stock_count": 14,
+        "low_stock_count": 8,
         "low_stock_text": "Low Stock: only {count} left"
       }
     },
