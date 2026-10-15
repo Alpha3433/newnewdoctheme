@@ -402,6 +402,18 @@
           <span class="checkout-button__lock"><svg aria-hidden="true" width="16" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
           <span class="checkout-button__label">{{ section.settings.checkout_label }}</span>{% if section.settings.show_total_on_button %} - <span class="product_price">{{ cart.total_price | money }}</span>{% endif %}
         </button>
+        {%- comment -%}
+          The payment methods checkout accepts, read from the store's payment settings, so the strip
+          follows whatever is switched on there. The drawer has no accelerated checkout buttons under
+          the button (Shop Pay stays off as a drawer button), so the strip sits right under it.
+        {%- endcomment -%}
+        {%- if shop.enabled_payment_types.size > 0 -%}
+        <ul class="cart-drawer__payment-icons" role="list">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
+          {%- endfor -%}
+        </ul>
+        {%- endif -%}
         {%- if badges.size > 0 -%}
         <div class="s-mini-cart__guarantee-badges">
           {%- for block in badges -%}

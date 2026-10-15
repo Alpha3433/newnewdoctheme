@@ -170,6 +170,10 @@ template (`templates/page.froya-landing.json`).
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
   "Pair with" products, checkout label, country/currency selector and trust badges. The header
   CART button opens it and every add-to-cart button adds in place and opens it.
+  * **Payment logos** sit under the checkout button, above the trust badges. They come from the
+    payment methods switched on in Settings → Payments (`shop.enabled_payment_types`), so a method
+    added there (iDEAL, Klarna…) shows up without a theme change. The drawer has no accelerated
+    checkout buttons; Shop Pay stays off as a drawer button.
   * The line's **Subscribe & save switch acts on the whole product**, not on the one line it sits
     on. A "Buy 2, Get 1 Free" bundle goes into the cart as three bottles on one line and Kaching
     Bundles then splits the free bottle onto its own $0 line; the switch gathers every line of that
