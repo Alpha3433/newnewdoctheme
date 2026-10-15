@@ -292,6 +292,69 @@
       });
     },
 
+    /* Bundle rows. The drawer shows the Bundled product (Theme settings > Bundle tiers) as one row
+       per bundle: every line of one variant on one plan with the same properties, whatever lines
+       the bundle discount split it into (a $0 line for the free bottles and one for the paid ones,
+       each with its own key) or Kaching's subscription layout tagged it into - its
+       __kaching_bundles tag is left out of the row's identity. The row's buttons set the row's
+       total, never one line of it:
+       - /cart/update.js by variant id only changes the first of the split lines, so it is not used;
+       - bottles go in with /cart/add.js, which adds to the total;
+       - bottles come off one line at a time with /cart/change.js by that line's key (by position if
+         two lines ever share a key), paid bottles first;
+       - keys change after every write, so the cart is read again before each step, until the row
+         adds up to what was asked for. */
+    groupProperties: function (properties) {
+      var base = {};
+      Object.keys(properties || {}).forEach(function (k) {
+        var v = properties[k];
+        if (k !== KACHING_BUNDLE_PROP && v !== null && v !== undefined && v !== '') base[k] = v;
+      });
+      return base;
+    },
+    groupKey: function (variantId, planId, properties) {
+      return variantId + '|' + (planId || '') + '|' + this.propertiesKey(this.groupProperties(properties));
+    },
+    setGroupTotal: function (group, goalFor) {
+      var self = this;
+      var key = this.groupKey(group.variantId, group.planId, group.properties);
+      var goal = null, steps = 0;
+      var step = function (cart) {
+        var items = cart.items || [];
+        var lines = items.filter(function (item) {
+          return !self.isGiftLine(item) && self.groupKey(item.variant_id, planOf(item), item.properties) === key;
+        });
+        var total = totalQuantity(lines);
+        if (goal === null) goal = Math.max(0, goalFor(total));
+        if (total === goal) return cart;
+        if (++steps > 8) throw new Error(CART_ERROR); // Shopify is not doing what is asked: stop
+        var write;
+        if (total < goal) {
+          var add = { id: group.variantId, quantity: goal - total };
+          if (group.planId) add.selling_plan = parseInt(group.planId, 10);
+          var properties = self.groupProperties(group.properties);
+          if (Object.keys(properties).length) add.properties = properties;
+          write = self.write('cart/add.js', { items: [add] }, false);
+        } else {
+          var pick = lines.slice().sort(function (a, b) {
+            return ((b.final_line_price > 0) - (a.final_line_price > 0)) || (b.quantity - a.quantity);
+          })[0];
+          var quantity = Math.max(0, pick.quantity - (total - goal));
+          var shared = items.filter(function (item) { return item.key === pick.key; }).length > 1;
+          write = self.write('cart/change.js', shared ? { line: items.indexOf(pick) + 1, quantity: quantity } : { id: pick.key, quantity: quantity }, false);
+        }
+        return write.then(function () { return self.fetchCart(); }).then(step);
+      };
+      return this.fetchCart().then(step);
+    },
+    // goalFor(total) -> the row's new total. The subscription layout and the gift follow.
+    changeGroup: function (group, goalFor) {
+      var self = this;
+      return this.run(function () {
+        return self.setGroupTotal(group, goalFor).then(function (cart) { return self.reconcile(cart); });
+      });
+    },
+
     /* Lines are the same line to Shopify when variant, plan and properties match (a line the
        discount has split in two is listed twice with the same identity), and a "pair" is every line
        of a variant on one plan (or on none) - what the switch moves between. */
@@ -749,6 +812,18 @@
     var line = el.closest('line-item');
     return line ? line.getAttribute('data-key') : null;
   }
+  // The bundle row a button acts on, from the data-group-* attributes the drawer prints on it.
+  function groupOf(el) {
+    var host = el.closest('[data-group-variant]');
+    if (!host) return null;
+    var properties = {};
+    try { properties = JSON.parse(host.getAttribute('data-group-properties') || '{}') || {}; } catch (err) { /* none */ }
+    return {
+      variantId: parseInt(host.getAttribute('data-group-variant'), 10),
+      planId: host.getAttribute('data-group-plan') || '',
+      properties: properties
+    };
+  }
 
   document.addEventListener('click', function (e) {
     var toggle = e.target.closest('.js-cart-toggle');
@@ -759,6 +834,18 @@
     if (giftQty) {
       e.preventDefault();
       Cart.setGiftQuantity(parseInt(giftQty.getAttribute('data-cart-gift-qty'), 10)).catch(cartFailed);
+      return;
+    }
+    // Bundle rows: the stepper moves the row's total by one, the bin empties the row.
+    var groupButton = e.target.closest('[data-cart-group-step], [data-cart-group-set]');
+    if (groupButton) {
+      e.preventDefault();
+      var group = groupOf(groupButton);
+      if (!group || !group.variantId) return;
+      var stepBy = parseInt(groupButton.getAttribute('data-cart-group-step'), 10);
+      var setTo = parseInt(groupButton.getAttribute('data-cart-group-set'), 10);
+      if (isNaN(stepBy) && isNaN(setTo)) return;
+      Cart.changeGroup(group, function (total) { return isNaN(stepBy) ? setTo : total + stepBy; }).catch(cartFailed);
       return;
     }
     var remove = e.target.closest('[data-cart-remove]');

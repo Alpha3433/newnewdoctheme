@@ -7,6 +7,7 @@
   assign badges = section.blocks | where: 'type', 'badge'
   assign upsells = section.settings.upsells
   assign amount_placeholder = '{amount}'
+  assign count_placeholder = '{count}'
 -%}
 {%- liquid
   comment
@@ -144,10 +145,56 @@
                 endif
               endif
             endfor
+            comment
+              One row per bundle. Once a bundle tier applies, Shopify lists the bundle as two lines
+              with their own keys - the free bottles at $0 (carrying the discount) and the paid ones -
+              and on a subscription Kaching's layout tags the two halves differently (assets/main.js,
+              reconcileBundles). The drawer shows every line of the Bundled product (Theme settings >
+              Bundle tiers) that shares a variant, a plan and the shopper's own properties as one
+              row; Kaching's __kaching_bundles tag is the layout's, not the shopper's, so it is left
+              out of that identity. line_group_keys holds each cart line's identity ('-' for any
+              other line), and a row is drawn at the first line of its bundle.
+            endcomment
+            assign bundle_product_id = 0
+            if settings.bundle_product != blank
+              assign bundle_product_id = settings.bundle_product.id
+            endif
+            assign line_group_keys = ''
+            for item in cart.items
+              assign group_key = '-'
+              if item.product_id == bundle_product_id and item.properties._free_gift == blank
+                assign group_key = item.variant_id | append: '|'
+                if item.selling_plan_allocation
+                  assign group_key = group_key | append: item.selling_plan_allocation.selling_plan.id
+                endif
+                assign group_key = group_key | append: '|'
+                for property in item.properties
+                  if property.first != '__kaching_bundles' and property.last != blank
+                    assign group_key = group_key | append: property.first | append: '=' | append: property.last | append: ';'
+                  endif
+                endfor
+              endif
+              unless forloop.first
+                assign line_group_keys = line_group_keys | append: '~~~'
+              endunless
+              assign line_group_keys = line_group_keys | append: group_key
+            endfor
+            assign line_group_keys = line_group_keys | split: '~~~'
+            assign shown_groups = '~'
           -%}
           {%- for item in cart.items -%}
             {%- liquid
               assign line = forloop.index
+              assign group_key = line_group_keys[forloop.index0] | default: '-'
+              assign is_bundle = false
+              if group_key != '-'
+                assign group_marker = '~' | append: group_key | append: '~'
+                if shown_groups contains group_marker
+                  continue
+                endif
+                assign shown_groups = shown_groups | append: group_key | append: '~'
+                assign is_bundle = true
+              endif
               comment
                 Offer the cheapest plan the VARIANT itself allocates, the same way the buy box does.
                 A product's selling plan groups are one-per-cadence in an order Liquid does not
@@ -232,10 +279,49 @@
                   assign show_variant_title = false
                 endif
               endif
+              comment
+                A bundle row adds up every line of its bundle: the bottles, what they cost together,
+                and the bottles the cart prices at $0. The tier's name is the discount's own title
+                from the cart. With a discount applied, the strike-through is every bottle at the
+                one-time price (the anchor the buy box's "Save" figures use), never the compare-at
+                price. The grey line names the supply (snippets/bundle-supply.liquid).
+              endcomment
+              if is_bundle
+                assign row_plan = ''
+                if item.selling_plan_allocation
+                  assign row_plan = item.selling_plan_allocation.selling_plan.id | append: ''
+                endif
+                assign row_qty = 0
+                assign row_price = 0
+                assign row_free = 0
+                assign row_tier = ''
+                for other in cart.items
+                  assign other_key = line_group_keys[forloop.index0]
+                  if other_key == group_key
+                    assign row_qty = row_qty | plus: other.quantity
+                    assign row_price = row_price | plus: other.final_line_price
+                    if other.final_line_price == 0 and other.original_line_price > 0
+                      assign row_free = row_free | plus: other.quantity
+                    endif
+                    if row_tier == blank
+                      for allocation in other.line_level_discount_allocations
+                        if allocation.discount_application.type == 'automatic' and allocation.amount > 0
+                          assign row_tier = allocation.discount_application.title
+                          break
+                        endif
+                      endfor
+                    endif
+                  endif
+                endfor
+                assign row_compare = item.variant.price | times: row_qty
+                capture row_supply
+                  render 'bundle-supply', quantity: row_qty
+                endcapture
+              endif
             -%}
-            <line-item class="line-item{% if is_gift %} line-item--gift{% endif %}" data-line="{{ line }}" data-key="{{ item.key }}"{% if is_gift %} data-gift{% endif %}>
+            <line-item class="line-item{% if is_gift %} line-item--gift{% endif %}{% if is_bundle %} line-item--bundle{% endif %}" data-line="{{ line }}" data-key="{{ item.key }}"{% if is_gift %} data-gift{% endif %}{% if is_bundle %} data-group-variant="{{ item.variant_id }}" data-group-plan="{{ row_plan }}" data-group-properties="{{ item.properties | json | escape }}"{% endif %}>
               <div class="line-item__content-wrapper">
-                <button type="button" class="s-mini-cart__remove-btn" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: item.quantity }}"{% else %}data-cart-remove="{{ line }}"{% endif %} aria-label="Remove {{ item.product.title | escape }}">
+                <button type="button" class="s-mini-cart__remove-btn" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: item.quantity }}"{% elsif is_bundle %}data-cart-group-set="0"{% else %}data-cart-remove="{{ line }}"{% endif %} aria-label="Remove {{ item.product.title | escape }}">
                   <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
                 </button>
                 <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="line-item__image-wrapper" tabindex="-1" aria-hidden="true">
@@ -253,6 +339,9 @@
                       {%- endif -%}
                     {%- elsif show_variant_title -%}
                       <span class="product-item-meta__variant text--xsmall text--subdued">{{ item.variant.title }}</span>
+                    {%- endif -%}
+                    {%- if is_bundle -%}
+                      <span class="line-item__bundle-meta">{{ row_supply }}{% if row_tier != blank %} · {{ row_tier }}{% endif %}</span>
                     {%- endif -%}
                     {%- comment -%}
                       The selling plan's own name ("Delivery: every month | 10% off") is not repeated
@@ -276,9 +365,9 @@
                     {%- endif -%}
                     <div class="product-item-meta__info">
                       <line-item-quantity class="line-item__quantity"><div class="custom-quantity-selector custom-quantity-selector--small">
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: 1 }}"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}"{% endif %} aria-label="Decrease quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7" stroke-linecap="round"/></svg></button>
-                        <span class="custom-quantity-selector__text">{{ item.quantity }}</span>
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | plus: 1 }}"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}"{% endif %} aria-label="Increase quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7M9 5.5v7" stroke-linecap="round"/></svg></button>
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: 1 }}"{% elsif is_bundle %}data-cart-group-step="-1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}"{% endif %} aria-label="Decrease quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7" stroke-linecap="round"/></svg></button>
+                        <span class="custom-quantity-selector__text">{% if is_bundle %}{{ row_qty }}{% else %}{{ item.quantity }}{% endif %}</span>
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | plus: 1 }}"{% elsif is_bundle %}data-cart-group-step="1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}"{% endif %} aria-label="Increase quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7M9 5.5v7" stroke-linecap="round"/></svg></button>
                       </div></line-item-quantity>
                       <div class="product-item-meta__price-list-container text--small"><div class="price-list">
                         {%- if is_gift and item.final_line_price == 0 and section.settings.gift_free_text != blank -%}
@@ -287,12 +376,31 @@
                         {%- elsif gift_has_free_unit -%}
                         <span class="price price--highlight"><span class="product_price">{{ item.final_line_price | money }}</span></span>
                         <span class="price price--compare"><span class="product_price">{{ item.original_line_price | money }}</span></span>
+                        {%- elsif is_bundle -%}
+                        <span class="price price--highlight"><span class="product_price">{{ row_price | money }}</span></span>
+                        {%- if row_compare > row_price -%}
+                          <span class="price price--compare"><span class="product_price">{{ row_compare | money }}</span></span>
+                        {%- endif -%}
+                        {%- if row_free > 0 and section.settings.free_tag_text != blank -%}
+                          <span class="line-item__free-tag">{{ section.settings.free_tag_text | replace: count_placeholder, row_free }}</span>
+                        {%- endif -%}
                         {%- else -%}
-                        <span class="price price--highlight"><span class="product_price">{{ item.final_price | money }}</span></span>
-                        {%- if item.original_price > item.final_price -%}
-                          <span class="price price--compare"><span class="product_price">{{ item.original_price | money }}</span></span>
+                        {%- comment -%}
+                          Every other line shows its line total, so the rows add up to the subtotal; the
+                          unit price follows underneath once there is more than one.
+                        {%- endcomment -%}
+                        <span class="price price--highlight"><span class="product_price">{{ item.final_line_price | money }}</span></span>
+                        {%- if item.original_line_price > item.final_line_price -%}
+                          <span class="price price--compare"><span class="product_price">{{ item.original_line_price | money }}</span></span>
                         {%- elsif item.selling_plan_allocation and item.selling_plan_allocation.compare_at_price > item.final_price -%}
-                          <span class="price price--compare"><span class="product_price">{{ item.selling_plan_allocation.compare_at_price | money }}</span></span>
+                          <span class="price price--compare"><span class="product_price">{{ item.selling_plan_allocation.compare_at_price | times: item.quantity | money }}</span></span>
+                        {%- endif -%}
+                        {%- if item.quantity > 1 and section.settings.unit_price_text != blank -%}
+                          {%- liquid
+                            assign unit_money = item.final_price | money
+                            assign unit_line = section.settings.unit_price_text | replace: amount_placeholder, unit_money
+                          -%}
+                          <span class="price price--unit">{{ unit_line }}</span>
                         {%- endif -%}
                         {%- endif -%}
                       </div></div>
@@ -467,6 +575,8 @@
     { "type": "text", "id": "selling_plan_id", "label": "Subscription plan ID", "info": "Optional. The plan the line toggle switches a one-time line to. Use the same ID as the Featured product section so the drawer sells the cadence the buy box promised. Leave blank to use the cheapest plan the variant offers." },
     { "type": "text", "id": "subscribe_label", "label": "Subscribe toggle label", "default": "SUBSCRIBE & SAVE" },
     { "type": "text", "id": "subscribe_saving_text", "label": "Saving shown next to the toggle", "default": "Save {amount}", "info": "{amount} is what the plan takes off everything the shopper is paying for that product (all its lines, a free bundle bottle counting for nothing). Leave empty to show no amount." },
+    { "type": "text", "id": "free_tag_text", "label": "Free bottles tag on a bundle row", "default": "{count} FREE", "info": "The Bundled product (Theme settings → Bundle tiers) shows as one row per bundle, priced at its total. {count} is the number of bottles the cart charges nothing for. Leave empty to hide the tag." },
+    { "type": "text", "id": "unit_price_text", "label": "Unit price under a line total", "default": "{amount} each", "info": "Lines show their total; with more than one unit this line follows underneath. Leave empty to hide it." },
     { "type": "header", "content": "Free subscription gift", "info": "The gift the Featured product section advertises with Subscribe & save. It is added to the cart (one unit, tagged as a free gift) as soon as a line on the plan above is in the cart, and removed when the last such line goes. The shopper can raise its quantity: the first one is free, the rest are charged. The theme cannot make it $0 on its own: in Kaching Subscriptions, add this product as a free gift (quantity 1) on the plan above, so the cart and checkout charge nothing for the first one." },
     { "type": "product", "id": "gift_product", "label": "Gift product", "info": "Pick the same product as Featured product → Free subscription gift. Leave empty to add nothing." },
     { "type": "text", "id": "gift_label", "label": "Gift line label", "default": "FREE GIFT" },

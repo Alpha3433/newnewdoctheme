@@ -176,6 +176,18 @@ template (`templates/page.froya-landing.json`).
 * **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
   "Pair with" products, checkout label, country/currency selector and trust badges. The header
   CART button opens it and every add-to-cart button adds in place and opens it.
+  * **One row per bundle.** The Bundled product (Theme settings → Bundle tiers) shows as one row
+    per bundle however the cart splits it: once a tier applies, Shopify lists the free bottles as a
+    $0 line and the paid ones as another (each with its own key), and a subscription is laid out
+    for Kaching as two tagged lines. The grey line under the title reads "supply · tier" (a tier's
+    own supply line for its bottle count, otherwise *Supply line for other bottle counts*; the tier
+    is the discount's own title from the cart). The price is the row total and, with a tier
+    applied, every bottle at the one-time price is struck through next to a "1 FREE" tag. The
+    quantity buttons move the bundle's total by one and the bin empties the row: bottles go in
+    with `/cart/add.js` and come off with `/cart/change.js` by line key, and the cart is read again
+    after every write because the keys change (`/cart/update.js` by variant would only change the
+    first of the split lines). Every other line shows its line total, with the unit price under it
+    once there is more than one.
   * **Payment logos** sit under the checkout button, above the trust badges. They come from the
     payment methods switched on in Settings → Payments (`shop.enabled_payment_types`), so a method
     added there (iDEAL, Klarna…) shows up without a theme change. The drawer has no accelerated
