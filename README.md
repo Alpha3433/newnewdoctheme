@@ -29,19 +29,13 @@ template (`templates/page.froya-landing.json`).
   last proof point so the person in a portrait shot stays visible under the copy, as on the reference.
 * **Logo** – Header → Logo (plus a width slider). Used in the bar and the mobile menu.
 * **Products** – the buy box, menu bestseller cards, review-card product tiles and cart-drawer
-  add-ons list use product pickers. Prices, the subscribe & save plan, stock, variant and
+  "Pair with" list use product pickers. Prices, the subscribe & save plan, stock, variant and
   product images all come from the product, so update those in Products, not in the theme.
-* **Bundles** – the quantity breaks are defined once, in Theme settings → *Bundle tiers*: up to four
-  tiers, each with the bottles the shopper pays for, free bottles, a discount off the price per
-  bottle, a name and a supply line, plus the product they belong to (*Bundled product*). The buy
-  box shows them as cards: each Featured product → *Bundle tier* block picks a tier by number and
-  adds the card's badge, gift line, perks, highlight and pre-selection (add, remove or reorder the
-  blocks). The cart drawer reads the same settings, and `snippets/bundle-tier-price.liquid` prices
-  the tiers for both, so the cards and the drawer cannot disagree. The theme only displays those
-  prices: the real discount is applied at checkout by the Kaching Bundles app, so the tier
-  quantities and discounts must match the quantity breaks configured there. `KACHING_DEAL` in
-  `assets/main.js` repeats the two free-bottle tiers with Kaching's own bar and plan IDs (see
-  below); change it too if the tiers change.
+* **Bundles** – Featured product → *Bundle tier* blocks are the quantity breaks in the buy box
+  (add, remove or reorder them). Each tier sets the quantity added to cart and a discount that
+  comes off the price per bottle, so the per-bottle price falls as the bundle grows. The theme only
+  displays that price: the real discount is applied at checkout by the Kaching Bundles app, so the
+  tier quantities and discounts here must match the quantity breaks configured there.
 * **Subscription cadence follows the bundle** – with Subscribe & save on, 1 bottle renews every
   month (Kaching Plan #1, `1039991141`), Buy 2 Get 1 Free every 3 months (Plan #2, `1052770661`) and
   Buy 3 Get 3 Free every 6 months (Plan #3, `1052803429`). The mapping sits next to the Kaching bars
@@ -173,52 +167,9 @@ template (`templates/page.froya-landing.json`).
   *Support email* and replaces the store email in the text with it. Empty the setting to show the
   policies exactly as written. The footer, FAQ and the Track your order help card keep their own
   email text.
-* **Cart drawer** – Header group → Cart drawer: title, free express shipping goal, empty state,
-  subscribe toggle label, add-on products, checkout label, country/currency selector and trust
-  badges. The header CART button opens it and every add-to-cart button adds in place and opens it.
-  * **Free express shipping goal.** Standard shipping is always free; Express Shipping ($4.99) is
-    free from US$50 (*Free express shipping from (USD)*, which must match the free-over amount on
-    the Express Shipping rate in Settings → Shipping). The bar at the top compares that with the
-    order total after discounts - so EXTRA10 counts - and reads "You’re $15.01 away from FREE
-    express shipping" with "Standard shipping is always free" under it, then "You’ve unlocked FREE
-    express shipping ✓" on a full bar. Shoppers in another currency see the threshold converted
-    with the exchange rate Shopify gives the storefront (`Shopify.currency.rate`); Liquid has no
-    rate, so `assets/main.js` (`expressGoal`) does the comparison after every redraw and prints
-    the amount in the store's money format, copied from a price the section renders.
-  * **Add-ons** use the *Products to recommend* list, minus anything in the cart or sold out, and
-    follow the goal. Below it, the products that reach it on their own lead, cheapest first, each
-    marked "Unlocks free express shipping", under "Add one to get FREE express shipping" (an order
-    code's share is taken off first, so with EXTRA10 the $19.99 brush no longer reaches a $18.51
-    gap). Otherwise they run cheapest first under "Complete your routine". Once the goal is met and
-    the one-time bottles are exactly a tier with a bigger one above (3 bottles today), an upgrade
-    card leads: "Upgrade to 6-month supply · +$34.99 for 3 more bottles · $17.50 a bottle", whose
-    button tops the bundle up. It stays out while a next-tier nudge is showing. Cards show the
-    price of the variant their button adds.
-  * **One row per bundle.** The Bundled product (Theme settings → Bundle tiers) shows as one row
-    per bundle however the cart splits it: once a tier applies, Shopify lists the free bottles as a
-    $0 line and the paid ones as another (each with its own key), and a subscription is laid out
-    for Kaching as two tagged lines. The grey line under the title reads "supply · tier" (a tier's
-    own supply line for its bottle count, otherwise *Supply line for other bottle counts*; the tier
-    is the discount's own title from the cart). The price is the row total and, with a tier
-    applied, every bottle at the one-time price is struck through next to a "1 FREE" tag. The
-    quantity buttons move the bundle's total by one and the bin empties the row: bottles go in
-    with `/cart/add.js` and come off with `/cart/change.js` by line key, and the cart is read again
-    after every write because the keys change (`/cart/update.js` by variant would only change the
-    first of the split lines). Every other line shows its line total, with the unit price under it
-    once there is more than one.
-  * **Next-tier nudge.** Under a one-time bundle row, when the next tier up costs the same as the
-    bottles in the cart or less (2 bottles cost what 3 do, 4 what 6 do, 5 cost more than 6), a
-    line says so ("Add 1 more bottle — it’s free", "Add 1 more and pay $34.99 less") with a button
-    that tops the row up to that tier, keeping its plan and properties. The copy is built from the
-    tiers and the prices `snippets/bundle-tier-price.liquid` predicts (an order code such as
-    EXTRA10 scales the saving to what the total really drops by); the row itself always shows the
-    cart's own prices. There is no nudge on a subscription: there the bottle count also sets how
-    often it renews (`KACHING_DEAL`), which the button would change without saying so. Screen
-    readers hear a new nudge through a live region that stays put while the drawer is redrawn.
-  * **Payment logos** sit under the checkout button, above the trust badges. They come from the
-    payment methods switched on in Settings → Payments (`shop.enabled_payment_types`), so a method
-    added there (iDEAL, Klarna…) shows up without a theme change. The drawer has no accelerated
-    checkout buttons; Shop Pay stays off as a drawer button.
+* **Cart drawer** – Header group → Cart drawer: title, empty state, subscribe toggle label,
+  "Pair with" products, checkout label, country/currency selector and trust badges. The header
+  CART button opens it and every add-to-cart button adds in place and opens it.
   * The line's **Subscribe & save switch acts on the whole product**, not on the one line it sits
     on. A "Buy 2, Get 1 Free" bundle goes into the cart as three bottles on one line and Kaching
     Bundles then splits the free bottle onto its own $0 line; the switch gathers every line of that
@@ -241,11 +192,11 @@ template (`templates/page.froya-landing.json`).
     only zeroes a line tagged the way Kaching's own widget tags its gifts, so the drawer adds a
     hidden `__kaching_subs_gift` property naming the subscription line's plan
     (`{"sellingPlan":"1039991141"}`). Without it the gift is charged in full; a MicroStamp added
-    any other way (e.g. from the add-ons) has no tag and is charged, and a gift tagged for a plan
+    any other way (e.g. from "Pair with") has no tag and is charged, and a gift tagged for a plan
     that is no longer in the cart is charged too. Gift lines already in a cart without the tag are
     re-tagged on the next page view or cart change. A Shopify
     Buy X get Y discount is not a substitute: it can't tell a subscription from a one-time purchase,
-    so anyone adding the MicroStamp from the add-ons next to the serum would get it free too.
+    so anyone adding the MicroStamp from "Pair with" next to the serum would get it free too.
 
 ## Before you publish
 
@@ -327,15 +278,13 @@ The theme folders Shopify needs (`layout`, `templates`, `sections`, `snippets`, 
 | `sections/header-group.json`, `sections/footer-group.json` | Section groups with the default header/footer content (menu links, bestseller cards, blog links, footer links, cart-drawer badges and upsells). |
 | `sections/froya-*.liquid` | The landing page, one editable section per block (settings + blocks in each `{% schema %}`): announcement bar, sticky header with mega menus and mobile drawer, cart drawer, hero, benefits strip, logo/quote slider, review slider, backed-by-science timeline, research results, featured product (gallery, ingredients modal, buy box with bundle tiers), founder story, hair-loss types & badges, review wall, guarantee, video reviews, how-to-use, ingredient quality, ingredient science, newsletter, footer. Markup keeps the captured page's class names so the verbatim CSS still applies. |
 | `snippets/froya-image.liquid`, `snippets/froya-nav-card.liquid` | Image-picker-with-fallback helper and the menu bestseller card. |
-| `snippets/bundle-tier-price.liquid`, `snippets/bundle-supply.liquid` | The price of a bottle count and its supply line under Theme settings → Bundle tiers, shared by the buy box and the cart drawer. |
-| `snippets/cart-drawer-nudge.liquid`, `snippets/cart-drawer-upgrade.liquid` | The cart drawer's next-tier nudge and upgrade card. |
 | `sections/main-*.liquid` | Minimal, on-brand sections for the rest of the store: page, product, collection, collections list, cart, search, blog, article, 404, password, and the customer account pages. |
 | `templates/*.json` | JSON templates wiring the sections above; `index.json` and `page.froya-landing.json` carry the landing page's default block content. |
 | `assets/critical.css` | Verbatim copy of the inline `<head>` CSS from the live page (font faces, CSS variables, critical layout). |
 | `assets/sections-inline.css` | Verbatim copy of every per-section inline `<style>` block from the live page. Section ids are preserved so these rules apply unchanged. |
 | `assets/theme.css` | Reconstruction of the theme's external stylesheets that the capture did not include: base typography, buttons, header/mega menu/drawer, footer, plus a light layer for the supporting store templates. |
 | `assets/sections.css` | Reconstruction of the landing-page component styles for desktop and mobile. |
-| `assets/main.js` | Interactions: cart drawer (Ajax add/change/remove, one-row bundles, subscribe & save toggle, next-tier nudge, free express shipping goal and add-ons, re-rendered through the Section Rendering API), in-page add to cart from every product form, mega menus, mobile drawer, carousels (Blaze Slider), product gallery + thumbnails, ingredients modal, subscribe/one-time buy-box toggle, bundle tier selection (quantity + per-bottle and total prices), lazy video playback, science scroll-spy, animated result bars, smooth anchors, theme-editor re-initialisation. |
+| `assets/main.js` | Interactions: cart drawer (Ajax add/change/remove, subscribe & save toggle, "Pair with" upsells, re-rendered through the Section Rendering API), in-page add to cart from every product form, mega menus, mobile drawer, carousels (Blaze Slider), product gallery + thumbnails, ingredients modal, subscribe/one-time buy-box toggle, bundle tier selection (quantity + per-bottle and total prices), lazy video playback, science scroll-spy, animated result bars, smooth anchors, theme-editor re-initialisation. |
 | `assets/blaze.css`, `assets/blaze-slider.min.js` | Blaze Slider 1.9.3 (MIT, <https://github.com/MananTank/blaze-slider>), the carousel library the live page uses, vendored unmodified. |
 | `scripts/localize_assets.py` | Vendors every remote placeholder image/font/video into `assets/` and rewrites the references (Liquid and JSON get `asset_url`). |
 | `tools/extract.py`, `tools/build.py` | Historical: the pipeline that produced the original static `froya-*` sections from a Chrome capture of the Frøya page. **Do not re-run it** – it would overwrite the editable Elaren sections. |
