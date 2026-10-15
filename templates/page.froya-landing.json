@@ -452,7 +452,11 @@
         "bundle_1": {
           "type": "bundle",
           "settings": {
-            "tier": "1",
+            "quantity": 1,
+            "free_quantity": 0,
+            "discount": 0,
+            "title": "1 Bottle",
+            "subtitle": "30-day supply",
             "badge": "",
             "gift": "",
             "perks": "",
@@ -463,7 +467,11 @@
         "bundle_2": {
           "type": "bundle",
           "settings": {
-            "tier": "2",
+            "quantity": 2,
+            "free_quantity": 1,
+            "discount": 0,
+            "title": "Buy 2, Get 1 Free",
+            "subtitle": "3-month supply",
             "badge": "MOST POPULAR",
             "gift": "",
             "perks": "A full growth cycle, start to finish",
@@ -474,7 +482,11 @@
         "bundle_3": {
           "type": "bundle",
           "settings": {
-            "tier": "3",
+            "quantity": 3,
+            "free_quantity": 3,
+            "discount": 0,
+            "title": "Buy 3, Get 3 Free",
+            "subtitle": "6-month supply",
             "badge": "BEST VALUE",
             "gift": "",
             "perks": "Lowest price per bottle",

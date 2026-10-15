@@ -421,7 +421,13 @@
       "settings": {
         "title": "Cart",
         "show_shipping_bar": true,
-        "express_free_threshold": 50,
+        "shipping_threshold": 1,
+        "shipping_text": "Spend {amount} and get",
+        "shipping_highlight": "FREE SHIPPING",
+        "shipping_unlocked": "You’re eligible for",
+        "shipping_unlocked_highlight": "FREE SHIPPING",
+        "shipping_label": "Free shipping",
+        "shipping_label_unlocked": "Free shipping",
         "reviews_banner": "RATED 4.77/5 BY VERIFIED CUSTOMERS",
         "empty_title": "Your cart is empty",
         "empty_text": "",
@@ -435,6 +441,7 @@
         "gift_product": "elaren-microstamp-pro",
         "gift_label": "FREE GIFT",
         "gift_free_text": "FREE",
+        "upsell_title": "PAIR WITH:",
         "upsells": [
           "pumpkin-seed-oil-capsules",
           "elaren-root-revival-scalp-brush",

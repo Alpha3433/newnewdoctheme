@@ -138,8 +138,8 @@
       var count = parseInt(fresh.getAttribute('data-cart-count') || '0', 10);
       d.setAttribute('data-cart-count', count);
       this.updateCount(count);
-      initCartDrawer(d); // fills the free express shipping bar (expressGoal) before it is animated
       this.animateShipping(oldProgress, wasReached);
+      initCartDrawer(d);
     },
     /* The drawer is re-rendered as a whole after every cart change, which would snap the
        free-shipping bar straight to its new width. Start it at the previous width and let the CSS
@@ -266,10 +266,7 @@
         // advertised gift comes along with it.
         return self.write('cart/add.js', data).then(function () { return self.reconcile(); });
       }).then(function () {
-        // Opened from the page, the drawer also says where the shipping goal and any nudge now
-        // stand; inside an open drawer those are read out as they change (announceDrawer).
-        var extra = self.isOpen() ? [] : drawerMessages(self.drawer());
-        self.announce(['Added to cart'].concat(extra).join('. '));
+        self.announce('Added to cart');
         self.open();
       });
     },
@@ -292,69 +289,6 @@
             return self.reconcile(cart);
           });
         });
-      });
-    },
-
-    /* Bundle rows. The drawer shows the Bundled product (Theme settings > Bundle tiers) as one row
-       per bundle: every line of one variant on one plan with the same properties, whatever lines
-       the bundle discount split it into (a $0 line for the free bottles and one for the paid ones,
-       each with its own key) or Kaching's subscription layout tagged it into - its
-       __kaching_bundles tag is left out of the row's identity. The row's buttons set the row's
-       total, never one line of it:
-       - /cart/update.js by variant id only changes the first of the split lines, so it is not used;
-       - bottles go in with /cart/add.js, which adds to the total;
-       - bottles come off one line at a time with /cart/change.js by that line's key (by position if
-         two lines ever share a key), paid bottles first;
-       - keys change after every write, so the cart is read again before each step, until the row
-         adds up to what was asked for. */
-    groupProperties: function (properties) {
-      var base = {};
-      Object.keys(properties || {}).forEach(function (k) {
-        var v = properties[k];
-        if (k !== KACHING_BUNDLE_PROP && v !== null && v !== undefined && v !== '') base[k] = v;
-      });
-      return base;
-    },
-    groupKey: function (variantId, planId, properties) {
-      return variantId + '|' + (planId || '') + '|' + this.propertiesKey(this.groupProperties(properties));
-    },
-    setGroupTotal: function (group, goalFor) {
-      var self = this;
-      var key = this.groupKey(group.variantId, group.planId, group.properties);
-      var goal = null, steps = 0;
-      var step = function (cart) {
-        var items = cart.items || [];
-        var lines = items.filter(function (item) {
-          return !self.isGiftLine(item) && self.groupKey(item.variant_id, planOf(item), item.properties) === key;
-        });
-        var total = totalQuantity(lines);
-        if (goal === null) goal = Math.max(0, goalFor(total));
-        if (total === goal) return cart;
-        if (++steps > 8) throw new Error(CART_ERROR); // Shopify is not doing what is asked: stop
-        var write;
-        if (total < goal) {
-          var add = { id: group.variantId, quantity: goal - total };
-          if (group.planId) add.selling_plan = parseInt(group.planId, 10);
-          var properties = self.groupProperties(group.properties);
-          if (Object.keys(properties).length) add.properties = properties;
-          write = self.write('cart/add.js', { items: [add] }, false);
-        } else {
-          var pick = lines.slice().sort(function (a, b) {
-            return ((b.final_line_price > 0) - (a.final_line_price > 0)) || (b.quantity - a.quantity);
-          })[0];
-          var quantity = Math.max(0, pick.quantity - (total - goal));
-          var shared = items.filter(function (item) { return item.key === pick.key; }).length > 1;
-          write = self.write('cart/change.js', shared ? { line: items.indexOf(pick) + 1, quantity: quantity } : { id: pick.key, quantity: quantity }, false);
-        }
-        return write.then(function () { return self.fetchCart(); }).then(step);
-      };
-      return this.fetchCart().then(step);
-    },
-    // goalFor(total) -> the row's new total. The subscription layout and the gift follow.
-    changeGroup: function (group, goalFor) {
-      var self = this;
-      return this.run(function () {
-        return self.setGroupTotal(group, goalFor).then(function (cart) { return self.reconcile(cart); });
       });
     },
 
@@ -815,18 +749,6 @@
     var line = el.closest('line-item');
     return line ? line.getAttribute('data-key') : null;
   }
-  // The bundle row a button acts on, from the data-group-* attributes the drawer prints on it.
-  function groupOf(el) {
-    var host = el.closest('[data-group-variant]');
-    if (!host) return null;
-    var properties = {};
-    try { properties = JSON.parse(host.getAttribute('data-group-properties') || '{}') || {}; } catch (err) { /* none */ }
-    return {
-      variantId: parseInt(host.getAttribute('data-group-variant'), 10),
-      planId: host.getAttribute('data-group-plan') || '',
-      properties: properties
-    };
-  }
 
   document.addEventListener('click', function (e) {
     var toggle = e.target.closest('.js-cart-toggle');
@@ -837,23 +759,6 @@
     if (giftQty) {
       e.preventDefault();
       Cart.setGiftQuantity(parseInt(giftQty.getAttribute('data-cart-gift-qty'), 10)).catch(cartFailed);
-      return;
-    }
-    // Bundle rows: the stepper moves the row's total by one, the bin empties the row and the
-    // next-tier nudge tops it up to the tier (never down, if it got there some other way).
-    var groupButton = e.target.closest('[data-cart-group-step], [data-cart-group-set], [data-cart-group-fill]');
-    if (groupButton) {
-      e.preventDefault();
-      var group = groupOf(groupButton);
-      if (!group || !group.variantId) return;
-      var stepBy = parseInt(groupButton.getAttribute('data-cart-group-step'), 10);
-      var setTo = parseInt(groupButton.getAttribute('data-cart-group-set'), 10);
-      var fillTo = parseInt(groupButton.getAttribute('data-cart-group-fill'), 10);
-      if (isNaN(stepBy) && isNaN(setTo) && isNaN(fillTo)) return;
-      Cart.changeGroup(group, function (total) {
-        if (!isNaN(stepBy)) return total + stepBy;
-        return isNaN(setTo) ? Math.max(total, fillTo) : setTo;
-      }).catch(cartFailed);
       return;
     }
     var remove = e.target.closest('[data-cart-remove]');
@@ -887,128 +792,14 @@
     if (e.key === 'Escape' && Cart.isOpen()) Cart.close();
   });
 
-  /* An amount in the store's money format, built from a sample the section renders with Liquid's
-     money filter (data-money: 1234567.89 in the shopper's currency), so it reads exactly like every
-     other price on the page - symbol, separators, decimals and any markup the format carries. */
-  function formatMoney(cents, sample) {
-    // (?:) keeps each back-reference apart from the digits after it: \1567 would read as one escape.
-    var m = String(sample || '').match(/1(\D?)234\1(?:567)(\D)89|1(\D?)234\3(?:568)/);
-    if (!m) return (cents / 100).toFixed(2);
-    var decimals = m[2] !== undefined;
-    var amount = decimals ? (cents / 100).toFixed(2) : String(Math.round(cents / 100));
-    var parts = amount.split('.');
-    var number = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, decimals ? m[1] : m[3]) + (decimals ? m[2] + parts[1] : '');
-    return sample.slice(0, m.index) + number + sample.slice(m.index + m[0].length);
-  }
-  function escapeHtml(text) {
-    return String(text || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
-  }
-
-  /* Free express shipping goal (sections/froya-cart-drawer.liquid). The threshold is in US dollars,
-     like the Express Shipping rate in Shopify's shipping settings, while the cart total is in the
-     shopper's currency; Liquid has no exchange rate, so the comparison is made here with the rate
-     Shopify gives the storefront (1 for USD). Runs after every render: writes the copy, fills the
-     bar, and orders the add-ons by the goal. */
-  function expressGoal(drawer) {
-    var goal = { on: false, reached: false, gap: 0 };
-    var bar = $('[data-cart-shipping]', drawer);
-    var currency = window.Shopify && window.Shopify.currency;
-    var rate = parseFloat(currency && currency.rate) || 1;
-    var threshold = bar ? Math.round((parseInt(bar.getAttribute('data-threshold'), 10) || 0) * rate) : 0;
-    if (bar && threshold > 0) {
-      var total = parseInt(bar.getAttribute('data-total'), 10) || 0;
-      goal.on = true;
-      goal.gap = Math.max(0, threshold - total);
-      goal.reached = goal.gap === 0;
-      var progress = goal.reached ? 100 : Math.floor(total * 100 / threshold);
-      var text = $('[data-cart-shipping-text]', bar);
-      if (text) {
-        text.innerHTML = goal.reached
-          ? escapeHtml(bar.getAttribute('data-text-reached'))
-          : escapeHtml(bar.getAttribute('data-text')).replace('{amount}', function () {
-            return '<span class="free-shipping__highlight">' + formatMoney(goal.gap, bar.getAttribute('data-money')) + '</span>';
-          });
-      }
-      var note = $('[data-cart-shipping-note]', bar);
-      if (note) note.hidden = goal.reached;
-      var meter = $('.free-shipping__bar', bar);
-      if (meter) {
-        meter.setAttribute('aria-valuenow', progress);
-        if (text) meter.setAttribute('aria-valuetext', text.textContent);
-      }
-      var fill = $('.free-shipping__progress', bar);
-      if (fill) fill.style.width = progress + '%';
-      var dot = $('.free-shipping__dot--end', bar);
-      if (dot) dot.classList.toggle('is-reached', goal.reached);
-      bar.classList.toggle('is-reached', goal.reached);
-      bar.setAttribute('data-progress', progress);
-      bar.setAttribute('data-reached', goal.reached ? 'true' : 'false');
-    }
-    orderAddons(drawer, goal);
-  }
-
-  /* Add-ons. Below the goal, a product that reaches it on its own leads (cheapest first) and says
-     so, under the goal heading; otherwise everything runs cheapest first under the routine heading.
-     "On its own" counts what the product adds once an order-level percentage code (EXTRA10) has
-     taken its share. The upgrade card only shows once the goal is met. */
-  function orderAddons(drawer, goal) {
-    var below = goal.on && !goal.reached;
-    var upgrade = $('[data-cart-upgrade]', drawer);
-    var list = $('[data-addon-list]', drawer);
-    if (upgrade) {
-      upgrade.hidden = below;
-      // With every add-on in the cart or sold out the box holds only the card: it goes with it.
-      if (!list && upgrade.parentNode) upgrade.parentNode.hidden = below;
-    }
-    if (!list) return;
-    var keep = parseInt(list.getAttribute('data-order-keep'), 10) || 1000000;
-    var cards = $$('[data-addon]', list).map(function (card) {
-      var price = parseInt(card.getAttribute('data-price'), 10) || 0;
-      return { el: card, price: price, index: parseInt(card.getAttribute('data-index'), 10) || 0, closes: below && Math.round(price * keep / 1000000) >= goal.gap };
-    });
-    cards.sort(function (a, b) { return (b.closes - a.closes) || (a.price - b.price) || (a.index - b.index); });
-    cards.forEach(function (card) {
-      list.appendChild(card.el);
-      var reason = $('[data-addon-reason]', card.el);
-      if (reason) reason.hidden = !card.closes;
-    });
-    var heading = $('[data-addon-heading]', drawer);
-    if (heading) {
-      var leads = cards.length && cards[0].closes;
-      heading.textContent = heading.getAttribute(leads ? 'data-heading-goal' : 'data-heading') || heading.textContent;
-    }
-  }
-
-  /* Messages that change with the cart - the shipping goal and the next-tier nudge - are read out
-     when a change alters them. The drawer's content is replaced on every change, and a live region
-     that is itself replaced is not reliably read, so they go to [data-cart-live], which stays put.
-     Nothing is read on page load or while the drawer is closed. */
-  var spokenMessages = null;
-  function drawerMessages(drawer) {
-    return $$('[data-cart-shipping-text], [data-cart-nudge] .line-item__nudge-text', drawer).map(function (el) { return el.textContent.trim(); });
-  }
-  function announceDrawer(drawer) {
-    var messages = drawerMessages(drawer);
-    var previous = spokenMessages;
-    spokenMessages = messages;
-    if (!previous || !Cart.isOpen()) return;
-    var fresh = messages.filter(function (m) { return m && previous.indexOf(m) === -1; });
-    var live = $('[data-cart-live]', drawer);
-    if (!fresh.length || !live) return;
-    live.textContent = '';
-    window.setTimeout(function () { live.textContent = fresh.join('. '); }, 100);
-  }
-
   function initCartDrawer(drawer) {
     if (!drawer) return;
-    expressGoal(drawer);
     var scroller = $('[data-rec-scroller]', drawer);
     var arrows = $$('[data-rec-prev], [data-rec-next]', drawer);
     if (scroller && arrows.length) {
       var overflow = scroller.scrollWidth > scroller.clientWidth + 4;
       arrows.forEach(function (a) { a.style.display = overflow ? '' : 'none'; });
     }
-    announceDrawer(drawer);
   }
 
   /* ============================================================== header */
