@@ -188,6 +188,15 @@ template (`templates/page.froya-landing.json`).
     after every write because the keys change (`/cart/update.js` by variant would only change the
     first of the split lines). Every other line shows its line total, with the unit price under it
     once there is more than one.
+  * **Next-tier nudge.** Under a one-time bundle row, when the next tier up costs the same as the
+    bottles in the cart or less (2 bottles cost what 3 do, 4 what 6 do, 5 cost more than 6), a
+    line says so ("Add 1 more bottle — it’s free", "Add 1 more and pay $34.99 less") with a button
+    that tops the row up to that tier, keeping its plan and properties. The copy is built from the
+    tiers and the prices `snippets/bundle-tier-price.liquid` predicts (an order code such as
+    EXTRA10 scales the saving to what the total really drops by); the row itself always shows the
+    cart's own prices. There is no nudge on a subscription: there the bottle count also sets how
+    often it renews (`KACHING_DEAL`), which the button would change without saying so. Screen
+    readers hear a new nudge through a live region that stays put while the drawer is redrawn.
   * **Payment logos** sit under the checkout button, above the trust badges. They come from the
     payment methods switched on in Settings → Payments (`shop.enabled_payment_types`), so a method
     added there (iDEAL, Klarna…) shows up without a theme change. The drawer has no accelerated

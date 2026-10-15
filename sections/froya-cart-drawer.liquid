@@ -35,6 +35,12 @@
       </button>
     </header>
     <div class="visually-hidden" aria-live="polite" data-cart-status></div>
+    {%- comment -%}
+      Stays put while the drawer's content is redrawn after every change (a live region that is
+      itself replaced is not reliably read out): assets/main.js reads the nudge into it whenever a
+      change alters it.
+    {%- endcomment -%}
+    <div class="visually-hidden" aria-live="polite" aria-atomic="true" data-cart-live></div>
     <p class="s-mini-cart__error" role="alert" data-cart-error hidden></p>
 
     <div class="drawer__content{% if cart.item_count == 0 %} drawer__content--empty{% endif %}" data-cart-content>
@@ -181,6 +187,21 @@
             endfor
             assign line_group_keys = line_group_keys | split: '~~~'
             assign shown_groups = '~'
+            comment
+              An order-level percentage code (EXTRA10) takes the same share off anything added, so
+              what a nudge says the order drops by is scaled by the share it leaves, in parts per
+              million. Fixed-amount codes take the same off either way and change nothing.
+            endcomment
+            assign order_keep = 1000000
+            if cart.items_subtotal_price > 0
+              assign percent_off = 0
+              for application in cart.cart_level_discount_applications
+                if application.value_type == 'percentage'
+                  assign percent_off = percent_off | plus: application.total_allocated_amount
+                endif
+              endfor
+              assign order_keep = cart.items_subtotal_price | minus: percent_off | times: 1000000 | divided_by: cart.items_subtotal_price
+            endif
           -%}
           {%- for item in cart.items -%}
             {%- liquid
@@ -408,6 +429,19 @@
                   </div>
                 </div>
               </div>
+              {%- liquid
+                comment
+                  The next-tier nudge (snippets/cart-drawer-nudge.liquid), under one-time bundle rows
+                  only: on a subscription the bottle count also sets how often it renews (KACHING_DEAL
+                  in assets/main.js), which a "Make it 3" button would change without saying so.
+                endcomment
+                if is_bundle and row_plan == blank
+                  capture row_nudge
+                    render 'cart-drawer-nudge', quantity: row_qty, unit: item.original_price, order_keep: order_keep, free_one: section.settings.nudge_free_one, free_many: section.settings.nudge_free_many, save: section.settings.nudge_save, button: section.settings.nudge_button
+                  endcapture
+                  echo row_nudge
+                endif
+              -%}
             </line-item>
           {%- endfor -%}
         </form>
@@ -577,6 +611,11 @@
     { "type": "text", "id": "subscribe_saving_text", "label": "Saving shown next to the toggle", "default": "Save {amount}", "info": "{amount} is what the plan takes off everything the shopper is paying for that product (all its lines, a free bundle bottle counting for nothing). Leave empty to show no amount." },
     { "type": "text", "id": "free_tag_text", "label": "Free bottles tag on a bundle row", "default": "{count} FREE", "info": "The Bundled product (Theme settings → Bundle tiers) shows as one row per bundle, priced at its total. {count} is the number of bottles the cart charges nothing for. Leave empty to hide the tag." },
     { "type": "text", "id": "unit_price_text", "label": "Unit price under a line total", "default": "{amount} each", "info": "Lines show their total; with more than one unit this line follows underneath. Leave empty to hide it." },
+    { "type": "header", "content": "Next-tier nudge", "info": "Shown under a one-time bundle row when the next tier in Theme settings → Bundle tiers costs the same as the bottles in the cart or less (2 bottles cost what 3 do, 5 cost more than 6). Its button tops the row up to that tier. {count} is the number of bottles to add, {amount} what the order total drops by, {total} the tier's bottle count." },
+    { "type": "text", "id": "nudge_free_one", "label": "One more bottle, free", "default": "Add {count} more bottle — it’s free" },
+    { "type": "text", "id": "nudge_free_many", "label": "More bottles, free", "default": "Add {count} more bottles — they’re free" },
+    { "type": "text", "id": "nudge_save", "label": "More bottles for less", "default": "Add {count} more and pay {amount} less" },
+    { "type": "text", "id": "nudge_button", "label": "Button", "default": "Make it {total}" },
     { "type": "header", "content": "Free subscription gift", "info": "The gift the Featured product section advertises with Subscribe & save. It is added to the cart (one unit, tagged as a free gift) as soon as a line on the plan above is in the cart, and removed when the last such line goes. The shopper can raise its quantity: the first one is free, the rest are charged. The theme cannot make it $0 on its own: in Kaching Subscriptions, add this product as a free gift (quantity 1) on the plan above, so the cart and checkout charge nothing for the first one." },
     { "type": "product", "id": "gift_product", "label": "Gift product", "info": "Pick the same product as Featured product → Free subscription gift. Leave empty to add nothing." },
     { "type": "text", "id": "gift_label", "label": "Gift line label", "default": "FREE GIFT" },

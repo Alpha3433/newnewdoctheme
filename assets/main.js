@@ -836,16 +836,21 @@
       Cart.setGiftQuantity(parseInt(giftQty.getAttribute('data-cart-gift-qty'), 10)).catch(cartFailed);
       return;
     }
-    // Bundle rows: the stepper moves the row's total by one, the bin empties the row.
-    var groupButton = e.target.closest('[data-cart-group-step], [data-cart-group-set]');
+    // Bundle rows: the stepper moves the row's total by one, the bin empties the row and the
+    // next-tier nudge tops it up to the tier (never down, if it got there some other way).
+    var groupButton = e.target.closest('[data-cart-group-step], [data-cart-group-set], [data-cart-group-fill]');
     if (groupButton) {
       e.preventDefault();
       var group = groupOf(groupButton);
       if (!group || !group.variantId) return;
       var stepBy = parseInt(groupButton.getAttribute('data-cart-group-step'), 10);
       var setTo = parseInt(groupButton.getAttribute('data-cart-group-set'), 10);
-      if (isNaN(stepBy) && isNaN(setTo)) return;
-      Cart.changeGroup(group, function (total) { return isNaN(stepBy) ? setTo : total + stepBy; }).catch(cartFailed);
+      var fillTo = parseInt(groupButton.getAttribute('data-cart-group-fill'), 10);
+      if (isNaN(stepBy) && isNaN(setTo) && isNaN(fillTo)) return;
+      Cart.changeGroup(group, function (total) {
+        if (!isNaN(stepBy)) return total + stepBy;
+        return isNaN(setTo) ? Math.max(total, fillTo) : setTo;
+      }).catch(cartFailed);
       return;
     }
     var remove = e.target.closest('[data-cart-remove]');
@@ -879,6 +884,23 @@
     if (e.key === 'Escape' && Cart.isOpen()) Cart.close();
   });
 
+  /* Messages that change with the cart - the next-tier nudge - are read out when a change alters
+     them. The drawer's content is replaced on every change, and a live region that is itself
+     replaced is not reliably read, so they go to [data-cart-live], which stays put. Nothing is read
+     on page load or while the drawer is closed. */
+  var spokenMessages = null;
+  function announceDrawer(drawer) {
+    var messages = $$('[data-cart-nudge] .line-item__nudge-text', drawer).map(function (el) { return el.textContent.trim(); });
+    var previous = spokenMessages;
+    spokenMessages = messages;
+    if (!previous || !Cart.isOpen()) return;
+    var fresh = messages.filter(function (m) { return m && previous.indexOf(m) === -1; });
+    var live = $('[data-cart-live]', drawer);
+    if (!fresh.length || !live) return;
+    live.textContent = '';
+    window.setTimeout(function () { live.textContent = fresh.join('. '); }, 100);
+  }
+
   function initCartDrawer(drawer) {
     if (!drawer) return;
     var scroller = $('[data-rec-scroller]', drawer);
@@ -887,6 +909,7 @@
       var overflow = scroller.scrollWidth > scroller.clientWidth + 4;
       arrows.forEach(function (a) { a.style.display = overflow ? '' : 'none'; });
     }
+    announceDrawer(drawer);
   }
 
   /* ============================================================== header */
