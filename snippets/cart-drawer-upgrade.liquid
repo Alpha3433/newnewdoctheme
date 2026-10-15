@@ -1,0 +1,77 @@
+{%- comment -%}
+  Upgrade card at the head of the cart drawer's add-ons. Offered when the one-time bottles in the
+  cart are exactly a bundle tier (Theme settings → Bundle tiers) other than the smallest and a
+  bigger tier exists - with today's tiers, a 3-bottle Buy 2 Get 1 Free can become the 6-bottle
+  Buy 3 Get 3 Free. The figures are predicted with snippets/bundle-tier-price.liquid: what the
+  bigger tier adds to the order and what a bottle then costs, scaled like the nudge's by an
+  order-level percentage code. Rendered hidden: assets/main.js shows it once the free express
+  shipping goal is met, and the drawer leaves it out while a next-tier nudge is showing. Its
+  button tops the bundle up to the tier, keeping its properties.
+
+  item         the bundle's first cart line (one-time)
+  quantity     one-time bottles in the cart
+  order_keep   what an order-level percentage code leaves, in parts per million
+  title, text, button   copy from the drawer's settings: {supply} is the bigger tier's supply line,
+               {amount} what it adds, {count} the bottles it adds, {price} the price per bottle,
+               {total} its bottle count
+{%- endcomment -%}
+{%- liquid
+  assign smallest_total = 0
+  assign is_tier = false
+  assign next_total = 0
+  for slot in (1..4)
+    assign slot_key = 'bundle_tier_' | append: slot
+    assign paid_key = slot_key | append: '_paid'
+    assign free_key = slot_key | append: '_free'
+    assign slot_paid = settings[paid_key] | default: 0
+    assign slot_free = settings[free_key] | default: 0
+    assign slot_total = slot_paid | plus: slot_free
+    if slot_paid > 0
+      if smallest_total == 0 or slot_total < smallest_total
+        assign smallest_total = slot_total
+      endif
+      if slot_total == quantity
+        assign is_tier = true
+      endif
+      if slot_total > quantity
+        if next_total == 0 or slot_total < next_total
+          assign next_total = slot_total
+        endif
+      endif
+    endif
+  endfor
+  assign upgrade_delta = 0
+  if is_tier and quantity > smallest_total and next_total > 0 and item.variant.available
+    capture now_price
+      render 'bundle-tier-price', quantity: quantity, unit: item.original_price
+    endcapture
+    capture next_price
+      render 'bundle-tier-price', quantity: next_total, unit: item.original_price
+    endcapture
+    assign now_price = now_price | plus: 0
+    assign next_price = next_price | plus: 0
+    assign upgrade_delta = next_price | minus: now_price | times: order_keep | plus: 500000 | divided_by: 1000000
+    assign upgrade_each = next_price | times: order_keep | divided_by: next_total | plus: 500000 | divided_by: 1000000
+    assign upgrade_extra = next_total | minus: quantity
+    capture upgrade_supply
+      render 'bundle-supply', quantity: next_total
+    endcapture
+    assign upgrade_delta_money = upgrade_delta | money
+    assign upgrade_each_money = upgrade_each | money
+    assign upgrade_title = title | replace: '{supply}', upgrade_supply
+    assign upgrade_text = text | replace: '{amount}', upgrade_delta_money | replace: '{count}', upgrade_extra | replace: '{price}', upgrade_each_money
+    assign upgrade_button = button | replace: '{total}', next_total
+  endif
+-%}
+{%- if upgrade_delta > 0 -%}
+<div class="mini-cart__upgrade" data-cart-upgrade data-group-variant="{{ item.variant_id }}" data-group-plan="" data-group-properties="{{ item.properties | json | escape }}" hidden>
+  <div class="mini-cart__upgrade-image">
+    {%- if item.image != blank -%}{{ item.image | image_url: width: 140, height: 140, crop: 'center' | image_tag: alt: '', loading: 'lazy' }}{%- endif -%}
+  </div>
+  <div class="mini-cart__upgrade-body">
+    <p class="mini-cart__upgrade-title">{{ upgrade_title }}</p>
+    <p class="mini-cart__upgrade-text">{{ upgrade_text }}</p>
+  </div>
+  <button type="button" class="drawer__product-button mini-cart__upgrade-button" data-cart-group-fill="{{ next_total }}">{{ upgrade_button }}</button>
+</div>
+{%- endif -%}

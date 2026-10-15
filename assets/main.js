@@ -138,8 +138,8 @@
       var count = parseInt(fresh.getAttribute('data-cart-count') || '0', 10);
       d.setAttribute('data-cart-count', count);
       this.updateCount(count);
+      initCartDrawer(d); // fills the free express shipping bar (expressGoal) before it is animated
       this.animateShipping(oldProgress, wasReached);
-      initCartDrawer(d);
     },
     /* The drawer is re-rendered as a whole after every cart change, which would snap the
        free-shipping bar straight to its new width. Start it at the previous width and let the CSS
@@ -266,7 +266,10 @@
         // advertised gift comes along with it.
         return self.write('cart/add.js', data).then(function () { return self.reconcile(); });
       }).then(function () {
-        self.announce('Added to cart');
+        // Opened from the page, the drawer also says where the shipping goal and any nudge now
+        // stand; inside an open drawer those are read out as they change (announceDrawer).
+        var extra = self.isOpen() ? [] : drawerMessages(self.drawer());
+        self.announce(['Added to cart'].concat(extra).join('. '));
         self.open();
       });
     },
@@ -884,13 +887,108 @@
     if (e.key === 'Escape' && Cart.isOpen()) Cart.close();
   });
 
-  /* Messages that change with the cart - the next-tier nudge - are read out when a change alters
-     them. The drawer's content is replaced on every change, and a live region that is itself
-     replaced is not reliably read, so they go to [data-cart-live], which stays put. Nothing is read
-     on page load or while the drawer is closed. */
+  /* An amount in the store's money format, built from a sample the section renders with Liquid's
+     money filter (data-money: 1234567.89 in the shopper's currency), so it reads exactly like every
+     other price on the page - symbol, separators, decimals and any markup the format carries. */
+  function formatMoney(cents, sample) {
+    // (?:) keeps each back-reference apart from the digits after it: \1567 would read as one escape.
+    var m = String(sample || '').match(/1(\D?)234\1(?:567)(\D)89|1(\D?)234\3(?:568)/);
+    if (!m) return (cents / 100).toFixed(2);
+    var decimals = m[2] !== undefined;
+    var amount = decimals ? (cents / 100).toFixed(2) : String(Math.round(cents / 100));
+    var parts = amount.split('.');
+    var number = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, decimals ? m[1] : m[3]) + (decimals ? m[2] + parts[1] : '');
+    return sample.slice(0, m.index) + number + sample.slice(m.index + m[0].length);
+  }
+  function escapeHtml(text) {
+    return String(text || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  }
+
+  /* Free express shipping goal (sections/froya-cart-drawer.liquid). The threshold is in US dollars,
+     like the Express Shipping rate in Shopify's shipping settings, while the cart total is in the
+     shopper's currency; Liquid has no exchange rate, so the comparison is made here with the rate
+     Shopify gives the storefront (1 for USD). Runs after every render: writes the copy, fills the
+     bar, and orders the add-ons by the goal. */
+  function expressGoal(drawer) {
+    var goal = { on: false, reached: false, gap: 0 };
+    var bar = $('[data-cart-shipping]', drawer);
+    var currency = window.Shopify && window.Shopify.currency;
+    var rate = parseFloat(currency && currency.rate) || 1;
+    var threshold = bar ? Math.round((parseInt(bar.getAttribute('data-threshold'), 10) || 0) * rate) : 0;
+    if (bar && threshold > 0) {
+      var total = parseInt(bar.getAttribute('data-total'), 10) || 0;
+      goal.on = true;
+      goal.gap = Math.max(0, threshold - total);
+      goal.reached = goal.gap === 0;
+      var progress = goal.reached ? 100 : Math.floor(total * 100 / threshold);
+      var text = $('[data-cart-shipping-text]', bar);
+      if (text) {
+        text.innerHTML = goal.reached
+          ? escapeHtml(bar.getAttribute('data-text-reached'))
+          : escapeHtml(bar.getAttribute('data-text')).replace('{amount}', function () {
+            return '<span class="free-shipping__highlight">' + formatMoney(goal.gap, bar.getAttribute('data-money')) + '</span>';
+          });
+      }
+      var note = $('[data-cart-shipping-note]', bar);
+      if (note) note.hidden = goal.reached;
+      var meter = $('.free-shipping__bar', bar);
+      if (meter) {
+        meter.setAttribute('aria-valuenow', progress);
+        if (text) meter.setAttribute('aria-valuetext', text.textContent);
+      }
+      var fill = $('.free-shipping__progress', bar);
+      if (fill) fill.style.width = progress + '%';
+      var dot = $('.free-shipping__dot--end', bar);
+      if (dot) dot.classList.toggle('is-reached', goal.reached);
+      bar.classList.toggle('is-reached', goal.reached);
+      bar.setAttribute('data-progress', progress);
+      bar.setAttribute('data-reached', goal.reached ? 'true' : 'false');
+    }
+    orderAddons(drawer, goal);
+  }
+
+  /* Add-ons. Below the goal, a product that reaches it on its own leads (cheapest first) and says
+     so, under the goal heading; otherwise everything runs cheapest first under the routine heading.
+     "On its own" counts what the product adds once an order-level percentage code (EXTRA10) has
+     taken its share. The upgrade card only shows once the goal is met. */
+  function orderAddons(drawer, goal) {
+    var below = goal.on && !goal.reached;
+    var upgrade = $('[data-cart-upgrade]', drawer);
+    var list = $('[data-addon-list]', drawer);
+    if (upgrade) {
+      upgrade.hidden = below;
+      // With every add-on in the cart or sold out the box holds only the card: it goes with it.
+      if (!list && upgrade.parentNode) upgrade.parentNode.hidden = below;
+    }
+    if (!list) return;
+    var keep = parseInt(list.getAttribute('data-order-keep'), 10) || 1000000;
+    var cards = $$('[data-addon]', list).map(function (card) {
+      var price = parseInt(card.getAttribute('data-price'), 10) || 0;
+      return { el: card, price: price, index: parseInt(card.getAttribute('data-index'), 10) || 0, closes: below && Math.round(price * keep / 1000000) >= goal.gap };
+    });
+    cards.sort(function (a, b) { return (b.closes - a.closes) || (a.price - b.price) || (a.index - b.index); });
+    cards.forEach(function (card) {
+      list.appendChild(card.el);
+      var reason = $('[data-addon-reason]', card.el);
+      if (reason) reason.hidden = !card.closes;
+    });
+    var heading = $('[data-addon-heading]', drawer);
+    if (heading) {
+      var leads = cards.length && cards[0].closes;
+      heading.textContent = heading.getAttribute(leads ? 'data-heading-goal' : 'data-heading') || heading.textContent;
+    }
+  }
+
+  /* Messages that change with the cart - the shipping goal and the next-tier nudge - are read out
+     when a change alters them. The drawer's content is replaced on every change, and a live region
+     that is itself replaced is not reliably read, so they go to [data-cart-live], which stays put.
+     Nothing is read on page load or while the drawer is closed. */
   var spokenMessages = null;
+  function drawerMessages(drawer) {
+    return $$('[data-cart-shipping-text], [data-cart-nudge] .line-item__nudge-text', drawer).map(function (el) { return el.textContent.trim(); });
+  }
   function announceDrawer(drawer) {
-    var messages = $$('[data-cart-nudge] .line-item__nudge-text', drawer).map(function (el) { return el.textContent.trim(); });
+    var messages = drawerMessages(drawer);
     var previous = spokenMessages;
     spokenMessages = messages;
     if (!previous || !Cart.isOpen()) return;
@@ -903,6 +1001,7 @@
 
   function initCartDrawer(drawer) {
     if (!drawer) return;
+    expressGoal(drawer);
     var scroller = $('[data-rec-scroller]', drawer);
     var arrows = $$('[data-rec-prev], [data-rec-next]', drawer);
     if (scroller && arrows.length) {
