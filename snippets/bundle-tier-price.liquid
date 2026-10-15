@@ -1,0 +1,38 @@
+{%- comment -%}
+  What `quantity` bottles cost at `unit` per bottle under Theme settings → Bundle tiers, in cents.
+  The biggest tier the quantity fills applies once (tiers do not repeat): its free bottles cost
+  nothing and its discount comes off every bottle that is paid for. So with Buy 2 Get 1 Free and
+  Buy 3 Get 3 Free, 4 bottles are charged as 3, and so are 6. This is the Kaching Bundles quantity
+  break the tiers mirror; Kaching prices the real cart.
+
+  The buy box prices its bundle cards with it and the cart drawer predicts the next tier with it,
+  so the two cannot disagree. Prints the number and nothing else; capture it:
+    capture price
+      render 'bundle-tier-price', quantity: 4, unit: 3499
+    endcapture
+  Only a prediction: the drawer always shows what the cart itself says a line costs.
+{%- endcomment -%}
+{%- liquid
+  assign best_total = 0
+  assign best_free = 0
+  assign best_discount = 0
+  for slot in (1..4)
+    assign slot_key = 'bundle_tier_' | append: slot
+    assign paid_key = slot_key | append: '_paid'
+    assign free_key = slot_key | append: '_free'
+    assign discount_key = slot_key | append: '_discount'
+    assign slot_paid = settings[paid_key] | default: 0
+    if slot_paid > 0
+      assign slot_free = settings[free_key] | default: 0
+      assign slot_total = slot_paid | plus: slot_free
+      if slot_total <= quantity and slot_total > best_total
+        assign best_total = slot_total
+        assign best_free = slot_free
+        assign best_discount = settings[discount_key] | default: 0
+      endif
+    endif
+  endfor
+  assign keep = 100 | minus: best_discount
+  assign paid_bottles = quantity | minus: best_free
+  echo unit | times: keep | divided_by: 100 | times: paid_bottles
+-%}

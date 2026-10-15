@@ -31,11 +31,17 @@ template (`templates/page.froya-landing.json`).
 * **Products** – the buy box, menu bestseller cards, review-card product tiles and cart-drawer
   "Pair with" list use product pickers. Prices, the subscribe & save plan, stock, variant and
   product images all come from the product, so update those in Products, not in the theme.
-* **Bundles** – Featured product → *Bundle tier* blocks are the quantity breaks in the buy box
-  (add, remove or reorder them). Each tier sets the quantity added to cart and a discount that
-  comes off the price per bottle, so the per-bottle price falls as the bundle grows. The theme only
-  displays that price: the real discount is applied at checkout by the Kaching Bundles app, so the
-  tier quantities and discounts here must match the quantity breaks configured there.
+* **Bundles** – the quantity breaks are defined once, in Theme settings → *Bundle tiers*: up to four
+  tiers, each with the bottles the shopper pays for, free bottles, a discount off the price per
+  bottle, a name and a supply line, plus the product they belong to (*Bundled product*). The buy
+  box shows them as cards: each Featured product → *Bundle tier* block picks a tier by number and
+  adds the card's badge, gift line, perks, highlight and pre-selection (add, remove or reorder the
+  blocks). The cart drawer reads the same settings, and `snippets/bundle-tier-price.liquid` prices
+  the tiers for both, so the cards and the drawer cannot disagree. The theme only displays those
+  prices: the real discount is applied at checkout by the Kaching Bundles app, so the tier
+  quantities and discounts must match the quantity breaks configured there. `KACHING_DEAL` in
+  `assets/main.js` repeats the two free-bottle tiers with Kaching's own bar and plan IDs (see
+  below); change it too if the tiers change.
 * **Subscription cadence follows the bundle** – with Subscribe & save on, 1 bottle renews every
   month (Kaching Plan #1, `1039991141`), Buy 2 Get 1 Free every 3 months (Plan #2, `1052770661`) and
   Buy 3 Get 3 Free every 6 months (Plan #3, `1052803429`). The mapping sits next to the Kaching bars

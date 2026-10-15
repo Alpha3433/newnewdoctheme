@@ -64,6 +64,214 @@
     ]
   },
   {
+    "name": "Bundle tiers",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "The serum's bundle tiers, defined once. The buy box's bundle cards (Featured product → Bundle tier blocks pick a tier by number) and the cart drawer (one row per bundle, next-tier nudge, upgrade card) all read them, and snippets/bundle-tier-price.liquid prices them for both. The theme only displays these prices: the Kaching Bundles discount charges them at checkout, so keep the bottles and discounts here in step with the quantity breaks set up in Kaching."
+      },
+      {
+        "type": "product",
+        "id": "bundle_product",
+        "label": "Bundled product",
+        "info": "The product the tiers belong to. The cart drawer shows its lines as one row per bundle and suggests the next tier."
+      },
+      {
+        "type": "text",
+        "id": "bundle_supply_text",
+        "label": "Supply line for other bottle counts",
+        "default": "{count}-month supply",
+        "info": "Shown in the cart for a bottle count that is not a tier. {count} is the number of bottles (one bottle lasts a month). A tier's own supply line is used for its bottle count."
+      },
+      {
+        "type": "header",
+        "content": "Tier 1"
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_1_paid",
+        "label": "Bottles the shopper pays for",
+        "min": 0,
+        "max": 6,
+        "step": 1,
+        "default": 1,
+        "info": "0 turns the tier off."
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_1_free",
+        "label": "Free bottles",
+        "min": 0,
+        "max": 6,
+        "step": 1,
+        "default": 0,
+        "info": "Buy 2, Get 1 Free = 2 paid + 1 free. Every bottle goes in the cart; a strike-through shows them all at the regular price."
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_1_discount",
+        "label": "Discount off the price per paid bottle",
+        "min": 0,
+        "max": 60,
+        "step": 1,
+        "unit": "%",
+        "default": 0
+      },
+      {
+        "type": "text",
+        "id": "bundle_tier_1_title",
+        "label": "Tier name",
+        "default": "1 Bottle",
+        "info": "Leave empty for \"Buy 2, Get 1 Free\" (or the bottle count when nothing is free)."
+      },
+      {
+        "type": "text",
+        "id": "bundle_tier_1_supply",
+        "label": "Supply line",
+        "default": "30-day supply"
+      },
+      {
+        "type": "header",
+        "content": "Tier 2"
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_2_paid",
+        "label": "Bottles the shopper pays for",
+        "min": 0,
+        "max": 6,
+        "step": 1,
+        "default": 2,
+        "info": "0 turns the tier off."
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_2_free",
+        "label": "Free bottles",
+        "min": 0,
+        "max": 6,
+        "step": 1,
+        "default": 1,
+        "info": "Buy 2, Get 1 Free = 2 paid + 1 free. Every bottle goes in the cart; a strike-through shows them all at the regular price."
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_2_discount",
+        "label": "Discount off the price per paid bottle",
+        "min": 0,
+        "max": 60,
+        "step": 1,
+        "unit": "%",
+        "default": 0
+      },
+      {
+        "type": "text",
+        "id": "bundle_tier_2_title",
+        "label": "Tier name",
+        "default": "Buy 2, Get 1 Free",
+        "info": "Leave empty for \"Buy 2, Get 1 Free\" (or the bottle count when nothing is free)."
+      },
+      {
+        "type": "text",
+        "id": "bundle_tier_2_supply",
+        "label": "Supply line",
+        "default": "3-month supply"
+      },
+      {
+        "type": "header",
+        "content": "Tier 3"
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_3_paid",
+        "label": "Bottles the shopper pays for",
+        "min": 0,
+        "max": 6,
+        "step": 1,
+        "default": 3,
+        "info": "0 turns the tier off."
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_3_free",
+        "label": "Free bottles",
+        "min": 0,
+        "max": 6,
+        "step": 1,
+        "default": 3,
+        "info": "Buy 2, Get 1 Free = 2 paid + 1 free. Every bottle goes in the cart; a strike-through shows them all at the regular price."
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_3_discount",
+        "label": "Discount off the price per paid bottle",
+        "min": 0,
+        "max": 60,
+        "step": 1,
+        "unit": "%",
+        "default": 0
+      },
+      {
+        "type": "text",
+        "id": "bundle_tier_3_title",
+        "label": "Tier name",
+        "default": "Buy 3, Get 3 Free",
+        "info": "Leave empty for \"Buy 2, Get 1 Free\" (or the bottle count when nothing is free)."
+      },
+      {
+        "type": "text",
+        "id": "bundle_tier_3_supply",
+        "label": "Supply line",
+        "default": "6-month supply"
+      },
+      {
+        "type": "header",
+        "content": "Tier 4"
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_4_paid",
+        "label": "Bottles the shopper pays for",
+        "min": 0,
+        "max": 6,
+        "step": 1,
+        "default": 0,
+        "info": "0 turns the tier off."
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_4_free",
+        "label": "Free bottles",
+        "min": 0,
+        "max": 6,
+        "step": 1,
+        "default": 0,
+        "info": "Buy 2, Get 1 Free = 2 paid + 1 free. Every bottle goes in the cart; a strike-through shows them all at the regular price."
+      },
+      {
+        "type": "range",
+        "id": "bundle_tier_4_discount",
+        "label": "Discount off the price per paid bottle",
+        "min": 0,
+        "max": 60,
+        "step": 1,
+        "unit": "%",
+        "default": 0
+      },
+      {
+        "type": "text",
+        "id": "bundle_tier_4_title",
+        "label": "Tier name",
+        "info": "Leave empty for \"Buy 2, Get 1 Free\" (or the bottle count when nothing is free)."
+      },
+      {
+        "type": "text",
+        "id": "bundle_tier_4_supply",
+        "label": "Supply line"
+      }
+    ]
+  },
+  {
     "name": "Currency format",
     "settings": [
       {
