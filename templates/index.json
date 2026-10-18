@@ -76,7 +76,7 @@
       ],
       "settings": {
         "text_color": "#1f1f1f",
-        "marquee_text": "BUY 2 GET 1 FREE + <strong>FREE GIFT</strong> WITH SUBSCRIPTION",
+        "marquee_text": "",
         "marquee_separator": "✦",
         "marquee_link": "#product-section",
         "marquee_style": "soft",
