@@ -7,7 +7,6 @@
   assign badges = section.blocks | where: 'type', 'badge'
   assign upsells = section.settings.upsells
   assign amount_placeholder = '{amount}'
-  assign count_placeholder = '{count}'
 -%}
 {%- liquid
   comment
@@ -35,39 +34,49 @@
       </button>
     </header>
     <div class="visually-hidden" aria-live="polite" data-cart-status></div>
-    {%- comment -%}
-      Stays put while the drawer's content is redrawn after every change (a live region that is
-      itself replaced is not reliably read out): assets/main.js reads the shipping goal and the
-      next-tier nudge into it whenever a change alters them.
-    {%- endcomment -%}
-    <div class="visually-hidden" aria-live="polite" aria-atomic="true" data-cart-live></div>
     <p class="s-mini-cart__error" role="alert" data-cart-error hidden></p>
 
     <div class="drawer__content{% if cart.item_count == 0 %} drawer__content--empty{% endif %}" data-cart-content>
       {%- liquid
         comment
-          Free express shipping goal. Standard shipping is always free; Express Shipping is free once
-          the order total after discounts (cart.total_price, what Shopify's price-based rate checks)
-          reaches the threshold, which is in US dollars like the rate in Shopify's shipping settings.
-          Shown in both states so it is the first thing the shopper sees after an add to cart.
-          Liquid cannot convert dollars into the shopper's currency, so assets/main.js
-          (expressGoal) compares the two with Shopify.currency.rate after every render: it writes
-          the copy (the amount in the store's money format, taken from data-money), fills the bar,
-          animates it from where it stood and orders the add-ons below by it.
+          Free-shipping progress. Shown in both states so the bar is the first thing the shopper sees
+          after an add to cart: assets/main.js re-renders this container after every cart change and
+          animates the bar from its previous width to the new one. Once the threshold is reached the
+          copy switches to the "unlocked" pair ("You’re eligible for FREE SHIPPING").
         endcomment
-        assign express_threshold = section.settings.express_free_threshold | default: 0 | times: 100 | round
+        assign threshold = section.settings.shipping_threshold | default: 0 | times: 100
+        assign remaining = threshold | minus: cart.total_price
+        assign remaining_money = remaining | money_without_trailing_zeros
+        assign progress = 0
+        if threshold > 0
+          assign progress = cart.total_price | times: 100 | divided_by: threshold | at_most: 100
+        endif
+        assign reached = false
+        if remaining <= 0
+          assign reached = true
+        endif
       -%}
-      {%- if section.settings.show_shipping_bar and express_threshold > 0 -%}
-      <div class="s-mini-cart__shipping free-shipping{% if cart.item_count == 0 %} s-mini-cart__shipping--empty{% endif %}" data-cart-shipping data-threshold="{{ express_threshold }}" data-total="{{ cart.total_price }}" data-money="{{ 123456789 | money | escape }}" data-text="{{ section.settings.express_progress_text | escape }}" data-text-reached="{{ section.settings.express_unlocked_text | escape }}" data-progress="0" data-reached="false">
-        <p class="free-shipping__text" data-cart-shipping-text></p>
-        <div class="free-shipping__bar" role="progressbar" aria-label="Free express shipping" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-          <div class="free-shipping__progress" style="width: 0%;"></div>
+      {%- if section.settings.show_shipping_bar and threshold > 0 -%}
+      <div class="s-mini-cart__shipping free-shipping{% if cart.item_count == 0 %} s-mini-cart__shipping--empty{% endif %}{% if reached %} is-reached{% endif %}" data-cart-shipping data-progress="{{ progress }}" data-reached="{{ reached }}">
+        <p class="free-shipping__text" data-cart-shipping-text>
+          {%- if reached -%}
+            {{ section.settings.shipping_unlocked }}{% if section.settings.shipping_unlocked_highlight != blank %} <span class="free-shipping__highlight">{{ section.settings.shipping_unlocked_highlight }}</span>{% endif %}
+          {%- else -%}
+            {{ section.settings.shipping_text | replace: amount_placeholder, remaining_money }} <span>{{ section.settings.shipping_highlight }}</span>
+          {%- endif -%}
+        </p>
+        <div class="free-shipping__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}">
+          <div class="free-shipping__progress" style="width: {{ progress }}%;"></div>
           <span class="free-shipping__dot free-shipping__dot--start" aria-hidden="true"></span>
-          <span class="free-shipping__dot free-shipping__dot--end" aria-hidden="true"></span>
+          <span class="free-shipping__dot free-shipping__dot--end{% if reached %} is-reached{% endif %}" aria-hidden="true"></span>
         </div>
-        {%- if section.settings.express_standard_text != blank -%}
-          <p class="free-shipping__note" data-cart-shipping-note hidden>{{ section.settings.express_standard_text }}</p>
-        {%- endif -%}
+        {%- liquid
+          assign bar_label = section.settings.shipping_label
+          if reached and section.settings.shipping_label_unlocked != blank
+            assign bar_label = section.settings.shipping_label_unlocked
+          endif
+        -%}
+        {%- if bar_label != blank -%}<span class="free-shipping__label">{{ bar_label }}</span>{%- endif -%}
       </div>
       {%- endif -%}
       {%- if cart.item_count == 0 -%}
@@ -135,76 +144,10 @@
                 endif
               endif
             endfor
-            comment
-              One row per bundle. Once a bundle tier applies, Shopify lists the bundle as two lines
-              with their own keys - the free bottles at $0 (carrying the discount) and the paid ones -
-              and on a subscription Kaching's layout tags the two halves differently (assets/main.js,
-              reconcileBundles). The drawer shows every line of the Bundled product (Theme settings >
-              Bundle tiers) that shares a variant, a plan and the shopper's own properties as one
-              row; Kaching's __kaching_bundles tag is the layout's, not the shopper's, so it is left
-              out of that identity. line_group_keys holds each cart line's identity ('-' for any
-              other line), and a row is drawn at the first line of its bundle.
-            endcomment
-            assign bundle_product_id = 0
-            if settings.bundle_product != blank
-              assign bundle_product_id = settings.bundle_product.id
-            endif
-            assign line_group_keys = ''
-            for item in cart.items
-              assign group_key = '-'
-              if item.product_id == bundle_product_id and item.properties._free_gift == blank
-                assign group_key = item.variant_id | append: '|'
-                if item.selling_plan_allocation
-                  assign group_key = group_key | append: item.selling_plan_allocation.selling_plan.id
-                endif
-                assign group_key = group_key | append: '|'
-                for property in item.properties
-                  if property.first != '__kaching_bundles' and property.last != blank
-                    assign group_key = group_key | append: property.first | append: '=' | append: property.last | append: ';'
-                  endif
-                endfor
-              endif
-              unless forloop.first
-                assign line_group_keys = line_group_keys | append: '~~~'
-              endunless
-              assign line_group_keys = line_group_keys | append: group_key
-            endfor
-            assign line_group_keys = line_group_keys | split: '~~~'
-            assign shown_groups = '~'
-            comment
-              An order-level percentage code (EXTRA10) takes the same share off anything added, so
-              what a nudge or the add-ons say the order changes by is scaled by the share it leaves,
-              in parts per million. The share is read off the cart's own discount and rounded to a
-              hundredth of a percent, which drops the cent Shopify rounds each discount to (10% of
-              $69.98 is $7.00). Fixed-amount codes take the same off either way and change nothing.
-            endcomment
-            assign order_keep = 1000000
-            if cart.items_subtotal_price > 0
-              assign percent_off = 0
-              for application in cart.cart_level_discount_applications
-                if application.value_type == 'percentage'
-                  assign percent_off = percent_off | plus: application.total_allocated_amount
-                endif
-              endfor
-              assign order_keep = cart.items_subtotal_price | minus: percent_off | times: 20000 | plus: cart.items_subtotal_price | divided_by: cart.items_subtotal_price | divided_by: 2 | times: 100
-            endif
-            assign nudge_shown = false
-            assign onetime_total = 0
-            assign upgrade_item = blank
           -%}
           {%- for item in cart.items -%}
             {%- liquid
               assign line = forloop.index
-              assign group_key = line_group_keys[forloop.index0] | default: '-'
-              assign is_bundle = false
-              if group_key != '-'
-                assign group_marker = '~' | append: group_key | append: '~'
-                if shown_groups contains group_marker
-                  continue
-                endif
-                assign shown_groups = shown_groups | append: group_key | append: '~'
-                assign is_bundle = true
-              endif
               comment
                 Offer the cheapest plan the VARIANT itself allocates, the same way the buy box does.
                 A product's selling plan groups are one-per-cadence in an order Liquid does not
@@ -289,49 +232,10 @@
                   assign show_variant_title = false
                 endif
               endif
-              comment
-                A bundle row adds up every line of its bundle: the bottles, what they cost together,
-                and the bottles the cart prices at $0. The tier's name is the discount's own title
-                from the cart. With a discount applied, the strike-through is every bottle at the
-                one-time price (the anchor the buy box's "Save" figures use), never the compare-at
-                price. The grey line names the supply (snippets/bundle-supply.liquid).
-              endcomment
-              if is_bundle
-                assign row_plan = ''
-                if item.selling_plan_allocation
-                  assign row_plan = item.selling_plan_allocation.selling_plan.id | append: ''
-                endif
-                assign row_qty = 0
-                assign row_price = 0
-                assign row_free = 0
-                assign row_tier = ''
-                for other in cart.items
-                  assign other_key = line_group_keys[forloop.index0]
-                  if other_key == group_key
-                    assign row_qty = row_qty | plus: other.quantity
-                    assign row_price = row_price | plus: other.final_line_price
-                    if other.final_line_price == 0 and other.original_line_price > 0
-                      assign row_free = row_free | plus: other.quantity
-                    endif
-                    if row_tier == blank
-                      for allocation in other.line_level_discount_allocations
-                        if allocation.discount_application.type == 'automatic' and allocation.amount > 0
-                          assign row_tier = allocation.discount_application.title
-                          break
-                        endif
-                      endfor
-                    endif
-                  endif
-                endfor
-                assign row_compare = item.variant.price | times: row_qty
-                capture row_supply
-                  render 'bundle-supply', quantity: row_qty
-                endcapture
-              endif
             -%}
-            <line-item class="line-item{% if is_gift %} line-item--gift{% endif %}{% if is_bundle %} line-item--bundle{% endif %}" data-line="{{ line }}" data-key="{{ item.key }}"{% if is_gift %} data-gift{% endif %}{% if is_bundle %} data-group-variant="{{ item.variant_id }}" data-group-plan="{{ row_plan }}" data-group-properties="{{ item.properties | json | escape }}"{% endif %}>
+            <line-item class="line-item{% if is_gift %} line-item--gift{% endif %}" data-line="{{ line }}" data-key="{{ item.key }}"{% if is_gift %} data-gift{% endif %}>
               <div class="line-item__content-wrapper">
-                <button type="button" class="s-mini-cart__remove-btn" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: item.quantity }}"{% elsif is_bundle %}data-cart-group-set="0"{% else %}data-cart-remove="{{ line }}"{% endif %} aria-label="Remove {{ item.product.title | escape }}">
+                <button type="button" class="s-mini-cart__remove-btn" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: item.quantity }}"{% else %}data-cart-remove="{{ line }}"{% endif %} aria-label="Remove {{ item.product.title | escape }}">
                   <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
                 </button>
                 <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="line-item__image-wrapper" tabindex="-1" aria-hidden="true">
@@ -349,9 +253,6 @@
                       {%- endif -%}
                     {%- elsif show_variant_title -%}
                       <span class="product-item-meta__variant text--xsmall text--subdued">{{ item.variant.title }}</span>
-                    {%- endif -%}
-                    {%- if is_bundle -%}
-                      <span class="line-item__bundle-meta">{{ row_supply }}{% if row_tier != blank %} · {{ row_tier }}{% endif %}</span>
                     {%- endif -%}
                     {%- comment -%}
                       The selling plan's own name ("Delivery: every month | 10% off") is not repeated
@@ -375,9 +276,9 @@
                     {%- endif -%}
                     <div class="product-item-meta__info">
                       <line-item-quantity class="line-item__quantity"><div class="custom-quantity-selector custom-quantity-selector--small">
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: 1 }}"{% elsif is_bundle %}data-cart-group-step="-1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}"{% endif %} aria-label="Decrease quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7" stroke-linecap="round"/></svg></button>
-                        <span class="custom-quantity-selector__text">{% if is_bundle %}{{ row_qty }}{% else %}{{ item.quantity }}{% endif %}</span>
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | plus: 1 }}"{% elsif is_bundle %}data-cart-group-step="1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}"{% endif %} aria-label="Increase quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7M9 5.5v7" stroke-linecap="round"/></svg></button>
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: 1 }}"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}"{% endif %} aria-label="Decrease quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7" stroke-linecap="round"/></svg></button>
+                        <span class="custom-quantity-selector__text">{{ item.quantity }}</span>
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | plus: 1 }}"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}"{% endif %} aria-label="Increase quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7M9 5.5v7" stroke-linecap="round"/></svg></button>
                       </div></line-item-quantity>
                       <div class="product-item-meta__price-list-container text--small"><div class="price-list">
                         {%- if is_gift and item.final_line_price == 0 and section.settings.gift_free_text != blank -%}
@@ -386,31 +287,12 @@
                         {%- elsif gift_has_free_unit -%}
                         <span class="price price--highlight"><span class="product_price">{{ item.final_line_price | money }}</span></span>
                         <span class="price price--compare"><span class="product_price">{{ item.original_line_price | money }}</span></span>
-                        {%- elsif is_bundle -%}
-                        <span class="price price--highlight"><span class="product_price">{{ row_price | money }}</span></span>
-                        {%- if row_compare > row_price -%}
-                          <span class="price price--compare"><span class="product_price">{{ row_compare | money }}</span></span>
-                        {%- endif -%}
-                        {%- if row_free > 0 and section.settings.free_tag_text != blank -%}
-                          <span class="line-item__free-tag">{{ section.settings.free_tag_text | replace: count_placeholder, row_free }}</span>
-                        {%- endif -%}
                         {%- else -%}
-                        {%- comment -%}
-                          Every other line shows its line total, so the rows add up to the subtotal; the
-                          unit price follows underneath once there is more than one.
-                        {%- endcomment -%}
-                        <span class="price price--highlight"><span class="product_price">{{ item.final_line_price | money }}</span></span>
-                        {%- if item.original_line_price > item.final_line_price -%}
-                          <span class="price price--compare"><span class="product_price">{{ item.original_line_price | money }}</span></span>
+                        <span class="price price--highlight"><span class="product_price">{{ item.final_price | money }}</span></span>
+                        {%- if item.original_price > item.final_price -%}
+                          <span class="price price--compare"><span class="product_price">{{ item.original_price | money }}</span></span>
                         {%- elsif item.selling_plan_allocation and item.selling_plan_allocation.compare_at_price > item.final_price -%}
-                          <span class="price price--compare"><span class="product_price">{{ item.selling_plan_allocation.compare_at_price | times: item.quantity | money }}</span></span>
-                        {%- endif -%}
-                        {%- if item.quantity > 1 and section.settings.unit_price_text != blank -%}
-                          {%- liquid
-                            assign unit_money = item.final_price | money
-                            assign unit_line = section.settings.unit_price_text | replace: amount_placeholder, unit_money
-                          -%}
-                          <span class="price price--unit">{{ unit_line }}</span>
+                          <span class="price price--compare"><span class="product_price">{{ item.selling_plan_allocation.compare_at_price | money }}</span></span>
                         {%- endif -%}
                         {%- endif -%}
                       </div></div>
@@ -418,94 +300,34 @@
                   </div>
                 </div>
               </div>
-              {%- liquid
-                comment
-                  The next-tier nudge (snippets/cart-drawer-nudge.liquid), under one-time bundle rows
-                  only: on a subscription the bottle count also sets how often it renews (KACHING_DEAL
-                  in assets/main.js), which a "Make it 3" button would change without saying so.
-                endcomment
-                if is_bundle and row_plan == blank
-                  capture row_nudge
-                    render 'cart-drawer-nudge', quantity: row_qty, unit: item.original_price, order_keep: order_keep, free_one: section.settings.nudge_free_one, free_many: section.settings.nudge_free_many, save: section.settings.nudge_save, button: section.settings.nudge_button
-                  endcapture
-                  echo row_nudge
-                  if row_nudge != blank
-                    assign nudge_shown = true
-                  endif
-                  comment
-                    The one-time bottles and the first one-time bundle, for the upgrade card below.
-                  endcomment
-                  assign onetime_total = onetime_total | plus: row_qty
-                  if upgrade_item == blank
-                    assign upgrade_item = item
-                  endif
-                endif
-              -%}
             </line-item>
           {%- endfor -%}
         </form>
 
-        {%- liquid
-          comment
-            Add-ons: the "Products to recommend" list, without anything already in the cart or sold
-            out. assets/main.js (expressGoal) orders them by the free express shipping goal after
-            every render: below it, the ones that close the gap on their own lead, cheapest first,
-            each saying so, under the goal heading; otherwise they run cheapest first under the
-            routine heading. The price shown is the price of the variant the button adds - the one
-            that test uses - scaled there by an order-level percentage code (data-order-keep).
-            The upgrade card (snippets/cart-drawer-upgrade.liquid) leads when it applies and no
-            next-tier nudge is showing.
-          endcomment
-          assign addon_count = 0
-          for product in upsells
-            assign addon_variant = product.selected_or_first_available_variant
-            assign in_cart = false
-            for item in cart.items
-              if item.product_id == product.id
-                assign in_cart = true
-                break
-              endif
-            endfor
-            if in_cart == false and addon_variant.available
-              assign addon_count = addon_count | plus: 1
-            endif
-          endfor
-          assign upgrade_card = ''
-          if upgrade_item != blank and nudge_shown == false
-            capture upgrade_card
-              render 'cart-drawer-upgrade', item: upgrade_item, quantity: onetime_total, order_keep: order_keep, title: section.settings.upgrade_title, text: section.settings.upgrade_text, button: section.settings.upgrade_button
-            endcapture
-          endif
-        -%}
-        {%- if addon_count > 0 or upgrade_card != blank -%}
+        {%- if upsells.size > 0 and section.settings.upsell_title != blank -%}
           <div class="mini-cart__recommendations">
-            {{- upgrade_card -}}
-            {%- if addon_count > 0 -%}
             <div class="mini-cart__recommendations-inner">
               <div class="s-mini-cart__rec-header">
-                <p data-addon-heading data-heading="{{ section.settings.addon_heading | escape }}" data-heading-goal="{{ section.settings.addon_goal_heading | escape }}">{{ section.settings.addon_heading }}</p>
+                <p>{{ section.settings.upsell_title }}</p>
                 <div class="s-mini-cart__rec-arrows">
                   <button type="button" class="s-mini-cart__rec-arrow s-mini-cart__rec-arrow--prev" data-rec-prev aria-label="Previous recommendation"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
                   <button type="button" class="s-mini-cart__rec-arrow s-mini-cart__rec-arrow--next" data-rec-next aria-label="Next recommendation"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
                 </div>
               </div>
               <div class="scroller" data-rec-scroller>
-                <div class="mini-cart__recommendations-list" data-addon-list data-order-keep="{{ order_keep }}">
+                <div class="mini-cart__recommendations-list">
                   {%- for product in upsells -%}
                     {%- liquid
-                      assign addon_variant = product.selected_or_first_available_variant
                       assign in_cart = false
                       for item in cart.items
                         if item.product_id == product.id
                           assign in_cart = true
-                          break
                         endif
                       endfor
-                      if in_cart or addon_variant.available == false
-                        continue
-                      endif
                     -%}
-                    <div class="drawer__product" data-addon data-price="{{ addon_variant.price }}" data-index="{{ forloop.index0 }}">
+                    {%- unless in_cart -%}
+                    {%- assign upsell_variant = product.selected_or_first_available_variant -%}
+                    <div class="drawer__product">
                       <div class="drawer__product-image">
                         <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="drawer__product-link">
                           {%- if product.featured_image != blank -%}
@@ -515,22 +337,19 @@
                       </div>
                       <div class="drawer__product-content">
                         <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="drawer__product-title">{{ product.title }}</a>
-                        <div class="drawer__product-price"><strong>{{ addon_variant.price | money }}</strong></div>
-                        {%- if section.settings.addon_goal_reason != blank -%}
-                          <p class="drawer__product-reason" data-addon-reason hidden>{{ section.settings.addon_goal_reason }}</p>
-                        {%- endif -%}
+                        <div class="drawer__product-price">From <strong>{{ product.price_min | money }}</strong></div>
                         {%- form 'product', product, class: 'drawer__product-form js-ajax-add' -%}
-                          <input type="hidden" name="id" value="{{ addon_variant.id }}">
+                          <input type="hidden" name="id" value="{{ upsell_variant.id }}">
                           <input type="hidden" name="quantity" value="1">
-                          <button type="submit" class="drawer__product-button">{{ section.settings.upsell_button }}</button>
+                          <button type="submit" class="drawer__product-button"{% unless upsell_variant.available %} disabled{% endunless %}>{% if upsell_variant.available %}{{ section.settings.upsell_button }}{% else %}SOLD OUT{% endif %}</button>
                         {%- endform -%}
                       </div>
                     </div>
+                    {%- endunless -%}
                   {%- endfor -%}
                 </div>
               </div>
             </div>
-            {%- endif -%}
           </div>
         {%- endif -%}
       {%- endif -%}
@@ -583,18 +402,6 @@
           <span class="checkout-button__lock"><svg aria-hidden="true" width="16" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
           <span class="checkout-button__label">{{ section.settings.checkout_label }}</span>{% if section.settings.show_total_on_button %} - <span class="product_price">{{ cart.total_price | money }}</span>{% endif %}
         </button>
-        {%- comment -%}
-          The payment methods checkout accepts, read from the store's payment settings, so the strip
-          follows whatever is switched on there. The drawer has no accelerated checkout buttons under
-          the button (Shop Pay stays off as a drawer button), so the strip sits right under it.
-        {%- endcomment -%}
-        {%- if shop.enabled_payment_types.size > 0 -%}
-        <ul class="cart-drawer__payment-icons" role="list">
-          {%- for type in shop.enabled_payment_types -%}
-            <li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
-          {%- endfor -%}
-        </ul>
-        {%- endif -%}
         {%- if badges.size > 0 -%}
         <div class="s-mini-cart__guarantee-badges">
           {%- for block in badges -%}
@@ -628,13 +435,15 @@
   "name": "Cart drawer",
   "settings": [
     { "type": "text", "id": "title", "label": "Title", "default": "Cart" },
-    { "type": "header", "content": "Free express shipping goal", "info": "Standard shipping is always free and Express Shipping is free from the amount below. The bar compares it with the order total after discounts, converted into the shopper's currency, and orders the add-ons by it." },
-    { "type": "checkbox", "id": "show_shipping_bar", "label": "Show the free express shipping goal", "default": true },
-    { "type": "number", "id": "express_free_threshold", "label": "Free express shipping from (USD)", "default": 50, "info": "Must match the free-over amount on the Express Shipping rate in Shopify shipping settings." },
-    { "type": "text", "id": "express_progress_text", "label": "Text below the amount", "default": "You’re {amount} away from FREE express shipping", "info": "{amount} is what is left to spend, in the shopper's currency." },
-    { "type": "text", "id": "express_standard_text", "label": "Line under it", "default": "Standard shipping is always free", "info": "Shown below the amount only. Leave empty to hide." },
-    { "type": "text", "id": "express_unlocked_text", "label": "Text once reached", "default": "You’ve unlocked FREE express shipping\u00a0✓" },
     { "type": "header", "content": "Empty cart" },
+    { "type": "checkbox", "id": "show_shipping_bar", "label": "Show free-shipping progress bar", "default": true },
+    { "type": "number", "id": "shipping_threshold", "label": "Free-shipping threshold (in your store currency)", "default": 30 },
+    { "type": "text", "id": "shipping_text", "label": "Progress text", "default": "Spend {amount} and get", "info": "{amount} is replaced with what is left to spend." },
+    { "type": "text", "id": "shipping_highlight", "label": "Progress text highlight", "default": "FREE SHIPPING" },
+    { "type": "text", "id": "shipping_unlocked", "label": "Text once the threshold is reached", "default": "You’re eligible for" },
+    { "type": "text", "id": "shipping_unlocked_highlight", "label": "Reached text highlight", "default": "FREE SHIPPING", "info": "Shown highlighted after the reached text." },
+    { "type": "text", "id": "shipping_label", "label": "Bar label", "default": "Free shipping" },
+    { "type": "text", "id": "shipping_label_unlocked", "label": "Bar label once the threshold is reached", "default": "Free shipping" },
     { "type": "text", "id": "reviews_banner", "label": "Reviews banner", "default": "RATED 4.77/5 BY VERIFIED CUSTOMERS", "info": "Shown with five stars under the shipping bar. Leave empty to hide." },
     { "type": "text", "id": "empty_title", "label": "Empty cart title", "default": "Your cart is empty" },
     { "type": "text", "id": "empty_text", "label": "Empty cart text", "info": "Optional line under the title." },
@@ -646,28 +455,15 @@
     { "type": "text", "id": "selling_plan_id", "label": "Subscription plan ID", "info": "Optional. The plan the line toggle switches a one-time line to. Use the same ID as the Featured product section so the drawer sells the cadence the buy box promised. Leave blank to use the cheapest plan the variant offers." },
     { "type": "text", "id": "subscribe_label", "label": "Subscribe toggle label", "default": "SUBSCRIBE & SAVE" },
     { "type": "text", "id": "subscribe_saving_text", "label": "Saving shown next to the toggle", "default": "Save {amount}", "info": "{amount} is what the plan takes off everything the shopper is paying for that product (all its lines, a free bundle bottle counting for nothing). Leave empty to show no amount." },
-    { "type": "text", "id": "free_tag_text", "label": "Free bottles tag on a bundle row", "default": "{count} FREE", "info": "The Bundled product (Theme settings → Bundle tiers) shows as one row per bundle, priced at its total. {count} is the number of bottles the cart charges nothing for. Leave empty to hide the tag." },
-    { "type": "text", "id": "unit_price_text", "label": "Unit price under a line total", "default": "{amount} each", "info": "Lines show their total; with more than one unit this line follows underneath. Leave empty to hide it." },
-    { "type": "header", "content": "Next-tier nudge", "info": "Shown under a one-time bundle row when the next tier in Theme settings → Bundle tiers costs the same as the bottles in the cart or less (2 bottles cost what 3 do, 5 cost more than 6). Its button tops the row up to that tier. {count} is the number of bottles to add, {amount} what the order total drops by, {total} the tier's bottle count." },
-    { "type": "text", "id": "nudge_free_one", "label": "One more bottle, free", "default": "Add {count} more bottle — it’s free" },
-    { "type": "text", "id": "nudge_free_many", "label": "More bottles, free", "default": "Add {count} more bottles — they’re free" },
-    { "type": "text", "id": "nudge_save", "label": "More bottles for less", "default": "Add {count} more and pay {amount} less" },
-    { "type": "text", "id": "nudge_button", "label": "Button", "default": "Make it {total}" },
     { "type": "header", "content": "Free subscription gift", "info": "The gift the Featured product section advertises with Subscribe & save. It is added to the cart (one unit, tagged as a free gift) as soon as a line on the plan above is in the cart, and removed when the last such line goes. The shopper can raise its quantity: the first one is free, the rest are charged. The theme cannot make it $0 on its own: in Kaching Subscriptions, add this product as a free gift (quantity 1) on the plan above, so the cart and checkout charge nothing for the first one." },
     { "type": "product", "id": "gift_product", "label": "Gift product", "info": "Pick the same product as Featured product → Free subscription gift. Leave empty to add nothing." },
     { "type": "text", "id": "gift_label", "label": "Gift line label", "default": "FREE GIFT" },
     { "type": "text", "id": "gift_free_text", "label": "Price shown once the gift is free", "default": "FREE" },
     { "type": "text", "id": "gift_extra_text", "label": "Note when extras are added", "default": "First one free · extras full price", "info": "Shown under the gift label once the shopper has more than one and the first is free." },
-    { "type": "header", "content": "Add-ons", "info": "The products below, without any already in the cart or sold out. Below the free express shipping goal, those that reach it on their own lead (cheapest first) under the first heading, each with the line below; otherwise they run cheapest first under the second heading." },
+    { "type": "header", "content": "Recommendations" },
+    { "type": "text", "id": "upsell_title", "label": "Heading", "default": "PAIR WITH:" },
     { "type": "product_list", "id": "upsells", "label": "Products to recommend", "limit": 6 },
-    { "type": "text", "id": "addon_goal_heading", "label": "Heading while one reaches the goal", "default": "Add one to get FREE express shipping" },
-    { "type": "text", "id": "addon_goal_reason", "label": "Line on each product that reaches it", "default": "Unlocks free express shipping" },
-    { "type": "text", "id": "addon_heading", "label": "Heading otherwise", "default": "Complete your routine" },
     { "type": "text", "id": "upsell_button", "label": "Add button label", "default": "ADD TO CART" },
-    { "type": "header", "content": "Upgrade card", "info": "Leads the add-ons once the free express shipping goal is met, when the one-time bottles in the cart are exactly a bundle tier other than the smallest and a bigger tier exists (3 bottles: the 6-month supply). Not shown while a next-tier nudge is. {supply} is the bigger tier's supply line, {amount} what it adds to the order, {count} the bottles it adds, {price} the price per bottle and {total} its bottle count." },
-    { "type": "text", "id": "upgrade_title", "label": "Title", "default": "Upgrade to {supply}" },
-    { "type": "text", "id": "upgrade_text", "label": "Text", "default": "+{amount} for {count} more bottles · {price} a bottle" },
-    { "type": "text", "id": "upgrade_button", "label": "Button", "default": "Make it {total}" },
     { "type": "header", "content": "Footer" },
     { "type": "checkbox", "id": "show_country_selector", "label": "Show country / currency selector", "default": true, "info": "Lets a shopper whose country Shopify guessed from their IP switch before checkout - the cart keeps its currency all the way through. Only appears when more than one market is enabled." },
     { "type": "text", "id": "country_label", "label": "Country selector label", "default": "Ship to" },
