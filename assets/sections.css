@@ -1156,8 +1156,8 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .c-bundle__perks { padding-left: 0; }
 }
 /* Buy box order on phones: rating and name; the gallery with its thumbnails and View Ingredients;
-   the shipping banner, "what you get" and the benefit tags; then the form - price line, bundles,
-   Subscribe & save and Add to Cart; then the USPs, and the low-stock line last. The markup keeps
+   the shipping banner, "what you get" and the benefit tags; then the form - price line, Subscribe
+   & save, bundles and Add to Cart; then the USPs, and the low-stock line last. The markup keeps
    the desktop order (gallery column, info column), so the info column is dissolved (display:
    contents) and its children are ordered around the gallery as items of the content grid, at the
    info column's own 14px rhythm. Anything new in the info column lands with the shipping banner
