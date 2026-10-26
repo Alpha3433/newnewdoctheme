@@ -65,7 +65,7 @@ template (`templates/page.froya-landing.json`).
   "About" column) also scrolls to a section instead of leaving the page; only the
   policies and *Manage Subscription* in the footer, and the checkout, lead off it. A link such as
   `/#faq` from another page lands on the home page and scrolls to that section.
-* **FAQ** – a numbered accordion right after the review slider, in the "Backed by science" style. Each
+* **FAQ** – a numbered accordion at the bottom of the page, right after the guarantee, in the "Backed by science" style. Each
   question is a block (question + rich-text answer); *Open the first question by default* and the
   closing "still wondering?" line are settings. Menu and footer "FAQ" links scroll here.
 * **Email popup** – Header group → *Email popup (gift)*. A *Photo* fills the left side (the top on
@@ -108,23 +108,26 @@ template (`templates/page.froya-landing.json`).
   (`reviews`) on the home page and the serum's page, the review wall's heading (`reviews-section`,
   "Real women, real hair, real reviews") on the landing page template. On the home page and the
   serum's page the badge pill above the product (*Badge text*) is empty, so it is hidden, and
-  *Displayed name* is "Pumpkin Seed Oil Serum", which fits on one line on a phone. The old two-label
+  *Displayed name* is "Pumpkin Seed Oil Serum". On phones the name scales with the screen (6.2vw,
+  between 22px and 26px), so it stays on one line from 360px up. The old two-label
   line under the name is still available (*Labels under the name*) and empty by default. The cart no longer repeats the
   selling plan's own name ("Delivery: every month | 10% off") under a subscription line: the
   Subscribe & save switch shows the state.
 * **Add-to-cart button** – Featured product → Button & stock → *Price on the button*: label only
   (the bundle total already sits in the price line and on the selected bundle card), label with the
   bundle total (the landing page's choice), or label with the total and the regular price struck
-  through. The
-  "-" separator is added automatically when a price is shown. The *Savings line* renders as a pill
+  through, which the home page and the serum's page use: "ADD TO CART - $69.98 USD ~~$104.97~~".
+  The struck-through price is every bottle at the one-time price and follows the selected bundle and
+  the Subscribe & save switch (`assets/main.js`, `renderTier`); with no saving (1 bottle, one-time)
+  nothing is struck through. On a 360px-wide phone the button stays on one line in every bundle and
+  switch state (checked in USD, AUD, GBP, EUR and SAR). The "-" separator is added automatically when a price is shown. The *Savings line* renders as a pill
   directly above the button ("🎉 Congrats! You’re saving $7.00") and follows the selected bundle
   and the Subscribe & save switch; on the home page and the serum's page it is empty, which hides
   the pill, because the selected bundle card already shows the saving. The Buy 2 and Buy 3 cards'
   *Perks line* is empty there too. The two static info lines under the plan are still available as
   *Info line 1 / 2* but are empty by default.
-* **Subscribe & save** sits directly under the bundle cards, right above Add to Cart, at every
-  screen size: the shopper picks the bundle, then how to buy it. The switch, the bundle cards and the
-  prices work as before (`assets/main.js` finds them inside the buy box, wherever they sit).
+* **Subscribe & save** sits between the price line and *Choose your bundle*, at every screen size,
+  as on the live site.
 * **Sticky buy bar** – the *Sticky buy bar* section (home page and the serum's product page): *Text*,
   where `{price}` becomes the lowest one-time price per bottle on the buy box's bundle cards, and
   *Button label*. It only appears on phones; select the section in the editor's mobile preview to
@@ -400,9 +403,9 @@ python3 scripts/localize_assets.py --dry-run
   seconds fails instead of hanging, and the drawer is redrawn once per change (Section Rendering
   API), from the finished cart. The newsletter posts to Shopify's customer form. The supporting
   `main-*` sections use the connected store's own products, cart and customer accounts.
-* **Home page order.** Hero, benefits strip, buy box, press slider, review slider, FAQ, backed by
-  science, clinical trial, guarantee, how to use, founder story, Arctic plants, ingredient quality
-  and the newsletter, then the email popup and the sticky buy bar. Three sections are switched off
+* **Home page order.** Hero, benefits strip, buy box, press slider, review slider, backed by
+  science, clinical trial, founder story, Arctic plants, how to use, ingredient quality, guarantee,
+  FAQ and the newsletter, then the email popup and the sticky buy bar. Three sections are switched off
   (`"disabled": true`), not deleted, and can be switched back on in the theme editor: the review
   wall (one screenshot whose text can't be read on a phone), *The science of the seed* (Arctic
   ingredients, which repeats the clinical study) and the second guarantee. The links that went to
@@ -411,7 +414,7 @@ python3 scripts/localize_assets.py --dry-run
 * **Buy box order on phones.** Nearly every visitor is on a phone, so on the home page the buy box
   comes straight after the benefits strip, and up to 767px it reads: rating and name, the gallery
   with its thumbnails and View Ingredients, the shipping banner ("This order ships free"), the
-  benefit tags, then the price line, the bundles, Subscribe & save and Add to Cart, then the USPs,
+  benefit tags, then the price line, Subscribe & save, the bundles and Add to Cart, then the USPs,
   and the low-stock line last ("What you get", empty today, sits between the banner and the tags).
   This is CSS only (`assets/sections.css`): the markup keeps the desktop order, so a block added to
   the info column shows up with the banner and the tags on phones, above the price. Desktop keeps
@@ -421,8 +424,8 @@ python3 scripts/localize_assets.py --dry-run
   settings → Product pages, the off switch is unchanged) except the Bundled product's (Theme settings
   → Bundle tiers), so Google visitors land on
   `/products/elaren-pumpkin-seed-oil-regrowth-serum`. That page is `templates/product.json`: the
-  buy box first (the home page's settings and blocks), then the review slider, FAQ, backed by
-  science, clinical trial, guarantee, how to use and the sticky buy bar. Those sections render on that product's
+  buy box first (the home page's settings and blocks), then the review slider, backed by science,
+  clinical trial, how to use, guarantee, FAQ and the sticky buy bar. Those sections render on that product's
   page only; any other product reaching the template (with the redirect switched off) gets the plain
   *Product* section instead. The serum is assigned a "serum" template in Products, which this theme
   doesn't have, so Shopify uses `product.json`; a `product.serum` template added later would take
