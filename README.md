@@ -108,6 +108,10 @@ template (`templates/page.froya-landing.json`).
   directly above the button ("🎉 Congrats! You’re saving $7.00") and follows the selected bundle
   and the Subscribe & save switch; the two static info lines under the plan are still available as
   *Info line 1 / 2* but are empty by default now that the pill carries that spot.
+* **Sticky buy bar** – the *Sticky buy bar* section (home page and the serum's product page): *Text*,
+  where `{price}` becomes the lowest one-time price per bottle on the buy box's bundle cards, and
+  *Button label*. It only appears on phones; select the section in the editor's mobile preview to
+  see it. How it behaves is under Behaviour notes.
 * **Low-stock notice** – Featured product → Button & stock → *Number shown*: *Tracked inventory*
   reads the variant's real stock and only shows at or below the threshold; *A fixed number* shows
   the figure typed below on every visit. The store tracks more than 2,000 units of the serum, so the
@@ -325,17 +329,18 @@ The theme folders Shopify needs (`layout`, `templates`, `sections`, `snippets`, 
 | --- | --- |
 | `layout/theme.liquid` | Page shell: meta/fonts, the five stylesheets, `content_for_header`, the header section group (announcement bar, header, cart drawer), `content_for_layout`, the footer section group, scripts. |
 | `sections/header-group.json`, `sections/footer-group.json` | Section groups with the default header/footer content (menu links, bestseller cards, blog links, footer links, cart-drawer badges and upsells). |
-| `sections/froya-*.liquid` | The landing page, one editable section per block (settings + blocks in each `{% schema %}`): announcement bar, sticky header with mega menus and mobile drawer, cart drawer, hero, benefits strip, logo/quote slider, review slider, backed-by-science timeline, research results, featured product (gallery, ingredients modal, buy box with bundle tiers), founder story, hair-loss types & badges, review wall, guarantee, video reviews, how-to-use, ingredient quality, ingredient science, newsletter, footer. Markup keeps the captured page's class names so the verbatim CSS still applies. |
+| `sections/froya-*.liquid` | The landing page, one editable section per block (settings + blocks in each `{% schema %}`): announcement bar, sticky header with mega menus and mobile drawer, cart drawer, hero, benefits strip, logo/quote slider, review slider, backed-by-science timeline, research results, featured product (gallery, ingredients modal, buy box with bundle tiers), founder story, hair-loss types & badges, review wall, guarantee, video reviews, how-to-use, ingredient quality, ingredient science, newsletter, footer, and the sticky buy bar for phones. Markup keeps the captured page's class names so the verbatim CSS still applies. |
 | `snippets/froya-image.liquid`, `snippets/froya-nav-card.liquid` | Image-picker-with-fallback helper and the menu bestseller card. |
 | `snippets/bundle-tier-price.liquid`, `snippets/bundle-supply.liquid` | The price of a bottle count and its supply line under Theme settings → Bundle tiers, shared by the buy box and the cart drawer. |
 | `snippets/cart-drawer-nudge.liquid`, `snippets/cart-drawer-upgrade.liquid` | The cart drawer's next-tier nudge and upgrade card. |
+| `snippets/product-json-ld.liquid` | Product structured data for the serum's product page. |
 | `sections/main-*.liquid` | Minimal, on-brand sections for the rest of the store: page, product, collection, collections list, cart, search, blog, article, 404, password, and the customer account pages. |
 | `templates/*.json` | JSON templates wiring the sections above; `index.json` and `page.froya-landing.json` carry the landing page's default block content. |
 | `assets/critical.css` | Verbatim copy of the inline `<head>` CSS from the live page (font faces, CSS variables, critical layout). |
 | `assets/sections-inline.css` | Verbatim copy of every per-section inline `<style>` block from the live page. Section ids are preserved so these rules apply unchanged. |
 | `assets/theme.css` | Reconstruction of the theme's external stylesheets that the capture did not include: base typography, buttons, header/mega menu/drawer, footer, plus a light layer for the supporting store templates. |
 | `assets/sections.css` | Reconstruction of the landing-page component styles for desktop and mobile. |
-| `assets/main.js` | Interactions: cart drawer (Ajax add/change/remove, one-row bundles, subscribe & save toggle, next-tier nudge, free express shipping goal and add-ons, re-rendered through the Section Rendering API), in-page add to cart from every product form, mega menus, mobile drawer, carousels (Blaze Slider), product gallery + thumbnails, ingredients modal, subscribe/one-time buy-box toggle, bundle tier selection (quantity + per-bottle and total prices), lazy video playback, science scroll-spy, animated result bars, smooth anchors, theme-editor re-initialisation. |
+| `assets/main.js` | Interactions: cart drawer (Ajax add/change/remove, one-row bundles, subscribe & save toggle, next-tier nudge, free express shipping goal and add-ons, re-rendered through the Section Rendering API), in-page add to cart from every product form, mega menus, mobile drawer, carousels (Blaze Slider), product gallery + thumbnails, ingredients modal, subscribe/one-time buy-box toggle, bundle tier selection (quantity + per-bottle and total prices), sticky buy bar, lazy video playback, science scroll-spy, animated result bars, smooth anchors, theme-editor re-initialisation. |
 | `assets/blaze.css`, `assets/blaze-slider.min.js` | Blaze Slider 1.9.3 (MIT, <https://github.com/MananTank/blaze-slider>), the carousel library the live page uses, vendored unmodified. |
 | `scripts/localize_assets.py` | Vendors every remote placeholder image/font/video into `assets/` and rewrites the references (Liquid and JSON get `asset_url`). |
 | `tools/extract.py`, `tools/build.py` | Historical: the pipeline that produced the original static `froya-*` sections from a Chrome capture of the Frøya page. **Do not re-run it** – it would overwrite the editable Elaren sections. |
@@ -373,7 +378,42 @@ python3 scripts/localize_assets.py --dry-run
   seconds fails instead of hanging, and the drawer is redrawn once per change (Section Rendering
   API), from the finished cart. The newsletter posts to Shopify's customer form. The supporting
   `main-*` sections use the connected store's own products, cart and customer accounts.
-* Run `shopify theme check` (Shopify CLI) before publishing; the only remaining warnings are the
-  remote placeholder images.
+* **Price first on phones.** Nearly every visitor is on a phone and most never scrolled as far as
+  the price, so on the home page the buy box comes straight after the benefits strip, and up to 767px it
+  reads: rating and name, price line, Subscribe & save, bundles, savings pill and Add to Cart, then
+  the USPs, the gallery with View Ingredients, the shipping banner, "what you get" and the benefit
+  tags, and the low-stock line last. This is CSS only (`assets/sections.css`): the markup keeps the
+  desktop order, which is unchanged, so a block added to the info column shows up with the benefit
+  tags on phones, not above the price. The price line is `#choose-bundle`: the hero button lands
+  there, and `#shop` / `#product-section` still go to the top of the buy box.
+* **The serum's product page.** Every product page still sends the visitor to the home page (Theme
+  settings → Product pages, the off switch is unchanged) except the Bundled product's (Theme settings
+  → Bundle tiers), so Google visitors land on
+  `/products/elaren-pumpkin-seed-oil-regrowth-serum`. That page is `templates/product.json`: the
+  buy box first (the home page's settings and blocks; its rating line scrolls to the review slider,
+  since the review wall isn't on this page), then the review slider, backed by science, clinical
+  trial, guarantee, how to use, FAQ and the sticky buy bar. Those sections render on that product's
+  page only; any other product reaching the template (with the redirect switched off) gets the plain
+  *Product* section instead. The serum is assigned a "serum" template in Products, which this theme
+  doesn't have, so Shopify uses `product.json`; a `product.serum` template added later would take
+  over its page. The page also carries Product structured data (`snippets/product-json-ld.liquid`):
+  name, images, URL, SKU, brand, description (the SEO description while the product description is
+  empty) and one offer, a single bottle bought once at the variant's price in the current currency,
+  which Google Merchant Center compares with the feed. It has no rating or review markup.
+* **Sticky buy bar** (phones only). Pinned to the bottom of the screen, it appears once the hero has
+  scrolled away (on the product page, once the page is scrolled) and hides while any part of the buy
+  box from the price line to Add to Cart is on screen, and while the cart drawer, the menu, the
+  ingredients modal or the email popup is open. `{price}` is read from the bundle cards
+  (`data-unit-otp`), so it is always the visitor's currency. A tap scrolls to `#choose-bundle` and
+  moves keyboard focus to the selected bundle. It sits under every drawer and popup (z-index 90),
+  pads the bottom by `env(safe-area-inset-bottom)`, neither slides nor scrolls smoothly for visitors
+  who ask for reduced motion, and the page keeps room for it at the end so the footer stays reachable. Clarity gets an
+  event `sticky_bar_tap` on each tap, and every visit that sees the buy box is tagged
+  `buybox_layout = price_first` (on desktop too, where the layout is unchanged), so recordings can
+  be filtered by layout.
+* Run `shopify theme check` (Shopify CLI) before publishing. It reports no errors; the known
+  warnings are the remote placeholder images (RemoteAsset), the buy box's settings count and Liquid
+  complexity, the cart drawer's Liquid complexity, and the bundle cards' use of block ids
+  (BlockIdUsage).
 * Hidden/utility parts of the original page (Shopify pixels, cookie consent, chat widget, Klaviyo,
   Loox scripts, the legacy hidden header and mini-cart drawer) are intentionally omitted.
