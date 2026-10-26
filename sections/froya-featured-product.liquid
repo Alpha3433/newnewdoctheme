@@ -259,9 +259,10 @@
 
     {%- comment -%}
       Buy-box header, laid out like Frøya's: the star-rating line sits ABOVE the product name and is
-      one link that scrolls to the review wall ("Real women, real hair, real reviews", whose header
-      carries id="reviews-section"). The optional two-label line renders under the name only when a
-      label is filled in; the landing page leaves both empty.
+      one link that scrolls to the element named in "Scrolls to" (reviews_anchor): the review slider
+      (reviews) on the home and product pages, the review wall's heading ("Real women, real hair,
+      real reviews", id="reviews-section", the default) on the landing page. The optional two-label
+      line renders under the name only when a label is filled in; the landing page leaves both empty.
     {%- endcomment -%}
     {%- assign reviews_anchor = section.settings.reviews_anchor | default: 'reviews-section' | remove: '#' | strip -%}
     {%- capture product_head -%}
@@ -750,7 +751,7 @@
     { "type": "number", "id": "reviews_count", "label": "Review count", "default": 435, "info": "Set to 0 to hide the line." },
     { "type": "text", "id": "rating", "label": "Star rating (out of 5)", "default": "4.77", "info": "Keep it equal to the rating quoted in the text below." },
     { "type": "text", "id": "rating_text", "label": "Rating text", "default": "RATED 4.77/5 BY WOMEN" },
-    { "type": "text", "id": "reviews_anchor", "label": "Scrolls to", "default": "reviews-section", "info": "The id of the element to scroll to. reviews-section is the heading of the Review wall (\"Real women, real hair, real reviews\")." },
+    { "type": "text", "id": "reviews_anchor", "label": "Scrolls to", "default": "reviews-section", "info": "The id of the element to scroll to: reviews is the review slider, reviews-section the heading of the Review wall (\"Real women, real hair, real reviews\")." },
     { "type": "header", "content": "Labels under the name", "info": "Optional small line under the product name. Leave both empty to hide it." },
     { "type": "text", "id": "label_1", "label": "Label 1" },
     { "type": "text", "id": "label_2", "label": "Label 2" },

@@ -713,7 +713,7 @@
         "reviews_count": 435,
         "rating": "4.77",
         "rating_text": "RATED 4.77/5 BY WOMEN",
-        "reviews_anchor": "reviews-section",
+        "reviews_anchor": "reviews",
         "label_1": "",
         "label_2": "",
         "save_tag": "Save {percent}%",
@@ -880,6 +880,7 @@
     },
     "review-wall": {
       "type": "froya-review-wall",
+      "disabled": true,
       "settings": {
         "eyebrow": "Raw, unedited reviews",
         "title": "Real women, real hair, real reviews",
@@ -1168,6 +1169,7 @@
     },
     "arctic-ingredients": {
       "type": "froya-arctic-ingredients",
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/hf_20260918_090108_4a499bca-b484-455f-98d9-6831a0e49c3c.png",
         "image_alt": "Pumpkin seeds and cold-pressed pumpkin seed oil",
@@ -1179,6 +1181,7 @@
     },
     "guarantee-2": {
       "type": "froya-guarantee",
+      "disabled": true,
       "settings": {
         "background": false,
         "anchor": false,
@@ -1322,18 +1325,18 @@
     "featured-product",
     "press-slider",
     "reviews-slider",
+    "review-wall",
+    "video-reviews",
+    "faq",
     "backed-by-science",
     "clinical-trial",
+    "guarantee",
+    "how-to-use",
     "founder-story",
     "arctic-plants",
-    "review-wall",
-    "guarantee",
-    "video-reviews",
-    "how-to-use",
     "ingredient-quality",
     "arctic-ingredients",
     "guarantee-2",
-    "faq",
     "newsletter",
     "froya_email_popup_3DrArA",
     "sticky-buy-bar"
