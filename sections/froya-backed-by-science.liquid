@@ -1,7 +1,9 @@
 {% comment %}
   "Backed by science" timeline – heading, the photo beside the steps and each numbered step editable in the theme editor.
   The wrapper ids are kept so the verbatim CSS in assets/sections-inline.css still applies.
+  On a product page it only shows on the serum's page (the Bundled product, templates/product.json).
 {% endcomment %}
+{%- unless template.name == 'product' and product.id != settings.bundle_product.id -%}
 {%- liquid
   assign sid = 'template--26717513089391__backed_by_science_VNNFmb'
   assign image_fallback = section.settings.image_fallback
@@ -36,6 +38,7 @@
   </div>
 </section>
 </div>
+{%- endunless -%}
 
 {% schema %}
 {

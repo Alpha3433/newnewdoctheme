@@ -1,7 +1,9 @@
 {% comment %}
   How to use – heading, image and a list of routine steps (each an editable block).
   The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
+  On a product page it only shows on the serum's page (the Bundled product, templates/product.json).
 {% endcomment %}
+{%- unless template.name == 'product' and product.id != settings.bundle_product.id -%}
 {%- liquid
   assign sid = 'template--26717513089391__how_to_use_Qx9RrL'
 -%}
@@ -38,6 +40,7 @@
   </div>
 </section>
 </div>
+{%- endunless -%}
 
 {% schema %}
 {

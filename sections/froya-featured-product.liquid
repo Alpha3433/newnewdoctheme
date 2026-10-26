@@ -4,7 +4,11 @@
   is off until the shopper switches it on (a setting can pre-select it). Every piece of copy
   around it is an editable setting or block. Adding to cart is done in-page and opens the cart drawer.
   The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
+  On a product page the buy box only shows on the serum's page (the Bundled product,
+  templates/product.json): any other product keeps the plain product section. The check runs before
+  `product` below becomes the section's own product.
 {% endcomment %}
+{%- unless template.name == 'product' and product.id != settings.bundle_product.id -%}
 {%- liquid
   assign product = section.settings.product
   assign ingredients = section.blocks | where: 'type', 'ingredient'
@@ -723,6 +727,7 @@
 </s-featured-product>
 {%- endif -%}
 </div>
+{%- endunless -%}
 
 {% schema %}
 {

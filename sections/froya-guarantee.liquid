@@ -1,7 +1,9 @@
 {% comment %}
   Money-back guarantee panel – icon, heading, text, links and the optional tinted background are editable.
   Used twice on the landing page (with and without the background).
+  On a product page it only shows on the serum's page (the Bundled product, templates/product.json).
 {% endcomment %}
+{%- unless template.name == 'product' and product.id != settings.bundle_product.id -%}
 <section class="shopify-section section"{% if section.settings.anchor %} data-anchor="guarantee"{% endif %} id="shopify-section-{{ section.id }}-guarantee"><section class="s-guarantee">
 <div class="s-guarantee__top{% if section.settings.background %} s-guarantee__top--background{% endif %}">
     <div class="s-guarantee__top s-guarantee__container"><div class="s-guarantee__image">
@@ -28,6 +30,7 @@
   {%- endif -%}
 </section>
 </section>
+{%- endunless -%}
 
 {% schema %}
 {

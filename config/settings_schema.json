@@ -309,7 +309,7 @@
         "id": "redirect_product_pages",
         "label": "Send product pages to the home page",
         "default": true,
-        "info": "Anyone opening a /products/… link (Google Shopping, order emails, the Shop app) is taken to the home page, where the buy box is. Untick to show the plain product page instead."
+        "info": "Anyone opening a /products/… link (Google Shopping, order emails, the Shop app) is taken to the home page, where the buy box is. The Bundled product (Bundle tiers above) always keeps its own page, with the buy box at the top. Untick to show every other product on the plain product page too."
       }
     ]
   },

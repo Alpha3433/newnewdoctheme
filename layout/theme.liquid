@@ -3,12 +3,20 @@
 <head>
   <meta charset="utf-8">
   {%- comment -%}
-    The store sells from the home page only, so product pages (reached from Google Shopping, order
-    emails, the Shop app…) send the visitor straight to the home page. A theme cannot answer with a
-    real 301 and Shopify's URL redirects only cover paths that no longer exist, so this is a meta
-    refresh backed by a script; skipped in the theme editor so the product template stays editable.
+    The store sells from the home page, so product pages (reached from Google Shopping, order emails,
+    the Shop app…) send the visitor straight to the home page - except the serum's own page: the
+    Bundled product (Theme settings → Bundle tiers) opens templates/product.json, with the buy box at
+    the top, so Google visitors land on a product page. A theme cannot answer with a real 301 and
+    Shopify's URL redirects only cover paths that no longer exist, so this is a meta refresh backed by
+    a script; skipped in the theme editor so the product template stays editable.
   {%- endcomment -%}
-  {%- if template.name == 'product' and settings.redirect_product_pages and request.design_mode == false -%}
+  {%- liquid
+    assign bundle_page = false
+    if template.name == 'product' and settings.bundle_product != blank and product.id == settings.bundle_product.id
+      assign bundle_page = true
+    endif
+  -%}
+  {%- if template.name == 'product' and settings.redirect_product_pages and bundle_page == false and request.design_mode == false -%}
     {%- assign home_url = shop.url | append: routes.root_url -%}
     <meta http-equiv="refresh" content="0; url={{ home_url }}">
     <script>window.location.replace({{ home_url | json }});</script>
@@ -29,6 +37,7 @@
   </title>
   {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
   {% render 'meta-tags' %}
+  {%- if bundle_page -%}{% render 'product-json-ld', product: product %}{%- endif -%}
 
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
