@@ -810,6 +810,9 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-subscribtion__add-to-cart .loader-button__text { gap: 8px; flex-wrap: nowrap; white-space: nowrap; }
 .c-subscribtion__add-to-cart--price-none .loader-button__text { letter-spacing: 0.04em; }
 .js-subscribtion__price-wrapper { display: inline-flex; align-items: baseline; gap: 8px; }
+/* No saving (1 bottle, one-time): the empty strike-through would still take a gap and push the
+   label off centre */
+.c-subscribtion__add-to-cart .igcp:empty { display: none; }
 @media screen and (max-width: 420px) {
   .c-subscribtion__add-to-cart--price-total,
   .c-subscribtion__add-to-cart--price-total_compare { font-size: 14px; }
