@@ -1307,6 +1307,13 @@
         "cta_label": "Shop with 10% off",
         "cta_url": ""
       }
+    },
+    "sticky-buy-bar": {
+      "type": "froya-sticky-buy-bar",
+      "settings": {
+        "text": "Choose your bundle · from {price} a bottle",
+        "button_label": "Shop now"
+      }
     }
   },
   "order": [
@@ -1328,6 +1335,7 @@
     "guarantee-2",
     "faq",
     "newsletter",
-    "froya_email_popup_3DrArA"
+    "froya_email_popup_3DrArA",
+    "sticky-buy-bar"
   ]
 }

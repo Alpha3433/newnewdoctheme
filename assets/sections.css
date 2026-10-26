@@ -1818,3 +1818,71 @@ body.email-popup-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .s-offer-marquee__track { animation: none; }
 }
+
+/* ---- Sticky buy bar (sections/froya-sticky-buy-bar.liquid, assets/main.js initStickyBuyBar). Phones
+   only. z-index 90 keeps it under the header (100), and so under the menu drawer, and under the cart
+   drawer, the ingredients modal, the email popup and Shopify's cookie banner. It also slides away
+   (and out of the tab order) while the cart drawer, the menu, the ingredients modal or the email
+   popup is open. ---- */
+.sticky-buy-bar { display: none; }
+@media screen and (max-width: 767px) {
+  .sticky-buy-bar {
+    display: block;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 90;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--brand-line);
+    background: #fff;
+    box-shadow: 0 -4px 18px rgba(31, 31, 31, 0.08);
+    transform: translateY(calc(100% + 20px));
+    visibility: hidden;
+    transition: transform .25s ease, visibility 0s linear .25s;
+  }
+  .sticky-buy-bar.is-visible,
+  .sticky-buy-bar.is-selected {
+    transform: none;
+    visibility: visible;
+    transition: transform .25s ease, visibility 0s;
+  }
+  body.cart-open .sticky-buy-bar,
+  body.drawer-open .sticky-buy-bar,
+  body.modal-open .sticky-buy-bar,
+  body.email-popup-open .sticky-buy-bar {
+    transform: translateY(calc(100% + 20px));
+    visibility: hidden;
+    transition: transform .25s ease, visibility 0s linear .25s;
+  }
+  /* The end of the page stays reachable above the bar. */
+  body.has-sticky-buy-bar { padding-bottom: var(--sticky-buy-bar-height, 0px); }
+}
+.sticky-buy-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--brand-ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.sticky-buy-bar__text { flex: 1 1 auto; min-width: 0; font-family: var(--font-sans); font-size: 14px; font-weight: 500; line-height: 1.3; }
+.sticky-buy-bar__price { font-weight: 700; white-space: nowrap; }
+.sticky-buy-bar__button { flex: 0 0 auto; min-height: 44px; padding: 12px 18px; font-size: 14px; white-space: nowrap; }
+.sticky-buy-bar__inner:hover .sticky-buy-bar__button { background: var(--brand-cta-hover); }
+@media (prefers-reduced-motion: reduce) {
+  .sticky-buy-bar,
+  .sticky-buy-bar.is-visible,
+  .sticky-buy-bar.is-selected,
+  body.cart-open .sticky-buy-bar,
+  body.drawer-open .sticky-buy-bar,
+  body.modal-open .sticky-buy-bar,
+  body.email-popup-open .sticky-buy-bar { transition: none; }
+}

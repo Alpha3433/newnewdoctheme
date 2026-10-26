@@ -1083,12 +1083,20 @@
     var burger = $('.froya-nav__burger');
     if (burger) burger.setAttribute('aria-expanded', 'false');
   }
-  function scrollToId(id) {
+  function scrollToId(id, instant) {
     var el = findAnchor(id);
     if (!el) return false;
     var offset = ($('.froya-nav__bar') || { offsetHeight: 0 }).offsetHeight + 8;
     var top = el.getBoundingClientRect().top + window.pageYOffset - offset;
-    window.scrollTo({ top: top, behavior: 'smooth' });
+    if (instant) {
+      // html scrolls smoothly (theme.css), so a jump switches that off for the moment.
+      var root = document.documentElement, was = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';
+      window.scrollTo(0, top);
+      root.style.scrollBehavior = was;
+    } else {
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
     return true;
   }
   document.addEventListener('click', function (e) {
@@ -1462,6 +1470,85 @@
     // Start in whatever mode the section rendered (Subscribe & save is off unless the merchant
     // pre-selects it): the checked purchase_type radio carries that state.
     setMode(!!defaultPlan && (!radios.length || radios.some(function (r) { return r.checked && r.value === 'subscription'; })));
+  }
+
+  /* ====================================================== sticky buy bar */
+  /* sections/froya-sticky-buy-bar.liquid, phones only (assets/sections.css). The bar shows once the
+     hero has left the screen (on a page without one, once the page has scrolled) and hides again
+     while the buy box's form - the price line down to Add to Cart - is on screen; an open drawer,
+     the ingredients modal or the email popup hides it through its body class. {price} is the lowest
+     one-time price per bottle on the bundle cards, already in the visitor's currency. The bar
+     watches other sections, so every section (re)load sets it up afresh. */
+  var stickyBuyBar = { observers: [], onScroll: null };
+  var reduceMotion = function () { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); };
+  function initStickyBuyBar() {
+    stickyBuyBar.observers.forEach(function (o) { o.disconnect(); });
+    stickyBuyBar.observers = [];
+    if (stickyBuyBar.onScroll) window.removeEventListener('scroll', stickyBuyBar.onScroll);
+    stickyBuyBar.onScroll = null;
+    var bar = $('[data-sticky-buy-bar]');
+    if (!bar) { document.body.classList.remove('has-sticky-buy-bar'); return; }
+    var targetId = bar.getAttribute('data-target') || 'choose-bundle';
+    var target = document.getElementById(targetId);
+    var form = target && (target.closest('form') || target);
+    var cheapest = null;
+    if (form) {
+      $$('.js-bundle-card', form).forEach(function (card) {
+        var cents = parseInt(card.getAttribute('data-unit-otp-cents'), 10);
+        if (!isNaN(cents) && (!cheapest || cents < cheapest.cents)) cheapest = { cents: cents, html: card.getAttribute('data-unit-otp') };
+      });
+      // No bundle cards: the one-time price in the price line is the price of a bottle.
+      var single = !cheapest && $('.c-buybox-toggle__price--otp .product_price', form);
+      if (single) cheapest = { html: single.innerHTML.trim() };
+    }
+    var ready = !!(cheapest && cheapest.html) && 'IntersectionObserver' in window;
+    document.body.classList.toggle('has-sticky-buy-bar', ready);
+    if (!ready) { bar.classList.remove('is-visible'); return; }
+    // Rendered as HTML, as the buy box does (renderTier): the money format may carry markup.
+    $$('[data-sticky-buy-bar-price]', bar).forEach(function (slot) { slot.innerHTML = cheapest.html; });
+
+    // The page keeps room for the bar at the bottom (body.has-sticky-buy-bar), as tall as it is.
+    var setHeight = function () { document.documentElement.style.setProperty('--sticky-buy-bar-height', bar.offsetHeight + 'px'); };
+    setHeight();
+    if ('ResizeObserver' in window) {
+      var resize = new ResizeObserver(setHeight);
+      resize.observe(bar);
+      stickyBuyBar.observers.push(resize);
+    }
+
+    var pastTop = false, onForm = false;
+    var update = function () { bar.classList.toggle('is-visible', pastTop && !onForm); };
+    var hero = $('.s-hero-aging-lp');
+    if (hero) {
+      var heroWatch = new IntersectionObserver(function (entries) {
+        var entry = entries[entries.length - 1];
+        pastTop = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+        update();
+      });
+      heroWatch.observe(hero);
+      stickyBuyBar.observers.push(heroWatch);
+    } else {
+      stickyBuyBar.onScroll = function () { pastTop = window.pageYOffset > 0; update(); };
+      window.addEventListener('scroll', stickyBuyBar.onScroll, { passive: true });
+      stickyBuyBar.onScroll();
+    }
+    var formWatch = new IntersectionObserver(function (entries) { onForm = entries[entries.length - 1].isIntersecting; update(); });
+    formWatch.observe(form);
+    stickyBuyBar.observers.push(formWatch);
+
+    if (!once(bar, 'init')) return;
+    bar.addEventListener('click', function (e) {
+      if (!e.target.closest('[data-sticky-buy-bar-button]')) return;
+      var id = bar.getAttribute('data-target') || 'choose-bundle';
+      if (window.clarity) window.clarity('event', 'sticky_bar_tap');
+      scrollToId(id, reduceMotion());
+      // Focus goes where the bar went (the selected bundle), so keyboard and screen reader users
+      // carry on from there instead of from a bar that has just hidden itself.
+      var line = document.getElementById(id);
+      var buyForm = line && (line.closest('form') || line);
+      var next = buyForm && ($('.js-bundle-card input:checked', buyForm) || $('button, input:not([type="hidden"])', buyForm));
+      if (next) next.focus({ preventScroll: true });
+    });
   }
 
   /* ============================================ backed-by-science scroll spy */
@@ -1868,6 +1955,7 @@
     initGallery(root);
     initModal(root);
     initBuyBox(root);
+    initStickyBuyBar();
     initScience(root);
     initBars(root);
     initNewsletter(root);
@@ -1888,6 +1976,12 @@
       if (cartCount) Cart.run(function () { return Cart.reconcile(); }, true).catch(function () {});
     }
     document.documentElement.classList.add('loaded');
+    // Clarity: tag visits that see the buy box with its layout, so recordings can be filtered by it.
+    // The Clarity snippet may only define window.clarity after this script has run; try again on load.
+    if (document.getElementById('choose-bundle')) {
+      var tagLayout = function () { if (window.clarity) window.clarity('set', 'buybox_layout', 'price_first'); };
+      if (window.clarity) tagLayout(); else window.addEventListener('load', tagLayout);
+    }
     autoLocalize();
     // Arrived from another page with a section key in the hash (e.g. /#faq): scroll to that section.
     var hash = (window.location.hash || '').replace(/^#/, '');
@@ -1910,10 +2004,14 @@
     if (e.target.querySelector('#mini-cart')) Cart.open();
     var popup = popupForSection(e.target);
     if (popup && popup.__open) popup.__open();
+    var bar = e.target.querySelector('[data-sticky-buy-bar]');
+    if (bar) bar.classList.add('is-selected');
   });
   document.addEventListener('shopify:section:deselect', function (e) {
     if (e.target.querySelector('#mini-cart')) Cart.close();
     var popup = popupForSection(e.target);
     if (popup && popup.__close) popup.__close();
+    var bar = e.target.querySelector('[data-sticky-buy-bar]');
+    if (bar) bar.classList.remove('is-selected');
   });
 })();
