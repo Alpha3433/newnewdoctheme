@@ -723,11 +723,11 @@
   "order": [
     "featured-product",
     "reviews-slider",
-    "faq",
     "backed-by-science",
     "clinical-trial",
-    "guarantee",
     "how-to-use",
+    "guarantee",
+    "faq",
     "sticky-buy-bar",
     "main"
   ]
