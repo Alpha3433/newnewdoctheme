@@ -20,7 +20,7 @@
             "tier": "2",
             "badge": "MOST POPULAR",
             "gift": "",
-            "perks": "A full growth cycle, start to finish",
+            "perks": "",
             "highlight": true,
             "selected": true
           }
@@ -31,7 +31,7 @@
             "tier": "3",
             "badge": "BEST VALUE",
             "gift": "",
-            "perks": "Lowest price per bottle",
+            "perks": "",
             "highlight": false,
             "selected": false
           }
@@ -225,8 +225,8 @@
       "settings": {
         "product": "elaren-pumpkin-seed-oil-regrowth-serum",
         "selling_plan_id": "1039991141",
-        "product_title": "",
-        "badge_text": "Formulated for women’s hair loss",
+        "product_title": "Pumpkin Seed Oil Serum",
+        "badge_text": "",
         "badge_underline": "",
         "badge_bg": "#e5f3fa",
         "badge_color": "#54585a",
@@ -266,7 +266,7 @@
         "gift_product": "elaren-microstamp-pro",
         "gift_badge": "FREE GIFT WORTH {price}",
         "gift_text": "<p>Complete your routine with our <strong>&lcub;product&rcub;</strong>.</p>",
-        "congrats_text": "Congrats! You’re saving",
+        "congrats_text": "",
         "sub_badge": "SAVE {percent}% ON EVERY ORDER",
         "sub_name": "Subscribe & save",
         "sub_perks": "<p><strong>LOWEST PRICE</strong> every month<br/><strong>&lcub;percent&rcub;% OFF</strong> every order<br/><strong>FREE INSURED SHIPPING</strong> always<br/><strong>CANCEL, PAUSE, EDIT</strong> anytime<br/><strong>RESERVED</strong> stock<br/><strong>LONG-TERM</strong> fuller hair</p>",
