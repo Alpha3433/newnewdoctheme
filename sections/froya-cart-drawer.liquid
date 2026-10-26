@@ -191,9 +191,25 @@
             assign nudge_shown = false
             assign onetime_total = 0
             assign upgrade_item = blank
+            comment
+              The serum's rows come first, then everything else (the free gift, add-ons): Shopify
+              lists the newest line first, so the gift added with a subscription used to sit above
+              the serum. Two passes over the cart keep each line's position (forloop.index), which
+              the quantity and remove buttons address.
+            endcomment
           -%}
+          {%- for pass in (1..2) -%}
           {%- for item in cart.items -%}
             {%- liquid
+              assign serum_line = false
+              if item.product_id == bundle_product_id and item.properties._free_gift == blank
+                assign serum_line = true
+              endif
+              if pass == 1 and serum_line == false
+                continue
+              elsif pass == 2 and serum_line
+                continue
+              endif
               assign line = forloop.index
               assign group_key = line_group_keys[forloop.index0] | default: '-'
               assign is_bundle = false
@@ -442,6 +458,7 @@
                 endif
               -%}
             </line-item>
+          {%- endfor -%}
           {%- endfor -%}
         </form>
 
