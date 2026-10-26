@@ -1740,7 +1740,9 @@
      intent, whichever comes first), posts the customer form in the background, reveals the code and
      attaches it to the session via /discount/CODE so checkout applies it automatically. Closing it,
      with or without signing up, is remembered per visitor in localStorage for the days set in the
-     section, and it never reopens on its own within the same visit. */
+     section, and it never reopens on its own within the same visit. It never opens over the buy box
+     or the cart drawer, and on a page with a buy box the delay only starts once the visitor has
+     scrolled past it. */
   function initEmailPopup(root) {
     var popup = $('[data-email-popup]', root) || (root === document ? $('[data-email-popup]') : null);
     if (!popup || !once(popup, 'init')) return;
@@ -1803,12 +1805,21 @@
       window.setTimeout(function () { if (!opened) popup.setAttribute('hidden', ''); }, 400);
       if (rememberDays && !designMode) remember(rememberDays, 'dismissed');
     };
+    // Never over the buy box or the cart: the popup doesn't open while any part of the buy box
+    // (#product-section) is on screen or while the cart drawer is open.
+    var buyBox = document.getElementById('product-section');
+    var inTheWay = function () {
+      if (document.body.classList.contains('cart-open')) return true;
+      if (!buyBox || !document.body.contains(buyBox)) return false;
+      var r = buyBox.getBoundingClientRect();
+      return r.bottom > 0 && r.top < window.innerHeight;
+    };
     // The popup fires once per visit at most. The delay timer and exit intent both come through
     // here: the first one to fire wins, and a popup the visitor has already closed (this visit, or
     // within the remembered days from an earlier one) never comes back on its own. Only the theme
     // editor (popup.__open) can reopen it.
     var autoOpen = function () {
-      if (fired || opened || hiddenUntil() > Date.now()) return;
+      if (fired || opened || hiddenUntil() > Date.now() || inTheWay()) return;
       fired = true;
       if (exitIntent) document.removeEventListener('mouseout', exitIntent);
       open();
@@ -1938,10 +1949,30 @@
     if (!enabled || hiddenUntil() > Date.now()) return;
 
     var delay = Math.max(0, parseInt(popup.getAttribute('data-delay') || '6', 10)) * 1000;
-    timer = window.setTimeout(autoOpen, delay);
+    // Once the delay is up the popup opens, or waits while the buy box or the cart is in the way.
+    var due = function () {
+      timer = null;
+      if (inTheWay()) { timer = window.setTimeout(due, 1000); return; }
+      autoOpen();
+    };
+    // On a page with a buy box the delay only starts once the visitor has scrolled past the bottom
+    // of it; on any other page it starts now. A scroll listener rather than an IntersectionObserver:
+    // a jump from above the buy box to below it (a menu link, a restored scroll position) never
+    // intersects it, so an observer would not report it.
+    if (buyBox) {
+      var pastBuyBox = function () {
+        if (buyBox.getBoundingClientRect().bottom > 0) return;
+        window.removeEventListener('scroll', pastBuyBox);
+        if (!fired && !opened) timer = window.setTimeout(due, delay);
+      };
+      window.addEventListener('scroll', pastBuyBox, { passive: true });
+      pastBuyBox();
+    } else {
+      timer = window.setTimeout(due, delay);
+    }
     if (popup.getAttribute('data-exit-intent') === 'true' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       exitIntent = function (e) {
-        if (!e.relatedTarget && e.clientY <= 0 && !document.body.classList.contains('cart-open')) autoOpen();
+        if (!e.relatedTarget && e.clientY <= 0 && !inTheWay()) autoOpen();
       };
       document.addEventListener('mouseout', exitIntent);
     }
