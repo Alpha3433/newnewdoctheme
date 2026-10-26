@@ -437,7 +437,7 @@
         <div class="c-product-form js-product-form">
           <c-subscription class="c-subscribtion c-subscribtion--buybox-toggle igcp-on{% if plan == blank %} c-subscribtion--no-plan{% endif %}{% if bundle_count > 0 %} c-subscribtion--bundles{% endif %}{% unless sub_on %} is-one-time{% endunless %}" data-default-selling-plan="{{ plan.id }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
             {%- form 'product', product, class: 'c-subscribtion__subscription-form js-subscribtion__subscription-form js-ajax-add', id: 'featured-product-form' -%}
-              <div class="c-buybox-toggle__priceline">
+              <div class="c-buybox-toggle__priceline" id="choose-bundle">
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--sub">
                   <span class="c-buybox-toggle__price-main"><span class="product_price">{{ display_unit_sub | money }}</span></span>{% if display_compare_unit > display_unit_sub %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{{ display_compare_unit | money }}</span></span>{% endif %}</span>
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--otp">
@@ -576,7 +576,7 @@
                       assign tier_pct_otp = tier_save_otp | times: 100 | divided_by: tier_compare
                     endif
                   -%}
-                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare | money | escape }}" data-compare-total-cents="{{ tier_compare }}" data-qty="{{ qty }}" data-save-otp="{{ tier_save_otp | money | escape }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ tier_save_sub | money | escape }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp_button | escape }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub_button | escape }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp | money | escape }}" data-unit-sub="{{ unit_sub | money | escape }}" {{ block.shopify_attributes }}>
+                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare | money | escape }}" data-compare-total-cents="{{ tier_compare }}" data-qty="{{ qty }}" data-save-otp="{{ tier_save_otp | money | escape }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ tier_save_sub | money | escape }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp_button | escape }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub_button | escape }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp | money | escape }}" data-unit-otp-cents="{{ unit_otp }}" data-unit-sub="{{ unit_sub | money | escape }}" {{ block.shopify_attributes }}>
                     <input class="c-bundle__radio" name="bundle_tier" type="radio" value="{{ qty }}"{% if block.id == default_bundle.id %} checked{% endif %}>
                     <span class="c-bundle__main">
                       <span aria-hidden="true" class="c-bundle__dot"></span>

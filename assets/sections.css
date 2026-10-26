@@ -674,7 +674,9 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-product-form { display: block; margin-top: 4px; }
 .c-subscribtion { display: block; }
 .c-subscribtion__subscription-form { margin: 0; display: flex; flex-direction: column; gap: 14px; }
-.c-buybox-toggle__priceline { display: flex; align-items: baseline; gap: 10px; }
+/* The price line is #choose-bundle, where the hero button and the sticky buy bar land: a jump to it
+   (e.g. /#choose-bundle) stops under the sticky header, as assets/main.js scrollToId does. */
+.c-buybox-toggle__priceline { display: flex; align-items: baseline; gap: 10px; scroll-margin-top: calc(var(--header-height, 64px) + 8px); }
 .c-buybox-toggle__price { display: inline-flex; align-items: baseline; gap: 10px; }
 .c-buybox-toggle__price-main { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
 .c-buybox-toggle__price-compare { font-size: 18px; color: var(--brand-strike); text-decoration: line-through; }
@@ -1150,6 +1152,22 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .c-bundle__meta,
   .c-bundle__gift,
   .c-bundle__perks { padding-left: 0; }
+}
+/* Price first on phones: rating and name, then the price line, Subscribe & save, the bundles, the
+   savings pill and Add to Cart, then the USPs, the gallery, the shipping banner, "what you get" and
+   the benefit tags, and the low-stock line last. The markup keeps the desktop order (gallery column,
+   info column), so the info column is dissolved (display: contents) and its children are ordered
+   around the gallery as items of the content grid, at the info column's own 14px rhythm. Anything
+   new in the info column lands with the tags (order 5) rather than above the price. */
+@media screen and (max-width: 767px) {
+  .s-featured-product__content { gap: 14px; }
+  .s-featured-product__info { display: contents; }
+  .s-featured-product__info > * { order: 5; min-width: 0; }
+  .s-featured-product__mobile-head { order: 1; }
+  .s-featured-product__info > .c-product-form { order: 2; }
+  .s-featured-product__info > .s-featured-product__product-icons { order: 3; }
+  .s-featured-product__gallery-wrapper { order: 4; margin: 6px 0; }
+  .s-featured-product__info > .c-low-stock { order: 6; }
 }
 @media screen and (max-width: 479px) {
   .c-bundle__main { gap: 10px; }

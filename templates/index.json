@@ -30,7 +30,7 @@
         "title": "Less Shedding in <em>2 Weeks.</em>",
         "subtitle": "Pumpkin seed oil and caffeine feed tired follicles, calm shedding and help hair grow back thicker. For the part, crown and edges, postpartum and menopausal shedding.",
         "button_label": "Try it risk-free - save up to 50%",
-        "button_link": "#product-section",
+        "button_link": "#choose-bundle",
         "stat_1": "FOR EVERY TEXTURE & TYPE OF HAIR LOSS",
         "stat_2": "",
         "stat_3": ""
@@ -1312,11 +1312,11 @@
   "order": [
     "hero",
     "benefits-strip",
+    "featured-product",
     "press-slider",
     "reviews-slider",
     "backed-by-science",
     "clinical-trial",
-    "featured-product",
     "founder-story",
     "arctic-plants",
     "review-wall",
