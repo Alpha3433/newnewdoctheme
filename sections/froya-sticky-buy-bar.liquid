@@ -3,8 +3,8 @@
   (on a page without a hero, once the page is scrolled), it shows the lowest one-time price per
   bottle and scrolls to the buy box's price line (#choose-bundle) when tapped. assets/main.js
   (initStickyBuyBar) fills in {price} from the buy box's bundle cards, so it is always the visitor's
-  currency, and hides the bar while the buy box from the price line to Add to Cart is on screen and
-  while the cart drawer, the menu, the ingredients modal or the email popup is open.
+  currency, and hides the bar while any part of the buy box is on screen and while the cart drawer,
+  the menu, the ingredients modal or the email popup is open.
   On a product page it belongs to the Bundled product (Theme settings → Bundle tiers) only.
 {% endcomment %}
 {%- unless template.name == 'product' and product.id != settings.bundle_product.id -%}
@@ -26,7 +26,7 @@
   "name": "Sticky buy bar",
   "tag": "section",
   "settings": [
-    { "type": "paragraph", "content": "Phones only. The bar appears once the hero has scrolled off screen and hides while the buy box, from the price to Add to Cart, is on screen. A tap scrolls to the price (#choose-bundle)." },
+    { "type": "paragraph", "content": "Phones only. The bar appears once the hero has scrolled off screen and hides while any part of the buy box is on screen. A tap scrolls to the price (#choose-bundle)." },
     { "type": "text", "id": "text", "label": "Text", "default": "Choose your bundle · from {price} a bottle", "info": "{price} is the lowest one-time price per bottle on the buy box's bundle cards, in the visitor's currency." },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop now" }
   ],

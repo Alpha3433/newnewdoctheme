@@ -1475,10 +1475,10 @@
   /* ====================================================== sticky buy bar */
   /* sections/froya-sticky-buy-bar.liquid, phones only (assets/sections.css). The bar shows once the
      hero has left the screen (on a page without one, once the page has scrolled) and hides again
-     while the buy box's form - the price line down to Add to Cart - is on screen; an open drawer,
-     the ingredients modal or the email popup hides it through its body class. {price} is the lowest
-     one-time price per bottle on the bundle cards, already in the visitor's currency. The bar
-     watches other sections, so every section (re)load sets it up afresh. */
+     while any part of the buy box (#product-section) is on screen; an open drawer, the ingredients
+     modal or the email popup hides it through its body class. {price} is the lowest one-time price
+     per bottle on the bundle cards, already in the visitor's currency. The bar watches other
+     sections, so every section (re)load sets it up afresh. */
   var stickyBuyBar = { observers: [], onScroll: null };
   var reduceMotion = function () { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); };
   function initStickyBuyBar() {
@@ -1533,7 +1533,7 @@
       stickyBuyBar.onScroll();
     }
     var formWatch = new IntersectionObserver(function (entries) { onForm = entries[entries.length - 1].isIntersecting; update(); });
-    formWatch.observe(form);
+    formWatch.observe(target.closest('#product-section') || form);
     stickyBuyBar.observers.push(formWatch);
 
     if (!once(bar, 'init')) return;
@@ -1542,8 +1542,10 @@
       var id = bar.getAttribute('data-target') || 'choose-bundle';
       if (window.clarity) window.clarity('event', 'sticky_bar_tap');
       scrollToId(id, reduceMotion());
-      // Focus goes where the bar went (the selected bundle), so keyboard and screen reader users
-      // carry on from there instead of from a bar that has just hidden itself.
+      // From the keyboard (a click with no pointer behind it, detail 0) focus follows the bar to the
+      // selected bundle, so the visitor carries on from there instead of from a bar that has just
+      // hidden itself. A tap leaves focus alone: moving it drew a focus ring round the card.
+      if (e.detail !== 0) return;
       var line = document.getElementById(id);
       var buyForm = line && (line.closest('form') || line);
       var next = buyForm && ($('.js-bundle-card input:checked', buyForm) || $('button, input:not([type="hidden"])', buyForm));
