@@ -62,9 +62,18 @@
       {%- endif -%}
       <h1 class="compact-pdp__title">{{ product.title }}</h1>
 
+      {%- liquid
+        assign current_save = ''
+        if current_variant.compare_at_price > current_variant.price
+          assign current_save = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round
+        endif
+      -%}
       <div class="compact-pdp__price" data-price-wrap>
         <span class="compact-pdp__price-now" data-price>{{ current_variant.price | money }}</span>
-        <s class="compact-pdp__price-was" data-compare{% unless current_variant.compare_at_price > current_variant.price %} hidden{% endunless %}>{{ current_variant.compare_at_price | money }}</s>
+        <s class="compact-pdp__price-was" data-compare{% if current_save == '' %} hidden{% endif %}>{{ current_variant.compare_at_price | money }}</s>
+        {%- if section.settings.save_label != blank -%}
+          <span class="compact-pdp__save" data-save-tag data-save-label="{{ section.settings.save_label | escape }}"{% if current_save == '' %} hidden{% endif %}>{{ section.settings.save_label | replace: '{percent}', current_save }}</span>
+        {%- endif -%}
       </div>
 
       {%- if section.settings.intro != blank -%}
@@ -83,12 +92,19 @@
             <div class="compact-pdp__option-list">
               {%- for variant in product.variants -%}
                 {%- capture variant_compare -%}{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money }}{% endif %}{%- endcapture -%}
+                {%- liquid
+                  assign variant_save = ''
+                  if variant.compare_at_price > variant.price
+                    assign variant_save = variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round
+                  endif
+                -%}
                 <button
                   type="button"
                   class="compact-pdp__option{% if variant.id == current_variant.id %} is-selected{% endif %}{% unless variant.available %} is-unavailable{% endunless %}"
                   data-variant="{{ variant.id }}"
                   data-price="{{ variant.price | money | escape }}"
                   data-compare="{{ variant_compare | strip | escape }}"
+                  data-save="{{ variant_save }}"
                   data-available="{{ variant.available }}"
                   aria-pressed="{% if variant.id == current_variant.id %}true{% else %}false{% endif %}"
                 >
@@ -99,6 +115,13 @@
             </div>
           </fieldset>
         {%- endunless -%}
+
+        {%- if section.settings.deal_note != blank -%}
+          <div class="compact-pdp__deal">
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg>
+            <div class="compact-pdp__deal-text">{{ section.settings.deal_note }}</div>
+          </div>
+        {%- endif -%}
 
         <div class="compact-pdp__buy">
           <div class="compact-pdp__qty">
@@ -186,7 +209,7 @@
   .compact-pdp__info { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
   .compact-pdp__eyebrow { margin: 0; font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brand-mauve-dark); }
   .compact-pdp__title { margin: 0; font-family: var(--font-serif); font-weight: 400; font-size: 28px; line-height: 1.2; text-wrap: balance; }
-  .compact-pdp__price { display: flex; align-items: baseline; gap: 10px; }
+  .compact-pdp__price { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
   .compact-pdp__price-now { font-size: 22px; font-weight: 700; }
   .compact-pdp__price-was { font-size: 16px; color: var(--brand-strike); }
   .compact-pdp__intro { font-size: 16px; }
