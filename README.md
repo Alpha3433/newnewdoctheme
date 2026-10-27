@@ -150,9 +150,12 @@ template (`templates/page.froya-landing.json`).
   (`sections/main-product-compact.liquid`): photo gallery with thumbnails, size buttons with their
   prices, quantity, *Add to cart* (adds in place and opens the cart drawer, like the buy box), a
   short intro, ticked perks, *Expandable detail* blocks and a *Pairs with* card that sends shoppers
-  to the serum's buy box. Any other product moved onto a custom template behaves the same way. In
-  the cart drawer, line items and add-on cards for these products link to their page; everything
-  else still scrolls to the buy box.
+  to the serum's buy box. A size with a compare-at price shows a *Save {percent}%* tag next to its
+  price, and the *Deal note* setting puts a line above the button for an automatic discount. The
+  note is only text: the capsules' Buy 2, Get 1 Free is a Shopify automatic discount (Discounts),
+  not part of the Kaching bundle tiers, so change both together. Any other product moved onto a
+  custom template behaves the same way. In the cart drawer, line items and add-on cards for these
+  products link to their page; everything else still scrolls to the buy box.
 * **Serum comparison advertorial** – a long-form "we compared 10 pumpkin seed hair serums"
   review article for paid traffic, template `page.serum-comparison` (create a page in Online
   Store → Pages and choose that template). Its layout follows an editorial review page: warm
