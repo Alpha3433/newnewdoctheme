@@ -1141,9 +1141,11 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .s-main-product__modal-container { width: 100vw; max-height: 100vh; height: 100vh; border-radius: 0; padding: 60px 20px 32px; }
   .s-featured-product__product-icons { gap: 16px; }
   .s-featured-product__product-icon-wrapper { min-width: 0; }
-  /* Benefit pills split evenly into two columns on phones */
-  .s-featured-product__product-tags { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .s-featured-product__product-tag { justify-content: center; padding: 8px 10px; text-align: center; }
+  /* Benefit tags as a tight two-column list on phones: no pills, 16px icons, small caps text. The
+     columns follow their labels, so the longer ones ("block DHT naturally") keep to one line. */
+  .s-featured-product__product-tags { display: grid; grid-template-columns: repeat(2, auto); gap: 6px 10px; }
+  .s-featured-product__product-tag { gap: 6px; padding: 0; border: 0; border-radius: 0; background: none; line-height: 1.25; letter-spacing: 0.02em; text-align: left; }
+  .s-featured-product__product-tag .product-tag__icon { flex: 0 0 16px; width: 16px; height: 16px; }
   .c-buybox-toggle__box { --box-pad: 14px; }
   .c-buybox-toggle__head-title { font-size: 17px; }
   .c-buybox-toggle__head-sub { font-size: 14px; }
