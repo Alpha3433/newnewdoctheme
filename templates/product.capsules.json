@@ -56,6 +56,8 @@
       "settings": {
         "eyebrow": "Daily softgel",
         "intro": "<p>Pumpkin seed oil in an easy daily softgel. It's the same oil as in our nightly scalp serum, taken by mouth, so it supports your hair from the inside, across your whole scalp.</p>",
+        "save_label": "Save {percent}%",
+        "deal_note": "<strong>Buy 2, get 1 free.</strong> Add 3 bottles and the third is free, taken off automatically in your cart.",
         "option_suffix": "",
         "add_label": "Add to cart",
         "perks": "Free insured shipping on every order\nPairs with the Elaren scalp serum",
