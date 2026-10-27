@@ -1,0 +1,71 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product-compact",
+      "blocks": {
+        "detail_what": {
+          "type": "detail",
+          "settings": {
+            "title": "What it is",
+            "text": "<p>A daily softgel with pumpkin seed oil, the same oil that's in our nightly scalp serum. Because you take it by mouth, it reaches your whole scalp, not just the areas you apply the serum to.</p>",
+            "open": true
+          }
+        },
+        "detail_how": {
+          "type": "detail",
+          "settings": {
+            "title": "How to take it",
+            "text": "<p>Take your softgels each day with a meal, as directed on the bottle. Hair grows in cycles, so give it at least 3 months of daily use.</p><p>If you're pregnant, breastfeeding, taking medication or have a medical condition, check with your doctor before starting any supplement.</p>",
+            "open": false
+          }
+        },
+        "detail_serum": {
+          "type": "detail",
+          "settings": {
+            "title": "Using it with the serum",
+            "text": "<p>For thinning across your whole head, take the capsules every day and keep using the serum each night on the areas you notice most. The capsules work from the inside, and the serum works directly on your scalp.</p>",
+            "open": false
+          }
+        },
+        "detail_shipping": {
+          "type": "detail",
+          "settings": {
+            "title": "Shipping and returns",
+            "text": "<p>Every order ships free, insured and tracked. Delivery times are in our <a href=\"/policies/shipping-policy\" title=\"Shipping Policy\">Shipping Policy</a>, and returns are covered in our <a href=\"/policies/refund-policy\" title=\"Refund Policy\">Refund Policy</a>.</p>",
+            "open": false
+          }
+        },
+        "pairing": {
+          "type": "pairing",
+          "settings": {
+            "product": "elaren-pumpkin-seed-oil-regrowth-serum",
+            "heading": "Pairs with",
+            "text": "The nightly scalp serum for the areas you notice most.",
+            "link": "",
+            "link_label": "Shop the serum"
+          }
+        }
+      },
+      "block_order": [
+        "detail_what",
+        "detail_how",
+        "detail_serum",
+        "detail_shipping",
+        "pairing"
+      ],
+      "settings": {
+        "eyebrow": "Daily softgel",
+        "intro": "<p>Pumpkin seed oil in an easy daily softgel. It's the same oil as in our nightly scalp serum, taken by mouth, so it supports your hair from the inside, across your whole scalp.</p>",
+        "save_label": "Save {percent}%",
+        "deal_note": "<strong>Buy 2, get 1 free.</strong> Add 3 bottles and the third is free, taken off automatically in your cart.",
+        "option_suffix": "",
+        "add_label": "Add to cart",
+        "perks": "Free insured shipping on every order\nPairs with the Elaren scalp serum",
+        "background": "#faf7f0"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

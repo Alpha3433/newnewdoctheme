@@ -3,12 +3,15 @@
 <head>
   <meta charset="utf-8">
   {%- comment -%}
-    The store sells from the home page, so product pages (reached from Google Shopping, order emails,
-    the Shop app…) send the visitor straight to the home page - except the serum's own page: the
-    Bundled product (Theme settings → Bundle tiers) opens templates/product.json, with the buy box at
-    the top, so Google visitors land on a product page. A theme cannot answer with a real 301 and
-    Shopify's URL redirects only cover paths that no longer exist, so this is a meta refresh backed by
-    a script; skipped in the theme editor so the product template stays editable.
+    The store sells the serum from the home page, so product pages (reached from Google Shopping,
+    order emails, the Shop app…) send the visitor straight to the home page, with two exceptions:
+    - the serum's own page: the Bundled product (Theme settings → Bundle tiers) opens
+      templates/product.json, with the buy box at the top, so Google visitors land on a product page;
+    - products assigned to their own template (template.suffix, e.g. the capsules on
+      product.capsules), which are sold on that page.
+    A theme cannot answer with a real 301 and Shopify's URL redirects only cover paths that no longer
+    exist, so this is a meta refresh backed by a script; skipped in the theme editor so the product
+    template stays editable. bundle_page also limits the Product structured data below to the serum.
   {%- endcomment -%}
   {%- liquid
     assign bundle_page = false
@@ -16,7 +19,7 @@
       assign bundle_page = true
     endif
   -%}
-  {%- if template.name == 'product' and settings.redirect_product_pages and bundle_page == false and request.design_mode == false -%}
+  {%- if template.name == 'product' and template.suffix == blank and bundle_page == false and settings.redirect_product_pages and request.design_mode == false -%}
     {%- assign home_url = shop.url | append: routes.root_url -%}
     <meta http-equiv="refresh" content="0; url={{ home_url }}">
     <script>window.location.replace({{ home_url | json }});</script>
