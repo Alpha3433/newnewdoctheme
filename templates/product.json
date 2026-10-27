@@ -448,6 +448,65 @@
         "read_less": "Read less"
       }
     },
+    "results-timeline": {
+      "type": "froya-results-timeline",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "label": "FIRST NIGHTS",
+            "title": "Two minutes a night",
+            "text": "Glide the roller along your part, massage for 60 seconds, leave it in overnight."
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "label": "WEEK 2",
+            "title": "Less shedding",
+            "text": "Most customers notice fewer hairs in the shower and on their brush in the first weeks."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "label": "DAY 30",
+            "title": "Fuller-looking hair",
+            "text": "Around day 30 your part starts to look fuller. Not happy? Your money-back guarantee starts at night 30."
+          }
+        },
+        "step_4": {
+          "type": "step",
+          "settings": {
+            "label": "MONTH 3",
+            "title": "New baby hairs",
+            "text": "New baby hairs along the part and hairline. One full growth cycle, which is the 3-month supply."
+          }
+        },
+        "step_5": {
+          "type": "step",
+          "settings": {
+            "label": "MONTH 6",
+            "title": "Density keeps building",
+            "text": "Density keeps building with nightly use, which is the 6-month supply."
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4",
+        "step_5"
+      ],
+      "settings": {
+        "heading": "What to expect",
+        "intro": "",
+        "footnote": "Hair grows in cycles, so results build with consistent nightly use. Individual results vary.",
+        "button_label": "Choose your bundle",
+        "button_link": "#choose-bundle"
+      }
+    },
     "backed-by-science": {
       "type": "froya-backed-by-science",
       "blocks": {
@@ -727,6 +786,7 @@
   "order": [
     "featured-product",
     "reviews-slider",
+    "results-timeline",
     "backed-by-science",
     "clinical-trial",
     "how-to-use",

@@ -1948,3 +1948,31 @@ body.email-popup-open { overflow: hidden; }
   body.modal-open .sticky-buy-bar,
   body.email-popup-open .sticky-buy-bar { transition: none; }
 }
+
+/* ---- Results timeline, "What to expect" (sections/froya-results-timeline.liquid): a cream band
+   with one marker per step on a vertical mauve line, like the "Backed by science" timeline, then
+   the footnote and a button to the bundles. ---- */
+.s-results-timeline { --timeline-bg: var(--brand-cream); --timeline-marker: 14px; --timeline-gap: 22px; display: block; padding: 56px 20px 64px; background: var(--timeline-bg); color: var(--brand-ink); }
+.s-results-timeline__container { max-width: 640px; margin: 0 auto; }
+.s-results-timeline__header { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 32px; text-align: center; }
+.s-results-timeline__intro { margin: 0; max-width: 520px; font-size: 16px; line-height: 1.5; text-wrap: balance; }
+.s-results-timeline__steps { display: flex; flex-direction: column; gap: var(--timeline-gap); margin: 0; padding: 0; list-style: none; }
+.s-results-timeline__step { position: relative; padding-left: calc(var(--timeline-marker) + 20px); }
+/* The line runs from each marker to the next one; the last step has none below it */
+.s-results-timeline__step::before { content: ''; position: absolute; top: 9px; bottom: calc(-1 * var(--timeline-gap) - 9px); left: calc(var(--timeline-marker) / 2 - 1px); width: 2px; background: rgba(175, 137, 152, 0.35); }
+.s-results-timeline__step:last-child::before { display: none; }
+.s-results-timeline__marker { position: absolute; top: 2px; left: 0; width: var(--timeline-marker); height: var(--timeline-marker); border-radius: 50%; background: var(--brand-mauve); box-shadow: 0 0 0 4px var(--timeline-bg); }
+.s-results-timeline__label { margin: 0; font-family: var(--font-mono); font-size: 12px; font-weight: 700; line-height: 18px; letter-spacing: 0.12em; text-transform: uppercase; }
+.s-results-timeline__step-title { margin: 4px 0 0; font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.25; letter-spacing: -0.01em; }
+.s-results-timeline__text { margin: 6px 0 0; font-size: 16px; line-height: 1.5; }
+.s-results-timeline__footnote { margin: 28px 0 0; font-size: 13px; line-height: 1.5; text-align: center; text-wrap: balance; }
+.s-results-timeline__cta { margin-top: 20px; text-align: center; }
+.s-results-timeline__button { min-width: 300px; }
+@media screen and (max-width: 767px) {
+  .s-results-timeline { --timeline-gap: 18px; padding: 36px 20px 40px; }
+  .s-results-timeline__header { margin-bottom: 22px; }
+  .s-results-timeline__step-title { margin-top: 2px; font-size: 19px; }
+  .s-results-timeline__text { margin-top: 4px; font-size: 15px; }
+  .s-results-timeline__footnote { margin-top: 22px; }
+  .s-results-timeline__button { width: 100%; min-width: 0; }
+}
