@@ -310,7 +310,7 @@
       {%- endcapture -%}
       {%- capture demo_thumb_html -%}
         <div class="s-featured-product__thumbnail s-featured-product__thumbnail--video{% if demo_slide == 1 %} is-active{% endif %}">
-          <picture>{{ demo_video.preview_image | image_url: width: 240, height: 240, crop: 'center' | image_tag: alt: demo_video.alt, loading: 'lazy' }}</picture>
+          {%- if demo_video.preview_image != blank -%}<picture>{{ demo_video.preview_image | image_url: width: 240, height: 240, crop: 'center' | image_tag: alt: demo_video.alt, loading: 'lazy' }}</picture>{%- endif -%}
           <span aria-hidden="true" class="s-featured-product__thumbnail-play">{{ play_icon }}</span>
         </div>
       {%- endcapture -%}

@@ -488,7 +488,7 @@
 /* Demo video (Featured product → Demo video): a tap on the slide pauses or resumes it and a play
    icon shows while it is paused; its thumbnail carries a small play icon */
 .s-featured-product__slide--demo { cursor: pointer; }
-.s-featured-product__thumbnail--video { position: relative; }
+.s-featured-product__thumbnail--video { position: relative; background: var(--brand-cream); }
 .s-featured-product__slide-play,
 .s-featured-product__thumbnail-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
 .s-featured-product__slide-play { width: 56px; height: 56px; opacity: 0; transition: opacity .2s ease; }
