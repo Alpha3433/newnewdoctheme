@@ -96,7 +96,7 @@
               assign empty_variant = empty_product.selected_or_first_available_variant
               assign empty_href = routes.root_url | append: '#shop'
               assign empty_scroll = true
-              if empty_product.template_suffix != blank
+              if empty_product.template_suffix != blank and empty_product.id != settings.bundle_product.id
                 assign empty_href = empty_product.url
                 assign empty_scroll = false
               endif
@@ -360,11 +360,12 @@
                   comment
                     A product sold on its own page (assigned to its own product template, e.g. the
                     capsules on product.capsules) links to that page; everything else scrolls back to
-                    the buy box on the home page.
+                    the buy box on the home page. The Bundled product is always sold from the buy box:
+                    its template suffix ("serum") names a template this theme doesn't have.
                   endcomment
                   assign item_href = routes.root_url | append: '#shop'
                   assign item_scroll = true
-                  if item.product.template_suffix != blank
+                  if item.product.template_suffix != blank and item.product_id != bundle_product_id
                     assign item_href = item.url
                     assign item_scroll = false
                   endif
@@ -544,7 +545,7 @@
                     {%- liquid
                       assign addon_href = routes.root_url | append: '#shop'
                       assign addon_scroll = true
-                      if product.template_suffix != blank
+                      if product.template_suffix != blank and product.id != bundle_product_id
                         assign addon_href = product.url
                         assign addon_scroll = false
                       endif
