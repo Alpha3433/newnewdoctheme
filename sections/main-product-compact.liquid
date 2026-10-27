@@ -62,9 +62,18 @@
       {%- endif -%}
       <h1 class="compact-pdp__title">{{ product.title }}</h1>
 
+      {%- liquid
+        assign current_save = ''
+        if current_variant.compare_at_price > current_variant.price
+          assign current_save = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round
+        endif
+      -%}
       <div class="compact-pdp__price" data-price-wrap>
         <span class="compact-pdp__price-now" data-price>{{ current_variant.price | money }}</span>
-        <s class="compact-pdp__price-was" data-compare{% unless current_variant.compare_at_price > current_variant.price %} hidden{% endunless %}>{{ current_variant.compare_at_price | money }}</s>
+        <s class="compact-pdp__price-was" data-compare{% if current_save == '' %} hidden{% endif %}>{{ current_variant.compare_at_price | money }}</s>
+        {%- if section.settings.save_label != blank -%}
+          <span class="compact-pdp__save" data-save-tag data-save-label="{{ section.settings.save_label | escape }}"{% if current_save == '' %} hidden{% endif %}>{{ section.settings.save_label | replace: '{percent}', current_save }}</span>
+        {%- endif -%}
       </div>
 
       {%- if section.settings.intro != blank -%}
