@@ -734,6 +734,8 @@
         "unit_suffix": "per bottle",
         "total_text": "{total} total",
         "save_text": "Save {amount} ({percent}% off)",
+        "days_per_tube": 30,
+        "per_day_text": "{price} a day",
         "sub_default": false,
         "why_subscribe": "<strong>Why subscribe?</strong> Hair grows in cycles, so results come from nightly use over 3+ months. Subscribing keeps you stocked.",
         "toggle_title": "Save {percent}% with our flexible plan",

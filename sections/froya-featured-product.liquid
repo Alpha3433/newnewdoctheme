@@ -28,7 +28,9 @@
   assign count_placeholder = '{count}'
   assign amount_placeholder = '{amount}'
   assign total_placeholder = '{total}'
+  assign price_placeholder = '{price}'
   assign show_currency_code = settings.currency_code_enable
+  assign days_per_tube = section.settings.days_per_tube | default: 0 | round
 
   assign fallback_images = 'IMG_1_8c681b46-2a29-4394-8f0b-a4d7759e9a48.jpg,IMG_2.png,nikki-reed-desktop_2x_2970174c-c49b-4943-8807-ab853fe8e55c.png,IMG_3.png,IMG_4_51e90354-5a8f-4469-9287-d1746d6736e0.png,IMG_5.png,IMG_6_corrected.png,IMG_7.png,IMG_8.png,IMG_9.png,IMG_10.png' | split: ','
   assign fallback_alts = 'Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex bottle|Woman applying Elaren Pumpkin Seed Regrowth Oil to her scalp along her part|Pumpkin Seed Regrowth Oil|Elaren Pumpkin Seed Regrowth Oil held in hand with key benefit callouts|Grid of customer before and after photos showing fuller parts, crowns and edges|Star rating and two verified customer reviews|Published research results for pumpkin seed oil and caffeine|Cold-pressed pumpkin seed oil and Caffeine Complex ingredients|Regrowth timeline at 2 weeks, 30 days and 30 days|Nightly two-minute scalp routine guide|Woman holding Elaren Pumpkin Seed Regrowth Oil with the 30-day money-back promise' | split: '|'
@@ -489,10 +491,7 @@
                     </div>
                   {%- endfor -%}
                 </div>
-                {%- liquid
-                  assign gift_product = section.settings.gift_product
-                  assign price_placeholder = '{price}'
-                -%}
+                {%- assign gift_product = section.settings.gift_product -%}
                 {%- if gift_product != blank and section.settings.gift_text != blank -%}
                   {%- liquid
                     assign gift_price = gift_product.price | money_without_trailing_zeros
@@ -544,6 +543,20 @@
                     assign total_sub = total_sub | plus: 0
                     assign unit_otp = total_otp | times: 10 | divided_by: qty | plus: 5 | divided_by: 10
                     assign unit_sub = total_sub | times: 10 | divided_by: qty | plus: 5 | divided_by: 10
+                    comment
+                      Price per day: the tier total over the days its bottles last (every bottle,
+                      free ones too, times Days per tube), rounded to the cent like the per-bottle
+                      price. 1 bottle at $34.99 is $1.17 a day, Buy 2 Get 1 Free $0.78.
+                    endcomment
+                    assign per_day_otp = blank
+                    assign per_day_sub = blank
+                    if days_per_tube > 0 and section.settings.per_day_text != blank
+                      assign tier_days = qty | times: days_per_tube
+                      assign day_otp = total_otp | times: 10 | divided_by: tier_days | plus: 5 | divided_by: 10 | money | prepend: '<strong>' | append: '</strong>'
+                      assign day_sub = total_sub | times: 10 | divided_by: tier_days | plus: 5 | divided_by: 10 | money | prepend: '<strong>' | append: '</strong>'
+                      assign per_day_otp = section.settings.per_day_text | replace: price_placeholder, day_otp
+                      assign per_day_sub = section.settings.per_day_text | replace: price_placeholder, day_sub
+                    endif
                     assign compare_basis = base_compare
                     if free > 0
                       assign compare_basis = otp_price
@@ -612,6 +625,10 @@
                         {%- if compare_basis > unit_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{{ compare_basis | money }}</span></span>{%- endif -%}
                         {%- if compare_basis > unit_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{{ compare_basis | money }}</span></span>{%- endif -%}
                         {%- if section.settings.unit_suffix != blank -%}<span class="c-bundle__unit-label">{{ section.settings.unit_suffix }}</span>{%- endif -%}
+                        {%- endif -%}
+                        {%- if per_day_otp != blank -%}
+                        <span class="c-bundle__per-day c-bundle__per-day--sub">{{ per_day_sub }}</span>
+                        <span class="c-bundle__per-day c-bundle__per-day--otp">{{ per_day_otp }}</span>
                         {%- endif -%}
                       </span>
                     </span>
@@ -781,6 +798,8 @@
     { "type": "text", "id": "unit_suffix", "label": "Per-unit label", "default": "per bottle" },
     { "type": "text", "id": "total_text", "label": "Total line", "default": "{total} total", "info": "{total} is replaced with the bundle total." },
     { "type": "text", "id": "save_text", "label": "Savings line", "default": "Save {amount} ({percent}% off)", "info": "{amount} is the money saved, {percent} the tier discount." },
+    { "type": "number", "id": "days_per_tube", "label": "Days per tube", "default": 30, "info": "How many nights one tube lasts. A card's price per day is its bundle total divided by its bottles (free ones included) times this number." },
+    { "type": "text", "id": "per_day_text", "label": "Price per day", "default": "{price} a day", "info": "Shown on each card under the per-bottle label, in the shopper's currency, following the Subscribe & save switch. {price} is replaced with the price per day. Leave empty to hide it." },
     { "type": "header", "content": "Subscribe & save" },
     { "type": "checkbox", "id": "sub_default", "label": "Pre-select Subscribe & save", "default": false, "info": "Off: the buy box loads on the one-time price and the shopper switches Subscribe & save on. On: it loads with Subscribe & save already selected." },
     { "type": "inline_richtext", "id": "why_subscribe", "label": "Why subscribe? note", "default": "<strong>Why subscribe?</strong> Hair grows in cycles, so results come from nightly use over 3+ months. Subscribing keeps you stocked.", "info": "A light box with a calendar icon directly above the Subscribe & save box, shown whether the switch is on or off. Leave empty to hide it." },

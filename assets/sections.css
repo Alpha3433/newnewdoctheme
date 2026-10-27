@@ -1019,6 +1019,22 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   text-transform: uppercase;
   color: var(--brand-muted);
 }
+/* Price per day, under the per-bottle label. It hangs below the price column rather than
+   lengthening it, so the cards keep their height: it sits in the space beside the total line. */
+.c-bundle__pricing { position: relative; }
+.c-bundle__per-day {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--brand-muted);
+}
+.c-bundle__per-day strong { font-weight: 700; }
 .c-bundle__meta {
   display: flex;
   flex-wrap: wrap;
@@ -1090,6 +1106,8 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-subscribtion.is-one-time .c-bundle__unit-compare--sub,
 .c-subscribtion.is-one-time .c-bundle__total--sub,
 .c-subscribtion.is-one-time .c-bundle__save--sub { display: none; }
+.c-subscribtion:not(.is-one-time) .c-bundle__per-day--otp,
+.c-subscribtion.is-one-time .c-bundle__per-day--sub { display: none; }
 /* Bundles still save money without a subscription, so keep the savings line visible */
 .c-subscribtion--bundles.is-one-time .c-buybox-toggle__congrats { display: flex; }
 .c-buybox-toggle__price-unit {
@@ -1196,6 +1214,11 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .c-bundle__main { gap: 10px; }
   .c-bundle__pricing { flex-direction: column; align-items: flex-end; gap: 0; }
   .c-bundle__badge { font-size: 9px; padding: 3px 7px; }
+  /* The stacked price lines are set tighter, so the price per day under them clears the total
+     line even at 360px */
+  .c-bundle__unit { line-height: 1.2; }
+  .c-bundle__unit-compare { line-height: 1.25; }
+  .c-bundle__unit-label { line-height: 1.3; }
 }
 
 /* --------------------------------------------------------------------------
