@@ -309,7 +309,7 @@
         "id": "redirect_product_pages",
         "label": "Send product pages to the home page",
         "default": true,
-        "info": "Anyone opening a /products/… link (Google Shopping, order emails, the Shop app) is taken to the home page, where the buy box is. Untick to show the plain product page instead."
+        "info": "Anyone opening a /products/… link (Google Shopping, order emails, the Shop app) is taken to the home page, where the buy box is. Products assigned to their own theme template (such as product.capsules) keep their page. Untick to show the plain product page instead."
       }
     ]
   },

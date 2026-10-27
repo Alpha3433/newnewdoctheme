@@ -94,17 +94,23 @@
                 were never shown - they opt in afterwards with the line's subscribe & save toggle.
               endcomment
               assign empty_variant = empty_product.selected_or_first_available_variant
+              assign empty_href = routes.root_url | append: '#shop'
+              assign empty_scroll = true
+              if empty_product.template_suffix != blank
+                assign empty_href = empty_product.url
+                assign empty_scroll = false
+              endif
             -%}
             <div class="drawer__product drawer__product--empty">
               <div class="drawer__product-image">
-                <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="drawer__product-link">
+                <a href="{{ empty_href }}"{% if empty_scroll %} data-scroll-to="shop"{% endif %} class="drawer__product-link">
                   {%- if empty_product.featured_image != blank -%}
                     {{ empty_product.featured_image | image_url: width: 320, height: 320, crop: 'center' | image_tag: class: 'drawer__product-image', alt: empty_product.title, loading: 'lazy' }}
                   {%- endif -%}
                 </a>
               </div>
               <div class="drawer__product-content">
-                <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="drawer__product-title">{{ empty_product.title }}</a>
+                <a href="{{ empty_href }}"{% if empty_scroll %} data-scroll-to="shop"{% endif %} class="drawer__product-title">{{ empty_product.title }}</a>
                 <div class="drawer__product-price">{{ section.settings.from_label }} <strong>{{ empty_product.price_min | money_without_trailing_zeros }}</strong></div>
                 {%- form 'product', empty_product, class: 'drawer__product-form js-ajax-add' -%}
                   <input type="hidden" name="id" value="{{ empty_variant.id }}">
@@ -334,14 +340,27 @@
                 <button type="button" class="s-mini-cart__remove-btn" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: item.quantity }}"{% elsif is_bundle %}data-cart-group-set="0"{% else %}data-cart-remove="{{ line }}"{% endif %} aria-label="Remove {{ item.product.title | escape }}">
                   <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
                 </button>
-                <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="line-item__image-wrapper" tabindex="-1" aria-hidden="true">
+                {%- liquid
+                  comment
+                    A product sold on its own page (assigned to its own product template, e.g. the
+                    capsules on product.capsules) links to that page; everything else scrolls back to
+                    the buy box on the home page.
+                  endcomment
+                  assign item_href = routes.root_url | append: '#shop'
+                  assign item_scroll = true
+                  if item.product.template_suffix != blank
+                    assign item_href = item.url
+                    assign item_scroll = false
+                  endif
+                -%}
+                <a href="{{ item_href }}"{% if item_scroll %} data-scroll-to="shop"{% endif %} class="line-item__image-wrapper" tabindex="-1" aria-hidden="true">
                   {%- if item.image != blank -%}
                     {{ item.image | image_url: width: 184, height: 184, crop: 'center' | image_tag: class: 'line-item__image', alt: item.product.title, loading: 'lazy' }}
                   {%- endif -%}
                 </a>
                 <div class="line-item__info">
                   <div class="product-item-meta">
-                    <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="product-item-meta__title text--small">{{ item.product.title }}</a>
+                    <a href="{{ item_href }}"{% if item_scroll %} data-scroll-to="shop"{% endif %} class="product-item-meta__title text--small">{{ item.product.title }}</a>
                     {%- if show_gift_label and section.settings.gift_label != blank -%}
                       <span class="product-item-meta__variant line-item__gift-label">{{ section.settings.gift_label }}</span>
                       {%- if gift_has_free_unit and gift_total_qty > 1 and section.settings.gift_extra_text != blank -%}
@@ -505,16 +524,24 @@
                         continue
                       endif
                     -%}
+                    {%- liquid
+                      assign addon_href = routes.root_url | append: '#shop'
+                      assign addon_scroll = true
+                      if product.template_suffix != blank
+                        assign addon_href = product.url
+                        assign addon_scroll = false
+                      endif
+                    -%}
                     <div class="drawer__product" data-addon data-price="{{ addon_variant.price }}" data-index="{{ forloop.index0 }}">
                       <div class="drawer__product-image">
-                        <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="drawer__product-link">
+                        <a href="{{ addon_href }}"{% if addon_scroll %} data-scroll-to="shop"{% endif %} class="drawer__product-link">
                           {%- if product.featured_image != blank -%}
                             {{ product.featured_image | image_url: width: 200, height: 200, crop: 'center' | image_tag: class: 'drawer__product-image', alt: product.title, loading: 'lazy' }}
                           {%- endif -%}
                         </a>
                       </div>
                       <div class="drawer__product-content">
-                        <a href="{{ routes.root_url }}#shop" data-scroll-to="shop" class="drawer__product-title">{{ product.title }}</a>
+                        <a href="{{ addon_href }}"{% if addon_scroll %} data-scroll-to="shop"{% endif %} class="drawer__product-title">{{ product.title }}</a>
                         <div class="drawer__product-price"><strong>{{ addon_variant.price | money }}</strong></div>
                         {%- if section.settings.addon_goal_reason != blank -%}
                           <p class="drawer__product-reason" data-addon-reason hidden>{{ section.settings.addon_goal_reason }}</p>

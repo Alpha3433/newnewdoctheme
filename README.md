@@ -142,6 +142,17 @@ template (`templates/page.froya-landing.json`).
   on desktop and a row in the mobile menu; Header → *Order tracking link*), the footer and the
   account page. The account order page shows a placed → shipped → on its way tracker and every
   tracking number with a *Track* button.
+* **Products with their own page (capsules)** – most product pages send visitors to the home page
+  (Theme settings → *Send product pages to the home page*), because the serum is sold from the buy
+  box there. A product assigned to its own product template keeps its page instead: the Pumpkin
+  Seed Oil Capsules use `templates/product.capsules.json` (Products → the product → *Theme
+  template* → `capsules`), built from the *Product (compact)* section
+  (`sections/main-product-compact.liquid`): photo gallery with thumbnails, size buttons with their
+  prices, quantity, *Add to cart* (adds in place and opens the cart drawer, like the buy box), a
+  short intro, ticked perks, *Expandable detail* blocks and a *Pairs with* card that sends shoppers
+  to the serum's buy box. Any other product moved onto a custom template behaves the same way. In
+  the cart drawer, line items and add-on cards for these products link to their page; everything
+  else still scrolls to the buy box.
 * **Serum comparison advertorial** – a long-form "we compared 10 pumpkin seed hair serums"
   review article for paid traffic, template `page.serum-comparison` (create a page in Online
   Store → Pages and choose that template). Its layout follows an editorial review page: warm

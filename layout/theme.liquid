@@ -3,12 +3,14 @@
 <head>
   <meta charset="utf-8">
   {%- comment -%}
-    The store sells from the home page only, so product pages (reached from Google Shopping, order
-    emails, the Shop app…) send the visitor straight to the home page. A theme cannot answer with a
-    real 301 and Shopify's URL redirects only cover paths that no longer exist, so this is a meta
-    refresh backed by a script; skipped in the theme editor so the product template stays editable.
+    The store sells the serum from the home page, so product pages on the default template (reached
+    from Google Shopping, order emails, the Shop app…) send the visitor straight to the home page. A
+    theme cannot answer with a real 301 and Shopify's URL redirects only cover paths that no longer
+    exist, so this is a meta refresh backed by a script; skipped in the theme editor so the product
+    template stays editable. Products assigned to their own template (template.suffix, e.g. the
+    capsules on product.capsules) are sold on that page, so they are never redirected.
   {%- endcomment -%}
-  {%- if template.name == 'product' and settings.redirect_product_pages and request.design_mode == false -%}
+  {%- if template.name == 'product' and template.suffix == blank and settings.redirect_product_pages and request.design_mode == false -%}
     {%- assign home_url = shop.url | append: routes.root_url -%}
     <meta http-equiv="refresh" content="0; url={{ home_url }}">
     <script>window.location.replace({{ home_url | json }});</script>
