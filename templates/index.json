@@ -30,7 +30,7 @@
         "title": "Less Shedding in <em>2 Weeks.</em>",
         "subtitle": "Pumpkin seed oil and caffeine feed tired follicles, calm shedding and help hair grow back thicker. For the part, crown and edges, postpartum and menopausal shedding.",
         "button_label": "Try it risk-free - save up to 50%",
-        "button_link": "#product-section",
+        "button_link": "#choose-bundle",
         "stat_1": "FOR EVERY TEXTURE & TYPE OF HAIR LOSS",
         "stat_2": "",
         "stat_3": ""
@@ -363,6 +363,65 @@
         "read_less": "Read less"
       }
     },
+    "results-timeline": {
+      "type": "froya-results-timeline",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "label": "FIRST NIGHTS",
+            "title": "Two minutes a night",
+            "text": "Glide the roller along your part, massage for 60 seconds, leave it in overnight."
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "label": "WEEK 2",
+            "title": "Less shedding",
+            "text": "Most customers notice fewer hairs in the shower and on their brush in the first weeks."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "label": "DAY 30",
+            "title": "Fuller-looking hair",
+            "text": "Around day 30 your part starts to look fuller. Not happy? Your money-back guarantee starts at night 30."
+          }
+        },
+        "step_4": {
+          "type": "step",
+          "settings": {
+            "label": "MONTH 3",
+            "title": "New baby hairs",
+            "text": "New baby hairs along the part and hairline. One full growth cycle, which is the 3-month supply."
+          }
+        },
+        "step_5": {
+          "type": "step",
+          "settings": {
+            "label": "MONTH 6",
+            "title": "Density keeps building",
+            "text": "Density keeps building with nightly use, which is the 6-month supply."
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4",
+        "step_5"
+      ],
+      "settings": {
+        "heading": "What to expect",
+        "intro": "",
+        "footnote": "Hair grows in cycles, so results build with consistent nightly use. Individual results vary.",
+        "button_label": "Choose your bundle",
+        "button_link": "#choose-bundle"
+      }
+    },
     "backed-by-science": {
       "type": "froya-backed-by-science",
       "blocks": {
@@ -500,7 +559,7 @@
             "tier": "2",
             "badge": "MOST POPULAR",
             "gift": "",
-            "perks": "A full growth cycle, start to finish",
+            "perks": "",
             "highlight": true,
             "selected": true
           }
@@ -511,7 +570,7 @@
             "tier": "3",
             "badge": "BEST VALUE",
             "gift": "",
-            "perks": "Lowest price per bottle",
+            "perks": "",
             "highlight": false,
             "selected": false
           }
@@ -705,18 +764,19 @@
       "settings": {
         "product": "elaren-pumpkin-seed-oil-regrowth-serum",
         "selling_plan_id": "1039991141",
-        "product_title": "",
-        "badge_text": "Formulated for women’s hair loss",
+        "product_title": "Elaren Pumpkin Seed Oil",
+        "badge_text": "",
         "badge_underline": "",
         "badge_bg": "#e5f3fa",
         "badge_color": "#54585a",
         "reviews_count": 435,
         "rating": "4.77",
         "rating_text": "RATED 4.77/5 BY WOMEN",
-        "reviews_anchor": "reviews-section",
+        "reviews_anchor": "reviews",
         "label_1": "",
         "label_2": "",
         "save_tag": "Save {percent}%",
+        "demo_video_slide": 2,
         "ships_free_text": "THIS ORDER SHIPS FREE",
         "includes": "",
         "ingredients_button": "View Ingredients",
@@ -734,7 +794,10 @@
         "unit_suffix": "per bottle",
         "total_text": "{total} total",
         "save_text": "Save {amount} ({percent}% off)",
+        "days_per_tube": 30,
+        "per_day_text": "{price} a day",
         "sub_default": false,
+        "why_subscribe": "<strong>Why subscribe?</strong> Hair grows in cycles, so results come from nightly use over 3+ months. Subscribing keeps you stocked.",
         "toggle_title": "Save {percent}% with our flexible plan",
         "toggle_sub": "No contracts. Cancel with ease.",
         "benefit_1": "<strong>Free Insured Shipping</strong> Every Order",
@@ -746,7 +809,7 @@
         "gift_product": "elaren-microstamp-pro",
         "gift_badge": "FREE GIFT WORTH {price}",
         "gift_text": "<p>Complete your routine with our <strong>&lcub;product&rcub;</strong>.</p>",
-        "congrats_text": "Congrats! You’re saving",
+        "congrats_text": "",
         "sub_badge": "SAVE {percent}% ON EVERY ORDER",
         "sub_name": "Subscribe & save",
         "sub_perks": "<p><strong>LOWEST PRICE</strong> every month<br/><strong>&lcub;percent&rcub;% OFF</strong> every order<br/><strong>FREE INSURED SHIPPING</strong> always<br/><strong>CANCEL, PAUSE, EDIT</strong> anytime<br/><strong>RESERVED</strong> stock<br/><strong>LONG-TERM</strong> fuller hair</p>",
@@ -756,7 +819,7 @@
         "info_1": "",
         "info_2": "",
         "button_label": "Add to Cart",
-        "button_price": "total",
+        "button_price": "total_compare",
         "sold_out_label": "Sold out",
         "show_low_stock": true,
         "low_stock_source": "fixed",
@@ -880,6 +943,7 @@
     },
     "review-wall": {
       "type": "froya-review-wall",
+      "disabled": true,
       "settings": {
         "eyebrow": "Raw, unedited reviews",
         "title": "Real women, real hair, real reviews",
@@ -893,7 +957,6 @@
       "settings": {
         "background": true,
         "anchor": true,
-        "image": "shopify://shop_images/hf_20260915_124844_5df67bf1-e85f-44b6-8421-9d2ed47ced81.png",
         "title": "Fuller hair in 30 days or your money back",
         "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 nights. Not happy with what you see?<br/>Email us any time from your 30th night until 60 days after delivery, with a photo from your first week and a recent one, and we’ll refund your serum. Hair loss is personal, and so is our promise.</p>",
         "link_label": "Learn More",
@@ -1168,6 +1231,7 @@
     },
     "arctic-ingredients": {
       "type": "froya-arctic-ingredients",
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/hf_20260918_090108_4a499bca-b484-455f-98d9-6831a0e49c3c.png",
         "image_alt": "Pumpkin seeds and cold-pressed pumpkin seed oil",
@@ -1179,10 +1243,10 @@
     },
     "guarantee-2": {
       "type": "froya-guarantee",
+      "disabled": true,
       "settings": {
         "background": false,
         "anchor": false,
-        "image": "shopify://shop_images/hf_20260915_124844_5df67bf1-e85f-44b6-8421-9d2ed47ced81.png",
         "title": "Fuller hair in 30 days or your money back",
         "text": "<p>Hair grows in cycles, so we ask for a little patience: use Elaren every night for 30 nights. Not happy with what you see?<br/>Email us any time from your 30th night until 60 days after delivery, with a photo from your first week and a recent one, and we’ll refund your serum. Hair loss is personal, and so is our promise.</p>",
         "link_label": "",
@@ -1307,27 +1371,36 @@
         "cta_label": "Shop with 10% off",
         "cta_url": ""
       }
+    },
+    "sticky-buy-bar": {
+      "type": "froya-sticky-buy-bar",
+      "settings": {
+        "text": "Choose your bundle · from {price} a bottle",
+        "button_label": "Shop now"
+      }
     }
   },
   "order": [
     "hero",
     "benefits-strip",
+    "featured-product",
     "press-slider",
     "reviews-slider",
+    "results-timeline",
+    "review-wall",
+    "video-reviews",
     "backed-by-science",
     "clinical-trial",
-    "featured-product",
     "founder-story",
     "arctic-plants",
-    "review-wall",
-    "guarantee",
-    "video-reviews",
     "how-to-use",
     "ingredient-quality",
     "arctic-ingredients",
     "guarantee-2",
+    "guarantee",
     "faq",
     "newsletter",
-    "froya_email_popup_3DrArA"
+    "froya_email_popup_3DrArA",
+    "sticky-buy-bar"
   ]
 }

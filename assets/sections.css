@@ -485,6 +485,17 @@
 .s-featured-product__thumbnail:hover { opacity: 1; }
 .s-featured-product__thumbnail.is-active { border-color: var(--brand-ink); opacity: 1; }
 .s-featured-product__thumbnail picture, .s-featured-product__thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+/* Demo video (Featured product → Demo video): a tap on the slide pauses or resumes it and a play
+   icon shows while it is paused; its thumbnail carries a small play icon */
+.s-featured-product__slide--demo { cursor: pointer; }
+.s-featured-product__thumbnail--video { position: relative; background: var(--brand-cream); }
+.s-featured-product__slide-play,
+.s-featured-product__thumbnail-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+.s-featured-product__slide-play { width: 56px; height: 56px; opacity: 0; transition: opacity .2s ease; }
+.s-featured-product__slide--demo.is-paused .s-featured-product__slide-play { opacity: 1; }
+.s-featured-product__thumbnail-play { width: 22px; height: 22px; }
+.s-featured-product__slide-play svg,
+.s-featured-product__thumbnail-play svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25)); }
 .s-main-product__view-ingredients {
   display: inline-flex;
   align-items: center;
@@ -674,12 +685,28 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-product-form { display: block; margin-top: 4px; }
 .c-subscribtion { display: block; }
 .c-subscribtion__subscription-form { margin: 0; display: flex; flex-direction: column; gap: 14px; }
-.c-buybox-toggle__priceline { display: flex; align-items: baseline; gap: 10px; }
+/* The price line is #choose-bundle, where the hero button and the sticky buy bar land: a jump to it
+   (e.g. /#choose-bundle) stops under the sticky header, as assets/main.js scrollToId does. */
+.c-buybox-toggle__priceline { display: flex; align-items: baseline; gap: 10px; scroll-margin-top: calc(var(--header-height, 64px) + 8px); }
 .c-buybox-toggle__price { display: inline-flex; align-items: baseline; gap: 10px; }
 .c-buybox-toggle__price-main { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
 .c-buybox-toggle__price-compare { font-size: 18px; color: var(--brand-strike); text-decoration: line-through; }
 .c-subscribtion:not(.is-one-time) .c-buybox-toggle__price--otp { display: none; }
 .c-subscribtion.is-one-time .c-buybox-toggle__price--sub { display: none; }
+/* "Why subscribe?" note above the Subscribe & save box: a light box with a calendar icon, in both modes */
+.c-why-subscribe {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--brand-mauve-light);
+  border-radius: 10px;
+  background: var(--brand-mauve-tint);
+}
+.c-why-subscribe__icon { flex: 0 0 24px; width: 24px; height: 24px; color: var(--brand-mauve-dark); }
+.c-why-subscribe__icon svg { display: block; width: 100%; height: 100%; }
+.c-why-subscribe__text { margin: 0; font-size: 14px; line-height: 1.45; }
+.c-why-subscribe__text strong { font-weight: 700; }
 /* Subscribe & save box: header row with the switch, a rule, the perks in two columns, then the free gift */
 .c-buybox-toggle__box {
   --box-pad: 18px;
@@ -808,6 +835,9 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-subscribtion__add-to-cart .loader-button__text { gap: 8px; flex-wrap: nowrap; white-space: nowrap; }
 .c-subscribtion__add-to-cart--price-none .loader-button__text { letter-spacing: 0.04em; }
 .js-subscribtion__price-wrapper { display: inline-flex; align-items: baseline; gap: 8px; }
+/* No saving (1 bottle, one-time): the empty strike-through would still take a gap and push the
+   label off centre */
+.c-subscribtion__add-to-cart .igcp:empty { display: none; }
 @media screen and (max-width: 420px) {
   .c-subscribtion__add-to-cart--price-total,
   .c-subscribtion__add-to-cart--price-total_compare { font-size: 14px; }
@@ -1000,6 +1030,22 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   text-transform: uppercase;
   color: var(--brand-muted);
 }
+/* Price per day, under the per-bottle label. It hangs below the price column rather than
+   lengthening it, so the cards keep their height: it sits in the space beside the total line. */
+.c-bundle__pricing { position: relative; }
+.c-bundle__per-day {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--brand-muted);
+}
+.c-bundle__per-day strong { font-weight: 700; }
 .c-bundle__meta {
   display: flex;
   flex-wrap: wrap;
@@ -1071,6 +1117,8 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-subscribtion.is-one-time .c-bundle__unit-compare--sub,
 .c-subscribtion.is-one-time .c-bundle__total--sub,
 .c-subscribtion.is-one-time .c-bundle__save--sub { display: none; }
+.c-subscribtion:not(.is-one-time) .c-bundle__per-day--otp,
+.c-subscribtion.is-one-time .c-bundle__per-day--sub { display: none; }
 /* Bundles still save money without a subscription, so keep the savings line visible */
 .c-subscribtion--bundles.is-one-time .c-buybox-toggle__congrats { display: flex; }
 .c-buybox-toggle__price-unit {
@@ -1124,6 +1172,8 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .s-featured-product { padding: 28px 0 40px; }
   .s-featured-product__title { margin-bottom: 20px; }
   .s-featured-product__badge-text { font-size: 14px; padding: 9px 16px; }
+  /* Scales with the screen so "Elaren Pumpkin Seed Oil" stays on one line from 360px up */
+  .s-featured-product__product-name { font-size: clamp(22px, 6.2vw, 26px); }
   .s-featured-product__content { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .s-featured-product--mobile-head .s-featured-product__mobile-head { display: flex; flex-direction: column; gap: 8px; }
   .s-featured-product--mobile-head .s-featured-product__desktop-head { display: none; }
@@ -1134,9 +1184,12 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .s-main-product__modal-container { width: 100vw; max-height: 100vh; height: 100vh; border-radius: 0; padding: 60px 20px 32px; }
   .s-featured-product__product-icons { gap: 16px; }
   .s-featured-product__product-icon-wrapper { min-width: 0; }
-  /* Benefit pills split evenly into two columns on phones */
-  .s-featured-product__product-tags { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .s-featured-product__product-tag { justify-content: center; padding: 8px 10px; text-align: center; }
+  /* Benefit tags as a tight two-column list on phones: no pills, 16px icons, small caps text. The
+     columns follow their labels, so the longer ones ("block DHT naturally") keep to one line. */
+  .s-featured-product__product-tags { display: grid; grid-template-columns: repeat(2, auto); gap: 6px 10px; }
+  .s-featured-product__product-tag { gap: 6px; padding: 0; border: 0; border-radius: 0; background: none; line-height: 1.25; letter-spacing: 0.02em; text-align: left; }
+  .s-featured-product__product-tag .product-tag__icon { flex: 0 0 16px; width: 16px; height: 16px; }
+  .c-why-subscribe__text { font-size: 13px; }
   .c-buybox-toggle__box { --box-pad: 14px; }
   .c-buybox-toggle__head-title { font-size: 17px; }
   .c-buybox-toggle__head-sub { font-size: 14px; }
@@ -1151,10 +1204,32 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .c-bundle__gift,
   .c-bundle__perks { padding-left: 0; }
 }
+/* Buy box order on phones: rating and name; the gallery with its thumbnails and View Ingredients;
+   the shipping banner, "what you get" and the benefit tags; then the form - price line, Subscribe
+   & save, bundles and Add to Cart; then the USPs, and the low-stock line last. The markup keeps
+   the desktop order (gallery column, info column), so the info column is dissolved (display:
+   contents) and its children are ordered around the gallery as items of the content grid, at the
+   info column's own 14px rhythm. Anything new in the info column lands with the shipping banner
+   and the tags (order 3), above the price. */
+@media screen and (max-width: 767px) {
+  .s-featured-product__content { gap: 14px; }
+  .s-featured-product__info { display: contents; }
+  .s-featured-product__info > * { order: 3; min-width: 0; }
+  .s-featured-product__mobile-head { order: 1; }
+  .s-featured-product__gallery-wrapper { order: 2; margin: 6px 0; }
+  .s-featured-product__info > .c-product-form { order: 4; }
+  .s-featured-product__info > .s-featured-product__product-icons { order: 5; }
+  .s-featured-product__info > .c-low-stock { order: 6; }
+}
 @media screen and (max-width: 479px) {
   .c-bundle__main { gap: 10px; }
   .c-bundle__pricing { flex-direction: column; align-items: flex-end; gap: 0; }
   .c-bundle__badge { font-size: 9px; padding: 3px 7px; }
+  /* The stacked price lines are set tighter, so the price per day under them clears the total
+     line even at 360px */
+  .c-bundle__unit { line-height: 1.2; }
+  .c-bundle__unit-compare { line-height: 1.25; }
+  .c-bundle__unit-label { line-height: 1.3; }
 }
 
 /* --------------------------------------------------------------------------
@@ -1312,6 +1387,11 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 }
 .s-guarantee__image { flex: 0 0 190px; }
 .s-guarantee__image img { width: 100%; height: auto; }
+/* Drawn badge (sections/froya-guarantee.liquid), used while no badge image is uploaded */
+.s-guarantee__badge { display: block; width: 100%; height: auto; color: var(--brand-ink); font-family: var(--font-sans); }
+.s-guarantee__badge text, .s-guarantee__badge use { fill: currentColor; }
+.s-guarantee__badge-ring { font-size: 15px; font-weight: 700; letter-spacing: 2.2px; }
+.s-guarantee__badge-centre { font-size: 27px; font-weight: 700; }
 .s-guarantee__content { display: flex; flex-direction: column; gap: 12px; }
 .s-guarantee__title p { font-family: var(--font-serif); font-size: 30px; line-height: 1.2; letter-spacing: -0.01em; }
 .s-guarantee__text p { font-size: 15px; line-height: 1.6; color: #3b3b3b; }
@@ -1799,4 +1879,100 @@ body.email-popup-open { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) {
   .s-offer-marquee__track { animation: none; }
+}
+
+/* ---- Sticky buy bar (sections/froya-sticky-buy-bar.liquid, assets/main.js initStickyBuyBar). Phones
+   only. z-index 90 keeps it under the header (100), and so under the menu drawer, and under the cart
+   drawer, the ingredients modal, the email popup and Shopify's cookie banner. It also slides away
+   (and out of the tab order) while the cart drawer, the menu, the ingredients modal or the email
+   popup is open. ---- */
+.sticky-buy-bar { display: none; }
+@media screen and (max-width: 767px) {
+  .sticky-buy-bar {
+    display: block;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 90;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--brand-line);
+    background: #fff;
+    box-shadow: 0 -4px 18px rgba(31, 31, 31, 0.08);
+    transform: translateY(calc(100% + 20px));
+    visibility: hidden;
+    transition: transform .25s ease, visibility 0s linear .25s;
+  }
+  .sticky-buy-bar.is-visible,
+  .sticky-buy-bar.is-selected {
+    transform: none;
+    visibility: visible;
+    transition: transform .25s ease, visibility 0s;
+  }
+  body.cart-open .sticky-buy-bar,
+  body.drawer-open .sticky-buy-bar,
+  body.modal-open .sticky-buy-bar,
+  body.email-popup-open .sticky-buy-bar {
+    transform: translateY(calc(100% + 20px));
+    visibility: hidden;
+    transition: transform .25s ease, visibility 0s linear .25s;
+  }
+  /* The end of the page stays reachable above the bar. */
+  body.has-sticky-buy-bar { padding-bottom: var(--sticky-buy-bar-height, 0px); }
+}
+.sticky-buy-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--brand-ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.sticky-buy-bar__text { flex: 1 1 auto; min-width: 0; font-family: var(--font-sans); font-size: 14px; font-weight: 500; line-height: 1.3; }
+.sticky-buy-bar__price { font-weight: 700; white-space: nowrap; }
+.sticky-buy-bar__button { flex: 0 0 auto; min-height: 44px; padding: 12px 18px; font-size: 14px; white-space: nowrap; }
+.sticky-buy-bar__inner:hover .sticky-buy-bar__button { background: var(--brand-cta-hover); }
+@media (prefers-reduced-motion: reduce) {
+  .sticky-buy-bar,
+  .sticky-buy-bar.is-visible,
+  .sticky-buy-bar.is-selected,
+  body.cart-open .sticky-buy-bar,
+  body.drawer-open .sticky-buy-bar,
+  body.modal-open .sticky-buy-bar,
+  body.email-popup-open .sticky-buy-bar { transition: none; }
+}
+
+/* ---- Results timeline, "What to expect" (sections/froya-results-timeline.liquid): a cream band
+   with one marker per step on a vertical mauve line, like the "Backed by science" timeline, then
+   the footnote and a button to the bundles. ---- */
+.s-results-timeline { --timeline-bg: var(--brand-cream); --timeline-marker: 14px; --timeline-gap: 22px; display: block; padding: 56px 20px 64px; background: var(--timeline-bg); color: var(--brand-ink); }
+.s-results-timeline__container { max-width: 640px; margin: 0 auto; }
+.s-results-timeline__header { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 32px; text-align: center; }
+.s-results-timeline__intro { margin: 0; max-width: 520px; font-size: 16px; line-height: 1.5; text-wrap: balance; }
+.s-results-timeline__steps { display: flex; flex-direction: column; gap: var(--timeline-gap); margin: 0; padding: 0; list-style: none; }
+.s-results-timeline__step { position: relative; padding-left: calc(var(--timeline-marker) + 20px); }
+/* The line runs from each marker to the next one; the last step has none below it */
+.s-results-timeline__step::before { content: ''; position: absolute; top: 9px; bottom: calc(-1 * var(--timeline-gap) - 9px); left: calc(var(--timeline-marker) / 2 - 1px); width: 2px; background: rgba(175, 137, 152, 0.35); }
+.s-results-timeline__step:last-child::before { display: none; }
+.s-results-timeline__marker { position: absolute; top: 2px; left: 0; width: var(--timeline-marker); height: var(--timeline-marker); border-radius: 50%; background: var(--brand-mauve); box-shadow: 0 0 0 4px var(--timeline-bg); }
+.s-results-timeline__label { margin: 0; font-family: var(--font-mono); font-size: 12px; font-weight: 700; line-height: 18px; letter-spacing: 0.12em; text-transform: uppercase; }
+.s-results-timeline__step-title { margin: 4px 0 0; font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.25; letter-spacing: -0.01em; }
+.s-results-timeline__text { margin: 6px 0 0; font-size: 16px; line-height: 1.5; }
+.s-results-timeline__footnote { margin: 28px 0 0; font-size: 13px; line-height: 1.5; text-align: center; text-wrap: balance; }
+.s-results-timeline__cta { margin-top: 20px; text-align: center; }
+.s-results-timeline__button { min-width: 300px; }
+@media screen and (max-width: 767px) {
+  .s-results-timeline { --timeline-gap: 18px; padding: 36px 20px 40px; }
+  .s-results-timeline__header { margin-bottom: 22px; }
+  .s-results-timeline__step-title { margin-top: 2px; font-size: 19px; }
+  .s-results-timeline__text { margin-top: 4px; font-size: 15px; }
+  .s-results-timeline__footnote { margin-top: 22px; }
+  .s-results-timeline__button { width: 100%; min-width: 0; }
 }

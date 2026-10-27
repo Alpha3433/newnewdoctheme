@@ -2,7 +2,9 @@
   Review slider – each card is a block: photo review (image, name, tags, quote, full review) or video
   review (video + poster). The product card under each review comes from a product picker.
   The wrapper ids are kept so the verbatim CSS in assets/sections-inline.css still applies.
+  On a product page it only shows on the serum's page (the Bundled product, templates/product.json).
 {% endcomment %}
+{%- unless template.name == 'product' and product.id != settings.bundle_product.id -%}
 {%- liquid
   assign shop_href = section.settings.shop_url | default: '#shop'
   assign shop_attrs = ''
@@ -103,6 +105,7 @@
   </div>
 </s-reviews-slider>
 </section>
+{%- endunless -%}
 
 {% schema %}
 {

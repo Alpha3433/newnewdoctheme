@@ -2,7 +2,9 @@
   Research / results panel – image on the left, stats on the right. Everything is editable in the theme editor.
   The result bars lead with pumpkin seed oil (the hero active); caffeine is presented as the supporting active.
   The layout no longer overlays the text on the image (see assets/sections.css), so any image works here.
+  On a product page it only shows on the serum's page (the Bundled product, templates/product.json).
 {% endcomment %}
+{%- unless template.name == 'product' and product.id != settings.bundle_product.id -%}
 {%- liquid
   assign sid = 'template--26717513089391__image_content_grid_XgREqy'
   assign desktop_fallback = 'https://froyaorganics.com/cdn/shop/files/clinical_trial_-_desktop.jpg?v=1769695904'
@@ -63,6 +65,7 @@
   </div>
 </div></section>
 </div>
+{%- endunless -%}
 
 {% schema %}
 {

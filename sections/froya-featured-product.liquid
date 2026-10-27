@@ -4,7 +4,11 @@
   is off until the shopper switches it on (a setting can pre-select it). Every piece of copy
   around it is an editable setting or block. Adding to cart is done in-page and opens the cart drawer.
   The wrapper id is kept so the verbatim CSS in assets/sections-inline.css still applies.
+  On a product page the buy box only shows on the serum's page (the Bundled product,
+  templates/product.json): any other product keeps the plain product section. The check runs before
+  `product` below becomes the section's own product.
 {% endcomment %}
+{%- unless template.name == 'product' and product.id != settings.bundle_product.id -%}
 {%- liquid
   assign product = section.settings.product
   assign ingredients = section.blocks | where: 'type', 'ingredient'
@@ -24,7 +28,9 @@
   assign count_placeholder = '{count}'
   assign amount_placeholder = '{amount}'
   assign total_placeholder = '{total}'
+  assign price_placeholder = '{price}'
   assign show_currency_code = settings.currency_code_enable
+  assign days_per_tube = section.settings.days_per_tube | default: 0 | round
 
   assign fallback_images = 'IMG_1_8c681b46-2a29-4394-8f0b-a4d7759e9a48.jpg,IMG_2.png,nikki-reed-desktop_2x_2970174c-c49b-4943-8807-ab853fe8e55c.png,IMG_3.png,IMG_4_51e90354-5a8f-4469-9287-d1746d6736e0.png,IMG_5.png,IMG_6_corrected.png,IMG_7.png,IMG_8.png,IMG_9.png,IMG_10.png' | split: ','
   assign fallback_alts = 'Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex bottle|Woman applying Elaren Pumpkin Seed Regrowth Oil to her scalp along her part|Pumpkin Seed Regrowth Oil|Elaren Pumpkin Seed Regrowth Oil held in hand with key benefit callouts|Grid of customer before and after photos showing fuller parts, crowns and edges|Star rating and two verified customer reviews|Published research results for pumpkin seed oil and caffeine|Cold-pressed pumpkin seed oil and Caffeine Complex ingredients|Regrowth timeline at 2 weeks, 30 days and 30 days|Nightly two-minute scalp routine guide|Woman holding Elaren Pumpkin Seed Regrowth Oil with the 30-day money-back promise' | split: '|'
@@ -82,6 +88,17 @@
     endif
     assign saving = otp_price | minus: sub_price
     assign media_count = product.media.size
+    comment
+      Demo video (optional): a video from Files added to the gallery as slide number "Demo video
+      slide", with a thumbnail at the same position, so the arrows, swipe and thumbnails stay in
+      step. A number past the last photo puts it at the end. assets/main.js (initGallery) plays it
+      muted and looped while its slide is showing and pauses it otherwise.
+    endcomment
+    assign demo_video = section.settings.demo_video
+    assign demo_slide = 0
+    if demo_video != blank
+      assign demo_slide = section.settings.demo_video_slide | default: 2 | round | at_least: 1
+    endif
 
     comment
       Subscribe & save starts switched OFF: the page loads on the one-time price and the shopper
@@ -255,9 +272,10 @@
 
     {%- comment -%}
       Buy-box header, laid out like Frøya's: the star-rating line sits ABOVE the product name and is
-      one link that scrolls to the review wall ("Real women, real hair, real reviews", whose header
-      carries id="reviews-section"). The optional two-label line renders under the name only when a
-      label is filled in; the landing page leaves both empty.
+      one link that scrolls to the element named in "Scrolls to" (reviews_anchor): the review slider
+      (reviews) on the home and product pages, the review wall's heading ("Real women, real hair,
+      real reviews", id="reviews-section", the default) on the landing page. The optional two-label
+      line renders under the name only when a label is filled in; the landing page leaves both empty.
     {%- endcomment -%}
     {%- assign reviews_anchor = section.settings.reviews_anchor | default: 'reviews-section' | remove: '#' | strip -%}
     {%- capture product_head -%}
@@ -282,6 +300,22 @@
       {%- endif -%}
     {%- endcapture -%}
 
+    {%- if demo_slide > 0 -%}
+      {%- capture play_icon -%}<svg fill="none" focusable="false" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#fff" fill-opacity=".92"/><path d="M9.8 7.9v8.2l6.4-4.1z" fill="#1f1f1f"/></svg>{%- endcapture -%}
+      {%- capture demo_slide_html -%}
+        <div class="s-featured-product__slide s-featured-product__slide--demo is-paused{% if demo_slide == 1 %} is-active{% endif %}" data-media-type="video">
+          {{ demo_video | video_tag: autoplay: false, loop: true, muted: true, controls: false, preload: 'none', class: 's-featured-product__video js-gallery-autoplay' }}
+          <span aria-hidden="true" class="s-featured-product__slide-play">{{ play_icon }}</span>
+        </div>
+      {%- endcapture -%}
+      {%- capture demo_thumb_html -%}
+        <div class="s-featured-product__thumbnail s-featured-product__thumbnail--video{% if demo_slide == 1 %} is-active{% endif %}">
+          {%- if demo_video.preview_image != blank -%}<picture>{{ demo_video.preview_image | image_url: width: 240, height: 240, crop: 'center' | image_tag: alt: demo_video.alt, loading: 'lazy' }}</picture>{%- endif -%}
+          <span aria-hidden="true" class="s-featured-product__thumbnail-play">{{ play_icon }}</span>
+        </div>
+      {%- endcapture -%}
+    {%- endif -%}
+
     <div class="s-featured-product__content"><div class="s-featured-product__mobile-head">{{ product_head }}</div><div class="s-featured-product__gallery-wrapper">
         <div class="s-featured-product__gallery js-featured-product__gallery s-featured-product__gallery--stage s-featured-product__gallery--video-crop-up">
           <div class="s-featured-product__gallery-arrow s-featured-product__gallery-arrow--prev js-arrow-prev">
@@ -292,7 +326,8 @@
           </div>
           {%- if media_count > 0 -%}
             {%- for media in product.media -%}
-              <div class="s-featured-product__slide{% if forloop.first %} is-active{% endif %}" data-media-type="{{ media.media_type }}">
+              {%- if forloop.index == demo_slide -%}{{ demo_slide_html }}{%- endif -%}
+              <div class="s-featured-product__slide{% if forloop.first and demo_slide != 1 %} is-active{% endif %}" data-media-type="{{ media.media_type }}">
                 {%- case media.media_type -%}
                   {%- when 'video' -%}
                     {{ media | video_tag: controls: true, preload: 'none', loop: false, muted: false, class: 's-featured-product__video' }}
@@ -308,12 +343,15 @@
                     {%- endif -%}
                 {%- endcase -%}
               </div>
+              {%- if forloop.last and demo_slide > forloop.length -%}{{ demo_slide_html }}{%- endif -%}
             {%- endfor -%}
           {%- else -%}
             {%- for src in fallback_images -%}
-              <div class="s-featured-product__slide{% if forloop.first %} is-active{% endif %}">
+              {%- if forloop.index == demo_slide -%}{{ demo_slide_html }}{%- endif -%}
+              <div class="s-featured-product__slide{% if forloop.first and demo_slide != 1 %} is-active{% endif %}">
                 <picture><img alt="{{ fallback_alts[forloop.index0] | escape }}" decoding="async" height="600" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" src="https://froyaorganics.com/cdn/shop/files/{{ src }}" width="600"></picture>
               </div>
+              {%- if forloop.last and demo_slide > forloop.length -%}{{ demo_slide_html }}{%- endif -%}
             {%- endfor -%}
           {%- endif -%}
           <div class="s-featured-product__gallery-arrow s-featured-product__gallery-arrow--next js-arrow-next">
@@ -324,15 +362,19 @@
         <div class="s-featured-product__thumbnails s-featured-product__thumbnails--strip js-featured-product__thumbnails is-stage-ready">
           {%- if media_count > 0 -%}
             {%- for media in product.media -%}
-              <div class="s-featured-product__thumbnail{% if forloop.first %} is-active{% endif %}">
+              {%- if forloop.index == demo_slide -%}{{ demo_thumb_html }}{%- endif -%}
+              <div class="s-featured-product__thumbnail{% if forloop.first and demo_slide != 1 %} is-active{% endif %}">
                 <picture>{{ media.preview_image | image_url: width: 240, height: 240, crop: 'center' | image_tag: alt: media.alt, loading: 'lazy' }}</picture>
               </div>
+              {%- if forloop.last and demo_slide > forloop.length -%}{{ demo_thumb_html }}{%- endif -%}
             {%- endfor -%}
           {%- else -%}
             {%- for src in fallback_images -%}
-              <div class="s-featured-product__thumbnail{% if forloop.first %} is-active{% endif %}">
+              {%- if forloop.index == demo_slide -%}{{ demo_thumb_html }}{%- endif -%}
+              <div class="s-featured-product__thumbnail{% if forloop.first and demo_slide != 1 %} is-active{% endif %}">
                 <picture><img alt="" decoding="async" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/{{ src }}" width="600"></picture>
               </div>
+              {%- if forloop.last and demo_slide > forloop.length -%}{{ demo_thumb_html }}{%- endif -%}
             {%- endfor -%}
           {%- endif -%}
         </div>
@@ -437,7 +479,7 @@
         <div class="c-product-form js-product-form">
           <c-subscription class="c-subscribtion c-subscribtion--buybox-toggle igcp-on{% if plan == blank %} c-subscribtion--no-plan{% endif %}{% if bundle_count > 0 %} c-subscribtion--bundles{% endif %}{% unless sub_on %} is-one-time{% endunless %}" data-default-selling-plan="{{ plan.id }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
             {%- form 'product', product, class: 'c-subscribtion__subscription-form js-subscribtion__subscription-form js-ajax-add', id: 'featured-product-form' -%}
-              <div class="c-buybox-toggle__priceline">
+              <div class="c-buybox-toggle__priceline" id="choose-bundle">
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--sub">
                   <span class="c-buybox-toggle__price-main"><span class="product_price">{{ display_unit_sub | money }}</span></span>{% if display_compare_unit > display_unit_sub %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{{ display_compare_unit | money }}</span></span>{% endif %}</span>
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--otp">
@@ -448,6 +490,16 @@
               <input class="js-bundle-quantity" name="quantity" type="hidden" value="{{ default_qty }}">
 
               {%- if plan != blank -%}
+              {%- comment -%}
+                "Why subscribe?" note, directly above the Subscribe & save box. It stays put whether
+                the switch is on or off; an empty setting hides it.
+              {%- endcomment -%}
+              {%- if section.settings.why_subscribe != blank -%}
+              <div class="c-why-subscribe">
+                <span aria-hidden="true" class="c-why-subscribe__icon"><svg fill="none" focusable="false" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="currentColor" fill-opacity=".18"/><g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><rect height="10" rx="1.6" width="11" x="6.5" y="7.5"/><path d="M6.5 10.5h11M9.5 6.2v2.6M14.5 6.2v2.6"/></g><g fill="currentColor"><circle cx="9.6" cy="13.2" r=".8"/><circle cx="12" cy="13.2" r=".8"/><circle cx="14.4" cy="13.2" r=".8"/><circle cx="9.6" cy="15.5" r=".8"/><circle cx="12" cy="15.5" r=".8"/></g></svg></span>
+                <p class="c-why-subscribe__text">{{ section.settings.why_subscribe }}</p>
+              </div>
+              {%- endif -%}
               <div class="c-buybox-toggle__box">
                 <button aria-checked="{{ sub_on }}" class="c-buybox-toggle__head js-bbt-toggle" role="switch" type="button">
                   <span aria-hidden="true" class="c-buybox-toggle__switch"><span class="c-buybox-toggle__knob"></span></span>
@@ -474,10 +526,7 @@
                     </div>
                   {%- endfor -%}
                 </div>
-                {%- liquid
-                  assign gift_product = section.settings.gift_product
-                  assign price_placeholder = '{price}'
-                -%}
+                {%- assign gift_product = section.settings.gift_product -%}
                 {%- if gift_product != blank and section.settings.gift_text != blank -%}
                   {%- liquid
                     assign gift_price = gift_product.price | money_without_trailing_zeros
@@ -529,6 +578,20 @@
                     assign total_sub = total_sub | plus: 0
                     assign unit_otp = total_otp | times: 10 | divided_by: qty | plus: 5 | divided_by: 10
                     assign unit_sub = total_sub | times: 10 | divided_by: qty | plus: 5 | divided_by: 10
+                    comment
+                      Price per day: the tier total over the days its bottles last (every bottle,
+                      free ones too, times Days per tube), rounded to the cent like the per-bottle
+                      price. 1 bottle at $34.99 is $1.17 a day, Buy 2 Get 1 Free $0.78.
+                    endcomment
+                    assign per_day_otp = blank
+                    assign per_day_sub = blank
+                    if days_per_tube > 0 and section.settings.per_day_text != blank
+                      assign tier_days = qty | times: days_per_tube
+                      assign day_otp = total_otp | times: 10 | divided_by: tier_days | plus: 5 | divided_by: 10 | money | prepend: '<strong>' | append: '</strong>'
+                      assign day_sub = total_sub | times: 10 | divided_by: tier_days | plus: 5 | divided_by: 10 | money | prepend: '<strong>' | append: '</strong>'
+                      assign per_day_otp = section.settings.per_day_text | replace: price_placeholder, day_otp
+                      assign per_day_sub = section.settings.per_day_text | replace: price_placeholder, day_sub
+                    endif
                     assign compare_basis = base_compare
                     if free > 0
                       assign compare_basis = otp_price
@@ -576,7 +639,7 @@
                       assign tier_pct_otp = tier_save_otp | times: 100 | divided_by: tier_compare
                     endif
                   -%}
-                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare | money | escape }}" data-compare-total-cents="{{ tier_compare }}" data-qty="{{ qty }}" data-save-otp="{{ tier_save_otp | money | escape }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ tier_save_sub | money | escape }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp_button | escape }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub_button | escape }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp | money | escape }}" data-unit-sub="{{ unit_sub | money | escape }}" {{ block.shopify_attributes }}>
+                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare | money | escape }}" data-compare-total-cents="{{ tier_compare }}" data-qty="{{ qty }}" data-save-otp="{{ tier_save_otp | money | escape }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ tier_save_sub | money | escape }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp_button | escape }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub_button | escape }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp | money | escape }}" data-unit-otp-cents="{{ unit_otp }}" data-unit-sub="{{ unit_sub | money | escape }}" {{ block.shopify_attributes }}>
                     <input class="c-bundle__radio" name="bundle_tier" type="radio" value="{{ qty }}"{% if block.id == default_bundle.id %} checked{% endif %}>
                     <span class="c-bundle__main">
                       <span aria-hidden="true" class="c-bundle__dot"></span>
@@ -597,6 +660,10 @@
                         {%- if compare_basis > unit_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{{ compare_basis | money }}</span></span>{%- endif -%}
                         {%- if compare_basis > unit_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{{ compare_basis | money }}</span></span>{%- endif -%}
                         {%- if section.settings.unit_suffix != blank -%}<span class="c-bundle__unit-label">{{ section.settings.unit_suffix }}</span>{%- endif -%}
+                        {%- endif -%}
+                        {%- if per_day_otp != blank -%}
+                        <span class="c-bundle__per-day c-bundle__per-day--sub">{{ per_day_sub }}</span>
+                        <span class="c-bundle__per-day c-bundle__per-day--otp">{{ per_day_otp }}</span>
                         {%- endif -%}
                       </span>
                     </span>
@@ -723,6 +790,7 @@
 </s-featured-product>
 {%- endif -%}
 </div>
+{%- endunless -%}
 
 {% schema %}
 {
@@ -741,11 +809,13 @@
     { "type": "number", "id": "reviews_count", "label": "Review count", "default": 435, "info": "Set to 0 to hide the line." },
     { "type": "text", "id": "rating", "label": "Star rating (out of 5)", "default": "4.77", "info": "Keep it equal to the rating quoted in the text below." },
     { "type": "text", "id": "rating_text", "label": "Rating text", "default": "RATED 4.77/5 BY WOMEN" },
-    { "type": "text", "id": "reviews_anchor", "label": "Scrolls to", "default": "reviews-section", "info": "The id of the element to scroll to. reviews-section is the heading of the Review wall (\"Real women, real hair, real reviews\")." },
+    { "type": "text", "id": "reviews_anchor", "label": "Scrolls to", "default": "reviews-section", "info": "The id of the element to scroll to: reviews is the review slider, reviews-section the heading of the Review wall (\"Real women, real hair, real reviews\")." },
     { "type": "header", "content": "Labels under the name", "info": "Optional small line under the product name. Leave both empty to hide it." },
     { "type": "text", "id": "label_1", "label": "Label 1" },
     { "type": "text", "id": "label_2", "label": "Label 2" },
     { "type": "text", "id": "save_tag", "label": "Gallery save tag", "default": "Save {percent}%", "info": "{percent} is replaced with the subscription discount." },
+    { "type": "video", "id": "demo_video", "label": "Demo video", "info": "Optional. A short video from Files, added to the gallery as its own slide with a thumbnail. It plays muted and looped, inline and without controls, while its slide is showing." },
+    { "type": "number", "id": "demo_video_slide", "label": "Demo video slide", "default": 2, "info": "Where the video sits in the gallery: 1 is the first slide. A number past the last photo puts it at the end." },
     { "type": "text", "id": "ships_free_text", "label": "Shipping banner", "default": "THIS ORDER SHIPS FREE" },
     { "type": "richtext", "id": "includes", "label": "What you get", "default": "<p>What you get (30-day supply):<br>· Pumpkin Seed Regrowth Oil with Caffeine Complex<br>· Precision applicator for scalp-only, no-waste application<br>· Scalp massager to boost circulation at the root<br>· Free insured shipping and a 30-day money-back guarantee</p>" },
     { "type": "header", "content": "Ingredients modal" },
@@ -765,8 +835,11 @@
     { "type": "text", "id": "unit_suffix", "label": "Per-unit label", "default": "per bottle" },
     { "type": "text", "id": "total_text", "label": "Total line", "default": "{total} total", "info": "{total} is replaced with the bundle total." },
     { "type": "text", "id": "save_text", "label": "Savings line", "default": "Save {amount} ({percent}% off)", "info": "{amount} is the money saved, {percent} the tier discount." },
+    { "type": "number", "id": "days_per_tube", "label": "Days per tube", "default": 30, "info": "How many nights one tube lasts. A card's price per day is its bundle total divided by its bottles (free ones included) times this number." },
+    { "type": "text", "id": "per_day_text", "label": "Price per day", "default": "{price} a day", "info": "Shown on each card under the per-bottle label, in the shopper's currency, following the Subscribe & save switch. {price} is replaced with the price per day. Leave empty to hide it." },
     { "type": "header", "content": "Subscribe & save" },
     { "type": "checkbox", "id": "sub_default", "label": "Pre-select Subscribe & save", "default": false, "info": "Off: the buy box loads on the one-time price and the shopper switches Subscribe & save on. On: it loads with Subscribe & save already selected." },
+    { "type": "inline_richtext", "id": "why_subscribe", "label": "Why subscribe? note", "default": "<strong>Why subscribe?</strong> Hair grows in cycles, so results come from nightly use over 3+ months. Subscribing keeps you stocked.", "info": "A light box with a calendar icon directly above the Subscribe & save box, shown whether the switch is on or off. Leave empty to hide it." },
     { "type": "text", "id": "toggle_title", "label": "Toggle title", "default": "Save {percent}% with our flexible plan" },
     { "type": "text", "id": "toggle_sub", "label": "Toggle subtitle", "default": "No contracts. Cancel with ease." },
     { "type": "inline_richtext", "id": "benefit_1", "label": "Benefit 1", "default": "<strong>Free Insured Shipping</strong> Every Order" },

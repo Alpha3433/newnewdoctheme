@@ -65,12 +65,16 @@ template (`templates/page.froya-landing.json`).
   "About" column) also scrolls to a section instead of leaving the page; only the
   policies and *Manage Subscription* in the footer, and the checkout, lead off it. A link such as
   `/#faq` from another page lands on the home page and scrolls to that section.
-* **FAQ** – a numbered accordion at the bottom of the page in the "Backed by science" style. Each
+* **FAQ** – a numbered accordion at the bottom of the page, right after the guarantee, in the "Backed by science" style. Each
   question is a block (question + rich-text answer); *Open the first question by default* and the
   closing "still wondering?" line are settings. Menu and footer "FAQ" links scroll here.
 * **Email popup** – Header group → *Email popup (gift)*. A *Photo* fills the left side (the top on
   phones) beside the sign-up: full screen on phones, a split card on desktop. It opens after a delay
-  and, on desktop, when the cursor leaves the page. The email posts to Shopify's customer form with
+  and, on desktop, when the cursor leaves the page, but never over the buy box or the cart drawer: on
+  a page with a buy box the delay only starts once the visitor has scrolled past the bottom of it
+  (`#product-section`), and a popup that comes due while the buy box is on screen or the cart is open
+  waits until neither is; exit intent is ignored while they are. A page without a buy box counts the
+  delay from page load, as before. The email posts to Shopify's customer form with
   the tags `newsletter` and `popup`; then the popup reveals the *Discount code* and attaches it to the
   visitor's cart, so checkout takes it off automatically. The gift is always the same code, only the
   framing is a mystery. The code itself lives in Discounts: `EXTRA10` is a 10% order code that
@@ -81,8 +85,13 @@ template (`templates/page.froya-landing.json`).
   fallback URL until one is uploaded); it stays in view while the steps scroll on desktop.
 * **Offer colours** – Theme settings → *Offer colours*: one gold → orange → mauve gradient shared by
   every offer, so a deal looks the same wherever it appears: the hero's promo pill (Hero → *Pill
-  colour*: offer gradient or a solid colour, plus an optional gift icon) and the scrolling offer
-  banner.
+  colour*: offer gradient or a solid colour, plus an optional gift icon), the scrolling offer
+  banner and the guarantee badge.
+* **Guarantee badge** – Guarantee → the badge is drawn in code: *Badge centre text* ("30-DAY") in
+  the middle and *Badge ring text* ("MONEY-BACK GUARANTEE") around the top, on the soft offer
+  gradient (Theme settings → Offer colours). An uploaded *Badge image* replaces it; the home page and
+  the serum's page have none. The landing page template's two guarantee sections had none either and
+  showed Frøya's guarantee icon from froyaorganics.com; they show the drawn badge now too.
 * **Scrolling offer banner** – Benefits strip → *Scrolling offer banner*: a band under the benefits
   that keeps repeating the offer ("BUY 2 GET 1 FREE + FREE GIFT WITH SUBSCRIPTION"), on the soft or
   full offer gradient. A tap scrolls to the buy box (*Link*). It pauses on hover and stands still
@@ -95,19 +104,68 @@ template (`templates/page.froya-landing.json`).
   centered in either order / stacked in either order) and a mobile layout (stacked or side by side,
   in either order).
 * **Buy-box header** – the star-rating line (Featured product → Rating line) sits above the product
-  name, as on Frøya's page, and the whole line scrolls to the review wall ("Real women, real hair,
-  real reviews"); *Scrolls to* takes another element id. The old two-label line under the name is
-  still available (*Labels under the name*) and empty by default. The cart no longer repeats the
+  name, as on Frøya's page, and the whole line is a link to *Scrolls to*: the review slider
+  (`reviews`) on the home page and the serum's page, the review wall's heading (`reviews-section`,
+  "Real women, real hair, real reviews") on the landing page template. On the home page and the
+  serum's page the badge pill above the product (*Badge text*) is empty, so it is hidden, and
+  *Displayed name* is "Elaren Pumpkin Seed Oil". On phones the name scales with the screen (6.2vw,
+  between 22px and 26px), so it stays on one line from 360px up. The old two-label
+  line under the name is still available (*Labels under the name*) and empty by default. The cart no longer repeats the
   selling plan's own name ("Delivery: every month | 10% off") under a subscription line: the
   Subscribe & save switch shows the state.
 * **Add-to-cart button** – Featured product → Button & stock → *Price on the button*: label only
   (the bundle total already sits in the price line and on the selected bundle card), label with the
   bundle total (the landing page's choice), or label with the total and the regular price struck
-  through. The
-  "-" separator is added automatically when a price is shown. The *Savings line* renders as a pill
+  through, which the home page and the serum's page use: "ADD TO CART - $69.98 USD ~~$104.97~~".
+  The struck-through price is every bottle at the one-time price and follows the selected bundle and
+  the Subscribe & save switch (`assets/main.js`, `renderTier`); with no saving (1 bottle, one-time)
+  nothing is struck through. On a 360px-wide phone the button stays on one line in every bundle and
+  switch state (checked in USD, AUD, GBP, EUR and SAR). The "-" separator is added automatically when a price is shown. The *Savings line* renders as a pill
   directly above the button ("🎉 Congrats! You’re saving $7.00") and follows the selected bundle
-  and the Subscribe & save switch; the two static info lines under the plan are still available as
-  *Info line 1 / 2* but are empty by default now that the pill carries that spot.
+  and the Subscribe & save switch; on the home page and the serum's page it is empty, which hides
+  the pill, because the selected bundle card already shows the saving. The Buy 2 and Buy 3 cards'
+  *Perks line* is empty there too. The two static info lines under the plan are still available as
+  *Info line 1 / 2* but are empty by default.
+* **Subscribe & save** sits between the price line and *Choose your bundle*, at every screen size,
+  as on the live site. Directly above it, *Why subscribe? note* (Featured product → Subscribe &
+  save) is a light box with a small calendar icon: "**Why subscribe?** Hair grows in cycles, so
+  results come from nightly use over 3+ months. Subscribing keeps you stocked." It stays whether
+  the switch is on or off; empty the setting to hide it.
+* **Price per day** – Featured product → Bundles → *Days per tube* (30) and *Price per day*
+  ("{price} a day"). Under PER BOTTLE each card shows its bundle total divided by its bottles, free
+  ones included, times the days per tube: in USD $1.17, $0.78 and $0.58 a day bought once, $1.05,
+  $0.70 and $0.52 with Subscribe & save. It is worked out in Liquid with the `money` filter, so it
+  is in the shopper's currency, and it follows the Subscribe & save switch like the other card
+  prices. The line hangs below the price column instead of lengthening it, so the cards keep their
+  height. Change *Days per tube* if a tube lasts longer or shorter; empty *Price per day* hides it.
+* **Demo video in the gallery** – Featured product → *Demo video*. To add one:
+  1. Upload the clip in Content → Files (or from the picker in the next step). Keep it short, a few
+     seconds, and square or close to it: the gallery is square and crops the rest.
+  2. Online Store → Themes → *Customize*, open the home page, select *Featured product* and, under
+     *Demo video*, choose *Select video* and pick the clip.
+  3. *Demo video slide* sets where it goes: 2 (the default) puts it right after the first photo, 1
+     makes it the first slide, and a number past the last photo puts it at the end. Save.
+  4. The serum's product page has its own copy of the buy box: in the editor's page menu choose
+     *Products* → *Default product*, preview the serum, and repeat steps 2 and 3 there.
+
+  The video gets a thumbnail at the same position with a small play icon, so the arrows, swipe and
+  thumbnails stay in step. It plays muted, looped and inline, with no controls, while its slide is
+  showing, and pauses when the shopper moves to another slide; a tap on it pauses or resumes it. Its
+  poster is the video's preview image from Files. Visitors who ask their device for reduced motion,
+  and phones that refuse to autoplay (iPhones in Low Power Mode), see the poster with a play icon
+  until they tap. With no video selected the gallery is exactly as before.
+* **Sticky buy bar** – the *Sticky buy bar* section (home page and the serum's product page): *Text*,
+  where `{price}` becomes the lowest one-time price per bottle on the buy box's bundle cards, and
+  *Button label*. It only appears on phones; select the section in the editor's mobile preview to
+  see it. How it behaves is under Behaviour notes.
+* **What to expect** – the *Results timeline* section, directly after the review slider on the home
+  page and the serum's page: *Heading*, an optional *Intro line* (empty today), one *Step* block per
+  milestone (label, title and text, each with a marker on a vertical line), a *Footnote* and a
+  button (*Button label*, and *Button link*: `#choose-bundle` scrolls to the buy box's price line).
+  The five steps reuse the site's own wording: the nightly roller routine, less shedding in the
+  first weeks, a fuller-looking part around day 30 with the guarantee from night 30, new baby hairs
+  at month 3 and density building to month 6. Keep them in line with the guarantee and the FAQ if
+  either changes. Menu links can reach the section with `#timeline`.
 * **Low-stock notice** – Featured product → Button & stock → *Number shown*: *Tracked inventory*
   reads the variant's real stock and only shows at or below the threshold; *A fixed number* shows
   the figure typed below on every visit. The store tracks more than 2,000 units of the serum, so the
@@ -155,7 +213,9 @@ template (`templates/page.froya-landing.json`).
   note is only text: the capsules' Buy 2, Get 1 Free is a Shopify automatic discount (Discounts),
   not part of the Kaching bundle tiers, so change both together. Any other product moved onto a
   custom template behaves the same way. In the cart drawer, line items and add-on cards for these
-  products link to their page; everything else still scrolls to the buy box.
+  products link to their page; everything else still scrolls to the buy box. The serum is the
+  exception: it is assigned a "serum" template this theme doesn't have, so its rows and the
+  empty-cart card are always treated as sold from the buy box.
 * **Serum comparison advertorial** – a long-form "we compared 10 pumpkin seed hair serums"
   review article for paid traffic, template `page.serum-comparison` (create a page in Online
   Store → Pages and choose that template). Its layout follows an editorial review page: warm
@@ -229,10 +289,15 @@ template (`templates/page.froya-landing.json`).
     cart's own prices. There is no nudge on a subscription: there the bottle count also sets how
     often it renews (`KACHING_DEAL`), which the button would change without saying so. Screen
     readers hear a new nudge through a live region that stays put while the drawer is redrawn.
+  * **Serum first.** The Bundled product's row comes first, then the free gift and any add-ons in
+    the cart's own order. Shopify lists the newest line first, so the gift, added after the serum,
+    used to sit on top. Only the listing changes: each row's buttons still act on its own cart line.
   * **Payment logos** sit under the checkout button, above the trust badges. They come from the
     payment methods switched on in Settings → Payments (`shop.enabled_payment_types`), so a method
     added there (iDEAL, Klarna…) shows up without a theme change. The drawer has no accelerated
-    checkout buttons; Shop Pay stays off as a drawer button.
+    checkout buttons; Shop Pay stays off as a drawer button. On phones (up to 767px) the payment
+    logos and the row of three trust badges are hidden, so on a 390 × 664 screen the serum row and
+    the checkout button are both in view without scrolling.
   * The line's **Subscribe & save switch acts on the whole product**, not on the one line it sits
     on. A "Buy 2, Get 1 Free" bundle goes into the cart as three bottles on one line and Kaching
     Bundles then splits the free bottle onto its own $0 line; the switch gathers every line of that
@@ -339,17 +404,18 @@ The theme folders Shopify needs (`layout`, `templates`, `sections`, `snippets`, 
 | --- | --- |
 | `layout/theme.liquid` | Page shell: meta/fonts, the five stylesheets, `content_for_header`, the header section group (announcement bar, header, cart drawer), `content_for_layout`, the footer section group, scripts. |
 | `sections/header-group.json`, `sections/footer-group.json` | Section groups with the default header/footer content (menu links, bestseller cards, blog links, footer links, cart-drawer badges and upsells). |
-| `sections/froya-*.liquid` | The landing page, one editable section per block (settings + blocks in each `{% schema %}`): announcement bar, sticky header with mega menus and mobile drawer, cart drawer, hero, benefits strip, logo/quote slider, review slider, backed-by-science timeline, research results, featured product (gallery, ingredients modal, buy box with bundle tiers), founder story, hair-loss types & badges, review wall, guarantee, video reviews, how-to-use, ingredient quality, ingredient science, newsletter, footer. Markup keeps the captured page's class names so the verbatim CSS still applies. |
+| `sections/froya-*.liquid` | The landing page, one editable section per block (settings + blocks in each `{% schema %}`): announcement bar, sticky header with mega menus and mobile drawer, cart drawer, hero, benefits strip, logo/quote slider, review slider, results timeline ("What to expect"), backed-by-science timeline, research results, featured product (gallery, ingredients modal, buy box with bundle tiers), founder story, hair-loss types & badges, review wall, guarantee, video reviews, how-to-use, ingredient quality, ingredient science, newsletter, footer, and the sticky buy bar for phones. Markup keeps the captured page's class names so the verbatim CSS still applies. |
 | `snippets/froya-image.liquid`, `snippets/froya-nav-card.liquid` | Image-picker-with-fallback helper and the menu bestseller card. |
 | `snippets/bundle-tier-price.liquid`, `snippets/bundle-supply.liquid` | The price of a bottle count and its supply line under Theme settings → Bundle tiers, shared by the buy box and the cart drawer. |
 | `snippets/cart-drawer-nudge.liquid`, `snippets/cart-drawer-upgrade.liquid` | The cart drawer's next-tier nudge and upgrade card. |
+| `snippets/product-json-ld.liquid` | Product structured data for the serum's product page. |
 | `sections/main-*.liquid` | Minimal, on-brand sections for the rest of the store: page, product, collection, collections list, cart, search, blog, article, 404, password, and the customer account pages. |
 | `templates/*.json` | JSON templates wiring the sections above; `index.json` and `page.froya-landing.json` carry the landing page's default block content. |
 | `assets/critical.css` | Verbatim copy of the inline `<head>` CSS from the live page (font faces, CSS variables, critical layout). |
 | `assets/sections-inline.css` | Verbatim copy of every per-section inline `<style>` block from the live page. Section ids are preserved so these rules apply unchanged. |
 | `assets/theme.css` | Reconstruction of the theme's external stylesheets that the capture did not include: base typography, buttons, header/mega menu/drawer, footer, plus a light layer for the supporting store templates. |
 | `assets/sections.css` | Reconstruction of the landing-page component styles for desktop and mobile. |
-| `assets/main.js` | Interactions: cart drawer (Ajax add/change/remove, one-row bundles, subscribe & save toggle, next-tier nudge, free express shipping goal and add-ons, re-rendered through the Section Rendering API), in-page add to cart from every product form, mega menus, mobile drawer, carousels (Blaze Slider), product gallery + thumbnails, ingredients modal, subscribe/one-time buy-box toggle, bundle tier selection (quantity + per-bottle and total prices), lazy video playback, science scroll-spy, animated result bars, smooth anchors, theme-editor re-initialisation. |
+| `assets/main.js` | Interactions: cart drawer (Ajax add/change/remove, one-row bundles, subscribe & save toggle, next-tier nudge, free express shipping goal and add-ons, re-rendered through the Section Rendering API), in-page add to cart from every product form, mega menus, mobile drawer, carousels (Blaze Slider), product gallery + thumbnails (and the optional demo video), ingredients modal, subscribe/one-time buy-box toggle, bundle tier selection (quantity + per-bottle and total prices), sticky buy bar, lazy video playback, science scroll-spy, animated result bars, smooth anchors, theme-editor re-initialisation. |
 | `assets/blaze.css`, `assets/blaze-slider.min.js` | Blaze Slider 1.9.3 (MIT, <https://github.com/MananTank/blaze-slider>), the carousel library the live page uses, vendored unmodified. |
 | `scripts/localize_assets.py` | Vendors every remote placeholder image/font/video into `assets/` and rewrites the references (Liquid and JSON get `asset_url`). |
 | `tools/extract.py`, `tools/build.py` | Historical: the pipeline that produced the original static `froya-*` sections from a Chrome capture of the Frøya page. **Do not re-run it** – it would overwrite the editable Elaren sections. |
@@ -387,7 +453,59 @@ python3 scripts/localize_assets.py --dry-run
   seconds fails instead of hanging, and the drawer is redrawn once per change (Section Rendering
   API), from the finished cart. The newsletter posts to Shopify's customer form. The supporting
   `main-*` sections use the connected store's own products, cart and customer accounts.
-* Run `shopify theme check` (Shopify CLI) before publishing; the only remaining warnings are the
-  remote placeholder images.
+* **Home page order.** Hero, benefits strip, buy box, press slider, review slider, results
+  timeline ("What to expect"), backed by science, clinical trial, founder story, Arctic plants, how
+  to use, ingredient quality, guarantee, FAQ and the newsletter, then the email popup and the
+  sticky buy bar. Three sections are switched off
+  (`"disabled": true`), not deleted, and can be switched back on in the theme editor: the review
+  wall (one screenshot whose text can't be read on a phone), *The science of the seed* (Arctic
+  ingredients, which repeats the clinical study) and the second guarantee. The links that went to
+  the review wall (the buy box's rating line, the header's *Reviews* link) go to the review slider
+  (`#reviews`). Every menu, footer, hero and button link lands on a section that is still there.
+* **Buy box order on phones.** Nearly every visitor is on a phone, so on the home page the buy box
+  comes straight after the benefits strip, and up to 767px it reads: rating and name, the gallery
+  with its thumbnails and View Ingredients, the shipping banner ("This order ships free"), the
+  benefit tags, then the price line, the *Why subscribe?* note, Subscribe & save, the bundles and
+  Add to Cart, then the USPs, and the low-stock line last ("What you get", empty today, sits between
+  the banner and the tags). On phones the benefit tags are a compact two-column list rather than
+  pills (16px icons, small capitals), about 60px tall at 390px wide instead of about 176px; desktop
+  keeps the pills.
+  This is CSS only (`assets/sections.css`): the markup keeps the desktop order, so a block added to
+  the info column shows up with the banner and the tags on phones, above the price. Desktop keeps
+  its two columns. The price line is `#choose-bundle`: the hero button lands there, and `#shop` /
+  `#product-section` still go to the top of the buy box.
+* **The serum's product page.** Every product page still sends the visitor to the home page (Theme
+  settings → Product pages, the off switch is unchanged), with two exceptions: products assigned to
+  their own template, such as the capsules on `product.capsules` (above), and the Bundled product
+  (Theme settings → Bundle tiers), so Google visitors land on
+  `/products/elaren-pumpkin-seed-oil-regrowth-serum`. That page is `templates/product.json`: the
+  buy box first (the home page's settings and blocks), then the review slider, the results
+  timeline, backed by science, clinical trial, how to use, guarantee, FAQ and the sticky buy bar.
+  Its copy of those sections repeats the home page's, so change the text in both templates (the
+  guarantee, how-to-use and FAQ edits made on the home page are carried over). Those sections render on that product's
+  page only; any other product reaching the template (with the redirect switched off) gets the plain
+  *Product* section instead. The serum is assigned a "serum" template in Products, which this theme
+  doesn't have, so Shopify uses `product.json`; a `product.serum` template added later would take
+  over its page. The page also carries Product structured data (`snippets/product-json-ld.liquid`):
+  name, images, URL, SKU, brand, description (the SEO description while the product description is
+  empty) and one offer, a single bottle bought once at the variant's price in the current currency,
+  which Google Merchant Center compares with the feed. It has no rating or review markup.
+* **Sticky buy bar** (phones only). Pinned to the bottom of the screen, it appears once the hero has
+  scrolled away (on the product page, once the page is scrolled) and hides while any part of the buy
+  box (`#product-section`, from the rating line to the low-stock line) is on screen, and while the
+  cart drawer, the menu, the ingredients modal or the email popup is open. `{price}` is read from the
+  bundle cards (`data-unit-otp`), so it is always the visitor's currency. A tap scrolls to
+  `#choose-bundle` and leaves focus alone, so no focus ring appears on the bundle card; activated
+  from the keyboard (Enter or Space), it also moves focus to the selected bundle, so the visitor
+  carries on from there. It sits under every drawer and popup (z-index 90), pads the bottom by
+  `env(safe-area-inset-bottom)`, neither slides nor scrolls smoothly for visitors who ask for
+  reduced motion, and the page keeps room for it at the end so the footer stays reachable. Clarity
+  gets an event `sticky_bar_tap` on each tap, and every visit that sees the buy box is tagged
+  `buybox_layout = price_first` (on desktop too), so recordings can be filtered by layout. The value
+  dates from the first version of this layout, when the price came first on phones.
+* Run `shopify theme check` (Shopify CLI) before publishing. It reports no errors; the known
+  warnings are the remote placeholder images (RemoteAsset), the buy box's settings count and Liquid
+  complexity, the cart drawer's Liquid complexity, and the bundle cards' use of block ids
+  (BlockIdUsage).
 * Hidden/utility parts of the original page (Shopify pixels, cookie consent, chat widget, Klaviyo,
   Loox scripts, the legacy hidden header and mini-cart drawer) are intentionally omitted.
