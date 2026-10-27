@@ -63,6 +63,11 @@
       <h1 class="compact-pdp__title">{{ product.title }}</h1>
 
       {%- liquid
+        comment
+          Shopify ends an output tag at its first closing brace, even one inside a quoted string,
+          so the percent placeholder is assigned here and the output below uses the variable.
+        endcomment
+        assign percent_placeholder = '{percent}'
         assign current_save = ''
         if current_variant.compare_at_price > current_variant.price
           assign current_save = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round
@@ -72,7 +77,7 @@
         <span class="compact-pdp__price-now" data-price>{{ current_variant.price | money }}</span>
         <s class="compact-pdp__price-was" data-compare{% if current_save == '' %} hidden{% endif %}>{{ current_variant.compare_at_price | money }}</s>
         {%- if section.settings.save_label != blank -%}
-          <span class="compact-pdp__save" data-save-tag data-save-label="{{ section.settings.save_label | escape }}"{% if current_save == '' %} hidden{% endif %}>{{ section.settings.save_label | replace: '{percent}', current_save }}</span>
+          <span class="compact-pdp__save" data-save-tag data-save-label="{{ section.settings.save_label | escape }}"{% if current_save == '' %} hidden{% endif %}>{{ section.settings.save_label | replace: percent_placeholder, current_save }}</span>
         {%- endif -%}
       </div>
 
