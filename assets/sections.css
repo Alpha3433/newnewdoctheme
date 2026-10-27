@@ -485,6 +485,17 @@
 .s-featured-product__thumbnail:hover { opacity: 1; }
 .s-featured-product__thumbnail.is-active { border-color: var(--brand-ink); opacity: 1; }
 .s-featured-product__thumbnail picture, .s-featured-product__thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+/* Demo video (Featured product → Demo video): a tap on the slide pauses or resumes it and a play
+   icon shows while it is paused; its thumbnail carries a small play icon */
+.s-featured-product__slide--demo { cursor: pointer; }
+.s-featured-product__thumbnail--video { position: relative; }
+.s-featured-product__slide-play,
+.s-featured-product__thumbnail-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+.s-featured-product__slide-play { width: 56px; height: 56px; opacity: 0; transition: opacity .2s ease; }
+.s-featured-product__slide--demo.is-paused .s-featured-product__slide-play { opacity: 1; }
+.s-featured-product__thumbnail-play { width: 22px; height: 22px; }
+.s-featured-product__slide-play svg,
+.s-featured-product__thumbnail-play svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25)); }
 .s-main-product__view-ingredients {
   display: inline-flex;
   align-items: center;

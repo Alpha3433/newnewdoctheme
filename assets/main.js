@@ -1268,6 +1268,13 @@
     video.dataset.loaded = '1';
     if (srcs.join('').trim()) video.load();
   }
+  // Muted and inline, so browsers let it start without a tap (and iOS keeps it in the page).
+  function playMuted(video) {
+    video.muted = true;
+    video.playsInline = true;
+    var playing = video.play();
+    if (playing && playing.catch) playing.catch(function () { /* autoplay refused: the play icon stays */ });
+  }
   function initVideos(root) {
     $$('.s-videos-slider__video-item', root).forEach(function (item) {
       if (!once(item, 'init')) return;
@@ -1319,7 +1326,12 @@
         var active = k === current;
         s.classList.toggle('is-active', active);
         var v = s.querySelector('video');
-        if (v) { if (active) loadVideo(v); else v.pause(); }
+        if (!v) return;
+        if (!active) { v.pause(); return; }
+        loadVideo(v);
+        // The demo video (Featured product → Demo video) plays muted and looped while its slide
+        // is showing; for visitors who ask their device for reduced motion it waits for a tap.
+        if (v.classList.contains('js-gallery-autoplay') && !reduceMotion()) playMuted(v);
       });
       thumbs.forEach(function (t, k) { t.classList.toggle('is-active', k === current); });
       var activeThumb = thumbs[current];
@@ -1328,6 +1340,14 @@
         strip.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
       }
     };
+    // A tap on the demo video pauses or resumes it; its slide shows a play icon while it is paused
+    // (also when the device refuses to autoplay, as iOS does in Low Power Mode).
+    $$('video.js-gallery-autoplay', gallery).forEach(function (v) {
+      var slide = v.closest('.s-featured-product__slide');
+      v.addEventListener('play', function () { slide.classList.remove('is-paused'); });
+      v.addEventListener('pause', function () { slide.classList.add('is-paused'); });
+      slide.addEventListener('click', function () { if (v.paused) playMuted(v); else v.pause(); });
+    });
     var prev = $('.js-arrow-prev', gallery), next = $('.js-arrow-next', gallery);
     if (prev) prev.addEventListener('click', function () { show(current - 1); });
     if (next) next.addEventListener('click', function () { show(current + 1); });

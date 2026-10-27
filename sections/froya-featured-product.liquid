@@ -88,6 +88,17 @@
     endif
     assign saving = otp_price | minus: sub_price
     assign media_count = product.media.size
+    comment
+      Demo video (optional): a video from Files added to the gallery as slide number "Demo video
+      slide", with a thumbnail at the same position, so the arrows, swipe and thumbnails stay in
+      step. A number past the last photo puts it at the end. assets/main.js (initGallery) plays it
+      muted and looped while its slide is showing and pauses it otherwise.
+    endcomment
+    assign demo_video = section.settings.demo_video
+    assign demo_slide = 0
+    if demo_video != blank
+      assign demo_slide = section.settings.demo_video_slide | default: 2 | round | at_least: 1
+    endif
 
     comment
       Subscribe & save starts switched OFF: the page loads on the one-time price and the shopper
@@ -289,6 +300,22 @@
       {%- endif -%}
     {%- endcapture -%}
 
+    {%- if demo_slide > 0 -%}
+      {%- capture play_icon -%}<svg fill="none" focusable="false" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#fff" fill-opacity=".92"/><path d="M9.8 7.9v8.2l6.4-4.1z" fill="#1f1f1f"/></svg>{%- endcapture -%}
+      {%- capture demo_slide_html -%}
+        <div class="s-featured-product__slide s-featured-product__slide--demo is-paused{% if demo_slide == 1 %} is-active{% endif %}" data-media-type="video">
+          {{ demo_video | video_tag: autoplay: false, loop: true, muted: true, controls: false, preload: 'none', class: 's-featured-product__video js-gallery-autoplay' }}
+          <span aria-hidden="true" class="s-featured-product__slide-play">{{ play_icon }}</span>
+        </div>
+      {%- endcapture -%}
+      {%- capture demo_thumb_html -%}
+        <div class="s-featured-product__thumbnail s-featured-product__thumbnail--video{% if demo_slide == 1 %} is-active{% endif %}">
+          <picture>{{ demo_video.preview_image | image_url: width: 240, height: 240, crop: 'center' | image_tag: alt: demo_video.alt, loading: 'lazy' }}</picture>
+          <span aria-hidden="true" class="s-featured-product__thumbnail-play">{{ play_icon }}</span>
+        </div>
+      {%- endcapture -%}
+    {%- endif -%}
+
     <div class="s-featured-product__content"><div class="s-featured-product__mobile-head">{{ product_head }}</div><div class="s-featured-product__gallery-wrapper">
         <div class="s-featured-product__gallery js-featured-product__gallery s-featured-product__gallery--stage s-featured-product__gallery--video-crop-up">
           <div class="s-featured-product__gallery-arrow s-featured-product__gallery-arrow--prev js-arrow-prev">
@@ -299,7 +326,8 @@
           </div>
           {%- if media_count > 0 -%}
             {%- for media in product.media -%}
-              <div class="s-featured-product__slide{% if forloop.first %} is-active{% endif %}" data-media-type="{{ media.media_type }}">
+              {%- if forloop.index == demo_slide -%}{{ demo_slide_html }}{%- endif -%}
+              <div class="s-featured-product__slide{% if forloop.first and demo_slide != 1 %} is-active{% endif %}" data-media-type="{{ media.media_type }}">
                 {%- case media.media_type -%}
                   {%- when 'video' -%}
                     {{ media | video_tag: controls: true, preload: 'none', loop: false, muted: false, class: 's-featured-product__video' }}
@@ -315,12 +343,15 @@
                     {%- endif -%}
                 {%- endcase -%}
               </div>
+              {%- if forloop.last and demo_slide > forloop.length -%}{{ demo_slide_html }}{%- endif -%}
             {%- endfor -%}
           {%- else -%}
             {%- for src in fallback_images -%}
-              <div class="s-featured-product__slide{% if forloop.first %} is-active{% endif %}">
+              {%- if forloop.index == demo_slide -%}{{ demo_slide_html }}{%- endif -%}
+              <div class="s-featured-product__slide{% if forloop.first and demo_slide != 1 %} is-active{% endif %}">
                 <picture><img alt="{{ fallback_alts[forloop.index0] | escape }}" decoding="async" height="600" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" src="https://froyaorganics.com/cdn/shop/files/{{ src }}" width="600"></picture>
               </div>
+              {%- if forloop.last and demo_slide > forloop.length -%}{{ demo_slide_html }}{%- endif -%}
             {%- endfor -%}
           {%- endif -%}
           <div class="s-featured-product__gallery-arrow s-featured-product__gallery-arrow--next js-arrow-next">
@@ -331,15 +362,19 @@
         <div class="s-featured-product__thumbnails s-featured-product__thumbnails--strip js-featured-product__thumbnails is-stage-ready">
           {%- if media_count > 0 -%}
             {%- for media in product.media -%}
-              <div class="s-featured-product__thumbnail{% if forloop.first %} is-active{% endif %}">
+              {%- if forloop.index == demo_slide -%}{{ demo_thumb_html }}{%- endif -%}
+              <div class="s-featured-product__thumbnail{% if forloop.first and demo_slide != 1 %} is-active{% endif %}">
                 <picture>{{ media.preview_image | image_url: width: 240, height: 240, crop: 'center' | image_tag: alt: media.alt, loading: 'lazy' }}</picture>
               </div>
+              {%- if forloop.last and demo_slide > forloop.length -%}{{ demo_thumb_html }}{%- endif -%}
             {%- endfor -%}
           {%- else -%}
             {%- for src in fallback_images -%}
-              <div class="s-featured-product__thumbnail{% if forloop.first %} is-active{% endif %}">
+              {%- if forloop.index == demo_slide -%}{{ demo_thumb_html }}{%- endif -%}
+              <div class="s-featured-product__thumbnail{% if forloop.first and demo_slide != 1 %} is-active{% endif %}">
                 <picture><img alt="" decoding="async" height="600" loading="lazy" src="https://froyaorganics.com/cdn/shop/files/{{ src }}" width="600"></picture>
               </div>
+              {%- if forloop.last and demo_slide > forloop.length -%}{{ demo_thumb_html }}{%- endif -%}
             {%- endfor -%}
           {%- endif -%}
         </div>
@@ -779,6 +814,8 @@
     { "type": "text", "id": "label_1", "label": "Label 1" },
     { "type": "text", "id": "label_2", "label": "Label 2" },
     { "type": "text", "id": "save_tag", "label": "Gallery save tag", "default": "Save {percent}%", "info": "{percent} is replaced with the subscription discount." },
+    { "type": "video", "id": "demo_video", "label": "Demo video", "info": "Optional. A short video from Files, added to the gallery as its own slide with a thumbnail. It plays muted and looped, inline and without controls, while its slide is showing." },
+    { "type": "number", "id": "demo_video_slide", "label": "Demo video slide", "default": 2, "info": "Where the video sits in the gallery: 1 is the first slide. A number past the last photo puts it at the end." },
     { "type": "text", "id": "ships_free_text", "label": "Shipping banner", "default": "THIS ORDER SHIPS FREE" },
     { "type": "richtext", "id": "includes", "label": "What you get", "default": "<p>What you get (30-day supply):<br>· Pumpkin Seed Regrowth Oil with Caffeine Complex<br>· Precision applicator for scalp-only, no-waste application<br>· Scalp massager to boost circulation at the root<br>· Free insured shipping and a 30-day money-back guarantee</p>" },
     { "type": "header", "content": "Ingredients modal" },
