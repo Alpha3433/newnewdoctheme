@@ -108,7 +108,7 @@ template (`templates/page.froya-landing.json`).
   (`reviews`) on the home page and the serum's page, the review wall's heading (`reviews-section`,
   "Real women, real hair, real reviews") on the landing page template. On the home page and the
   serum's page the badge pill above the product (*Badge text*) is empty, so it is hidden, and
-  *Displayed name* is "Pumpkin Seed Oil Serum". On phones the name scales with the screen (6.2vw,
+  *Displayed name* is "Elaren Pumpkin Seed Oil". On phones the name scales with the screen (6.2vw,
   between 22px and 26px), so it stays on one line from 360px up. The old two-label
   line under the name is still available (*Labels under the name*) and empty by default. The cart no longer repeats the
   selling plan's own name ("Delivery: every month | 10% off") under a subscription line: the
@@ -127,11 +127,45 @@ template (`templates/page.froya-landing.json`).
   *Perks line* is empty there too. The two static info lines under the plan are still available as
   *Info line 1 / 2* but are empty by default.
 * **Subscribe & save** sits between the price line and *Choose your bundle*, at every screen size,
-  as on the live site.
+  as on the live site. Directly above it, *Why subscribe? note* (Featured product → Subscribe &
+  save) is a light box with a small calendar icon: "**Why subscribe?** Hair grows in cycles, so
+  results come from nightly use over 3+ months. Subscribing keeps you stocked." It stays whether
+  the switch is on or off; empty the setting to hide it.
+* **Price per day** – Featured product → Bundles → *Days per tube* (30) and *Price per day*
+  ("{price} a day"). Under PER BOTTLE each card shows its bundle total divided by its bottles, free
+  ones included, times the days per tube: in USD $1.17, $0.78 and $0.58 a day bought once, $1.05,
+  $0.70 and $0.52 with Subscribe & save. It is worked out in Liquid with the `money` filter, so it
+  is in the shopper's currency, and it follows the Subscribe & save switch like the other card
+  prices. The line hangs below the price column instead of lengthening it, so the cards keep their
+  height. Change *Days per tube* if a tube lasts longer or shorter; empty *Price per day* hides it.
+* **Demo video in the gallery** – Featured product → *Demo video*. To add one:
+  1. Upload the clip in Content → Files (or from the picker in the next step). Keep it short, a few
+     seconds, and square or close to it: the gallery is square and crops the rest.
+  2. Online Store → Themes → *Customize*, open the home page, select *Featured product* and, under
+     *Demo video*, choose *Select video* and pick the clip.
+  3. *Demo video slide* sets where it goes: 2 (the default) puts it right after the first photo, 1
+     makes it the first slide, and a number past the last photo puts it at the end. Save.
+  4. The serum's product page has its own copy of the buy box: in the editor's page menu choose
+     *Products* → *Default product*, preview the serum, and repeat steps 2 and 3 there.
+
+  The video gets a thumbnail at the same position with a small play icon, so the arrows, swipe and
+  thumbnails stay in step. It plays muted, looped and inline, with no controls, while its slide is
+  showing, and pauses when the shopper moves to another slide; a tap on it pauses or resumes it. Its
+  poster is the video's preview image from Files. Visitors who ask their device for reduced motion,
+  and phones that refuse to autoplay (iPhones in Low Power Mode), see the poster with a play icon
+  until they tap. With no video selected the gallery is exactly as before.
 * **Sticky buy bar** – the *Sticky buy bar* section (home page and the serum's product page): *Text*,
   where `{price}` becomes the lowest one-time price per bottle on the buy box's bundle cards, and
   *Button label*. It only appears on phones; select the section in the editor's mobile preview to
   see it. How it behaves is under Behaviour notes.
+* **What to expect** – the *Results timeline* section, directly after the review slider on the home
+  page and the serum's page: *Heading*, an optional *Intro line* (empty today), one *Step* block per
+  milestone (label, title and text, each with a marker on a vertical line), a *Footnote* and a
+  button (*Button label*, and *Button link*: `#choose-bundle` scrolls to the buy box's price line).
+  The five steps reuse the site's own wording: the nightly roller routine, less shedding in the
+  first weeks, a fuller-looking part around day 30 with the guarantee from night 30, new baby hairs
+  at month 3 and density building to month 6. Keep them in line with the guarantee and the FAQ if
+  either changes. Menu links can reach the section with `#timeline`.
 * **Low-stock notice** – Featured product → Button & stock → *Number shown*: *Tracked inventory*
   reads the variant's real stock and only shows at or below the threshold; *A fixed number* shows
   the figure typed below on every visit. The store tracks more than 2,000 units of the serum, so the
@@ -179,7 +213,9 @@ template (`templates/page.froya-landing.json`).
   note is only text: the capsules' Buy 2, Get 1 Free is a Shopify automatic discount (Discounts),
   not part of the Kaching bundle tiers, so change both together. Any other product moved onto a
   custom template behaves the same way. In the cart drawer, line items and add-on cards for these
-  products link to their page; everything else still scrolls to the buy box.
+  products link to their page; everything else still scrolls to the buy box. The serum is the
+  exception: it is assigned a "serum" template this theme doesn't have, so its rows and the
+  empty-cart card are always treated as sold from the buy box.
 * **Serum comparison advertorial** – a long-form "we compared 10 pumpkin seed hair serums"
   review article for paid traffic, template `page.serum-comparison` (create a page in Online
   Store → Pages and choose that template). Its layout follows an editorial review page: warm
@@ -368,7 +404,7 @@ The theme folders Shopify needs (`layout`, `templates`, `sections`, `snippets`, 
 | --- | --- |
 | `layout/theme.liquid` | Page shell: meta/fonts, the five stylesheets, `content_for_header`, the header section group (announcement bar, header, cart drawer), `content_for_layout`, the footer section group, scripts. |
 | `sections/header-group.json`, `sections/footer-group.json` | Section groups with the default header/footer content (menu links, bestseller cards, blog links, footer links, cart-drawer badges and upsells). |
-| `sections/froya-*.liquid` | The landing page, one editable section per block (settings + blocks in each `{% schema %}`): announcement bar, sticky header with mega menus and mobile drawer, cart drawer, hero, benefits strip, logo/quote slider, review slider, backed-by-science timeline, research results, featured product (gallery, ingredients modal, buy box with bundle tiers), founder story, hair-loss types & badges, review wall, guarantee, video reviews, how-to-use, ingredient quality, ingredient science, newsletter, footer, and the sticky buy bar for phones. Markup keeps the captured page's class names so the verbatim CSS still applies. |
+| `sections/froya-*.liquid` | The landing page, one editable section per block (settings + blocks in each `{% schema %}`): announcement bar, sticky header with mega menus and mobile drawer, cart drawer, hero, benefits strip, logo/quote slider, review slider, results timeline ("What to expect"), backed-by-science timeline, research results, featured product (gallery, ingredients modal, buy box with bundle tiers), founder story, hair-loss types & badges, review wall, guarantee, video reviews, how-to-use, ingredient quality, ingredient science, newsletter, footer, and the sticky buy bar for phones. Markup keeps the captured page's class names so the verbatim CSS still applies. |
 | `snippets/froya-image.liquid`, `snippets/froya-nav-card.liquid` | Image-picker-with-fallback helper and the menu bestseller card. |
 | `snippets/bundle-tier-price.liquid`, `snippets/bundle-supply.liquid` | The price of a bottle count and its supply line under Theme settings → Bundle tiers, shared by the buy box and the cart drawer. |
 | `snippets/cart-drawer-nudge.liquid`, `snippets/cart-drawer-upgrade.liquid` | The cart drawer's next-tier nudge and upgrade card. |
@@ -379,7 +415,7 @@ The theme folders Shopify needs (`layout`, `templates`, `sections`, `snippets`, 
 | `assets/sections-inline.css` | Verbatim copy of every per-section inline `<style>` block from the live page. Section ids are preserved so these rules apply unchanged. |
 | `assets/theme.css` | Reconstruction of the theme's external stylesheets that the capture did not include: base typography, buttons, header/mega menu/drawer, footer, plus a light layer for the supporting store templates. |
 | `assets/sections.css` | Reconstruction of the landing-page component styles for desktop and mobile. |
-| `assets/main.js` | Interactions: cart drawer (Ajax add/change/remove, one-row bundles, subscribe & save toggle, next-tier nudge, free express shipping goal and add-ons, re-rendered through the Section Rendering API), in-page add to cart from every product form, mega menus, mobile drawer, carousels (Blaze Slider), product gallery + thumbnails, ingredients modal, subscribe/one-time buy-box toggle, bundle tier selection (quantity + per-bottle and total prices), sticky buy bar, lazy video playback, science scroll-spy, animated result bars, smooth anchors, theme-editor re-initialisation. |
+| `assets/main.js` | Interactions: cart drawer (Ajax add/change/remove, one-row bundles, subscribe & save toggle, next-tier nudge, free express shipping goal and add-ons, re-rendered through the Section Rendering API), in-page add to cart from every product form, mega menus, mobile drawer, carousels (Blaze Slider), product gallery + thumbnails (and the optional demo video), ingredients modal, subscribe/one-time buy-box toggle, bundle tier selection (quantity + per-bottle and total prices), sticky buy bar, lazy video playback, science scroll-spy, animated result bars, smooth anchors, theme-editor re-initialisation. |
 | `assets/blaze.css`, `assets/blaze-slider.min.js` | Blaze Slider 1.9.3 (MIT, <https://github.com/MananTank/blaze-slider>), the carousel library the live page uses, vendored unmodified. |
 | `scripts/localize_assets.py` | Vendors every remote placeholder image/font/video into `assets/` and rewrites the references (Liquid and JSON get `asset_url`). |
 | `tools/extract.py`, `tools/build.py` | Historical: the pipeline that produced the original static `froya-*` sections from a Chrome capture of the Frøya page. **Do not re-run it** – it would overwrite the editable Elaren sections. |
@@ -417,9 +453,10 @@ python3 scripts/localize_assets.py --dry-run
   seconds fails instead of hanging, and the drawer is redrawn once per change (Section Rendering
   API), from the finished cart. The newsletter posts to Shopify's customer form. The supporting
   `main-*` sections use the connected store's own products, cart and customer accounts.
-* **Home page order.** Hero, benefits strip, buy box, press slider, review slider, backed by
-  science, clinical trial, founder story, Arctic plants, how to use, ingredient quality, guarantee,
-  FAQ and the newsletter, then the email popup and the sticky buy bar. Three sections are switched off
+* **Home page order.** Hero, benefits strip, buy box, press slider, review slider, results
+  timeline ("What to expect"), backed by science, clinical trial, founder story, Arctic plants, how
+  to use, ingredient quality, guarantee, FAQ and the newsletter, then the email popup and the
+  sticky buy bar. Three sections are switched off
   (`"disabled": true`), not deleted, and can be switched back on in the theme editor: the review
   wall (one screenshot whose text can't be read on a phone), *The science of the seed* (Arctic
   ingredients, which repeats the clinical study) and the second guarantee. The links that went to
@@ -428,18 +465,24 @@ python3 scripts/localize_assets.py --dry-run
 * **Buy box order on phones.** Nearly every visitor is on a phone, so on the home page the buy box
   comes straight after the benefits strip, and up to 767px it reads: rating and name, the gallery
   with its thumbnails and View Ingredients, the shipping banner ("This order ships free"), the
-  benefit tags, then the price line, Subscribe & save, the bundles and Add to Cart, then the USPs,
-  and the low-stock line last ("What you get", empty today, sits between the banner and the tags).
+  benefit tags, then the price line, the *Why subscribe?* note, Subscribe & save, the bundles and
+  Add to Cart, then the USPs, and the low-stock line last ("What you get", empty today, sits between
+  the banner and the tags). On phones the benefit tags are a compact two-column list rather than
+  pills (16px icons, small capitals), about 60px tall at 390px wide instead of about 176px; desktop
+  keeps the pills.
   This is CSS only (`assets/sections.css`): the markup keeps the desktop order, so a block added to
   the info column shows up with the banner and the tags on phones, above the price. Desktop keeps
   its two columns. The price line is `#choose-bundle`: the hero button lands there, and `#shop` /
   `#product-section` still go to the top of the buy box.
 * **The serum's product page.** Every product page still sends the visitor to the home page (Theme
-  settings → Product pages, the off switch is unchanged) except the Bundled product's (Theme settings
-  → Bundle tiers), so Google visitors land on
+  settings → Product pages, the off switch is unchanged), with two exceptions: products assigned to
+  their own template, such as the capsules on `product.capsules` (above), and the Bundled product
+  (Theme settings → Bundle tiers), so Google visitors land on
   `/products/elaren-pumpkin-seed-oil-regrowth-serum`. That page is `templates/product.json`: the
-  buy box first (the home page's settings and blocks), then the review slider, backed by science,
-  clinical trial, how to use, guarantee, FAQ and the sticky buy bar. Those sections render on that product's
+  buy box first (the home page's settings and blocks), then the review slider, the results
+  timeline, backed by science, clinical trial, how to use, guarantee, FAQ and the sticky buy bar.
+  Its copy of those sections repeats the home page's, so change the text in both templates (the
+  guarantee, how-to-use and FAQ edits made on the home page are carried over). Those sections render on that product's
   page only; any other product reaching the template (with the redirect switched off) gets the plain
   *Product* section instead. The serum is assigned a "serum" template in Products, which this theme
   doesn't have, so Shopify uses `product.json`; a `product.serum` template added later would take
