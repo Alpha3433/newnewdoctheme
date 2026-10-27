@@ -453,6 +453,16 @@
               <input class="js-bundle-quantity" name="quantity" type="hidden" value="{{ default_qty }}">
 
               {%- if plan != blank -%}
+              {%- comment -%}
+                "Why subscribe?" note, directly above the Subscribe & save box. It stays put whether
+                the switch is on or off; an empty setting hides it.
+              {%- endcomment -%}
+              {%- if section.settings.why_subscribe != blank -%}
+              <div class="c-why-subscribe">
+                <span aria-hidden="true" class="c-why-subscribe__icon"><svg fill="none" focusable="false" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="currentColor" fill-opacity=".18"/><g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><rect height="10" rx="1.6" width="11" x="6.5" y="7.5"/><path d="M6.5 10.5h11M9.5 6.2v2.6M14.5 6.2v2.6"/></g><g fill="currentColor"><circle cx="9.6" cy="13.2" r=".8"/><circle cx="12" cy="13.2" r=".8"/><circle cx="14.4" cy="13.2" r=".8"/><circle cx="9.6" cy="15.5" r=".8"/><circle cx="12" cy="15.5" r=".8"/></g></svg></span>
+                <p class="c-why-subscribe__text">{{ section.settings.why_subscribe }}</p>
+              </div>
+              {%- endif -%}
               <div class="c-buybox-toggle__box">
                 <button aria-checked="{{ sub_on }}" class="c-buybox-toggle__head js-bbt-toggle" role="switch" type="button">
                   <span aria-hidden="true" class="c-buybox-toggle__switch"><span class="c-buybox-toggle__knob"></span></span>
@@ -773,6 +783,7 @@
     { "type": "text", "id": "save_text", "label": "Savings line", "default": "Save {amount} ({percent}% off)", "info": "{amount} is the money saved, {percent} the tier discount." },
     { "type": "header", "content": "Subscribe & save" },
     { "type": "checkbox", "id": "sub_default", "label": "Pre-select Subscribe & save", "default": false, "info": "Off: the buy box loads on the one-time price and the shopper switches Subscribe & save on. On: it loads with Subscribe & save already selected." },
+    { "type": "inline_richtext", "id": "why_subscribe", "label": "Why subscribe? note", "default": "<strong>Why subscribe?</strong> Hair grows in cycles, so results come from nightly use over 3+ months. Subscribing keeps you stocked.", "info": "A light box with a calendar icon directly above the Subscribe & save box, shown whether the switch is on or off. Leave empty to hide it." },
     { "type": "text", "id": "toggle_title", "label": "Toggle title", "default": "Save {percent}% with our flexible plan" },
     { "type": "text", "id": "toggle_sub", "label": "Toggle subtitle", "default": "No contracts. Cancel with ease." },
     { "type": "inline_richtext", "id": "benefit_1", "label": "Benefit 1", "default": "<strong>Free Insured Shipping</strong> Every Order" },

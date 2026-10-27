@@ -682,6 +682,20 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-buybox-toggle__price-compare { font-size: 18px; color: var(--brand-strike); text-decoration: line-through; }
 .c-subscribtion:not(.is-one-time) .c-buybox-toggle__price--otp { display: none; }
 .c-subscribtion.is-one-time .c-buybox-toggle__price--sub { display: none; }
+/* "Why subscribe?" note above the Subscribe & save box: a light box with a calendar icon, in both modes */
+.c-why-subscribe {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--brand-mauve-light);
+  border-radius: 10px;
+  background: var(--brand-mauve-tint);
+}
+.c-why-subscribe__icon { flex: 0 0 24px; width: 24px; height: 24px; color: var(--brand-mauve-dark); }
+.c-why-subscribe__icon svg { display: block; width: 100%; height: 100%; }
+.c-why-subscribe__text { margin: 0; font-size: 14px; line-height: 1.45; }
+.c-why-subscribe__text strong { font-weight: 700; }
 /* Subscribe & save box: header row with the switch, a rule, the perks in two columns, then the free gift */
 .c-buybox-toggle__box {
   --box-pad: 18px;
@@ -1146,6 +1160,7 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .s-featured-product__product-tags { display: grid; grid-template-columns: repeat(2, auto); gap: 6px 10px; }
   .s-featured-product__product-tag { gap: 6px; padding: 0; border: 0; border-radius: 0; background: none; line-height: 1.25; letter-spacing: 0.02em; text-align: left; }
   .s-featured-product__product-tag .product-tag__icon { flex: 0 0 16px; width: 16px; height: 16px; }
+  .c-why-subscribe__text { font-size: 13px; }
   .c-buybox-toggle__box { --box-pad: 14px; }
   .c-buybox-toggle__head-title { font-size: 17px; }
   .c-buybox-toggle__head-sub { font-size: 14px; }

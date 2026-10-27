@@ -735,6 +735,7 @@
         "total_text": "{total} total",
         "save_text": "Save {amount} ({percent}% off)",
         "sub_default": false,
+        "why_subscribe": "<strong>Why subscribe?</strong> Hair grows in cycles, so results come from nightly use over 3+ months. Subscribing keeps you stocked.",
         "toggle_title": "Save {percent}% with our flexible plan",
         "toggle_sub": "No contracts. Cancel with ease.",
         "benefit_1": "<strong>Free Insured Shipping</strong> Every Order",
