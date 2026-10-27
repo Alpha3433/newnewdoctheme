@@ -325,10 +325,11 @@
             o.setAttribute('aria-pressed', selected ? 'true' : 'false');
           });
           if (idInput) idInput.value = option.getAttribute('data-variant');
-          if (price) price.textContent = option.getAttribute('data-price');
+          // The shop's money format wraps prices in <span class=money>, so these hold markup from our own Liquid.
+          if (price) price.innerHTML = option.getAttribute('data-price');
           if (compare) {
             var was = option.getAttribute('data-compare');
-            compare.textContent = was;
+            compare.innerHTML = was;
             if (was) compare.removeAttribute('hidden'); else compare.setAttribute('hidden', '');
           }
           if (save) {
