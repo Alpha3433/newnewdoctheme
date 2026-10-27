@@ -1129,7 +1129,7 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .s-featured-product { padding: 28px 0 40px; }
   .s-featured-product__title { margin-bottom: 20px; }
   .s-featured-product__badge-text { font-size: 14px; padding: 9px 16px; }
-  /* Scales with the screen so "Pumpkin Seed Oil Serum" stays on one line from 360px up */
+  /* Scales with the screen so "Elaren Pumpkin Seed Oil" stays on one line from 360px up */
   .s-featured-product__product-name { font-size: clamp(22px, 6.2vw, 26px); }
   .s-featured-product__content { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .s-featured-product--mobile-head .s-featured-product__mobile-head { display: flex; flex-direction: column; gap: 8px; }
