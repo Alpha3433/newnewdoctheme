@@ -283,6 +283,13 @@
         "id": "currency_code_enable",
         "label": "Show currency codes on totals",
         "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "round_prices",
+        "label": "Round prices to whole amounts",
+        "default": false,
+        "info": "Shows $34.99 as $35 and $23.33 as $23, in every currency: buy box, bundle cards, cart drawer, product and cart pages. Display only: checkout still charges the exact prices, and order history and gift card balances show them as charged."
       }
     ]
   },

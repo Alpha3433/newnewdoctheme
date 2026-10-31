@@ -112,6 +112,16 @@ template (`templates/page.froya-landing.json`).
   reads the variant's real stock and only shows at or below the threshold; *A fixed number* shows
   the figure typed below on every visit. The store tracks more than 2,000 units of the serum, so the
   landing page uses the fixed number; switch back to tracked inventory once real stock is low.
+* **Rounded prices** – Theme settings → Currency format → *Round prices to whole amounts* (off by
+  default) shows every price the storefront prints as a whole amount, in whatever currency the
+  shopper sees: $34.99 as $35, the Buy 2, Get 1 Free bundle's $69.98 as $70, $23.33 a bottle as $23.
+  Each figure is rounded to the nearest whole amount on its own, so a total and its saving can be a
+  dollar off what the rounded figures add up to; the free express shipping gap is rounded up
+  instead, so "$16 away" is never a cent short. Only the display changes: every price in the buy
+  box, bundle cards, cart drawer (lines, nudge, upgrade card, add-ons, totals), product pages and
+  cart page goes through `snippets/money.liquid`, while the cart, Kaching and checkout still charge
+  the exact prices, and the account's order history and gift card balances keep showing the amounts
+  as charged. Prices typed into text settings (such as "US$4.99" in the FAQ) are not changed.
 * **Typography** – the Pangram and Apercu Mono fonts are served from this store's own Files (see the
   `@font-face` rules in `assets/critical.css`). Weight 400 maps to the Regular face and 600/700 to the
   Bold face; an earlier mapping pointed regular text at the Light file, which is why paragraphs looked
@@ -342,6 +352,7 @@ The theme folders Shopify needs (`layout`, `templates`, `sections`, `snippets`, 
 | `sections/froya-*.liquid` | The landing page, one editable section per block (settings + blocks in each `{% schema %}`): announcement bar, sticky header with mega menus and mobile drawer, cart drawer, hero, benefits strip, logo/quote slider, review slider, backed-by-science timeline, research results, featured product (gallery, ingredients modal, buy box with bundle tiers), founder story, hair-loss types & badges, review wall, guarantee, video reviews, how-to-use, ingredient quality, ingredient science, newsletter, footer. Markup keeps the captured page's class names so the verbatim CSS still applies. |
 | `snippets/froya-image.liquid`, `snippets/froya-nav-card.liquid` | Image-picker-with-fallback helper and the menu bestseller card. |
 | `snippets/bundle-tier-price.liquid`, `snippets/bundle-supply.liquid` | The price of a bottle count and its supply line under Theme settings → Bundle tiers, shared by the buy box and the cart drawer. |
+| `snippets/money.liquid` | Prints every storefront price with the money filters, rounded to whole amounts when Theme settings → Currency format → *Round prices to whole amounts* is on. |
 | `snippets/cart-drawer-nudge.liquid`, `snippets/cart-drawer-upgrade.liquid` | The cart drawer's next-tier nudge and upgrade card. |
 | `sections/main-*.liquid` | Minimal, on-brand sections for the rest of the store: page, product, collection, collections list, cart, search, blog, article, 404, password, and the customer account pages. |
 | `templates/*.json` | JSON templates wiring the sections above; `index.json` and `page.froya-landing.json` carry the landing page's default block content. |

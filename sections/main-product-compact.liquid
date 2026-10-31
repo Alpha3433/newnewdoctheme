@@ -74,8 +74,8 @@
         endif
       -%}
       <div class="compact-pdp__price" data-price-wrap>
-        <span class="compact-pdp__price-now" data-price>{{ current_variant.price | money }}</span>
-        <s class="compact-pdp__price-was" data-compare{% if current_save == '' %} hidden{% endif %}>{{ current_variant.compare_at_price | money }}</s>
+        <span class="compact-pdp__price-now" data-price>{% render 'money', amount: current_variant.price %}</span>
+        <s class="compact-pdp__price-was" data-compare{% if current_save == '' %} hidden{% endif %}>{% render 'money', amount: current_variant.compare_at_price %}</s>
         {%- if section.settings.save_label != blank -%}
           <span class="compact-pdp__save" data-save-tag data-save-label="{{ section.settings.save_label | escape }}"{% if current_save == '' %} hidden{% endif %}>{{ section.settings.save_label | replace: percent_placeholder, current_save }}</span>
         {%- endif -%}
@@ -96,7 +96,8 @@
             <legend class="compact-pdp__label">{{ product.options.first }}</legend>
             <div class="compact-pdp__option-list">
               {%- for variant in product.variants -%}
-                {%- capture variant_compare -%}{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money }}{% endif %}{%- endcapture -%}
+                {%- capture variant_price -%}{% render 'money', amount: variant.price %}{%- endcapture -%}
+                {%- capture variant_compare -%}{% if variant.compare_at_price > variant.price %}{% render 'money', amount: variant.compare_at_price %}{% endif %}{%- endcapture -%}
                 {%- liquid
                   assign variant_save = ''
                   if variant.compare_at_price > variant.price
@@ -107,14 +108,14 @@
                   type="button"
                   class="compact-pdp__option{% if variant.id == current_variant.id %} is-selected{% endif %}{% unless variant.available %} is-unavailable{% endunless %}"
                   data-variant="{{ variant.id }}"
-                  data-price="{{ variant.price | money | escape }}"
+                  data-price="{{ variant_price | escape }}"
                   data-compare="{{ variant_compare | strip | escape }}"
                   data-save="{{ variant_save }}"
                   data-available="{{ variant.available }}"
                   aria-pressed="{% if variant.id == current_variant.id %}true{% else %}false{% endif %}"
                 >
                   <span class="compact-pdp__option-name">{{ variant.title }}{{ option_suffix }}</span>
-                  <span class="compact-pdp__option-price">{% if variant.available %}{{ variant.price | money }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+                  <span class="compact-pdp__option-price">{% if variant.available %}{{ variant_price }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
                 </button>
               {%- endfor -%}
             </div>

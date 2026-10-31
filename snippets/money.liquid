@@ -1,0 +1,45 @@
+{%- comment -%}
+  A price as the money filters print it in the shopper's currency, or rounded to a whole amount
+  when Theme settings → Currency format → Round prices to whole amounts is on: $34.99 shows as $35,
+  $23.33 as $23.
+  Only what the storefront prints changes. The cart, Kaching and checkout keep the exact prices,
+  and the theme's own comparisons (whether a saving shows, the shipping goal) still use the cents.
+
+  amount   the price in cents
+  format   'with_currency' prints it like money_with_currency (code after it), 'without_trailing_zeros'
+           like money_without_trailing_zeros, anything else like money
+  Prints the price and nothing else; capture it to use it in a sentence or an attribute:
+    capture saving_money
+      render 'money', amount: saving
+    endcapture
+{%- endcomment -%}
+{%- liquid
+  if settings.round_prices and amount != nil
+    assign whole = amount | divided_by: 100.0 | round | times: 100
+    assign rounded = whole | money_without_trailing_zeros
+    if format == 'with_currency'
+      assign coded = whole | money_with_currency
+      assign padded = whole | money
+      if padded != rounded
+        comment
+          No filter prints the currency code without the decimals, so the number itself (35.00)
+          loses its zero decimals inside the coded price ($35.00 USD), whatever symbol or markup
+          the format puts around it.
+        endcomment
+        assign number = whole | money_without_currency
+        assign number_size = number.size | minus: 3
+        assign trimmed = number | slice: 0, number_size
+        assign coded = coded | replace: number, trimmed
+      endif
+      echo coded
+    else
+      echo rounded
+    endif
+  elsif format == 'with_currency'
+    echo amount | money_with_currency
+  elsif format == 'without_trailing_zeros'
+    echo amount | money_without_trailing_zeros
+  else
+    echo amount | money
+  endif
+-%}
