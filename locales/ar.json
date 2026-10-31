@@ -161,7 +161,9 @@
       "subtext": "بطاقة الهدايا الخاصة بك",
       "gift_card_code": "رمز بطاقة الهدايا",
       "shop_link": "متابعة التسوق",
-      "remaining_html": "الرصيد المتبقي {{ balance }}"
+      "remaining_html": "الرصيد المتبقي {{ balance }}",
+      "add_to_apple_wallet": "إضافة إلى Apple Wallet",
+      "print_gift_card": "طباعة"
     }
   }
 }
