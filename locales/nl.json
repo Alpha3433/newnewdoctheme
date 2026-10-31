@@ -132,7 +132,38 @@
     "reset_password": {
       "title": "Accountwachtwoord opnieuw instellen",
       "subtext": "Voer een nieuw wachtwoord in",
-      "password": "Wachtwoord"
+      "password": "Wachtwoord",
+      "password_confirm": "Wachtwoord bevestigen",
+      "submit": "Wachtwoord opnieuw instellen"
+    },
+    "recover_password": {
+      "title": "Je wachtwoord opnieuw instellen",
+      "subtext": "We sturen je een e-mail om je wachtwoord opnieuw in te stellen.",
+      "submit": "Verzenden",
+      "cancel": "Annuleren"
+    },
+    "tracking": {
+      "step_placed": "Bestelling geplaatst",
+      "step_preparing": "In voorbereiding",
+      "step_shipped": "Verzonden",
+      "step_on_way": "Onderweg",
+      "carrier": "Vervoerder",
+      "shipped_on": "Verzonden op {{ date }}",
+      "track": "Volgen",
+      "partial": "Een deel van deze bestelling is verzonden; de rest volgt in een apart pakket met een eigen trackingnummer.",
+      "no_number": "Je bestelling is verzonden. Het trackingnummer is onderweg naar je inbox.",
+      "cancelled": "Deze bestelling is geannuleerd."
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Hier is je cadeaubon ter waarde van {{ value }} voor {{ shop }}!",
+      "subtext": "Je cadeaubon",
+      "gift_card_code": "Cadeauboncode",
+      "shop_link": "Verder winkelen",
+      "remaining_html": "Resterend: {{ balance }}",
+      "add_to_apple_wallet": "Toevoegen aan Apple Wallet",
+      "print_gift_card": "Afdrukken"
     }
   }
 }

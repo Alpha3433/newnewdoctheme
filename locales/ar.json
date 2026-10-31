@@ -1,0 +1,167 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "search": {
+      "search": "بحث",
+      "placeholder": "البحث عن المنتجات",
+      "no_results": "لم يتم العثور على نتائج لـ «{{ terms }}».",
+      "results_for": "نتائج البحث عن «{{ terms }}»"
+    },
+    "404": {
+      "title": "الصفحة غير موجودة",
+      "subtext": "الصفحة المطلوبة غير موجودة.",
+      "link": "متابعة التسوق"
+    },
+    "password_page": {
+      "login_form_heading": "الدخول إلى المتجر باستخدام كلمة المرور",
+      "login_form_password_label": "كلمة المرور",
+      "login_form_submit": "دخول"
+    },
+    "pagination": {
+      "previous": "السابق",
+      "next": "التالي"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "إضافة إلى السلة",
+      "sold_out": "نفدت الكمية",
+      "unavailable": "غير متوفر",
+      "quantity": "الكمية",
+      "regular_price": "السعر العادي",
+      "sale_price": "سعر التخفيض"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_products": "لا توجد منتجات في هذه المجموعة.",
+      "view_all": "عرض الكل"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "سلة التسوق الخاصة بك",
+      "empty": "سلة التسوق الخاصة بك فارغة حاليًا.",
+      "continue_shopping": "متابعة التسوق",
+      "subtotal": "المجموع الفرعي",
+      "checkout": "الدفع",
+      "remove": "إزالة",
+      "update": "تحديث السلة",
+      "taxes_and_shipping": "يتم احتساب الضرائب والشحن عند الدفع"
+    }
+  },
+  "blogs": {
+    "article": {
+      "read_more": "قراءة المزيد",
+      "back_to_blog": "العودة إلى {{ title }}"
+    }
+  },
+  "customer": {
+    "login": {
+      "title": "تسجيل الدخول",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "forgot_password": "هل نسيت كلمة المرور؟",
+      "sign_in": "تسجيل الدخول",
+      "create_account": "إنشاء حساب",
+      "guest_continue": "المتابعة كضيف"
+    },
+    "register": {
+      "title": "إنشاء حساب",
+      "first_name": "الاسم الأول",
+      "last_name": "اسم العائلة",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "إنشاء"
+    },
+    "account": {
+      "title": "الحساب",
+      "log_out": "تسجيل الخروج",
+      "order_history": "سجل الطلبات",
+      "no_orders": "ليس لديك أي طلبات حتى الآن.",
+      "view_addresses": "عرض العناوين",
+      "track_orders": "تتبّع طلباتك"
+    },
+    "order": {
+      "title": "الطلب {{ name }}",
+      "date": "تاريخ الطلب: {{ date }}",
+      "product": "المنتج",
+      "quantity": "الكمية",
+      "total": "الإجمالي",
+      "shipping_address": "عنوان الشحن",
+      "billing_address": "عنوان الفوترة",
+      "delivery": "التوصيل",
+      "status_page": "تفاصيل التوصيل الكاملة"
+    },
+    "addresses": {
+      "title": "العناوين",
+      "default": "افتراضي",
+      "add_new": "إضافة عنوان جديد",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "update": "تحديث العنوان",
+      "cancel": "إلغاء",
+      "first_name": "الاسم الأول",
+      "last_name": "اسم العائلة",
+      "company": "الشركة",
+      "address1": "العنوان 1",
+      "address2": "العنوان 2",
+      "city": "المدينة",
+      "country": "البلد/المنطقة",
+      "province": "المقاطعة",
+      "zip": "الرمز البريدي",
+      "phone": "الهاتف",
+      "set_default": "التعيين كعنوان افتراضي"
+    },
+    "activate_account": {
+      "title": "تفعيل الحساب",
+      "subtext": "يُرجى إنشاء كلمة مرور لتفعيل حسابك.",
+      "password": "كلمة المرور",
+      "password_confirm": "تأكيد كلمة المرور",
+      "submit": "تفعيل الحساب",
+      "cancel": "رفض الدعوة"
+    },
+    "reset_password": {
+      "title": "إعادة تعيين كلمة مرور الحساب",
+      "subtext": "يُرجى إدخال كلمة مرور جديدة",
+      "password": "كلمة المرور",
+      "password_confirm": "تأكيد كلمة المرور",
+      "submit": "إعادة تعيين كلمة المرور"
+    },
+    "recover_password": {
+      "title": "إعادة تعيين كلمة المرور",
+      "subtext": "سنرسل إليك رسالة عبر البريد الإلكتروني لإعادة تعيين كلمة المرور.",
+      "submit": "إرسال",
+      "cancel": "إلغاء"
+    },
+    "tracking": {
+      "step_placed": "تم تقديم الطلب",
+      "step_preparing": "قيد التجهيز",
+      "step_shipped": "تم الشحن",
+      "step_on_way": "في الطريق إليك",
+      "carrier": "شركة الشحن",
+      "shipped_on": "تم الشحن في {{ date }}",
+      "track": "تتبّع",
+      "partial": "تم شحن جزء من هذا الطلب؛ وسيتبعه الباقي في طرد منفصل برقم تتبّع خاص به.",
+      "no_number": "تم شحن طلبك. رقم التتبّع في طريقه إلى بريدك الوارد.",
+      "cancelled": "تم إلغاء هذا الطلب."
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "إليك بطاقة الهدايا الخاصة بك بقيمة {{ value }} لمتجر {{ shop }}!",
+      "subtext": "بطاقة الهدايا الخاصة بك",
+      "gift_card_code": "رمز بطاقة الهدايا",
+      "shop_link": "متابعة التسوق",
+      "remaining_html": "الرصيد المتبقي {{ balance }}"
+    }
+  }
+}
