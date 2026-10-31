@@ -889,13 +889,15 @@
 
   /* An amount in the store's money format, built from a sample the section renders with Liquid's
      money filter (data-money: 1234567.89 in the shopper's currency), so it reads exactly like every
-     other price on the page - symbol, separators, decimals and any markup the format carries. */
-  function formatMoney(cents, sample) {
+     other price on the page - symbol, separators, decimals and any markup the format carries. A
+     sample without decimals (Round prices on, or a currency like JPY) prints a whole amount:
+     rounded, or rounded up with roundUp. */
+  function formatMoney(cents, sample, roundUp) {
     // (?:) keeps each back-reference apart from the digits after it: \1567 would read as one escape.
     var m = String(sample || '').match(/1(\D?)234\1(?:567)(\D)89|1(\D?)234\3(?:568)/);
     if (!m) return (cents / 100).toFixed(2);
     var decimals = m[2] !== undefined;
-    var amount = decimals ? (cents / 100).toFixed(2) : String(Math.round(cents / 100));
+    var amount = decimals ? (cents / 100).toFixed(2) : String(Math[roundUp ? 'ceil' : 'round'](cents / 100));
     var parts = amount.split('.');
     var number = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, decimals ? m[1] : m[3]) + (decimals ? m[2] + parts[1] : '');
     return sample.slice(0, m.index) + number + sample.slice(m.index + m[0].length);
@@ -926,7 +928,8 @@
         text.innerHTML = goal.reached
           ? escapeHtml(bar.getAttribute('data-text-reached'))
           : escapeHtml(bar.getAttribute('data-text')).replace('{amount}', function () {
-            return '<span class="free-shipping__highlight">' + formatMoney(goal.gap, bar.getAttribute('data-money')) + '</span>';
+            // Rounded up when prices show whole amounts: "$15 away" with $15.01 to go is a cent short.
+            return '<span class="free-shipping__highlight">' + formatMoney(goal.gap, bar.getAttribute('data-money'), true) + '</span>';
           });
       }
       var note = $('[data-cart-shipping-note]', bar);

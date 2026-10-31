@@ -184,11 +184,15 @@
     assign button_compare_otp = ''
     if plan != blank and display_compare_total > display_total_sub
       assign show_button_compare = true
-      assign button_compare_sub = display_compare_total | money
+      capture button_compare_sub
+        render 'money', amount: display_compare_total
+      endcapture
     endif
     if display_compare_total > display_total_otp
       assign show_button_compare = true
-      assign button_compare_otp = display_compare_total | money
+      capture button_compare_otp
+        render 'money', amount: display_compare_total
+      endcapture
     endif
     if bundle_count > 0
       assign show_button_compare = true
@@ -439,9 +443,9 @@
             {%- form 'product', product, class: 'c-subscribtion__subscription-form js-subscribtion__subscription-form js-ajax-add', id: 'featured-product-form' -%}
               <div class="c-buybox-toggle__priceline">
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--sub">
-                  <span class="c-buybox-toggle__price-main"><span class="product_price">{{ display_unit_sub | money }}</span></span>{% if display_compare_unit > display_unit_sub %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{{ display_compare_unit | money }}</span></span>{% endif %}</span>
+                  <span class="c-buybox-toggle__price-main"><span class="product_price">{% render 'money', amount: display_unit_sub %}</span></span>{% if display_compare_unit > display_unit_sub %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{% render 'money', amount: display_compare_unit %}</span></span>{% endif %}</span>
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--otp">
-                  <span class="c-buybox-toggle__price-main"><span class="product_price">{{ display_unit_otp | money }}</span></span>{% if display_compare_unit > display_unit_otp %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{{ display_compare_unit | money }}</span></span>{% endif %}</span>
+                  <span class="c-buybox-toggle__price-main"><span class="product_price">{% render 'money', amount: display_unit_otp %}</span></span>{% if display_compare_unit > display_unit_otp %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{% render 'money', amount: display_compare_unit %}</span></span>{% endif %}</span>
                 {%- if bundle_count > 0 and section.settings.unit_suffix != blank -%}<span class="c-buybox-toggle__price-unit">{{ section.settings.unit_suffix }}</span>{%- endif -%}
               </div>
               <input name="id" type="hidden" value="{{ variant.id }}">
@@ -480,7 +484,9 @@
                 -%}
                 {%- if gift_product != blank and section.settings.gift_text != blank -%}
                   {%- liquid
-                    assign gift_price = gift_product.price | money_without_trailing_zeros
+                    capture gift_price
+                      render 'money', amount: gift_product.price, format: 'without_trailing_zeros'
+                    endcapture
                     assign gift_badge = section.settings.gift_badge | replace: price_placeholder, gift_price | replace: '&lcub;price&rcub;', gift_price
                     comment
                       Placeholders are swapped here, inside a liquid tag: a literal "{" inside an
@@ -555,16 +561,37 @@
                       add-to-cart button shows (data-total-*) carries the code, because that is the
                       figure the shopper commits to and $ alone is ambiguous across USD/AUD/CAD/NZD.
                     endcomment
-                    assign total_sub_money = total_sub | money
-                    assign total_otp_money = total_otp | money
+                    capture total_sub_money
+                      render 'money', amount: total_sub
+                    endcapture
+                    capture total_otp_money
+                      render 'money', amount: total_otp
+                    endcapture
                     assign total_sub_button = total_sub_money
                     assign total_otp_button = total_otp_money
                     if show_currency_code
-                      assign total_sub_button = total_sub | money_with_currency
-                      assign total_otp_button = total_otp | money_with_currency
+                      capture total_sub_button
+                        render 'money', amount: total_sub, format: 'with_currency'
+                      endcapture
+                      capture total_otp_button
+                        render 'money', amount: total_otp, format: 'with_currency'
+                      endcapture
                     endif
-                    assign save_sub_money = tier_save_sub | money
-                    assign save_otp_money = tier_save_otp | money
+                    capture save_sub_money
+                      render 'money', amount: tier_save_sub
+                    endcapture
+                    capture save_otp_money
+                      render 'money', amount: tier_save_otp
+                    endcapture
+                    capture tier_compare_money
+                      render 'money', amount: tier_compare
+                    endcapture
+                    capture unit_sub_money
+                      render 'money', amount: unit_sub
+                    endcapture
+                    capture unit_otp_money
+                      render 'money', amount: unit_otp
+                    endcapture
                     comment
                       {amount} is measured against the compare-at total, so {percent} must be too -
                       using the tier's own discount here made the two halves of the sentence disagree.
@@ -576,7 +603,7 @@
                       assign tier_pct_otp = tier_save_otp | times: 100 | divided_by: tier_compare
                     endif
                   -%}
-                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare | money | escape }}" data-compare-total-cents="{{ tier_compare }}" data-qty="{{ qty }}" data-save-otp="{{ tier_save_otp | money | escape }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ tier_save_sub | money | escape }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp_button | escape }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub_button | escape }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp | money | escape }}" data-unit-sub="{{ unit_sub | money | escape }}" {{ block.shopify_attributes }}>
+                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare_money | escape }}" data-compare-total-cents="{{ tier_compare }}" data-qty="{{ qty }}" data-save-otp="{{ save_otp_money | escape }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ save_sub_money | escape }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp_button | escape }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub_button | escape }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp_money | escape }}" data-unit-sub="{{ unit_sub_money | escape }}" {{ block.shopify_attributes }}>
                     <input class="c-bundle__radio" name="bundle_tier" type="radio" value="{{ qty }}"{% if block.id == default_bundle.id %} checked{% endif %}>
                     <span class="c-bundle__main">
                       <span aria-hidden="true" class="c-bundle__dot"></span>
@@ -587,15 +614,15 @@
                       </span>
                       <span class="c-bundle__pricing">
                         {%- if plan_style -%}
-                        <span class="c-bundle__unit c-bundle__unit--sub"><span class="product_price">{{ total_sub | money }}</span></span>
-                        <span class="c-bundle__unit c-bundle__unit--otp"><span class="product_price">{{ total_otp | money }}</span></span>
-                        {%- if tier_compare > total_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{{ tier_compare | money }}</span></span>{%- endif -%}
-                        {%- if tier_compare > total_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{{ tier_compare | money }}</span></span>{%- endif -%}
+                        <span class="c-bundle__unit c-bundle__unit--sub"><span class="product_price">{{ total_sub_money }}</span></span>
+                        <span class="c-bundle__unit c-bundle__unit--otp"><span class="product_price">{{ total_otp_money }}</span></span>
+                        {%- if tier_compare > total_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{{ tier_compare_money }}</span></span>{%- endif -%}
+                        {%- if tier_compare > total_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{{ tier_compare_money }}</span></span>{%- endif -%}
                         {%- else -%}
-                        <span class="c-bundle__unit c-bundle__unit--sub"><span class="product_price">{{ unit_sub | money }}</span></span>
-                        <span class="c-bundle__unit c-bundle__unit--otp"><span class="product_price">{{ unit_otp | money }}</span></span>
-                        {%- if compare_basis > unit_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{{ compare_basis | money }}</span></span>{%- endif -%}
-                        {%- if compare_basis > unit_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{{ compare_basis | money }}</span></span>{%- endif -%}
+                        <span class="c-bundle__unit c-bundle__unit--sub"><span class="product_price">{{ unit_sub_money }}</span></span>
+                        <span class="c-bundle__unit c-bundle__unit--otp"><span class="product_price">{{ unit_otp_money }}</span></span>
+                        {%- if compare_basis > unit_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{% render 'money', amount: compare_basis %}</span></span>{%- endif -%}
+                        {%- if compare_basis > unit_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{% render 'money', amount: compare_basis %}</span></span>{%- endif -%}
                         {%- if section.settings.unit_suffix != blank -%}<span class="c-bundle__unit-label">{{ section.settings.unit_suffix }}</span>{%- endif -%}
                         {%- endif -%}
                       </span>
@@ -628,8 +655,8 @@
                   {%- if section.settings.sub_badge != blank -%}<span class="c-subscribtion__discount-label c-subscribtion__discount-label--orange">{{ section.settings.sub_badge | replace: percent_placeholder, sub_percent }}</span>{%- endif -%}
                   <span class="c-subscribtion__option-name">{{ section.settings.sub_name }}</span>
                   <div class="c-subscribtion__option-price js-subscribtion__option-price">
-                    <span class="js-subscribtion__main-price"><span class="product_price">{{ sub_price | money }}</span></span>
-                    {%- if saving > 0 -%}<span class="js-subscribtion__compare-at-price"><span class="product_price">{{ otp_price | money }}</span></span>{%- endif -%}
+                    <span class="js-subscribtion__main-price"><span class="product_price">{% render 'money', amount: sub_price %}</span></span>
+                    {%- if saving > 0 -%}<span class="js-subscribtion__compare-at-price"><span class="product_price">{% render 'money', amount: otp_price %}</span></span>{%- endif -%}
                   </div>
                   {%- if section.settings.sub_perks != blank -%}
                   <div class="c-subscribtion__button-info-wrapper"><div><div class="metafield-rich_text_field">{{ section.settings.sub_perks | replace: percent_placeholder, sub_percent | replace: percent_entity, sub_percent | replace: percent_entity_numeric, sub_percent }}</div></div></div>
@@ -640,8 +667,8 @@
                   {%- if section.settings.otp_badge != blank -%}<span class="c-subscribtion__discount-label">{{ section.settings.otp_badge }}</span>{%- endif -%}
                   <span class="c-subscribtion__option-name">{{ section.settings.otp_name }}</span>
                   <div class="c-subscribtion__option-price js-subscribtion__option-price">
-                    <span class="js-subscribtion__main-price"><span class="product_price">{{ otp_price | money }}</span></span>
-                    {%- if otp_compare > otp_price -%}<span class="js-subscribtion__compare-at-price"><span class="product_price">{{ otp_compare | money }}</span></span>{%- endif -%}
+                    <span class="js-subscribtion__main-price"><span class="product_price">{% render 'money', amount: otp_price %}</span></span>
+                    {%- if otp_compare > otp_price -%}<span class="js-subscribtion__compare-at-price"><span class="product_price">{% render 'money', amount: otp_compare %}</span></span>{%- endif -%}
                   </div>
                 </label>
                 <fieldset class="c-subscribtion__buttons-wrapper c-subscribtion__buttons-wrapper--no-marign c-subscribtion__buttons-wrapper--fixed-plan" id="selling-plan-fieldset">
@@ -667,7 +694,7 @@
                 picks another bundle tier or switches subscription off, from the tier's data-save-*.
               {%- endcomment -%}
               <div class="c-buybox-toggle__congrats" role="status" aria-live="polite"{% if display_save <= 0 %} hidden{% endif %}>
-                <span aria-hidden="true">🎉</span><span>{{ section.settings.congrats_text }} <span class="product_price">{{ display_save | money }}</span></span>
+                <span aria-hidden="true">🎉</span><span>{{ section.settings.congrats_text }} <span class="product_price">{% render 'money', amount: display_save %}</span></span>
               </div>
               {%- endif -%}
 
@@ -682,11 +709,11 @@
                         assign button_total = display_total_sub
                       endif
                       if show_currency_code
-                        echo button_total | money_with_currency
+                        render 'money', amount: button_total, format: 'with_currency'
                       else
-                        echo button_total | money
+                        render 'money', amount: button_total
                       endif
-                    %}</span></span>{% if show_button_compare %}<s class="igcp" data-compare-otp="{{ button_compare_otp | escape }}" data-compare-sub="{{ button_compare_sub | escape }}">{% if display_compare_total > button_total %}{{ display_compare_total | money }}{% endif %}</s>{% endif %}
+                    %}</span></span>{% if show_button_compare %}<s class="igcp" data-compare-otp="{{ button_compare_otp | escape }}" data-compare-sub="{{ button_compare_sub | escape }}">{% if display_compare_total > button_total %}{% render 'money', amount: display_compare_total %}{% endif %}</s>{% endif %}
                   </span>
                   {%- endif -%}
                 </span>

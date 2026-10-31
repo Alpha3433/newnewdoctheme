@@ -14,9 +14,9 @@
     <div class="product-page__info">
       <h1 class="product-page__title">{{ product.title }}</h1>
       <div class="product-page__price" data-price>
-        {{ current_variant.price | money }}
+        {% render 'money', amount: current_variant.price %}
         {%- if current_variant.compare_at_price > current_variant.price -%}
-          <s>{{ current_variant.compare_at_price | money }}</s>
+          <s>{% render 'money', amount: current_variant.compare_at_price %}</s>
         {%- endif -%}
       </div>
 
@@ -27,7 +27,7 @@
             <select id="variant-{{ section.id }}" name="id">
               {%- for variant in product.variants -%}
                 <option value="{{ variant.id }}" {% if variant == current_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
-                  {{ variant.title }} – {{ variant.price | money }}{% unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
+                  {{ variant.title }} – {% render 'money', amount: variant.price %}{% unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
                 </option>
               {%- endfor -%}
             </select>

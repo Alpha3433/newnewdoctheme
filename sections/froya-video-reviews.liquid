@@ -52,7 +52,7 @@
                       </a>
                       <div class="s-videos-slider__product-info">
                         <div class="s-videos-slider__product-title">{{ block.settings.product_title | default: product.title }}</div>
-                        <div class="s-videos-slider__product-price"><span>{{ section.settings.from_label }} <span class="product_price">{{ product.price_min | money }}</span></span></div>
+                        <div class="s-videos-slider__product-price"><span>{{ section.settings.from_label }} <span class="product_price">{% render 'money', amount: product.price_min %}</span></span></div>
                         <a class="s-videos-slider__product-button custom-button" href="{{ shop_href }}"{{ shop_attrs }}>{{ section.settings.shop_label }}</a>
                       </div>
                     </div>

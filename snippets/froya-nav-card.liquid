@@ -47,7 +47,7 @@
     {%- endif -%}
     <a class="froya-nav-card__title-link" href="{{ routes.root_url }}#shop" data-scroll-to="shop"><p class="froya-nav-card__title">{{ title }}</p></a>
     {%- if block.settings.subtitle != blank -%}<p class="froya-nav-card__copy">{{ block.settings.subtitle }}</p>{%- endif -%}
-    <p class="froya-nav-card__price">from <span class="product_price">{{ product.price_min | money }}</span></p>
+    <p class="froya-nav-card__price">from <span class="product_price">{% render 'money', amount: product.price_min %}</span></p>
     {%- if layout == 'horizontal' -%}
       <a class="froya-nav-card__cta" href="{{ routes.root_url }}#shop" data-scroll-to="shop">SHOP NOW</a>
     {%- else -%}
