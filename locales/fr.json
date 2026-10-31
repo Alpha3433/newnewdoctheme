@@ -112,7 +112,58 @@
       "first_name": "Prénom",
       "last_name": "Nom",
       "company": "Entreprise",
-      "address1": "Adresse 1"
+      "address1": "Adresse 1",
+      "address2": "Adresse 2",
+      "city": "Ville",
+      "country": "Pays/région",
+      "province": "Province",
+      "zip": "Code postal",
+      "phone": "Téléphone",
+      "set_default": "Définir comme adresse par défaut"
+    },
+    "activate_account": {
+      "title": "Activer le compte",
+      "subtext": "Créez votre mot de passe pour activer votre compte.",
+      "password": "Mot de passe",
+      "password_confirm": "Confirmer le mot de passe",
+      "submit": "Activer le compte",
+      "cancel": "Refuser l’invitation"
+    },
+    "reset_password": {
+      "title": "Réinitialiser le mot de passe du compte",
+      "subtext": "Saisissez un nouveau mot de passe",
+      "password": "Mot de passe",
+      "password_confirm": "Confirmer le mot de passe",
+      "submit": "Réinitialiser le mot de passe"
+    },
+    "recover_password": {
+      "title": "Réinitialiser votre mot de passe",
+      "subtext": "Nous vous enverrons un e-mail pour réinitialiser votre mot de passe.",
+      "submit": "Envoyer",
+      "cancel": "Annuler"
+    },
+    "tracking": {
+      "step_placed": "Commande passée",
+      "step_preparing": "En préparation",
+      "step_shipped": "Expédiée",
+      "step_on_way": "En route",
+      "carrier": "Transporteur",
+      "shipped_on": "Expédiée le {{ date }}",
+      "track": "Suivre",
+      "partial": "Une partie de cette commande a été expédiée ; le reste suit dans un colis séparé, avec son propre numéro de suivi.",
+      "no_number": "Votre commande a été expédiée. Son numéro de suivi arrive bientôt dans votre boîte de réception.",
+      "cancelled": "Cette commande a été annulée."
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Voici votre carte-cadeau {{ shop }} d’une valeur de {{ value }} !",
+      "subtext": "Votre carte-cadeau",
+      "gift_card_code": "Code de la carte-cadeau",
+      "shop_link": "Continuer les achats",
+      "remaining_html": "Solde restant : {{ balance }}",
+      "add_to_apple_wallet": "Ajouter à Apple Wallet",
+      "print_gift_card": "Imprimer"
     }
   }
 }
