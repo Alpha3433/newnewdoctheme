@@ -122,7 +122,48 @@
       "set_default": "Imposta come indirizzo predefinito"
     },
     "activate_account": {
-      "title": "Attiva account"
+      "title": "Attiva account",
+      "subtext": "Crea la tua password per attivare il tuo account.",
+      "password": "Password",
+      "password_confirm": "Conferma password",
+      "submit": "Attiva account",
+      "cancel": "Rifiuta invito"
+    },
+    "reset_password": {
+      "title": "Reimposta la password dell’account",
+      "subtext": "Inserisci una nuova password",
+      "password": "Password",
+      "password_confirm": "Conferma password",
+      "submit": "Reimposta password"
+    },
+    "recover_password": {
+      "title": "Reimposta la tua password",
+      "subtext": "Ti invieremo un’email per reimpostare la password.",
+      "submit": "Invia",
+      "cancel": "Annulla"
+    },
+    "tracking": {
+      "step_placed": "Ordine effettuato",
+      "step_preparing": "In preparazione",
+      "step_shipped": "Spedito",
+      "step_on_way": "In viaggio",
+      "carrier": "Corriere",
+      "shipped_on": "Spedito il {{ date }}",
+      "track": "Traccia",
+      "partial": "Parte di questo ordine è stata spedita; il resto arriverà in un pacco separato con un proprio numero di tracciamento.",
+      "no_number": "Il tuo ordine è stato spedito. Il numero di tracciamento sta arrivando nella tua casella di posta.",
+      "cancelled": "Questo ordine è stato annullato."
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Ecco il tuo buono regalo da {{ value }} per {{ shop }}!",
+      "subtext": "Il tuo buono regalo",
+      "gift_card_code": "Codice del buono regalo",
+      "shop_link": "Continua lo shopping",
+      "remaining_html": "Saldo residuo {{ balance }}",
+      "add_to_apple_wallet": "Aggiungi a Apple Wallet",
+      "print_gift_card": "Stampa"
     }
   }
 }

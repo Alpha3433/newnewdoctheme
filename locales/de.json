@@ -125,7 +125,45 @@
       "title": "Konto aktivieren",
       "subtext": "Erstelle dein Passwort, um dein Konto zu aktivieren.",
       "password": "Passwort",
-      "password_confirm": "Passwort bestätigen"
+      "password_confirm": "Passwort bestätigen",
+      "submit": "Konto aktivieren",
+      "cancel": "Einladung ablehnen"
+    },
+    "reset_password": {
+      "title": "Konto-Passwort zurücksetzen",
+      "subtext": "Gib ein neues Passwort ein",
+      "password": "Passwort",
+      "password_confirm": "Passwort bestätigen",
+      "submit": "Passwort zurücksetzen"
+    },
+    "recover_password": {
+      "title": "Setze dein Passwort zurück",
+      "subtext": "Wir senden dir eine E-Mail, um dein Passwort zurückzusetzen.",
+      "submit": "Senden",
+      "cancel": "Abbrechen"
+    },
+    "tracking": {
+      "step_placed": "Bestellung aufgegeben",
+      "step_preparing": "In Vorbereitung",
+      "step_shipped": "Versandt",
+      "step_on_way": "Unterwegs",
+      "carrier": "Versanddienstleister",
+      "shipped_on": "Versandt am {{ date }}",
+      "track": "Verfolgen",
+      "partial": "Ein Teil dieser Bestellung wurde versandt; der Rest folgt in einem separaten Paket mit eigener Sendungsnummer.",
+      "no_number": "Deine Bestellung wurde versandt. Die Sendungsnummer ist auf dem Weg in dein Postfach.",
+      "cancelled": "Diese Bestellung wurde storniert."
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Hier ist dein Geschenkgutschein über {{ value }} für {{ shop }}!",
+      "subtext": "Dein Geschenkgutschein",
+      "gift_card_code": "Gutscheincode",
+      "shop_link": "Weiter shoppen",
+      "remaining_html": "Restguthaben: {{ balance }}",
+      "add_to_apple_wallet": "Zu Apple Wallet hinzufügen",
+      "print_gift_card": "Drucken"
     }
   }
 }
