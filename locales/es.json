@@ -120,6 +120,50 @@
       "zip": "Código postal",
       "phone": "Teléfono",
       "set_default": "Establecer como dirección predeterminada"
+    },
+    "activate_account": {
+      "title": "Activar cuenta",
+      "subtext": "Crea tu contraseña para activar tu cuenta.",
+      "password": "Contraseña",
+      "password_confirm": "Confirmar contraseña",
+      "submit": "Activar cuenta",
+      "cancel": "Rechazar invitación"
+    },
+    "reset_password": {
+      "title": "Restablecer la contraseña de la cuenta",
+      "subtext": "Escribe una nueva contraseña",
+      "password": "Contraseña",
+      "password_confirm": "Confirmar contraseña",
+      "submit": "Restablecer contraseña"
+    },
+    "recover_password": {
+      "title": "Restablece tu contraseña",
+      "subtext": "Te enviaremos un correo electrónico para restablecer tu contraseña.",
+      "submit": "Enviar",
+      "cancel": "Cancelar"
+    },
+    "tracking": {
+      "step_placed": "Pedido realizado",
+      "step_preparing": "En preparación",
+      "step_shipped": "Enviado",
+      "step_on_way": "En camino",
+      "carrier": "Transportista",
+      "shipped_on": "Enviado el {{ date }}",
+      "track": "Rastrear",
+      "partial": "Parte de este pedido ya se ha enviado; el resto llegará en un paquete aparte con su propio número de seguimiento.",
+      "no_number": "Tu pedido ya se ha enviado. Su número de seguimiento va de camino a tu bandeja de entrada.",
+      "cancelled": "Este pedido fue cancelado."
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "¡Aquí tienes tu tarjeta de regalo de {{ value }} para {{ shop }}!",
+      "subtext": "Tu tarjeta de regalo",
+      "gift_card_code": "Código de la tarjeta de regalo",
+      "shop_link": "Seguir comprando",
+      "remaining_html": "Saldo restante: {{ balance }}",
+      "add_to_apple_wallet": "Agregar a Apple Wallet",
+      "print_gift_card": "Imprimir"
     }
   }
 }

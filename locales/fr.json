@@ -1,0 +1,118 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "search": {
+      "search": "Recherche",
+      "placeholder": "Rechercher des produits",
+      "no_results": "Aucun résultat trouvé pour « {{ terms }} ».",
+      "results_for": "Résultats pour « {{ terms }} »"
+    },
+    "404": {
+      "title": "Page introuvable",
+      "subtext": "La page que vous recherchez n’existe pas.",
+      "link": "Continuer les achats"
+    },
+    "password_page": {
+      "login_form_heading": "Accéder à la boutique à l’aide d’un mot de passe",
+      "login_form_password_label": "Mot de passe",
+      "login_form_submit": "Entrer"
+    },
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Ajouter au panier",
+      "sold_out": "Épuisé",
+      "unavailable": "Non disponible",
+      "quantity": "Quantité",
+      "regular_price": "Prix habituel",
+      "sale_price": "Prix promotionnel"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_products": "Aucun produit trouvé dans cette collection.",
+      "view_all": "Tout afficher"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Votre panier",
+      "empty": "Votre panier est actuellement vide.",
+      "continue_shopping": "Continuer les achats",
+      "subtotal": "Sous-total",
+      "checkout": "Procéder au paiement",
+      "remove": "Supprimer",
+      "update": "Mettre à jour le panier",
+      "taxes_and_shipping": "Taxes et frais de livraison calculés lors du paiement"
+    }
+  },
+  "blogs": {
+    "article": {
+      "read_more": "Lire la suite",
+      "back_to_blog": "Retour à {{ title }}"
+    }
+  },
+  "customer": {
+    "login": {
+      "title": "Connexion",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "forgot_password": "Mot de passe oublié ?",
+      "sign_in": "Se connecter",
+      "create_account": "Créer un compte",
+      "guest_continue": "Continuer en tant qu’invité"
+    },
+    "register": {
+      "title": "Créer un compte",
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "email": "E-mail",
+      "password": "Mot de passe",
+      "submit": "Créer"
+    },
+    "account": {
+      "title": "Compte",
+      "log_out": "Se déconnecter",
+      "order_history": "Historique des commandes",
+      "no_orders": "Vous n’avez pas encore passé de commande.",
+      "view_addresses": "Afficher les adresses",
+      "track_orders": "Suivre vos commandes"
+    },
+    "order": {
+      "title": "Commande {{ name }}",
+      "date": "Passée le {{ date }}",
+      "product": "Produit",
+      "quantity": "Quantité",
+      "total": "Total",
+      "shipping_address": "Adresse de livraison",
+      "billing_address": "Adresse de facturation",
+      "delivery": "Livraison",
+      "status_page": "Tous les détails de livraison"
+    },
+    "addresses": {
+      "title": "Adresses",
+      "default": "Par défaut",
+      "add_new": "Ajouter une nouvelle adresse",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "update": "Mettre à jour l’adresse",
+      "cancel": "Annuler",
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "company": "Entreprise",
+      "address1": "Adresse 1"
+    }
+  }
+}

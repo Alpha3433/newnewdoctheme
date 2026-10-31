@@ -1,0 +1,138 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "search": {
+      "search": "Zoeken",
+      "placeholder": "Producten zoeken",
+      "no_results": "Geen resultaten gevonden voor \"{{ terms }}\".",
+      "results_for": "Resultaten voor \"{{ terms }}\""
+    },
+    "404": {
+      "title": "Pagina niet gevonden",
+      "subtext": "De pagina die je zocht bestaat niet.",
+      "link": "Verder winkelen"
+    },
+    "password_page": {
+      "login_form_heading": "Winkel betreden met wachtwoord",
+      "login_form_password_label": "Wachtwoord",
+      "login_form_submit": "Betreden"
+    },
+    "pagination": {
+      "previous": "Vorige",
+      "next": "Volgende"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Toevoegen aan winkelwagen",
+      "sold_out": "Uitverkocht",
+      "unavailable": "Niet beschikbaar",
+      "quantity": "Aantal",
+      "regular_price": "Normale prijs",
+      "sale_price": "Aanbiedingsprijs"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_products": "Geen producten gevonden in deze collectie.",
+      "view_all": "Alles weergeven"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Je winkelwagen",
+      "empty": "Je winkelwagen is momenteel leeg.",
+      "continue_shopping": "Verder winkelen",
+      "subtotal": "Subtotaal",
+      "checkout": "Afrekenen",
+      "remove": "Verwijderen",
+      "update": "Winkelwagen bijwerken",
+      "taxes_and_shipping": "Belastingen en verzendkosten worden berekend bij het afrekenen"
+    }
+  },
+  "blogs": {
+    "article": {
+      "read_more": "Lees meer",
+      "back_to_blog": "Terug naar {{ title }}"
+    }
+  },
+  "customer": {
+    "login": {
+      "title": "Inloggen",
+      "email": "E-mail",
+      "password": "Wachtwoord",
+      "forgot_password": "Wachtwoord vergeten?",
+      "sign_in": "Inloggen",
+      "create_account": "Account aanmaken",
+      "guest_continue": "Doorgaan als gast"
+    },
+    "register": {
+      "title": "Account aanmaken",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "email": "E-mail",
+      "password": "Wachtwoord",
+      "submit": "Aanmaken"
+    },
+    "account": {
+      "title": "Account",
+      "log_out": "Uitloggen",
+      "order_history": "Bestelgeschiedenis",
+      "no_orders": "Je hebt nog geen bestellingen geplaatst.",
+      "view_addresses": "Adressen weergeven",
+      "track_orders": "Volg je bestellingen"
+    },
+    "order": {
+      "title": "Bestelling {{ name }}",
+      "date": "Geplaatst op {{ date }}",
+      "product": "Product",
+      "quantity": "Aantal",
+      "total": "Totaal",
+      "shipping_address": "Verzendadres",
+      "billing_address": "Factuuradres",
+      "delivery": "Levering",
+      "status_page": "Volledige leveringsgegevens"
+    },
+    "addresses": {
+      "title": "Adressen",
+      "default": "Standaard",
+      "add_new": "Nieuw adres toevoegen",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "update": "Adres bijwerken",
+      "cancel": "Annuleren",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "company": "Bedrijf",
+      "address1": "Adres 1",
+      "address2": "Adres 2",
+      "city": "Plaats",
+      "country": "Land/regio",
+      "province": "Provincie",
+      "zip": "Postcode",
+      "phone": "Telefoon",
+      "set_default": "Instellen als standaardadres"
+    },
+    "activate_account": {
+      "title": "Account activeren",
+      "subtext": "Maak je wachtwoord aan om je account te activeren.",
+      "password": "Wachtwoord",
+      "password_confirm": "Wachtwoord bevestigen",
+      "submit": "Account activeren",
+      "cancel": "Uitnodiging weigeren"
+    },
+    "reset_password": {
+      "title": "Accountwachtwoord opnieuw instellen",
+      "subtext": "Voer een nieuw wachtwoord in",
+      "password": "Wachtwoord"
+    }
+  }
+}
