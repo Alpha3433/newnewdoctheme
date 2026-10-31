@@ -1,0 +1,131 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "search": {
+      "search": "Suchen",
+      "placeholder": "Produkte suchen",
+      "no_results": "Keine Ergebnisse für „{{ terms }}“ gefunden.",
+      "results_for": "Ergebnisse für „{{ terms }}“"
+    },
+    "404": {
+      "title": "Seite nicht gefunden",
+      "subtext": "Die Seite, die du gesucht hast, existiert nicht.",
+      "link": "Weiter shoppen"
+    },
+    "password_page": {
+      "login_form_heading": "Shop mit Passwort betreten",
+      "login_form_password_label": "Passwort",
+      "login_form_submit": "Betreten"
+    },
+    "pagination": {
+      "previous": "Zurück",
+      "next": "Weiter"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "In den Warenkorb",
+      "sold_out": "Ausverkauft",
+      "unavailable": "Nicht verfügbar",
+      "quantity": "Menge",
+      "regular_price": "Normaler Preis",
+      "sale_price": "Angebotspreis"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_products": "In dieser Kollektion wurden keine Produkte gefunden.",
+      "view_all": "Alle ansehen"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Dein Warenkorb",
+      "empty": "Dein Warenkorb ist derzeit leer.",
+      "continue_shopping": "Weiter shoppen",
+      "subtotal": "Zwischensumme",
+      "checkout": "Zur Kasse",
+      "remove": "Entfernen",
+      "update": "Warenkorb aktualisieren",
+      "taxes_and_shipping": "Steuern und Versandkosten werden an der Kasse berechnet"
+    }
+  },
+  "blogs": {
+    "article": {
+      "read_more": "Weiterlesen",
+      "back_to_blog": "Zurück zu {{ title }}"
+    }
+  },
+  "customer": {
+    "login": {
+      "title": "Anmelden",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "forgot_password": "Passwort vergessen?",
+      "sign_in": "Anmelden",
+      "create_account": "Konto erstellen",
+      "guest_continue": "Als Gast fortfahren"
+    },
+    "register": {
+      "title": "Konto erstellen",
+      "first_name": "Vorname",
+      "last_name": "Nachname",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "submit": "Erstellen"
+    },
+    "account": {
+      "title": "Konto",
+      "log_out": "Abmelden",
+      "order_history": "Bestellverlauf",
+      "no_orders": "Du hast noch keine Bestellungen aufgegeben.",
+      "view_addresses": "Adressen ansehen",
+      "track_orders": "Deine Bestellungen verfolgen"
+    },
+    "order": {
+      "title": "Bestellung {{ name }}",
+      "date": "Aufgegeben am {{ date }}",
+      "product": "Produkt",
+      "quantity": "Menge",
+      "total": "Gesamt",
+      "shipping_address": "Lieferadresse",
+      "billing_address": "Rechnungsadresse",
+      "delivery": "Lieferung",
+      "status_page": "Alle Lieferdetails"
+    },
+    "addresses": {
+      "title": "Adressen",
+      "default": "Standard",
+      "add_new": "Neue Adresse hinzufügen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "update": "Adresse aktualisieren",
+      "cancel": "Abbrechen",
+      "first_name": "Vorname",
+      "last_name": "Nachname",
+      "company": "Unternehmen",
+      "address1": "Adresse 1",
+      "address2": "Adresse 2",
+      "city": "Stadt",
+      "country": "Land/Region",
+      "province": "Bundesland/Provinz",
+      "zip": "Postleitzahl",
+      "phone": "Telefon",
+      "set_default": "Als Standardadresse festlegen"
+    },
+    "activate_account": {
+      "title": "Konto aktivieren",
+      "subtext": "Erstelle dein Passwort, um dein Konto zu aktivieren.",
+      "password": "Passwort",
+      "password_confirm": "Passwort bestätigen"
+    }
+  }
+}
