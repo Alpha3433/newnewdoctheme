@@ -1020,6 +1020,8 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   text-align: right;
   white-space: nowrap;
 }
+/* The price per bottle and the struck-through regular price, side by side at every width */
+.c-bundle__price-line { display: flex; align-items: baseline; justify-content: flex-end; gap: 6px; }
 .c-bundle__unit { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
 .c-bundle__unit-compare { font-size: 13px; color: var(--brand-strike); text-decoration: line-through; }
 .c-bundle__unit-label {
@@ -1225,8 +1227,8 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .c-bundle__main { gap: 10px; }
   .c-bundle__pricing { flex-direction: column; align-items: flex-end; gap: 0; }
   .c-bundle__badge { font-size: 9px; padding: 3px 7px; }
-  /* The stacked price lines are set tighter, so the price per day under them clears the total
-     line even at 360px */
+  /* The price line stacks over "per bottle" here, and both are set tighter, so the price per day
+     under them clears the total line even at 360px */
   .c-bundle__unit { line-height: 1.2; }
   .c-bundle__unit-compare { line-height: 1.25; }
   .c-bundle__unit-label { line-height: 1.3; }
