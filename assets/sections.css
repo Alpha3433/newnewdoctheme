@@ -691,6 +691,7 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-buybox-toggle__price { display: inline-flex; align-items: baseline; gap: 10px; }
 .c-buybox-toggle__price-main { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
 .c-buybox-toggle__price-compare { font-size: 18px; color: var(--brand-strike); text-decoration: line-through; }
+.c-buybox-toggle__price-compare[hidden] { display: none; }
 .c-subscribtion:not(.is-one-time) .c-buybox-toggle__price--otp { display: none; }
 .c-subscribtion.is-one-time .c-buybox-toggle__price--sub { display: none; }
 /* "Why subscribe?" note above the Subscribe & save box: a light box with a calendar icon, in both modes */
@@ -1024,9 +1025,13 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 .c-bundle__price-line { display: flex; align-items: baseline; justify-content: flex-end; gap: 6px; }
 .c-bundle__unit { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
 .c-bundle__unit-compare { font-size: 13px; color: var(--brand-strike); text-decoration: line-through; }
-/* A card without a struck-through price holds the space for one, so every card's price starts in
-   the same place ($52 over $35 over $26). The spacer goes when no card shows one in that mode. */
+/* On phones a card without a struck-through price holds the space for one, so every card's price
+   starts in the same place ($52 over $35 over $26). The spacer goes when no card shows one in that
+   mode, and on desktop, where the price sits at the card's right edge. */
 .c-bundle__unit-compare--spacer { visibility: hidden; }
+@media screen and (min-width: 768px) {
+  .c-bundle .c-bundle__unit-compare--spacer { display: none; }
+}
 .c-bundle:not(:has(.c-bundle__unit-compare--otp:not(.c-bundle__unit-compare--spacer))) .c-bundle__unit-compare--otp.c-bundle__unit-compare--spacer,
 .c-bundle:not(:has(.c-bundle__unit-compare--sub:not(.c-bundle__unit-compare--spacer))) .c-bundle__unit-compare--sub.c-bundle__unit-compare--spacer { display: none; }
 .c-bundle__unit-label {
@@ -1168,6 +1173,41 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 }
 .c-low-stock__count { font-weight: 600; color: var(--brand-cta); }
 
+/* Under the stock notice, as on froyaorganics.com: "See it in action" videos, then the questions */
+.c-buybox-videos { margin-top: 18px; }
+.c-buybox-videos__title { margin: 0 0 14px; font-family: var(--font-serif); font-size: 26px; font-weight: 400; line-height: 1.2; color: var(--brand-ink); }
+.c-buybox-videos__row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.c-buybox-videos__thumb { position: relative; display: block; width: 100%; aspect-ratio: 9 / 16; padding: 0; overflow: hidden; border: 0; border-radius: 6px; background: #e9e4de; cursor: pointer; }
+.c-buybox-videos__thumb img,
+.c-buybox-videos__placeholder { display: block; width: 100%; height: 100%; object-fit: cover; }
+.c-buybox-videos__play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.c-buybox-videos__play svg { width: 48px; height: 48px; transition: transform .2s ease; }
+.c-buybox-videos__thumb:hover .c-buybox-videos__play svg { transform: scale(1.08); }
+.c-buybox-videos__thumb:focus-visible { outline: 2px solid var(--brand-cta); outline-offset: 2px; }
+.c-buybox-videos__thumb--empty { cursor: default; }
+.c-buybox-videos__empty-label { position: absolute; right: 0; bottom: 10px; left: 0; font-size: 12px; font-weight: 600; text-align: center; color: var(--brand-ink); }
+/* The video plays in a dialog sized so a 9:16 clip fits the screen's height */
+.c-video-dialog { width: min(92vw, 440px, 47.8vh); max-width: none; max-height: none; padding: 0; overflow: visible; border: 0; background: transparent; }
+.c-video-dialog::backdrop { background: rgba(0, 0, 0, .85); }
+.c-video-dialog__content { position: relative; }
+.c-video-dialog__video { display: block; width: 100%; max-height: 85vh; border-radius: 8px; background: #000; }
+.c-video-dialog__close { position: absolute; top: -44px; inset-inline-end: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 10px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .16); cursor: pointer; }
+.c-video-dialog__close svg { width: 16px; height: 16px; }
+.c-buybox-faq { margin-top: 6px; }
+.c-buybox-faq__item { border-bottom: 1px solid var(--brand-ink); }
+.c-buybox-faq__title { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0 14px; list-style: none; cursor: pointer; font-size: 15px; font-weight: 500; line-height: 1.35; letter-spacing: .14em; text-transform: uppercase; color: var(--brand-ink); }
+.c-buybox-faq__title::-webkit-details-marker { display: none; }
+.c-buybox-faq__title::marker { content: ""; }
+.c-buybox-faq__icon { position: relative; flex: 0 0 12px; width: 12px; height: 12px; }
+.c-buybox-faq__icon::before,
+.c-buybox-faq__icon::after { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; margin-top: -1px; background: currentColor; transition: transform .2s ease; }
+.c-buybox-faq__icon::after { transform: rotate(90deg); }
+.c-buybox-faq__item[open] .c-buybox-faq__icon::after { transform: rotate(0deg); }
+.c-buybox-faq__content { padding: 0 0 18px; font-size: 15px; line-height: 1.6; color: var(--brand-ink); }
+.c-buybox-faq__content p { margin: 0 0 10px; }
+.c-buybox-faq__content p:last-child { margin-bottom: 0; }
+.c-buybox-faq__content a { color: inherit; text-decoration: underline; }
+
 @media screen and (max-width: 999px) {
   .s-featured-product__content { gap: 32px; }
   .s-featured-product__product-name { font-size: 26px; }
@@ -1226,9 +1266,18 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .s-featured-product__info > .c-product-form { order: 4; }
   .s-featured-product__info > .s-featured-product__product-icons { order: 5; }
   .s-featured-product__info > .c-low-stock { order: 6; }
+  .s-featured-product__info > .c-buybox-videos { order: 7; margin-top: 10px; }
+  .s-featured-product__info > .c-buybox-faq { order: 8; margin-top: 0; }
+  .c-buybox-videos__title { font-size: 22px; margin-bottom: 12px; }
+  .c-buybox-videos__row { gap: 8px; }
+  .c-buybox-videos__play svg { width: 40px; height: 40px; }
+  .c-buybox-faq__title { padding: 16px 0 12px; font-size: 14px; letter-spacing: .12em; }
+  .c-buybox-faq__content { font-size: 14px; }
 }
 @media screen and (max-width: 479px) {
   .c-bundle__main { gap: 10px; }
+  /* "Save 10% with our flexible plan" stays on one line from about 330px up */
+  .c-buybox-toggle__head-title { font-size: clamp(13px, 4vw, 17px); }
   /* The savings line starts where the name and supply line do: the 20px dot plus this 10px gap
      (32px above this width, the base rule, with the 12px gap) */
   .c-bundle__meta { padding-left: 30px; }

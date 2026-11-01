@@ -733,6 +733,66 @@
             "text": "<p>free insured shipping on every order</p>",
             "icon_fallback": "https://froyaorganics.com/cdn/shop/files/product_icon_3.svg"
           }
+        },
+        "action_video_1": {
+          "type": "action_video",
+          "settings": {
+            "label": "Play video 1"
+          }
+        },
+        "action_video_2": {
+          "type": "action_video",
+          "settings": {
+            "label": "Play video 2"
+          }
+        },
+        "action_video_3": {
+          "type": "action_video",
+          "settings": {
+            "label": "Play video 3"
+          }
+        },
+        "stock_faq_guarantee": {
+          "type": "stock_faq",
+          "settings": {
+            "title": "30-day money-back guarantee",
+            "content": "<p>Use it every night for 30 nights. Not happy with your results? Email <a href=\"mailto:support@shopelaren.com\">support@shopelaren.com</a> any time from your 30th night until 60 days after your order was delivered. Include your order number, a photo of your hair or scalp from your first 7 nights, a recent photo of the same area and a photo of your bottle(s). We’ll refund the bottle you’ve been using (you keep it), and any other bottles from that order can be sent back for a refund too. The guarantee covers your first order, one claim per customer, and Express Shipping fees aren’t refunded. The full details are in our <a href=\"/policies/refund-policy\">Refund Policy</a>.</p>"
+          }
+        },
+        "stock_faq_shipping": {
+          "type": "stock_faq",
+          "settings": {
+            "title": "Shipping & delivery",
+            "content": "<p>Shipping is free and insured on every order, and Express Shipping is free on orders of US$50 or more (US$4.99 otherwise). Orders ship within 1–3 business days, Express orders first, and you get tracking by email as soon as they do. Delivery then usually takes 6–10 business days in the US, 5–9 in the EU, UK, Switzerland and Norway and 7–14 everywhere else, and Express orders usually arrive about a business day sooner. The full details are in our <a href=\"/policies/shipping-policy\" title=\"/policies/shipping-policy\">Shipping Policy</a>.</p>"
+          }
+        },
+        "stock_faq_results": {
+          "type": "stock_faq",
+          "settings": {
+            "title": "What results can I expect?",
+            "content": "<p>Hair grows in cycles, so give it a full 30 days of nightly use. Most customers notice less shedding in the first weeks and fuller-looking hair around day 30, with new baby hairs along the part and hairline in the months after. Consistency matters more than anything: two minutes a night, every night.</p>"
+          }
+        },
+        "stock_faq_hair_loss": {
+          "type": "stock_faq",
+          "settings": {
+            "title": "What kinds of hair loss does it help?",
+            "content": "<p>It was made for the ways women’s hair thins after 35: female pattern thinning at the part and crown, postpartum and menopausal shedding, traction and breakage along the edges, and stress shedding. Pumpkin seed oil targets DHT at the follicle while the Caffeine Complex wakes dormant follicles. It is a cosmetic scalp treatment, not a medicine, so it cannot cure medical conditions such as alopecia areata, though many customers use it to support the hair they have.</p>"
+          }
+        },
+        "stock_faq_how_to_use": {
+          "type": "stock_faq",
+          "settings": {
+            "title": "How do I use it?",
+            "content": "<p>Part dry or towel-dried hair where you’re thinning (the part, crown, temples or hairline). Glide the roller once along each part to leave a thin line of serum. There’s no need to cover your whole scalp. Massage in for about 60 seconds to get the blood flowing, leave it in overnight and wash as normal in the morning. Used once a night on your thinning areas, one tube lasts about 30 nights. Applying it all over your scalp will use it up much faster.</p>"
+          }
+        },
+        "stock_faq_ingredients": {
+          "type": "stock_faq",
+          "settings": {
+            "title": "Ingredients",
+            "content": "<p><strong>Pumpkin seed phytosterols:</strong> Beta-sitosterol and delta-7-sterine, the plant sterols in pumpkin seed oil, help inhibit 5-alpha-reductase so less testosterone becomes follicle-shrinking DHT.</p><p><strong>Caffeine Complex:</strong> Counteracts DHT’s effect on the follicle and helps extend the growth phase, so more of your hairs are growing and fewer are shedding.</p><p><strong>Omega-3, 6 & 9 fatty acids:</strong> Linoleic, oleic and alpha-linolenic acids nourish the follicle, condition the scalp and reduce the dryness that leads to breakage.</p><p><strong>Zinc & magnesium:</strong> Minerals naturally present in pumpkin seed oil that support keratin production and healthy follicle cycling.</p><p><strong>Vitamin E (tocopherols):</strong> A powerful antioxidant that neutralises the oxidative stress linked to premature follicle ageing and thinning.</p><p><strong>Carotenoids:</strong> The pigments that give pumpkin seed oil its deep green-gold colour are anti-inflammatory, soothing the itchy, irritated scalp that so often comes with hair loss.</p>"
+          }
         }
       },
       "block_order": [
@@ -759,7 +819,16 @@
         "tag_6",
         "usp_1",
         "usp_2",
-        "usp_3"
+        "usp_3",
+        "action_video_1",
+        "action_video_2",
+        "action_video_3",
+        "stock_faq_guarantee",
+        "stock_faq_shipping",
+        "stock_faq_results",
+        "stock_faq_hair_loss",
+        "stock_faq_how_to_use",
+        "stock_faq_ingredients"
       ],
       "settings": {
         "product": "elaren-pumpkin-seed-oil-regrowth-serum",
@@ -825,7 +894,8 @@
         "low_stock_source": "fixed",
         "low_stock_threshold": 150,
         "low_stock_count": 8,
-        "low_stock_text": "Low Stock: only {count} left"
+        "low_stock_text": "Low Stock: only {count} left",
+        "videos_title": "See it in action"
       }
     },
     "founder-story": {

@@ -1433,6 +1433,8 @@
     };
     var priceMain = $('.c-buybox-toggle__price--sub .product_price', sub);
     var priceOtp = $('.c-buybox-toggle__price--otp .product_price', sub);
+    var priceMainCompare = $('.c-buybox-toggle__price--sub .c-buybox-toggle__price-compare', sub);
+    var priceOtpCompare = $('.c-buybox-toggle__price--otp .c-buybox-toggle__price-compare', sub);
     var buttonPrice = $('.c-subscribtion__add-to-cart .js-subscribtion__main-price .product_price', sub);
     var buttonCompare = $('.c-subscribtion__add-to-cart .igcp', sub);
     // Strike-through for each mode, rendered by the section: the page may load in either mode,
@@ -1461,6 +1463,21 @@
       // markup as visible text, so render it as HTML, exactly as the server does on first paint.
       if (priceMain) priceMain.innerHTML = d('data-unit-sub');
       if (priceOtp) priceOtp.innerHTML = d('data-unit-otp');
+      // The regular price struck through beside the big price follows the tier too: it shows only
+      // while the tier's price per bottle is below it, so one bottle bought once reads "$52", not
+      // "$52 $52".
+      var compareUnitCents = parseInt(d('data-compare-unit-cents'), 10) || 0;
+      var showCompare = function (el, unitCents) {
+        if (!el) return;
+        if (compareUnitCents > unitCents) {
+          ($('.product_price', el) || el).innerHTML = d('data-compare-unit');
+          el.removeAttribute('hidden');
+        } else {
+          el.setAttribute('hidden', '');
+        }
+      };
+      showCompare(priceMainCompare, parseInt(d('data-unit-sub-cents'), 10) || 0);
+      showCompare(priceOtpCompare, parseInt(d('data-unit-otp-cents'), 10) || 0);
       if (buttonPrice) buttonPrice.innerHTML = total;
       if (buttonCompare) buttonCompare.innerHTML = saveCents > 0 ? d('data-compare-total') : '';
       if (congratsPrice) congratsPrice.innerHTML = save;
@@ -2062,6 +2079,47 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 
   // Theme editor: re-initialise a section after it is re-rendered, and open drawers when selected.
+  // "See it in action" videos under the stock notice: a thumbnail plays its video in the dialog
+  // beside it. Delegated, so a section the theme editor re-renders needs no setup.
+  document.addEventListener('click', function (e) {
+    var target = e.target;
+    if (!target || !target.closest) return;
+    var thumb = target.closest('.js-buybox-video');
+    if (thumb) {
+      var src = thumb.getAttribute('data-video-src');
+      var wrap = thumb.closest('.c-buybox-videos');
+      var dialog = wrap && $('.js-video-dialog', wrap);
+      var video = dialog && $('video', dialog);
+      if (!src) return;
+      if (!dialog || !video || typeof dialog.showModal !== 'function') {
+        window.open(src, '_blank', 'noopener');
+        return;
+      }
+      video.src = src;
+      dialog.showModal();
+      var playing = video.play();
+      if (playing && playing.catch) playing.catch(function () {});
+      return;
+    }
+    var closeButton = target.closest('.js-video-dialog-close');
+    if (closeButton) {
+      closeButton.closest('dialog').close();
+      return;
+    }
+    // A click on the dark backdrop lands on the dialog element itself
+    if (target.classList && target.classList.contains('js-video-dialog')) target.close();
+  });
+  // However the dialog closes (button, backdrop, Esc), stop the video and drop it
+  document.addEventListener('close', function (e) {
+    var dialog = e.target;
+    if (!dialog || !dialog.classList || !dialog.classList.contains('js-video-dialog')) return;
+    var video = $('video', dialog);
+    if (!video) return;
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+  }, true);
+
   document.addEventListener('shopify:section:load', function (e) {
     var old = document.querySelector('#ingredients-modal[data-for-section]');
     if (old && e.target.querySelector('.js-view-ingredients')) old.parentNode.removeChild(old);

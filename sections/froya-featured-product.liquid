@@ -17,6 +17,8 @@
   assign tags = section.blocks | where: 'type', 'tag'
   assign usps = section.blocks | where: 'type', 'usp'
   assign bundles = section.blocks | where: 'type', 'bundle'
+  assign action_videos = section.blocks | where: 'type', 'action_video'
+  assign stock_faqs = section.blocks | where: 'type', 'stock_faq'
   assign percent_placeholder = '{percent}'
   comment
     The rich text editor stores braces as HTML entities, so a "{percent}" typed into a richtext or
@@ -485,9 +487,9 @@
             {%- form 'product', product, class: 'c-subscribtion__subscription-form js-subscribtion__subscription-form js-ajax-add', id: 'featured-product-form' -%}
               <div class="c-buybox-toggle__priceline" id="choose-bundle">
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--sub">
-                  <span class="c-buybox-toggle__price-main"><span class="product_price">{% render 'money', amount: display_unit_sub %}</span></span>{% if display_compare_unit > display_unit_sub %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{% render 'money', amount: display_compare_unit %}</span></span>{% endif %}</span>
+                  <span class="c-buybox-toggle__price-main"><span class="product_price">{% render 'money', amount: display_unit_sub %}</span></span><span class="c-buybox-toggle__price-compare"{% unless display_compare_unit > display_unit_sub %} hidden{% endunless %}><span class="product_price">{% render 'money', amount: display_compare_unit %}</span></span></span>
                 <span class="c-buybox-toggle__price c-buybox-toggle__price--otp">
-                  <span class="c-buybox-toggle__price-main"><span class="product_price">{% render 'money', amount: display_unit_otp %}</span></span>{% if display_compare_unit > display_unit_otp %}<span class="c-buybox-toggle__price-compare"><span class="product_price">{% render 'money', amount: display_compare_unit %}</span></span>{% endif %}</span>
+                  <span class="c-buybox-toggle__price-main"><span class="product_price">{% render 'money', amount: display_unit_otp %}</span></span><span class="c-buybox-toggle__price-compare"{% unless display_compare_unit > display_unit_otp %} hidden{% endunless %}><span class="product_price">{% render 'money', amount: display_compare_unit %}</span></span></span>
                 {%- if bundle_count > 0 and section.settings.unit_suffix != blank -%}<span class="c-buybox-toggle__price-unit">{{ section.settings.unit_suffix }}</span>{%- endif -%}
               </div>
               <input name="id" type="hidden" value="{{ variant.id }}">
@@ -655,6 +657,9 @@
                     capture unit_otp_money
                       render 'money', amount: unit_otp
                     endcapture
+                    capture compare_unit_money
+                      render 'money', amount: compare_basis
+                    endcapture
                     comment
                       {amount} is measured against the compare-at total, so {percent} must be too -
                       using the tier's own discount here made the two halves of the sentence disagree.
@@ -666,7 +671,7 @@
                       assign tier_pct_otp = tier_save_otp | times: 100 | divided_by: tier_compare
                     endif
                   -%}
-                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare_money | escape }}" data-compare-total-cents="{{ tier_compare }}" data-qty="{{ qty }}" data-save-otp="{{ save_otp_money | escape }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ save_sub_money | escape }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp_button | escape }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub_button | escape }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp_money | escape }}" data-unit-otp-cents="{{ unit_otp }}" data-unit-sub="{{ unit_sub_money | escape }}" {{ block.shopify_attributes }}>
+                  <label class="c-bundle__card js-bundle-card{% if block.settings.highlight %} c-bundle__card--highlight{% endif %}{% if block.id == default_bundle.id %} is-selected{% endif %}" data-compare-total="{{ tier_compare_money | escape }}" data-compare-total-cents="{{ tier_compare }}" data-compare-unit="{{ compare_unit_money | escape }}" data-compare-unit-cents="{{ compare_basis }}" data-qty="{{ qty }}" data-save-otp="{{ save_otp_money | escape }}" data-save-otp-cents="{{ tier_save_otp }}" data-save-sub="{{ save_sub_money | escape }}" data-save-sub-cents="{{ tier_save_sub }}" data-total-otp="{{ total_otp_button | escape }}" data-total-otp-cents="{{ total_otp }}" data-total-sub="{{ total_sub_button | escape }}" data-total-sub-cents="{{ total_sub }}" data-unit-otp="{{ unit_otp_money | escape }}" data-unit-otp-cents="{{ unit_otp }}" data-unit-sub="{{ unit_sub_money | escape }}" data-unit-sub-cents="{{ unit_sub }}" {{ block.shopify_attributes }}>
                     <input class="c-bundle__radio" name="bundle_tier" type="radio" value="{{ qty }}"{% if block.id == default_bundle.id %} checked{% endif %}>
                     <span class="c-bundle__main">
                       <span aria-hidden="true" class="c-bundle__dot"></span>
@@ -819,6 +824,92 @@
           <span class="c-low-stock__text">{{ section.settings.low_stock_text | replace: count_placeholder, low_stock_number }}</span>
         </div></div>
         {%- endif -%}
+
+        {%- comment -%}
+          Under the stock notice, as on froyaorganics.com: a "See it in action" row of videos, then
+          the questions. Each video is a "See it in action video" block holding a video from Files.
+          The row shows once a block has a video; in the theme editor an empty block shows a
+          placeholder. A thumbnail opens its video in a dialog (assets/main.js), at 720p or the
+          closest mp4 Shopify made from the upload.
+        {%- endcomment -%}
+        {%- liquid
+          assign action_video_count = 0
+          for block in action_videos
+            if block.settings.video != blank
+              assign action_video_count = action_video_count | plus: 1
+            endif
+          endfor
+          assign show_action_videos = false
+          if action_video_count > 0
+            assign show_action_videos = true
+          elsif request.design_mode and action_videos.size > 0
+            assign show_action_videos = true
+          endif
+        -%}
+        {%- if show_action_videos -%}
+        <div class="c-buybox-videos">
+          {%- if section.settings.videos_title != blank -%}<h3 class="c-buybox-videos__title">{{ section.settings.videos_title }}</h3>{%- endif -%}
+          <div class="c-buybox-videos__row">
+            {%- for block in action_videos -%}
+              {%- liquid
+                assign video = block.settings.video
+                assign video_src = ''
+                assign video_longest = 0
+                if video != blank
+                  for source in video.sources
+                    if source.format == 'mp4'
+                      assign source_longest = source.width | at_least: source.height
+                      if source_longest <= 1280 and source_longest > video_longest
+                        assign video_src = source.url
+                        assign video_longest = source_longest
+                      endif
+                    endif
+                  endfor
+                  if video_src == ''
+                    for source in video.sources
+                      if source.format == 'mp4'
+                        assign video_src = source.url
+                        break
+                      endif
+                    endfor
+                  endif
+                endif
+                assign poster = block.settings.poster | default: video.preview_image
+              -%}
+              {%- if video_src != '' -%}
+              <button aria-label="{{ block.settings.label | default: 'Play video' | escape }}" class="c-buybox-videos__thumb js-buybox-video" data-video-src="{{ video_src }}" type="button" {{ block.shopify_attributes }}>
+                {%- if poster != blank -%}{{ poster | image_url: width: 570 | image_tag: widths: '190, 380, 570', sizes: '(min-width: 768px) 190px, 31vw', loading: 'lazy', alt: '' }}{%- endif -%}
+                <span aria-hidden="true" class="c-buybox-videos__play"><svg fill="none" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" fill="#fff" fill-opacity=".45" r="30"/><path d="M44 30 23 42.1V17.9z" fill="#fff"/></svg></span>
+              </button>
+              {%- elsif request.design_mode -%}
+              <div class="c-buybox-videos__thumb c-buybox-videos__thumb--empty" {{ block.shopify_attributes }}>
+                {{- 'lifestyle-1' | placeholder_svg_tag: 'c-buybox-videos__placeholder' -}}
+                <span class="c-buybox-videos__empty-label">Choose a video</span>
+              </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          <dialog class="c-video-dialog js-video-dialog">
+            <div class="c-video-dialog__content">
+              <button aria-label="{{ 'general.accessibility.close' | t | escape }}" class="c-video-dialog__close js-video-dialog-close" type="button"><svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m2 2 12 12M14 2 2 14" stroke="#fff" stroke-linecap="round" stroke-width="2"/></svg></button>
+              <video class="c-video-dialog__video" controls playsinline preload="none"></video>
+            </div>
+          </dialog>
+        </div>
+        {%- endif -%}
+
+        {%- if stock_faqs.size > 0 -%}
+        <div class="c-buybox-faq">
+          {%- for block in stock_faqs -%}
+            {%- if block.settings.title != blank -%}
+            <details class="c-buybox-faq__item" {{ block.shopify_attributes }}>
+              <summary class="c-buybox-faq__title"><span>{{ block.settings.title }}</span><span aria-hidden="true" class="c-buybox-faq__icon"></span></summary>
+              <div class="c-buybox-faq__content">{{ block.settings.content }}</div>
+            </details>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {%- endif -%}
       </div>
     </div>
   </div>
@@ -911,7 +1002,9 @@
     ], "default": "inventory", "info": "Tracked inventory hides the notice while stock is above the threshold - with more than 2,000 units on hand it never appears. A fixed number shows the figure typed below on every visit." },
     { "type": "range", "id": "low_stock_threshold", "label": "Low-stock threshold", "min": 5, "max": 500, "step": 5, "default": 150, "info": "Tracked inventory only." },
     { "type": "number", "id": "low_stock_count", "label": "Fixed number", "default": 156, "info": "Fixed number only." },
-    { "type": "text", "id": "low_stock_text", "label": "Low-stock text", "default": "Low Stock: only {count} left" }
+    { "type": "text", "id": "low_stock_text", "label": "Low-stock text", "default": "Low Stock: only {count} left" },
+    { "type": "header", "content": "Under the stock notice", "info": "Add \"See it in action video\" blocks for a row of videos and \"Question under the stock notice\" blocks for the questions below it." },
+    { "type": "text", "id": "videos_title", "label": "Videos heading", "default": "See it in action", "info": "The videos show once a block has a video." }
   ],
   "blocks": [
     {
@@ -970,9 +1063,26 @@
         { "type": "richtext", "id": "text", "label": "Text", "default": "<p>fuller hair in 30 days or your money back</p>" },
         { "type": "text", "id": "icon_fallback", "label": "Fallback icon URL", "info": "Used only until an icon is uploaded." }
       ]
+    },
+    {
+      "type": "action_video",
+      "name": "See it in action video",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Video", "info": "Upload your own video to Files. Vertical (9:16) fills the thumbnail." },
+        { "type": "image_picker", "id": "poster", "label": "Thumbnail", "info": "Optional. Uses the video's preview image when empty. About 380 × 668 px." },
+        { "type": "text", "id": "label", "label": "Label for screen readers", "default": "Play video" }
+      ]
+    },
+    {
+      "type": "stock_faq",
+      "name": "Question under the stock notice",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Question", "default": "What results can I expect?" },
+        { "type": "richtext", "id": "content", "label": "Answer", "default": "<p>Write the answer here.</p>" }
+      ]
     }
   ],
-  "max_blocks": 30,
+  "max_blocks": 50,
   "presets": [
     { "name": "Featured product", "blocks": [ { "type": "bundle", "settings": { "tier": "1" } }, { "type": "bundle", "settings": { "tier": "2" } }, { "type": "bundle", "settings": { "tier": "3" } }, { "type": "tag" }, { "type": "tag" }, { "type": "tag" }, { "type": "usp" }, { "type": "usp" }, { "type": "usp" } ] }
   ]
