@@ -11,6 +11,9 @@
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
   assign option_suffix = section.settings.option_suffix
+  capture text_direction
+    render 'text-direction'
+  endcapture
   assign image_count = 0
   for media in product.media
     if media.media_type == 'image'
@@ -187,7 +190,7 @@
                     {%- if block.settings.heading != blank -%}<span class="compact-pdp__pair-heading">{{ block.settings.heading }}</span>{%- endif -%}
                     {%- if pair_product != blank -%}<span class="compact-pdp__pair-title">{{ pair_product.title }}</span>{%- endif -%}
                     {%- if block.settings.text != blank -%}<span class="compact-pdp__pair-copy">{{ block.settings.text }}</span>{%- endif -%}
-                    {%- if block.settings.link_label != blank -%}<span class="compact-pdp__pair-link">{{ block.settings.link_label }} &rarr;</span>{%- endif -%}
+                    {%- if block.settings.link_label != blank -%}<span class="compact-pdp__pair-link">{{ block.settings.link_label }} {% if text_direction == 'rtl' %}&larr;{% else %}&rarr;{% endif %}</span>{%- endif -%}
                   </span>
                 </a>
             {%- endcase -%}
@@ -306,7 +309,9 @@
         stage.addEventListener('touchend', function (e) {
           if (startX === null) return;
           var dx = e.changedTouches[0].clientX - startX;
-          if (Math.abs(dx) > 40) show(dx < 0 ? current + 1 : current - 1);
+          // Right to left (Arabic…) the next photo comes with a swipe to the right.
+          var rtl = document.documentElement.getAttribute('dir') === 'rtl';
+          if (Math.abs(dx) > 40) show((dx < 0) !== rtl ? current + 1 : current - 1);
           startX = null;
         });
       }

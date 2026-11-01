@@ -147,6 +147,21 @@ template (`templates/page.froya-landing.json`).
   (alt text handed to `snippets/froya-image.liquid`, the script's strings) or that holds markup
   (the menu card's "from {{ price }}"). The bundle tiers are the exception described under
   *Bundles*.
+* **Right-to-left (Arabic)** – Arabic, Hebrew, Persian and Urdu pages get `dir="rtl"`
+  (`snippets/text-direction.liquid`), Noto Sans Arabic from Google Fonts and `assets/rtl.css`;
+  left-to-right pages load neither, so they render exactly as before. `rtl.css` mirrors every rule
+  written with a physical side (left/right offsets, margins, paddings, borders, text alignment,
+  `translateX`) with `[dir="rtl"]` in front of the same selector, so a left/right rule added or
+  changed in the other stylesheets needs its mirror there too. On those pages the header, buy box
+  (gallery arrows, thumbnails, bundle cards, the Subscribe & save switch), cart drawer (it slides in
+  from the left), timelines, FAQ and email popup are mirrored and arrows point the other way. The
+  review, video and logo carousels start on the right and move on with a swipe to the right
+  (`attachSwipe` in `assets/main.js` reads the swipe mirrored), the scrolling offer banner runs left
+  to right and the countdown reads hours first from the right. The mobile menu still opens from the
+  left. The brand fonts stay first in every font stack, so Latin text (product names, prices) looks
+  as it does in English and Arabic letters fall through to Noto Sans Arabic; tracking
+  (letter-spacing) is off on these pages so the letters join up. Arabic can be previewed before it
+  is published from Settings → Languages.
 * **Hair-loss fit quiz** – three questions, one result screen that says how well Elaren fits the
   *kind* of hair loss the visitor has (never a probability). *Question* blocks are asked in sidebar
   order; each *Answer* block names the question it belongs to and the hair-loss type it points to;
