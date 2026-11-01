@@ -28,6 +28,27 @@
     "pagination": {
       "previous": "Zurück",
       "next": "Weiter"
+    },
+    "meta": {
+      "tagged": "mit dem Tag „{{ tags }}“",
+      "page": "Seite {{ page }}"
+    },
+    "accessibility": {
+      "skip_to_content": "Zum Inhalt springen",
+      "close": "Schließen",
+      "hero_banner": "Hauptbanner",
+      "five_star_rating_html": "Fünf-Sterne-Bewertung",
+      "five_stars_html": "5 Sterne",
+      "customer_before_after_html": "Vorher und nachher einer Kundin",
+      "customer_review_video": "Video einer Kundenbewertung",
+      "customer_testimonial_video": "Video mit Kundenstimme",
+      "video_not_supported": "Dein Browser unterstützt keine Videowiedergabe.",
+      "decrease_quantity": "Menge verringern",
+      "increase_quantity": "Menge erhöhen"
+    },
+    "localization": {
+      "country_label": "Land/Region",
+      "language_label": "Sprache"
     }
   },
   "products": {
@@ -37,7 +58,29 @@
       "unavailable": "Nicht verfügbar",
       "quantity": "Menge",
       "regular_price": "Normaler Preis",
-      "sale_price": "Angebotspreis"
+      "sale_price": "Angebotspreis",
+      "add_to_cart_button": "IN DEN WARENKORB",
+      "sold_out_button": "AUSVERKAUFT",
+      "shop_now": "JETZT SHOPPEN",
+      "price_from_html": "ab {{ price }}",
+      "star_rating": "Mit {{ rating }} von 5 Sternen bewertet",
+      "read_reviews": "Bewertungen lesen",
+      "reviews_count": "{{ count }} Bewertungen",
+      "close_ingredients": "Inhaltsstoffe schließen",
+      "show_image": "Bild {{ index }} von {{ total }} anzeigen"
+    },
+    "bundle_tiers": {
+      "tier_1_title": "1 Flasche",
+      "tier_1_supply": "Vorrat für 30 Tage",
+      "tier_2_title": "Kauf 2, erhalte 1 gratis",
+      "tier_2_supply": "Vorrat für 3 Monate",
+      "tier_3_title": "Kauf 3, erhalte 3 gratis",
+      "tier_3_supply": "Vorrat für 6 Monate",
+      "supply_months": {
+        "one": "Vorrat für {{ count }} Monat",
+        "other": "Vorrat für {{ count }} Monate"
+      },
+      "buy_get": "Kauf {{ paid }}, erhalte {{ free }} gratis"
     }
   },
   "collections": {
@@ -56,6 +99,15 @@
       "remove": "Entfernen",
       "update": "Warenkorb aktualisieren",
       "taxes_and_shipping": "Steuern und Versandkosten werden an der Kasse berechnet"
+    },
+    "drawer": {
+      "close": "Warenkorb schließen",
+      "free_express_shipping": "Kostenloser Expressversand",
+      "remove_item": "{{ title }} entfernen",
+      "previous_recommendation": "Vorherige Empfehlung",
+      "next_recommendation": "Nächste Empfehlung",
+      "added_html": "In den Warenkorb gelegt",
+      "error_html": "Etwas ist schiefgelaufen. Bitte versuch es noch einmal."
     }
   },
   "blogs": {
@@ -164,6 +216,29 @@
       "remaining_html": "Restguthaben: {{ balance }}",
       "add_to_apple_wallet": "Zu Apple Wallet hinzufügen",
       "print_gift_card": "Drucken"
+    }
+  },
+  "sections": {
+    "header": {
+      "open_menu": "Menü öffnen",
+      "close_menu": "Menü schließen",
+      "cart": "Warenkorb",
+      "site_navigation": "Seitennavigation",
+      "page_sections": "Seitenabschnitte"
+    },
+    "announcement_bar": {
+      "countdown_units": "Tage,Stunden,Minuten,Sekunden"
+    },
+    "featured_product": {
+      "no_product_html": "<strong>Hervorgehobenes Produkt:</strong> Wähle in den Abschnittseinstellungen ein Produkt aus, um die Kaufbox anzuzeigen.",
+      "fallback_image_alts_html": "Flasche Elaren Kürbiskern-Haarwuchsöl mit Koffein-Komplex|Frau trägt Elaren Kürbiskern-Haarwuchsöl entlang ihres Scheitels auf die Kopfhaut auf|Kürbiskern-Haarwuchsöl|Elaren Kürbiskern-Haarwuchsöl in der Hand mit den wichtigsten Vorteilen|Raster mit Vorher-nachher-Fotos von Kundinnen mit volleren Scheiteln, Oberköpfen und Haaransätzen|Sternebewertung und zwei verifizierte Kundenbewertungen|Veröffentlichte Studienergebnisse zu Kürbiskernöl und Koffein|Inhaltsstoffe: kaltgepresstes Kürbiskernöl und Koffein-Komplex|Zeitplan des Haarwachstums nach 2 Wochen, 30 Tagen und 30 Tagen|Anleitung für die zweiminütige Kopfhautroutine am Abend|Frau hält Elaren Kürbiskern-Haarwuchsöl mit der 30-Tage-Geld-zurück-Garantie"
+    },
+    "newsletter": {
+      "email_label": "Deine E-Mail"
+    },
+    "email_popup": {
+      "copied_html": "Kopiert!",
+      "invalid_email_html": "Bitte gib eine gültige E-Mail-Adresse ein."
     }
   }
 }

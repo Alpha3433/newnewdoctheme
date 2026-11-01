@@ -28,6 +28,27 @@
     "pagination": {
       "previous": "Anterior",
       "next": "Siguiente"
+    },
+    "meta": {
+      "tagged": "con la etiqueta \"{{ tags }}\"",
+      "page": "Página {{ page }}"
+    },
+    "accessibility": {
+      "skip_to_content": "Saltar al contenido",
+      "close": "Cerrar",
+      "hero_banner": "Banner principal",
+      "five_star_rating_html": "Valoración de cinco estrellas",
+      "five_stars_html": "5 estrellas",
+      "customer_before_after_html": "Antes y después de una clienta",
+      "customer_review_video": "Vídeo de reseña de una clienta",
+      "customer_testimonial_video": "Vídeo de testimonio de una clienta",
+      "video_not_supported": "Tu navegador no admite la reproducción de vídeo.",
+      "decrease_quantity": "Reducir cantidad",
+      "increase_quantity": "Aumentar cantidad"
+    },
+    "localization": {
+      "country_label": "País/región",
+      "language_label": "Idioma"
     }
   },
   "products": {
@@ -37,7 +58,29 @@
       "unavailable": "No disponible",
       "quantity": "Cantidad",
       "regular_price": "Precio habitual",
-      "sale_price": "Precio de oferta"
+      "sale_price": "Precio de oferta",
+      "add_to_cart_button": "AGREGAR AL CARRITO",
+      "sold_out_button": "AGOTADO",
+      "shop_now": "COMPRAR AHORA",
+      "price_from_html": "desde {{ price }}",
+      "star_rating": "Valoración de {{ rating }} sobre 5 estrellas",
+      "read_reviews": "Lee las reseñas",
+      "reviews_count": "{{ count }} reseñas",
+      "close_ingredients": "Cerrar ingredientes",
+      "show_image": "Mostrar imagen {{ index }} de {{ total }}"
+    },
+    "bundle_tiers": {
+      "tier_1_title": "1 frasco",
+      "tier_1_supply": "Suministro para 30 días",
+      "tier_2_title": "Compra 2 y llévate 1 gratis",
+      "tier_2_supply": "Suministro para 3 meses",
+      "tier_3_title": "Compra 3 y llévate 3 gratis",
+      "tier_3_supply": "Suministro para 6 meses",
+      "supply_months": {
+        "one": "Suministro para {{ count }} mes",
+        "other": "Suministro para {{ count }} meses"
+      },
+      "buy_get": "Compra {{ paid }} y llévate {{ free }} gratis"
     }
   },
   "collections": {
@@ -56,6 +99,15 @@
       "remove": "Eliminar",
       "update": "Actualizar carrito",
       "taxes_and_shipping": "Impuestos y envío calculados en la pantalla de pago"
+    },
+    "drawer": {
+      "close": "Cerrar carrito",
+      "free_express_shipping": "Envío exprés gratis",
+      "remove_item": "Eliminar {{ title }}",
+      "previous_recommendation": "Recomendación anterior",
+      "next_recommendation": "Siguiente recomendación",
+      "added_html": "Agregado al carrito",
+      "error_html": "Algo salió mal. Inténtalo de nuevo."
     }
   },
   "blogs": {
@@ -164,6 +216,29 @@
       "remaining_html": "Saldo restante: {{ balance }}",
       "add_to_apple_wallet": "Agregar a Apple Wallet",
       "print_gift_card": "Imprimir"
+    }
+  },
+  "sections": {
+    "header": {
+      "open_menu": "Abrir menú",
+      "close_menu": "Cerrar menú",
+      "cart": "Carrito",
+      "site_navigation": "Navegación del sitio",
+      "page_sections": "Secciones de la página"
+    },
+    "announcement_bar": {
+      "countdown_units": "Días,Horas,Minutos,Segundos"
+    },
+    "featured_product": {
+      "no_product_html": "<strong>Producto destacado:</strong> selecciona un producto en la configuración de la sección para mostrar el bloque de compra.",
+      "fallback_image_alts_html": "Frasco de aceite de crecimiento Elaren de semilla de calabaza con Complejo de Cafeína|Mujer aplicando el aceite de crecimiento Elaren en el cuero cabelludo a lo largo de la raya|Aceite de crecimiento de semilla de calabaza|Aceite de crecimiento Elaren en la mano con sus principales beneficios|Cuadrícula de fotos de antes y después de clientas con rayas, coronillas y entradas más pobladas|Valoración con estrellas y dos reseñas verificadas de clientas|Resultados de investigaciones publicadas sobre el aceite de semilla de calabaza y la cafeína|Ingredientes: aceite de semilla de calabaza prensado en frío y Complejo de Cafeína|Cronología del crecimiento a las 2 semanas, 30 días y 30 días|Guía de la rutina nocturna de dos minutos para el cuero cabelludo|Mujer sosteniendo el aceite de crecimiento Elaren con la garantía de devolución de 30 días"
+    },
+    "newsletter": {
+      "email_label": "Tu correo electrónico"
+    },
+    "email_popup": {
+      "copied_html": "¡Copiado!",
+      "invalid_email_html": "Introduce una dirección de correo electrónico válida."
     }
   }
 }

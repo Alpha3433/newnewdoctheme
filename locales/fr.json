@@ -28,6 +28,27 @@
     "pagination": {
       "previous": "Précédent",
       "next": "Suivant"
+    },
+    "meta": {
+      "tagged": "avec le tag « {{ tags }} »",
+      "page": "Page {{ page }}"
+    },
+    "accessibility": {
+      "skip_to_content": "Passer au contenu",
+      "close": "Fermer",
+      "hero_banner": "Bannière principale",
+      "five_star_rating_html": "Note de cinq étoiles",
+      "five_stars_html": "5 étoiles",
+      "customer_before_after_html": "Avant/après d’une cliente",
+      "customer_review_video": "Vidéo d’avis client",
+      "customer_testimonial_video": "Vidéo de témoignage client",
+      "video_not_supported": "Votre navigateur ne prend pas en charge la lecture de vidéos.",
+      "decrease_quantity": "Diminuer la quantité",
+      "increase_quantity": "Augmenter la quantité"
+    },
+    "localization": {
+      "country_label": "Pays/région",
+      "language_label": "Langue"
     }
   },
   "products": {
@@ -37,7 +58,29 @@
       "unavailable": "Non disponible",
       "quantity": "Quantité",
       "regular_price": "Prix habituel",
-      "sale_price": "Prix promotionnel"
+      "sale_price": "Prix promotionnel",
+      "add_to_cart_button": "AJOUTER AU PANIER",
+      "sold_out_button": "ÉPUISÉ",
+      "shop_now": "ACHETER",
+      "price_from_html": "à partir de {{ price }}",
+      "star_rating": "Noté {{ rating }} sur 5 étoiles",
+      "read_reviews": "Lire les avis",
+      "reviews_count": "{{ count }} avis",
+      "close_ingredients": "Fermer la fenêtre des ingrédients",
+      "show_image": "Afficher l’image {{ index }} sur {{ total }}"
+    },
+    "bundle_tiers": {
+      "tier_1_title": "1 flacon",
+      "tier_1_supply": "30 jours d’utilisation",
+      "tier_2_title": "2 achetés = 1 offert",
+      "tier_2_supply": "3 mois d’utilisation",
+      "tier_3_title": "3 achetés = 3 offerts",
+      "tier_3_supply": "6 mois d’utilisation",
+      "supply_months": {
+        "one": "{{ count }} mois d’utilisation",
+        "other": "{{ count }} mois d’utilisation"
+      },
+      "buy_get": "Achetez-en {{ paid }}, recevez-en {{ free }} gratuitement"
     }
   },
   "collections": {
@@ -56,6 +99,15 @@
       "remove": "Supprimer",
       "update": "Mettre à jour le panier",
       "taxes_and_shipping": "Taxes et frais de livraison calculés lors du paiement"
+    },
+    "drawer": {
+      "close": "Fermer le panier",
+      "free_express_shipping": "Livraison express offerte",
+      "remove_item": "Supprimer {{ title }}",
+      "previous_recommendation": "Recommandation précédente",
+      "next_recommendation": "Recommandation suivante",
+      "added_html": "Ajouté au panier",
+      "error_html": "Une erreur s’est produite. Veuillez réessayer."
     }
   },
   "blogs": {
@@ -164,6 +216,29 @@
       "remaining_html": "Solde restant : {{ balance }}",
       "add_to_apple_wallet": "Ajouter à Apple Wallet",
       "print_gift_card": "Imprimer"
+    }
+  },
+  "sections": {
+    "header": {
+      "open_menu": "Ouvrir le menu",
+      "close_menu": "Fermer le menu",
+      "cart": "Panier",
+      "site_navigation": "Navigation du site",
+      "page_sections": "Sections de la page"
+    },
+    "announcement_bar": {
+      "countdown_units": "Jours,Heures,Minutes,Secondes"
+    },
+    "featured_product": {
+      "no_product_html": "<strong>Produit en vedette :</strong> sélectionnez un produit dans les paramètres de la section pour afficher le bloc d’achat.",
+      "fallback_image_alts_html": "Flacon d’huile de repousse Elaren aux pépins de courge avec Complexe Caféine|Femme appliquant l’huile de repousse Elaren sur son cuir chevelu, le long de sa raie|Huile de repousse aux pépins de courge|Huile de repousse Elaren tenue en main, avec ses principaux bienfaits|Grille de photos avant/après de clientes montrant une raie, un sommet du crâne et des contours plus fournis|Note en étoiles et deux avis clients vérifiés|Résultats de recherches publiées sur l’huile de pépins de courge et la caféine|Ingrédients : huile de pépins de courge pressée à froid et Complexe Caféine|Calendrier de repousse à 2 semaines, 30 jours et 30 jours|Guide de la routine du soir de deux minutes pour le cuir chevelu|Femme tenant l’huile de repousse Elaren avec la garantie satisfaite ou remboursée de 30 jours"
+    },
+    "newsletter": {
+      "email_label": "Votre e-mail"
+    },
+    "email_popup": {
+      "copied_html": "Copié !",
+      "invalid_email_html": "Veuillez saisir une adresse e-mail valide."
     }
   }
 }
