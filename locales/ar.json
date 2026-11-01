@@ -28,6 +28,27 @@
     "pagination": {
       "previous": "السابق",
       "next": "التالي"
+    },
+    "meta": {
+      "tagged": "بالوسم \"{{ tags }}\"",
+      "page": "الصفحة {{ page }}"
+    },
+    "accessibility": {
+      "skip_to_content": "الانتقال إلى المحتوى",
+      "close": "إغلاق",
+      "hero_banner": "اللافتة الرئيسية",
+      "five_star_rating_html": "تقييم خمس نجوم",
+      "five_stars_html": "5 نجوم",
+      "customer_before_after_html": "قبل وبعد لإحدى العميلات",
+      "customer_review_video": "فيديو تقييم من إحدى العميلات",
+      "customer_testimonial_video": "فيديو شهادة من إحدى العميلات",
+      "video_not_supported": "متصفّحكِ لا يدعم تشغيل الفيديو.",
+      "decrease_quantity": "تقليل الكمية",
+      "increase_quantity": "زيادة الكمية"
+    },
+    "localization": {
+      "country_label": "الدولة/المنطقة",
+      "language_label": "اللغة"
     }
   },
   "products": {
@@ -37,7 +58,29 @@
       "unavailable": "غير متوفر",
       "quantity": "الكمية",
       "regular_price": "السعر العادي",
-      "sale_price": "سعر التخفيض"
+      "sale_price": "سعر التخفيض",
+      "add_to_cart_button": "إضافة إلى السلة",
+      "sold_out_button": "نفدت الكمية",
+      "shop_now": "التسوق الآن",
+      "price_from_html": "ابتداءً من {{ price }}",
+      "star_rating": "التقييم {{ rating }} من 5 نجوم",
+      "read_reviews": "قراءة التقييمات",
+      "reviews_count": "{{ count }} تقييمًا",
+      "close_ingredients": "إغلاق نافذة المكونات",
+      "show_image": "عرض الصورة {{ index }} من {{ total }}"
+    },
+    "bundle_tiers": {
+      "tier_1_title": "عبوة واحدة",
+      "tier_1_supply": "يكفي لمدة 30 يومًا",
+      "tier_2_title": "اشتري 2 واحصلي على 1 مجانًا",
+      "tier_2_supply": "يكفي لمدة 3 أشهر",
+      "tier_3_title": "اشتري 3 واحصلي على 3 مجانًا",
+      "tier_3_supply": "يكفي لمدة 6 أشهر",
+      "supply_months": {
+        "one": "يكفي لمدة شهر واحد",
+        "other": "يكفي لمدة {{ count }} أشهر"
+      },
+      "buy_get": "اشتري {{ paid }} واحصلي على {{ free }} مجانًا"
     }
   },
   "collections": {
@@ -56,6 +99,15 @@
       "remove": "إزالة",
       "update": "تحديث السلة",
       "taxes_and_shipping": "يتم احتساب الضرائب والشحن عند الدفع"
+    },
+    "drawer": {
+      "close": "إغلاق السلة",
+      "free_express_shipping": "شحن سريع مجاني",
+      "remove_item": "إزالة {{ title }}",
+      "previous_recommendation": "التوصية السابقة",
+      "next_recommendation": "التوصية التالية",
+      "added_html": "تمت الإضافة إلى السلة",
+      "error_html": "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
     }
   },
   "blogs": {
@@ -164,6 +216,29 @@
       "remaining_html": "الرصيد المتبقي {{ balance }}",
       "add_to_apple_wallet": "إضافة إلى Apple Wallet",
       "print_gift_card": "طباعة"
+    }
+  },
+  "sections": {
+    "header": {
+      "open_menu": "فتح القائمة",
+      "close_menu": "إغلاق القائمة",
+      "cart": "السلة",
+      "site_navigation": "التنقل في الموقع",
+      "page_sections": "أقسام الصفحة"
+    },
+    "announcement_bar": {
+      "countdown_units": "أيام,ساعات,دقائق,ثوانٍ"
+    },
+    "featured_product": {
+      "no_product_html": "<strong>منتج مميز:</strong> اختاري منتجًا من إعدادات القسم لعرض مربع الشراء.",
+      "fallback_image_alts_html": "عبوة زيت Elaren لإعادة نمو الشعر من بذور اليقطين مع مركّب الكافيين|امرأة تضع زيت Elaren لإعادة نمو الشعر على فروة رأسها على طول فرق الشعر|زيت بذور اليقطين لإعادة نمو الشعر|زيت Elaren لإعادة نمو الشعر في اليد مع أبرز فوائده|مجموعة صور قبل وبعد لعميلات تُظهر فرقًا وتاجًا وأطرافًا أكثر كثافة|تقييم بالنجوم ومراجعتان موثّقتان من العميلات|نتائج أبحاث منشورة عن زيت بذور اليقطين والكافيين|المكونات: زيت بذور اليقطين المعصور على البارد ومركّب الكافيين|الجدول الزمني لإعادة النمو بعد أسبوعين و30 يومًا و30 يومًا|دليل روتين فروة الرأس الليلي في دقيقتين|امرأة تحمل زيت Elaren لإعادة نمو الشعر مع ضمان استرداد الأموال خلال 30 يومًا"
+    },
+    "newsletter": {
+      "email_label": "بريدكِ الإلكتروني"
+    },
+    "email_popup": {
+      "copied_html": "تم النسخ!",
+      "invalid_email_html": "يُرجى إدخال بريد إلكتروني صالح."
     }
   }
 }

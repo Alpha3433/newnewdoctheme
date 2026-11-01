@@ -28,6 +28,27 @@
     "pagination": {
       "previous": "Precedente",
       "next": "Successiva"
+    },
+    "meta": {
+      "tagged": "con il tag \"{{ tags }}\"",
+      "page": "Pagina {{ page }}"
+    },
+    "accessibility": {
+      "skip_to_content": "Vai al contenuto",
+      "close": "Chiudi",
+      "hero_banner": "Banner principale",
+      "five_star_rating_html": "Valutazione a cinque stelle",
+      "five_stars_html": "5 stelle",
+      "customer_before_after_html": "Prima e dopo di una cliente",
+      "customer_review_video": "Video recensione di una cliente",
+      "customer_testimonial_video": "Video testimonianza di una cliente",
+      "video_not_supported": "Il tuo browser non supporta la riproduzione video.",
+      "decrease_quantity": "Diminuisci quantità",
+      "increase_quantity": "Aumenta quantità"
+    },
+    "localization": {
+      "country_label": "Paese/regione",
+      "language_label": "Lingua"
     }
   },
   "products": {
@@ -37,7 +58,29 @@
       "unavailable": "Non disponibile",
       "quantity": "Quantità",
       "regular_price": "Prezzo di listino",
-      "sale_price": "Prezzo scontato"
+      "sale_price": "Prezzo scontato",
+      "add_to_cart_button": "AGGIUNGI AL CARRELLO",
+      "sold_out_button": "ESAURITO",
+      "shop_now": "ACQUISTA ORA",
+      "price_from_html": "da {{ price }}",
+      "star_rating": "Valutazione di {{ rating }} su 5 stelle",
+      "read_reviews": "Leggi le recensioni",
+      "reviews_count": "{{ count }} recensioni",
+      "close_ingredients": "Chiudi ingredienti",
+      "show_image": "Mostra immagine {{ index }} di {{ total }}"
+    },
+    "bundle_tiers": {
+      "tier_1_title": "1 flacone",
+      "tier_1_supply": "Fornitura per 30 giorni",
+      "tier_2_title": "Compra 2, il 3° è in omaggio",
+      "tier_2_supply": "Fornitura per 3 mesi",
+      "tier_3_title": "Compra 3, altri 3 in omaggio",
+      "tier_3_supply": "Fornitura per 6 mesi",
+      "supply_months": {
+        "one": "Fornitura per {{ count }} mese",
+        "other": "Fornitura per {{ count }} mesi"
+      },
+      "buy_get": "Compra {{ paid }}, ricevi {{ free }} in omaggio"
     }
   },
   "collections": {
@@ -56,6 +99,15 @@
       "remove": "Rimuovi",
       "update": "Aggiorna carrello",
       "taxes_and_shipping": "Imposte e spese di spedizione calcolate al check-out"
+    },
+    "drawer": {
+      "close": "Chiudi carrello",
+      "free_express_shipping": "Spedizione Express gratuita",
+      "remove_item": "Rimuovi {{ title }}",
+      "previous_recommendation": "Suggerimento precedente",
+      "next_recommendation": "Suggerimento successivo",
+      "added_html": "Aggiunto al carrello",
+      "error_html": "Qualcosa è andato storto. Riprova."
     }
   },
   "blogs": {
@@ -164,6 +216,29 @@
       "remaining_html": "Saldo residuo {{ balance }}",
       "add_to_apple_wallet": "Aggiungi a Apple Wallet",
       "print_gift_card": "Stampa"
+    }
+  },
+  "sections": {
+    "header": {
+      "open_menu": "Apri menu",
+      "close_menu": "Chiudi menu",
+      "cart": "Carrello",
+      "site_navigation": "Navigazione del sito",
+      "page_sections": "Sezioni della pagina"
+    },
+    "announcement_bar": {
+      "countdown_units": "Giorni,Ore,Minuti,Secondi"
+    },
+    "featured_product": {
+      "no_product_html": "<strong>Prodotto in evidenza:</strong> seleziona un prodotto nelle impostazioni della sezione per mostrare il box d’acquisto.",
+      "fallback_image_alts_html": "Flacone di Olio Ricrescita Elaren ai semi di zucca con Complesso alla Caffeina|Donna che applica l’Olio Ricrescita Elaren sul cuoio capelluto lungo la riga|Olio Ricrescita ai semi di zucca|Olio Ricrescita Elaren tenuto in mano con i principali benefici|Griglia di foto prima e dopo di clienti con riga, vertice e attaccatura più folti|Valutazione a stelle e due recensioni verificate di clienti|Risultati di ricerche pubblicate sull’olio di semi di zucca e sulla caffeina|Ingredienti: olio di semi di zucca spremuto a freddo e Complesso alla Caffeina|Tempistiche della ricrescita a 2 settimane, 30 giorni e 30 giorni|Guida alla routine serale di due minuti per il cuoio capelluto|Donna che tiene l’Olio Ricrescita Elaren con la garanzia soddisfatti o rimborsati di 30 giorni"
+    },
+    "newsletter": {
+      "email_label": "La tua email"
+    },
+    "email_popup": {
+      "copied_html": "Copiato!",
+      "invalid_email_html": "Inserisci un indirizzo email valido."
     }
   }
 }
