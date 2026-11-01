@@ -289,7 +289,7 @@
         "id": "round_prices",
         "label": "Round prices to whole amounts",
         "default": false,
-        "info": "Shows $34.99 as $35 and $23.33 as $23, in every currency: buy box, bundle cards, cart drawer, product and cart pages. Display only: checkout still charges the exact prices, and order history and gift card balances show them as charged."
+        "info": "Product pages show whole amounts in every currency, like Frøya: $32.40 shows as $32 in the buy box, bundle cards, Add to Cart button and product cards. The cart drawer, cart page and checkout button show exact prices, dropping only a whole amount's .00 ($72, $64.80), so the cart matches checkout. Price per day keeps its cents. Display only: checkout charges the exact prices."
       }
     ]
   },

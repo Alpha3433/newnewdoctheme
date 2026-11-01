@@ -898,16 +898,18 @@
   /* An amount in the store's money format, built from a sample the section renders with Liquid's
      money filter (data-money: 1234567.89 in the shopper's currency), so it reads exactly like every
      other price on the page - symbol, separators, decimals and any markup the format carries. A
-     sample without decimals (Round prices on, or a currency like JPY) prints a whole amount:
-     rounded, or rounded up with roundUp. */
-  function formatMoney(cents, sample, roundUp) {
+     sample without decimals (a currency like JPY) prints a whole amount: rounded, or rounded up
+     with roundUp. trimZeros drops a whole amount's ".00" ($16, but $5.50), like the cart's prices
+     with Round prices on. */
+  function formatMoney(cents, sample, roundUp, trimZeros) {
     // (?:) keeps each back-reference apart from the digits after it: \1567 would read as one escape.
     var m = String(sample || '').match(/1(\D?)234\1(?:567)(\D)89|1(\D?)234\3(?:568)/);
     if (!m) return (cents / 100).toFixed(2);
-    var decimals = m[2] !== undefined;
-    var amount = decimals ? (cents / 100).toFixed(2) : String(Math[roundUp ? 'ceil' : 'round'](cents / 100));
+    var hasDecimals = m[2] !== undefined;
+    var decimals = hasDecimals && !(trimZeros && cents % 100 === 0);
+    var amount = decimals ? (cents / 100).toFixed(2) : String(Math[roundUp && !hasDecimals ? 'ceil' : 'round'](cents / 100));
     var parts = amount.split('.');
-    var number = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, decimals ? m[1] : m[3]) + (decimals ? m[2] + parts[1] : '');
+    var number = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, hasDecimals ? m[1] : m[3]) + (decimals ? m[2] + parts[1] : '');
     return sample.slice(0, m.index) + number + sample.slice(m.index + m[0].length);
   }
   function escapeHtml(text) {
@@ -936,8 +938,9 @@
         text.innerHTML = goal.reached
           ? escapeHtml(bar.getAttribute('data-text-reached'))
           : escapeHtml(bar.getAttribute('data-text')).replace('{amount}', function () {
-            // Rounded up when prices show whole amounts: "$15 away" with $15.01 to go is a cent short.
-            return '<span class="free-shipping__highlight">' + formatMoney(goal.gap, bar.getAttribute('data-money'), true) + '</span>';
+            // Exact, like the rest of the cart; rounded up only for a currency without decimals, where
+            // "$15 away" with $15.01 to go would be a cent short.
+            return '<span class="free-shipping__highlight">' + formatMoney(goal.gap, bar.getAttribute('data-money'), true, bar.hasAttribute('data-money-trim')) + '</span>';
           });
       }
       var note = $('[data-cart-shipping-note]', bar);
