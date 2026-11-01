@@ -228,13 +228,6 @@
             "url": "/#reviews-section"
           }
         },
-        "more_2": {
-          "type": "more_link",
-          "settings": {
-            "label": "Our Story",
-            "url": "/pages/about-us"
-          }
-        },
         "more_3": {
           "type": "more_link",
           "settings": {
@@ -344,7 +337,6 @@
         "card_1",
         "card_2",
         "more_1",
-        "more_2",
         "more_3",
         "more_4",
         "more_5",
@@ -422,6 +414,9 @@
         "title": "Cart",
         "show_shipping_bar": true,
         "express_free_threshold": 50,
+        "express_progress_text": "You’re {amount} away from FREE express shipping",
+        "express_standard_text": "Standard shipping is always free",
+        "express_unlocked_text": "You’ve unlocked FREE express shipping ✓",
         "reviews_banner": "RATED 4.77/5 BY VERIFIED CUSTOMERS",
         "empty_title": "Your cart is empty",
         "empty_text": "",
@@ -432,16 +427,29 @@
         "selling_plan_id": "1039991141",
         "subscribe_label": "SUBSCRIBE & SAVE",
         "subscribe_saving_text": "Save {amount}",
+        "free_tag_text": "{count} FREE",
+        "unit_price_text": "{amount} each",
+        "nudge_free_one": "Add {count} more bottle — it’s free",
+        "nudge_free_many": "Add {count} more bottles — they’re free",
+        "nudge_save": "Add {count} more and pay {amount} less",
+        "nudge_button": "Make it {total}",
         "gift_product": "elaren-microstamp-pro",
         "gift_label": "FREE GIFT",
         "gift_free_text": "FREE",
+        "gift_extra_text": "First one free · extras full price",
         "upsells": [
           "pumpkin-seed-oil-capsules",
           "elaren-root-revival-scalp-brush",
           "elaren-microstamp-pro",
           "elaren-sleepsilk-pillowcase"
         ],
+        "addon_goal_heading": "Add one to get FREE express shipping",
+        "addon_goal_reason": "Unlocks free express shipping",
+        "addon_heading": "Complete your routine",
         "upsell_button": "ADD TO CART",
+        "upgrade_title": "Upgrade to {supply}",
+        "upgrade_text": "+{amount} for {count} more bottles · {price} a bottle",
+        "upgrade_button": "Make it {total}",
         "show_country_selector": false,
         "country_label": "Ship to",
         "discount_label": "DISCOUNT",
