@@ -12,6 +12,7 @@
 -%}
 {%- liquid
   assign sid = 'template--26717513089391__reviews_slider_hyUAzq'
+  assign stars_alt = 'general.accessibility.five_stars_html' | t
 -%}
 <section class="shopify-section section-reviews-slider" data-anchor="reviews" id="shopify-section-{{ sid }}">
 <s-reviews-slider class="s-reviews-slider custom-section">
@@ -43,7 +44,7 @@
         {%- if block.settings.video != blank -%}
           {{ block.settings.video | video_tag: controls: true, preload: 'none', class: 'c-review-card__video js-review-card__video' }}
         {%- else -%}
-          <video aria-label="Customer review video" class="c-review-card__video js-review-card__video" controls data-sources="{{ block.settings.video_url }}" data-types="video/mp4" preload="none">Your browser does not support the video tag.</video>
+          <video aria-label="{{ 'general.accessibility.customer_review_video' | t }}" class="c-review-card__video js-review-card__video" controls data-sources="{{ block.settings.video_url }}" data-types="video/mp4" preload="none">{{ 'general.accessibility.video_not_supported' | t }}</video>
         {%- endif -%}
       </div>
     {%- elsif block.settings.image != blank or block.settings.image_fallback != blank -%}
@@ -58,7 +59,7 @@
           {%- if is_video and block.settings.date != blank -%}<span class="c-review-card__date">{{ block.settings.date }}</span>{%- endif -%}
         </div>
         <div class="c-review-card__stars">
-          <picture>{%- render 'froya-image', image: section.settings.stars_image, fallback: 'https://froyaorganics.com/cdn/shop/files/stars.svg', alt: '5 stars', width: 71, height: 16 -%}</picture>
+          <picture>{%- render 'froya-image', image: section.settings.stars_image, fallback: 'https://froyaorganics.com/cdn/shop/files/stars.svg', alt: stars_alt, width: 71, height: 16 -%}</picture>
         </div>
       </div>
       {%- unless is_video -%}

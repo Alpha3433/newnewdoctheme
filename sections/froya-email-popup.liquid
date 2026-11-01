@@ -19,7 +19,7 @@
 <div class="s-email-popup" id="email-popup-{{ sid }}" hidden data-email-popup data-section-id="{{ sid }}" data-enabled="{{ section.settings.enabled }}" data-design-mode="{{ request.design_mode }}" data-delay="{{ section.settings.delay }}" data-exit-intent="{{ section.settings.exit_intent }}" data-dismiss-days="{{ section.settings.dismiss_days }}" data-signup-days="{{ section.settings.signup_days }}" data-code="{{ code | escape }}" data-storage-key="{{ storage_key }}" data-copied-label="{{ section.settings.copied_label | escape }}" data-error-text="{{ section.settings.error_text | escape }}">
   <div class="s-email-popup__overlay" data-popup-close></div>
   <div class="s-email-popup__dialog" role="dialog" aria-modal="true" aria-labelledby="email-popup-title-{{ sid }}" tabindex="-1">
-    <button aria-label="Close" class="s-email-popup__close" data-popup-close type="button">
+    <button aria-label="{{ 'general.accessibility.close' | t }}" class="s-email-popup__close" data-popup-close type="button">
       <svg aria-hidden="true" fill="none" height="14" viewBox="0 0 14 14" width="14"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/></svg>
     </button>
 

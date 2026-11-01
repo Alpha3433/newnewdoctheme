@@ -27,7 +27,7 @@
   assign show_currency_code = settings.currency_code_enable
 
   assign fallback_images = 'IMG_1_8c681b46-2a29-4394-8f0b-a4d7759e9a48.jpg,IMG_2.png,nikki-reed-desktop_2x_2970174c-c49b-4943-8807-ab853fe8e55c.png,IMG_3.png,IMG_4_51e90354-5a8f-4469-9287-d1746d6736e0.png,IMG_5.png,IMG_6_corrected.png,IMG_7.png,IMG_8.png,IMG_9.png,IMG_10.png' | split: ','
-  assign fallback_alts = 'Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex bottle|Woman applying Elaren Pumpkin Seed Regrowth Oil to her scalp along her part|Pumpkin Seed Regrowth Oil|Elaren Pumpkin Seed Regrowth Oil held in hand with key benefit callouts|Grid of customer before and after photos showing fuller parts, crowns and edges|Star rating and two verified customer reviews|Published research results for pumpkin seed oil and caffeine|Cold-pressed pumpkin seed oil and Caffeine Complex ingredients|Regrowth timeline at 2 weeks, 30 days and 30 days|Nightly two-minute scalp routine guide|Woman holding Elaren Pumpkin Seed Regrowth Oil with the 30-day money-back promise' | split: '|'
+  assign fallback_alts = 'sections.featured_product.fallback_image_alts_html' | t | split: '|'
 
   if product != blank
     assign variant = product.selected_or_first_available_variant
@@ -245,7 +245,7 @@
 {%- if product == blank -%}
   {%- if request.design_mode -%}
     <div style="max-width:720px;margin:48px auto;padding:24px;border:1px dashed #af8998;text-align:center;font-family:sans-serif;">
-      <strong>Featured product:</strong> select a product in the section settings to render the buy box.
+      {{ 'sections.featured_product.no_product_html' | t }}
     </div>
   {%- endif -%}
 {%- else -%}
@@ -267,8 +267,8 @@
     {%- capture product_head -%}
       {%- if section.settings.reviews_count > 0 -%}
       <div class="custom_loox_star_rating custom_loox_star_rating--above-name">
-        <a data-scroll-to="{{ reviews_anchor }}" href="#{{ reviews_anchor }}" aria-label="{{ section.settings.rating_text | default: 'Read the reviews' | escape }}">
-          <div aria-label="{{ section.settings.reviews_count }} reviews" class="loox-rating" data-raters="{{ section.settings.reviews_count }}" data-rating="{{ section.settings.rating }}" role="figure" title="{{ section.settings.reviews_count }} reviews"><div class="loox-rating-content">
+        <a data-scroll-to="{{ reviews_anchor }}" href="#{{ reviews_anchor }}" aria-label="{% if section.settings.rating_text != blank %}{{ section.settings.rating_text | escape }}{% else %}{{ 'products.product.read_reviews' | t }}{% endif %}">
+          <div aria-label="{{ 'products.product.reviews_count' | t: count: section.settings.reviews_count }}" class="loox-rating" data-raters="{{ section.settings.reviews_count }}" data-rating="{{ section.settings.rating }}" role="figure" title="{{ 'products.product.reviews_count' | t: count: section.settings.reviews_count }}"><div class="loox-rating-content">
             {%- for i in (1..5) -%}<svg aria-hidden="true" class="loox-icon" data-lx-fill="full" viewBox="0 0 24 24"><use href="#looxicons-rating-icon"></use></svg>{%- endfor -%}
             <span aria-hidden="true" class="loox-rating-label">&nbsp;({{ section.settings.reviews_count }})</span>
           </div></div>
@@ -347,7 +347,7 @@
         <div aria-labelledby="ingredients-modal-title" aria-modal="true" class="s-main-product__modal" hidden id="ingredients-modal" role="dialog">
           <div class="s-main-product__modal-overlay"></div>
           <div class="s-main-product__modal-container">
-            <button aria-label="Close ingredients modal" class="s-main-product__modal-close" type="button">
+            <button aria-label="{{ 'products.product.close_ingredients' | t }}" class="s-main-product__modal-close" type="button">
               <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
             </button>
             <div class="s-main-product__modal-wrapper">
@@ -517,8 +517,6 @@
                     assign tier_key = 'bundle_tier_' | append: block.settings.tier
                     assign paid_key = tier_key | append: '_paid'
                     assign free_key = tier_key | append: '_free'
-                    assign title_key = tier_key | append: '_title'
-                    assign supply_key = tier_key | append: '_supply'
                     assign paid = settings[paid_key] | default: 0
                     if paid < 1
                       continue
@@ -542,15 +540,17 @@
                     assign tier_compare = compare_basis | times: qty
                     assign tier_save_otp = tier_compare | minus: total_otp
                     assign tier_save_sub = tier_compare | minus: total_sub
-                    assign tier_supply = settings[supply_key]
-                    assign tier_name = settings[title_key]
-                    if tier_name == blank
-                      if free > 0
-                        assign tier_name = 'Buy ' | append: paid | append: ', Get ' | append: free | append: ' Free'
-                      else
-                        assign tier_name = qty
-                      endif
-                    endif
+                    comment
+                      Name and supply line in the shopper's language: the Theme settings value in
+                      the store's default language, the locale key in any other (Shopify can't
+                      translate Theme settings).
+                    endcomment
+                    capture tier_supply
+                      render 'bundle-tier-text', tier: block.settings.tier, field: 'supply'
+                    endcapture
+                    capture tier_name
+                      render 'bundle-tier-text', tier: block.settings.tier, field: 'title'
+                    endcapture
                     assign plan_style = false
                     if section.settings.price_style == 'total'
                       assign plan_style = true

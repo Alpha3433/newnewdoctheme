@@ -19,6 +19,27 @@
     "pagination": {
       "previous": "Previous",
       "next": "Next"
+    },
+    "meta": {
+      "tagged": "tagged \"{{ tags }}\"",
+      "page": "Page {{ page }}"
+    },
+    "accessibility": {
+      "skip_to_content": "Skip to content",
+      "close": "Close",
+      "hero_banner": "Hero banner",
+      "five_star_rating_html": "Five star rating",
+      "five_stars_html": "5 stars",
+      "customer_before_after_html": "Customer before and after",
+      "customer_review_video": "Customer review video",
+      "customer_testimonial_video": "Customer testimonial video",
+      "video_not_supported": "Your browser does not support the video tag.",
+      "decrease_quantity": "Decrease quantity",
+      "increase_quantity": "Increase quantity"
+    },
+    "localization": {
+      "country_label": "Country/region",
+      "language_label": "Language"
     }
   },
   "products": {
@@ -28,7 +49,29 @@
       "unavailable": "Unavailable",
       "quantity": "Quantity",
       "regular_price": "Regular price",
-      "sale_price": "Sale price"
+      "sale_price": "Sale price",
+      "add_to_cart_button": "ADD TO CART",
+      "sold_out_button": "SOLD OUT",
+      "shop_now": "SHOP NOW",
+      "price_from_html": "from {{ price }}",
+      "star_rating": "Rated {{ rating }} out of 5 stars",
+      "read_reviews": "Read the reviews",
+      "reviews_count": "{{ count }} reviews",
+      "close_ingredients": "Close ingredients modal",
+      "show_image": "Show image {{ index }} of {{ total }}"
+    },
+    "bundle_tiers": {
+      "tier_1_title": "1 Bottle",
+      "tier_1_supply": "30-day supply",
+      "tier_2_title": "Buy 2, Get 1 Free",
+      "tier_2_supply": "3-month supply",
+      "tier_3_title": "Buy 3, Get 3 Free",
+      "tier_3_supply": "6-month supply",
+      "supply_months": {
+        "one": "{{ count }}-month supply",
+        "other": "{{ count }}-month supply"
+      },
+      "buy_get": "Buy {{ paid }}, Get {{ free }} Free"
     }
   },
   "collections": {
@@ -47,6 +90,38 @@
       "remove": "Remove",
       "update": "Update cart",
       "taxes_and_shipping": "Taxes and shipping calculated at checkout"
+    },
+    "drawer": {
+      "close": "Close cart",
+      "free_express_shipping": "Free express shipping",
+      "remove_item": "Remove {{ title }}",
+      "previous_recommendation": "Previous recommendation",
+      "next_recommendation": "Next recommendation",
+      "added_html": "Added to cart",
+      "error_html": "Something went wrong. Please try again."
+    }
+  },
+  "sections": {
+    "header": {
+      "open_menu": "Open menu",
+      "close_menu": "Close menu",
+      "cart": "Cart",
+      "site_navigation": "Site navigation",
+      "page_sections": "Page sections"
+    },
+    "announcement_bar": {
+      "countdown_units": "Days,Hours,Minutes,Seconds"
+    },
+    "featured_product": {
+      "no_product_html": "<strong>Featured product:</strong> select a product in the section settings to render the buy box.",
+      "fallback_image_alts_html": "Elaren Pumpkin Seed Regrowth Oil with Caffeine Complex bottle|Woman applying Elaren Pumpkin Seed Regrowth Oil to her scalp along her part|Pumpkin Seed Regrowth Oil|Elaren Pumpkin Seed Regrowth Oil held in hand with key benefit callouts|Grid of customer before and after photos showing fuller parts, crowns and edges|Star rating and two verified customer reviews|Published research results for pumpkin seed oil and caffeine|Cold-pressed pumpkin seed oil and Caffeine Complex ingredients|Regrowth timeline at 2 weeks, 30 days and 30 days|Nightly two-minute scalp routine guide|Woman holding Elaren Pumpkin Seed Regrowth Oil with the 30-day money-back promise"
+    },
+    "newsletter": {
+      "email_label": "Your e-mail"
+    },
+    "email_popup": {
+      "copied_html": "Copied!",
+      "invalid_email_html": "Please enter a valid email address."
     }
   },
   "blogs": {

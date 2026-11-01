@@ -55,7 +55,7 @@
     {%- form 'localization', id: 'localization_form_footer', class: 'shopify-localization-form' -%}
       {%- if localization.available_countries.size > 1 -%}
       <div class="custom-select">
-        <select aria-label="Country/region" class="custom-select__select" name="country_code" onchange="this.form.submit()">
+        <select aria-label="{{ 'general.localization.country_label' | t }}" class="custom-select__select" name="country_code" onchange="this.form.submit()">
           {%- for country in localization.available_countries -%}
             <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})</option>
           {%- endfor -%}
@@ -64,7 +64,7 @@
       {%- endif -%}
       {%- if localization.available_languages.size > 1 -%}
       <div class="custom-select">
-        <select aria-label="Language" class="custom-select__select" name="locale_code" onchange="this.form.submit()">
+        <select aria-label="{{ 'general.localization.language_label' | t }}" class="custom-select__select" name="locale_code" onchange="this.form.submit()">
           {%- for language in localization.available_languages -%}
             <option value="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
           {%- endfor -%}

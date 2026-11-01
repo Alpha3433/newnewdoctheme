@@ -25,8 +25,8 @@
 
   <title>
     {{ page_title }}
-    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
-    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- if current_tags %}{% assign title_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tagged' | t: tags: title_tags }}{% endif -%}
+    {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
     {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
   </title>
   {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
@@ -65,7 +65,17 @@
     window.Shopify = window.Shopify || {};
     window.Shopify.routes = window.Shopify.routes || {};
     window.Shopify.routes.root = '{{ routes.root_url }}';
-    window.theme = { moneyFormat: {{ shop.money_format | json }} };
+    window.theme = {
+      moneyFormat: {{ shop.money_format | json }},
+      // Text assets/main.js shows, in the shopper's language (locales/*.json; the _html keys stay
+      // unescaped so they read as plain text here).
+      translations: {
+        addedToCart: {{ 'cart.drawer.added_html' | t | json }},
+        cartError: {{ 'cart.drawer.error_html' | t | json }},
+        copied: {{ 'sections.email_popup.copied_html' | t | json }},
+        invalidEmail: {{ 'sections.email_popup.invalid_email_html' | t | json }}
+      }
+    };
   </script>
 
   {{ content_for_header }}

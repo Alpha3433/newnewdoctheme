@@ -18,6 +18,11 @@
     var r = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
     return r.charAt(r.length - 1) === '/' ? r : r + '/';
   };
+  // Text in the shopper's language: layout/theme.liquid passes it in from the locale files.
+  var translate = function (key) {
+    var strings = window.theme && window.theme.translations;
+    return (strings && strings[key]) || '';
+  };
 
   function readFlag(key) { try { return window.sessionStorage.getItem(key); } catch (err) { return null; } }
   function writeFlag(key, value) { try { window.sessionStorage.setItem(key, value); } catch (err) { /* private mode */ } }
@@ -67,7 +72,7 @@
   // A cart request that gets no answer within this long fails, so a dropped connection can never
   // leave the drawer greyed out for good.
   var CART_TIMEOUT = 20000;
-  var CART_ERROR = 'Something went wrong. Please try again.';
+  var CART_ERROR = translate('cartError');
   var totalQuantity = function (lines) { return lines.reduce(function (total, line) { return total + line.quantity; }, 0); };
   var planOf = function (item) { return item.selling_plan_allocation ? item.selling_plan_allocation.selling_plan.id : ''; };
 
@@ -269,7 +274,7 @@
         // Opened from the page, the drawer also says where the shipping goal and any nudge now
         // stand; inside an open drawer those are read out as they change (announceDrawer).
         var extra = self.isOpen() ? [] : drawerMessages(self.drawer());
-        self.announce(['Added to cart'].concat(extra).join('. '));
+        self.announce([translate('addedToCart')].concat(extra).join('. '));
         self.open();
       });
     },
@@ -1770,7 +1775,7 @@
         var text = codeEl ? codeEl.textContent.trim() : code;
         var done = function () {
           var label = copy.textContent;
-          copy.textContent = popup.getAttribute('data-copied-label') || 'Copied!';
+          copy.textContent = popup.getAttribute('data-copied-label') || translate('copied');
           window.setTimeout(function () { copy.textContent = label; }, 1800);
         };
         if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, done);
@@ -1790,7 +1795,7 @@
         if (error) error.setAttribute('hidden', '');
         if (input && !input.checkValidity()) {
           input.setAttribute('aria-invalid', 'true');
-          if (error) { error.textContent = popup.getAttribute('data-error-text') || 'Please enter a valid email address.'; error.removeAttribute('hidden'); }
+          if (error) { error.textContent = popup.getAttribute('data-error-text') || translate('invalidEmail'); error.removeAttribute('hidden'); }
           input.focus();
           return;
         }
@@ -1820,7 +1825,7 @@
             if (submit) submit.disabled = false;
             if (err && err.message === 'invalid') {
               if (input) input.setAttribute('aria-invalid', 'true');
-              if (error) { error.textContent = err.detail || popup.getAttribute('data-error-text') || 'Please enter a valid email address.'; error.removeAttribute('hidden'); }
+              if (error) { error.textContent = err.detail || popup.getAttribute('data-error-text') || translate('invalidEmail'); error.removeAttribute('hidden'); }
               return;
             }
             form.dataset.native = '1';
