@@ -1022,8 +1022,13 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 }
 /* The price per bottle and the struck-through regular price, side by side at every width */
 .c-bundle__price-line { display: flex; align-items: baseline; justify-content: flex-end; gap: 6px; }
-.c-bundle__unit { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.c-bundle__unit { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
 .c-bundle__unit-compare { font-size: 13px; color: var(--brand-strike); text-decoration: line-through; }
+/* A card without a struck-through price holds the space for one, so every card's price starts in
+   the same place ($52 over $35 over $26). The spacer goes when no card shows one in that mode. */
+.c-bundle__unit-compare--spacer { visibility: hidden; }
+.c-bundle:not(:has(.c-bundle__unit-compare--otp:not(.c-bundle__unit-compare--spacer))) .c-bundle__unit-compare--otp.c-bundle__unit-compare--spacer,
+.c-bundle:not(:has(.c-bundle__unit-compare--sub:not(.c-bundle__unit-compare--spacer))) .c-bundle__unit-compare--sub.c-bundle__unit-compare--spacer { display: none; }
 .c-bundle__unit-label {
   flex: 0 0 100%;
   font-size: 11px;

@@ -682,11 +682,17 @@
                         {%- if tier_compare > total_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{{ tier_compare_money }}</span></span>{%- endif -%}
                         {%- if tier_compare > total_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{{ tier_compare_money }}</span></span>{%- endif -%}
                         {%- else -%}
+                        {%- comment -%}
+                          A card with no struck-through price (one bottle, bought once) keeps the
+                          space for one, hidden, so its price starts where the discounted cards'
+                          prices do. sections.css drops the spacer when no card shows a
+                          struck-through price in that mode.
+                        {%- endcomment -%}
                         <span class="c-bundle__price-line">
                           <span class="c-bundle__unit c-bundle__unit--sub"><span class="product_price">{{ unit_sub_money }}</span></span>
                           <span class="c-bundle__unit c-bundle__unit--otp"><span class="product_price">{{ unit_otp_money }}</span></span>
-                          {%- if compare_basis > unit_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{% render 'money', amount: compare_basis %}</span></span>{%- endif -%}
-                          {%- if compare_basis > unit_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{% render 'money', amount: compare_basis %}</span></span>{%- endif -%}
+                          {%- if compare_basis > unit_sub -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--sub"><span class="product_price">{% render 'money', amount: compare_basis %}</span></span>{%- else -%}<span aria-hidden="true" class="c-bundle__unit-compare c-bundle__unit-compare--sub c-bundle__unit-compare--spacer">{% render 'money', amount: otp_price %}</span>{%- endif -%}
+                          {%- if compare_basis > unit_otp -%}<span class="c-bundle__unit-compare c-bundle__unit-compare--otp"><span class="product_price">{% render 'money', amount: compare_basis %}</span></span>{%- else -%}<span aria-hidden="true" class="c-bundle__unit-compare c-bundle__unit-compare--otp c-bundle__unit-compare--spacer">{% render 'money', amount: otp_price %}</span>{%- endif -%}
                         </span>
                         {%- if section.settings.unit_suffix != blank -%}<span class="c-bundle__unit-label">{{ section.settings.unit_suffix }}</span>{%- endif -%}
                         {%- endif -%}
