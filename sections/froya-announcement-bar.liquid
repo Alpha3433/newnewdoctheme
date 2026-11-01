@@ -12,7 +12,12 @@
     assign show_countdown = false
   endif
   assign shop_offset = 'now' | date: '%z'
-  assign unit_labels = section.settings.countdown_units | default: 'Days,Hours,Minutes,Seconds' | split: ','
+  comment
+    Four unit labels, comma-separated. An Arabic translation may separate them with the Arabic comma
+    (،), so that counts as a separator too. An empty setting falls back to the locale file.
+  endcomment
+  assign default_units = 'sections.announcement_bar.countdown_units' | t
+  assign unit_labels = section.settings.countdown_units | default: default_units | replace: '،', ',' | split: ','
   comment
     Layout and sizes come from the settings below. They land on the item as modifier classes and CSS
     variables (see "Announcement bar" in assets/theme.css and the mobile block in

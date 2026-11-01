@@ -1,0 +1,244 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "search": {
+      "search": "Zoeken",
+      "placeholder": "Producten zoeken",
+      "no_results": "Geen resultaten gevonden voor \"{{ terms }}\".",
+      "results_for": "Resultaten voor \"{{ terms }}\""
+    },
+    "404": {
+      "title": "Pagina niet gevonden",
+      "subtext": "De pagina die je zocht bestaat niet.",
+      "link": "Verder winkelen"
+    },
+    "password_page": {
+      "login_form_heading": "Winkel betreden met wachtwoord",
+      "login_form_password_label": "Wachtwoord",
+      "login_form_submit": "Betreden"
+    },
+    "pagination": {
+      "previous": "Vorige",
+      "next": "Volgende"
+    },
+    "meta": {
+      "tagged": "met tag \"{{ tags }}\"",
+      "page": "Pagina {{ page }}"
+    },
+    "accessibility": {
+      "skip_to_content": "Naar de inhoud",
+      "close": "Sluiten",
+      "hero_banner": "Hoofdbanner",
+      "five_star_rating_html": "Vijfsterrenbeoordeling",
+      "five_stars_html": "5 sterren",
+      "customer_before_after_html": "Voor en na van een klant",
+      "customer_review_video": "Video met een klantreview",
+      "customer_testimonial_video": "Video met een klantervaring",
+      "video_not_supported": "Je browser ondersteunt geen videoweergave.",
+      "decrease_quantity": "Aantal verlagen",
+      "increase_quantity": "Aantal verhogen"
+    },
+    "localization": {
+      "country_label": "Land/regio",
+      "language_label": "Taal"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Toevoegen aan winkelwagen",
+      "sold_out": "Uitverkocht",
+      "unavailable": "Niet beschikbaar",
+      "quantity": "Aantal",
+      "regular_price": "Normale prijs",
+      "sale_price": "Aanbiedingsprijs",
+      "add_to_cart_button": "IN WINKELWAGEN",
+      "sold_out_button": "UITVERKOCHT",
+      "shop_now": "NU SHOPPEN",
+      "price_from_html": "vanaf {{ price }}",
+      "star_rating": "Beoordeeld met {{ rating }} van de 5 sterren",
+      "read_reviews": "Lees de reviews",
+      "reviews_count": "{{ count }} reviews",
+      "close_ingredients": "Ingrediënten sluiten",
+      "show_image": "Afbeelding {{ index }} van {{ total }} tonen"
+    },
+    "bundle_tiers": {
+      "tier_1_title": "1 fles",
+      "tier_1_supply": "Voorraad voor 30 dagen",
+      "tier_2_title": "Koop 2, krijg 1 gratis",
+      "tier_2_supply": "Voorraad voor 3 maanden",
+      "tier_3_title": "Koop 3, krijg 3 gratis",
+      "tier_3_supply": "Voorraad voor 6 maanden",
+      "supply_months": {
+        "one": "Voorraad voor {{ count }} maand",
+        "other": "Voorraad voor {{ count }} maanden"
+      },
+      "buy_get": "Koop {{ paid }}, krijg {{ free }} gratis"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_products": "Geen producten gevonden in deze collectie.",
+      "view_all": "Alles weergeven"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Je winkelwagen",
+      "empty": "Je winkelwagen is momenteel leeg.",
+      "continue_shopping": "Verder winkelen",
+      "subtotal": "Subtotaal",
+      "checkout": "Afrekenen",
+      "remove": "Verwijderen",
+      "update": "Winkelwagen bijwerken",
+      "taxes_and_shipping": "Belastingen en verzendkosten worden berekend bij het afrekenen"
+    },
+    "drawer": {
+      "close": "Winkelwagen sluiten",
+      "free_express_shipping": "Gratis expresverzending",
+      "remove_item": "{{ title }} verwijderen",
+      "previous_recommendation": "Vorige aanbeveling",
+      "next_recommendation": "Volgende aanbeveling",
+      "added_html": "Toegevoegd aan winkelwagen",
+      "error_html": "Er ging iets mis. Probeer het opnieuw."
+    }
+  },
+  "blogs": {
+    "article": {
+      "read_more": "Lees meer",
+      "back_to_blog": "Terug naar {{ title }}"
+    }
+  },
+  "customer": {
+    "login": {
+      "title": "Inloggen",
+      "email": "E-mail",
+      "password": "Wachtwoord",
+      "forgot_password": "Wachtwoord vergeten?",
+      "sign_in": "Inloggen",
+      "create_account": "Account aanmaken",
+      "guest_continue": "Doorgaan als gast"
+    },
+    "register": {
+      "title": "Account aanmaken",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "email": "E-mail",
+      "password": "Wachtwoord",
+      "submit": "Aanmaken"
+    },
+    "account": {
+      "title": "Account",
+      "log_out": "Uitloggen",
+      "order_history": "Bestelgeschiedenis",
+      "no_orders": "Je hebt nog geen bestellingen geplaatst.",
+      "view_addresses": "Adressen weergeven",
+      "track_orders": "Volg je bestellingen"
+    },
+    "order": {
+      "title": "Bestelling {{ name }}",
+      "date": "Geplaatst op {{ date }}",
+      "product": "Product",
+      "quantity": "Aantal",
+      "total": "Totaal",
+      "shipping_address": "Verzendadres",
+      "billing_address": "Factuuradres",
+      "delivery": "Levering",
+      "status_page": "Volledige leveringsgegevens"
+    },
+    "addresses": {
+      "title": "Adressen",
+      "default": "Standaard",
+      "add_new": "Nieuw adres toevoegen",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "update": "Adres bijwerken",
+      "cancel": "Annuleren",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "company": "Bedrijf",
+      "address1": "Adres 1",
+      "address2": "Adres 2",
+      "city": "Plaats",
+      "country": "Land/regio",
+      "province": "Provincie",
+      "zip": "Postcode",
+      "phone": "Telefoon",
+      "set_default": "Instellen als standaardadres"
+    },
+    "activate_account": {
+      "title": "Account activeren",
+      "subtext": "Maak je wachtwoord aan om je account te activeren.",
+      "password": "Wachtwoord",
+      "password_confirm": "Wachtwoord bevestigen",
+      "submit": "Account activeren",
+      "cancel": "Uitnodiging weigeren"
+    },
+    "reset_password": {
+      "title": "Accountwachtwoord opnieuw instellen",
+      "subtext": "Voer een nieuw wachtwoord in",
+      "password": "Wachtwoord",
+      "password_confirm": "Wachtwoord bevestigen",
+      "submit": "Wachtwoord opnieuw instellen"
+    },
+    "recover_password": {
+      "title": "Je wachtwoord opnieuw instellen",
+      "subtext": "We sturen je een e-mail om je wachtwoord opnieuw in te stellen.",
+      "submit": "Verzenden",
+      "cancel": "Annuleren"
+    },
+    "tracking": {
+      "step_placed": "Bestelling geplaatst",
+      "step_preparing": "In voorbereiding",
+      "step_shipped": "Verzonden",
+      "step_on_way": "Onderweg",
+      "carrier": "Vervoerder",
+      "shipped_on": "Verzonden op {{ date }}",
+      "track": "Volgen",
+      "partial": "Een deel van deze bestelling is verzonden; de rest volgt in een apart pakket met een eigen trackingnummer.",
+      "no_number": "Je bestelling is verzonden. Het trackingnummer is onderweg naar je inbox.",
+      "cancelled": "Deze bestelling is geannuleerd."
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Hier is je cadeaubon ter waarde van {{ value }} voor {{ shop }}!",
+      "subtext": "Je cadeaubon",
+      "gift_card_code": "Cadeauboncode",
+      "shop_link": "Verder winkelen",
+      "remaining_html": "Resterend: {{ balance }}",
+      "add_to_apple_wallet": "Toevoegen aan Apple Wallet",
+      "print_gift_card": "Afdrukken"
+    }
+  },
+  "sections": {
+    "header": {
+      "open_menu": "Menu openen",
+      "close_menu": "Menu sluiten",
+      "cart": "Winkelwagen",
+      "site_navigation": "Sitenavigatie",
+      "page_sections": "Paginasecties"
+    },
+    "announcement_bar": {
+      "countdown_units": "Dagen,Uren,Minuten,Seconden"
+    },
+    "featured_product": {
+      "no_product_html": "<strong>Uitgelicht product:</strong> selecteer een product in de sectie-instellingen om het koopblok te tonen.",
+      "fallback_image_alts_html": "Fles Elaren pompoenpit-haargroeiolie met cafeïnecomplex|Vrouw brengt Elaren haargroeiolie aan op haar hoofdhuid langs haar scheiding|Pompoenpit-haargroeiolie|Elaren haargroeiolie in de hand met de belangrijkste voordelen|Raster met voor-en-nafoto’s van klanten met vollere scheidingen, kruinen en haarlijnen|Sterrenbeoordeling en twee geverifieerde klantreviews|Gepubliceerde onderzoeksresultaten over pompoenpitolie en cafeïne|Ingrediënten: koudgeperste pompoenpitolie en cafeïnecomplex|Tijdlijn van hergroei na 2 weken, 30 dagen en 30 dagen|Gids voor de avondroutine van twee minuten voor de hoofdhuid|Vrouw met Elaren haargroeiolie en de 30 dagen geld-terug-garantie"
+    },
+    "newsletter": {
+      "email_label": "Je e-mailadres"
+    },
+    "email_popup": {
+      "copied_html": "Gekopieerd!",
+      "invalid_email_html": "Vul een geldig e-mailadres in."
+    }
+  }
+}

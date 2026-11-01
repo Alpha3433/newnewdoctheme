@@ -68,7 +68,7 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "The serum's bundle tiers, defined once. The buy box's bundle cards (Featured product → Bundle tier blocks pick a tier by number) and the cart drawer (one row per bundle, next-tier nudge, upgrade card) all read them, and snippets/bundle-tier-price.liquid prices them for both. The theme only displays these prices: the Kaching Bundles discount charges them at checkout, so keep the bottles and discounts here in step with the quantity breaks set up in Kaching."
+        "content": "The serum's bundle tiers, defined once. The buy box's bundle cards (Featured product → Bundle tier blocks pick a tier by number) and the cart drawer (one row per bundle, next-tier nudge, upgrade card) all read them, and snippets/bundle-tier-price.liquid prices them for both. The theme only displays these prices: the Kaching Bundles discount charges them at checkout, so keep the bottles and discounts here in step with the quantity breaks set up in Kaching. Names and supply lines show as typed in the store's default language only: Shopify can't translate Theme settings, so other languages show the theme's translations of them (products.bundle_tiers, tiers 1-3). When you rename a tier, update those translations too."
       },
       {
         "type": "product",
@@ -283,6 +283,13 @@
         "id": "currency_code_enable",
         "label": "Show currency codes on totals",
         "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "round_prices",
+        "label": "Round prices to whole amounts",
+        "default": false,
+        "info": "Shows $34.99 as $35 and $23.33 as $23, in every currency: buy box, bundle cards, cart drawer, product and cart pages. Display only: checkout still charges the exact prices, and order history and gift card balances show them as charged."
       }
     ]
   },

@@ -30,7 +30,7 @@
   <div class="drawer__panel">
     <header class="drawer__header">
       <span id="mini-cart-title" class="s-mini-cart__title" data-cart-title>{{ section.settings.title }} · {{ cart.item_count }}</span>
-      <button type="button" class="drawer__close-button tap-area" data-cart-close aria-label="Close cart">
+      <button type="button" class="drawer__close-button tap-area" data-cart-close aria-label="{{ 'cart.drawer.close' | t }}">
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.1"/></svg>
       </button>
     </header>
@@ -53,14 +53,19 @@
           Liquid cannot convert dollars into the shopper's currency, so assets/main.js
           (expressGoal) compares the two with Shopify.currency.rate after every render: it writes
           the copy (the amount in the store's money format, taken from data-money), fills the bar,
-          animates it from where it stood and orders the add-ons below by it.
+          animates it from where it stood and orders the add-ons below by it. The sample goes
+          through snippets/money.liquid, so with Round prices on it has no decimals and main.js
+          prints a whole amount too.
         endcomment
         assign express_threshold = section.settings.express_free_threshold | default: 0 | times: 100 | round
+        capture money_sample
+          render 'money', amount: 123456789
+        endcapture
       -%}
       {%- if section.settings.show_shipping_bar and express_threshold > 0 -%}
-      <div class="s-mini-cart__shipping free-shipping{% if cart.item_count == 0 %} s-mini-cart__shipping--empty{% endif %}" data-cart-shipping data-threshold="{{ express_threshold }}" data-total="{{ cart.total_price }}" data-money="{{ 123456789 | money | escape }}" data-text="{{ section.settings.express_progress_text | escape }}" data-text-reached="{{ section.settings.express_unlocked_text | escape }}" data-progress="0" data-reached="false">
+      <div class="s-mini-cart__shipping free-shipping{% if cart.item_count == 0 %} s-mini-cart__shipping--empty{% endif %}" data-cart-shipping data-threshold="{{ express_threshold }}" data-total="{{ cart.total_price }}" data-money="{{ money_sample | escape }}" data-text="{{ section.settings.express_progress_text | escape }}" data-text-reached="{{ section.settings.express_unlocked_text | escape }}" data-progress="0" data-reached="false">
         <p class="free-shipping__text" data-cart-shipping-text></p>
-        <div class="free-shipping__bar" role="progressbar" aria-label="Free express shipping" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="free-shipping__bar" role="progressbar" aria-label="{{ 'cart.drawer.free_express_shipping' | t }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
           <div class="free-shipping__progress" style="width: 0%;"></div>
           <span class="free-shipping__dot free-shipping__dot--start" aria-hidden="true"></span>
           <span class="free-shipping__dot free-shipping__dot--end" aria-hidden="true"></span>
@@ -111,11 +116,11 @@
               </div>
               <div class="drawer__product-content">
                 <a href="{{ empty_href }}"{% if empty_scroll %} data-scroll-to="shop"{% endif %} class="drawer__product-title">{{ empty_product.title }}</a>
-                <div class="drawer__product-price">{{ section.settings.from_label }} <strong>{{ empty_product.price_min | money_without_trailing_zeros }}</strong></div>
+                <div class="drawer__product-price">{{ section.settings.from_label }} <strong>{% render 'money', amount: empty_product.price_min, format: 'without_trailing_zeros' %}</strong></div>
                 {%- form 'product', empty_product, class: 'drawer__product-form js-ajax-add' -%}
                   <input type="hidden" name="id" value="{{ empty_variant.id }}">
                   <input type="hidden" name="quantity" value="1">
-                  <button type="submit" class="drawer__product-button"{% unless empty_variant.available %} disabled{% endunless %}>{% if empty_variant.available %}{{ section.settings.empty_add_label }}{% else %}SOLD OUT{% endif %}</button>
+                  <button type="submit" class="drawer__product-button"{% unless empty_variant.available %} disabled{% endunless %}>{% if empty_variant.available %}{{ section.settings.empty_add_label }}{% else %}{{ 'products.product.sold_out_button' | t }}{% endif %}</button>
                 {%- endform -%}
               </div>
             </div>
@@ -349,11 +354,24 @@
                 capture row_supply
                   render 'bundle-supply', quantity: row_qty
                 endcapture
+                comment
+                  The discount's title is the bundle app's own English name for the tier. In any
+                  language but the store's default one the row names the tier its bottles fill
+                  instead, from the locale files (snippets/bundle-tier-text.liquid).
+                endcomment
+                if row_tier != blank and request.locale.primary == false
+                  capture row_tier_name
+                    render 'bundle-tier-text', quantity: row_qty, field: 'title'
+                  endcapture
+                  if row_tier_name != blank
+                    assign row_tier = row_tier_name
+                  endif
+                endif
               endif
             -%}
             <line-item class="line-item{% if is_gift %} line-item--gift{% endif %}{% if is_bundle %} line-item--bundle{% endif %}" data-line="{{ line }}" data-key="{{ item.key }}"{% if is_gift %} data-gift{% endif %}{% if is_bundle %} data-group-variant="{{ item.variant_id }}" data-group-plan="{{ row_plan }}" data-group-properties="{{ item.properties | json | escape }}"{% endif %}>
               <div class="line-item__content-wrapper">
-                <button type="button" class="s-mini-cart__remove-btn" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: item.quantity }}"{% elsif is_bundle %}data-cart-group-set="0"{% else %}data-cart-remove="{{ line }}"{% endif %} aria-label="Remove {{ item.product.title | escape }}">
+                <button type="button" class="s-mini-cart__remove-btn" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: item.quantity }}"{% elsif is_bundle %}data-cart-group-set="0"{% else %}data-cart-remove="{{ line }}"{% endif %} aria-label="{{ 'cart.drawer.remove_item' | t: title: item.product.title }}">
                   <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
                 </button>
                 {%- liquid
@@ -398,7 +416,9 @@
                         <label class="subscription-toggle" role="switch" aria-checked="{% if item.selling_plan_allocation %}true{% else %}false{% endif %}">
                           <input type="checkbox" class="subscription-checkbox" data-cart-plan-toggle data-line="{{ line }}" data-variant-id="{{ item.variant_id }}" data-selling-plan-id="{{ plan_id }}"{% if item.selling_plan_allocation %} checked{% endif %}>
                           {%- liquid
-                            assign saving_money = variant_saving | money
+                            capture saving_money
+                              render 'money', amount: variant_saving
+                            endcapture
                             assign saving_line = section.settings.subscribe_saving_text | replace: amount_placeholder, saving_money
                           -%}
                           <span class="subscription-text">
@@ -411,21 +431,21 @@
                     {%- endif -%}
                     <div class="product-item-meta__info">
                       <line-item-quantity class="line-item__quantity"><div class="custom-quantity-selector custom-quantity-selector--small">
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: 1 }}"{% elsif is_bundle %}data-cart-group-step="-1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}"{% endif %} aria-label="Decrease quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7" stroke-linecap="round"/></svg></button>
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: 1 }}"{% elsif is_bundle %}data-cart-group-step="-1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}"{% endif %} aria-label="{{ 'general.accessibility.decrease_quantity' | t }}"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7" stroke-linecap="round"/></svg></button>
                         <span class="custom-quantity-selector__text">{% if is_bundle %}{{ row_qty }}{% else %}{{ item.quantity }}{% endif %}</span>
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | plus: 1 }}"{% elsif is_bundle %}data-cart-group-step="1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}"{% endif %} aria-label="Increase quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7M9 5.5v7" stroke-linecap="round"/></svg></button>
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | plus: 1 }}"{% elsif is_bundle %}data-cart-group-step="1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}"{% endif %} aria-label="{{ 'general.accessibility.increase_quantity' | t }}"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7M9 5.5v7" stroke-linecap="round"/></svg></button>
                       </div></line-item-quantity>
                       <div class="product-item-meta__price-list-container text--small"><div class="price-list">
                         {%- if is_gift and item.final_line_price == 0 and section.settings.gift_free_text != blank -%}
                         <span class="price price--highlight price--free">{{ section.settings.gift_free_text }}</span>
-                        <span class="price price--compare"><span class="product_price">{{ item.original_line_price | money }}</span></span>
+                        <span class="price price--compare"><span class="product_price">{% render 'money', amount: item.original_line_price %}</span></span>
                         {%- elsif gift_has_free_unit -%}
-                        <span class="price price--highlight"><span class="product_price">{{ item.final_line_price | money }}</span></span>
-                        <span class="price price--compare"><span class="product_price">{{ item.original_line_price | money }}</span></span>
+                        <span class="price price--highlight"><span class="product_price">{% render 'money', amount: item.final_line_price %}</span></span>
+                        <span class="price price--compare"><span class="product_price">{% render 'money', amount: item.original_line_price %}</span></span>
                         {%- elsif is_bundle -%}
-                        <span class="price price--highlight"><span class="product_price">{{ row_price | money }}</span></span>
+                        <span class="price price--highlight"><span class="product_price">{% render 'money', amount: row_price %}</span></span>
                         {%- if row_compare > row_price -%}
-                          <span class="price price--compare"><span class="product_price">{{ row_compare | money }}</span></span>
+                          <span class="price price--compare"><span class="product_price">{% render 'money', amount: row_compare %}</span></span>
                         {%- endif -%}
                         {%- if row_free > 0 and section.settings.free_tag_text != blank -%}
                           <span class="line-item__free-tag">{{ section.settings.free_tag_text | replace: count_placeholder, row_free }}</span>
@@ -435,15 +455,18 @@
                           Every other line shows its line total, so the rows add up to the subtotal; the
                           unit price follows underneath once there is more than one.
                         {%- endcomment -%}
-                        <span class="price price--highlight"><span class="product_price">{{ item.final_line_price | money }}</span></span>
+                        <span class="price price--highlight"><span class="product_price">{% render 'money', amount: item.final_line_price %}</span></span>
                         {%- if item.original_line_price > item.final_line_price -%}
-                          <span class="price price--compare"><span class="product_price">{{ item.original_line_price | money }}</span></span>
+                          <span class="price price--compare"><span class="product_price">{% render 'money', amount: item.original_line_price %}</span></span>
                         {%- elsif item.selling_plan_allocation and item.selling_plan_allocation.compare_at_price > item.final_price -%}
-                          <span class="price price--compare"><span class="product_price">{{ item.selling_plan_allocation.compare_at_price | times: item.quantity | money }}</span></span>
+                          {%- assign plan_compare = item.selling_plan_allocation.compare_at_price | times: item.quantity -%}
+                          <span class="price price--compare"><span class="product_price">{% render 'money', amount: plan_compare %}</span></span>
                         {%- endif -%}
                         {%- if item.quantity > 1 and section.settings.unit_price_text != blank -%}
                           {%- liquid
-                            assign unit_money = item.final_price | money
+                            capture unit_money
+                              render 'money', amount: item.final_price
+                            endcapture
                             assign unit_line = section.settings.unit_price_text | replace: amount_placeholder, unit_money
                           -%}
                           <span class="price price--unit">{{ unit_line }}</span>
@@ -522,8 +545,8 @@
               <div class="s-mini-cart__rec-header">
                 <p data-addon-heading data-heading="{{ section.settings.addon_heading | escape }}" data-heading-goal="{{ section.settings.addon_goal_heading | escape }}">{{ section.settings.addon_heading }}</p>
                 <div class="s-mini-cart__rec-arrows">
-                  <button type="button" class="s-mini-cart__rec-arrow s-mini-cart__rec-arrow--prev" data-rec-prev aria-label="Previous recommendation"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-                  <button type="button" class="s-mini-cart__rec-arrow s-mini-cart__rec-arrow--next" data-rec-next aria-label="Next recommendation"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+                  <button type="button" class="s-mini-cart__rec-arrow s-mini-cart__rec-arrow--prev" data-rec-prev aria-label="{{ 'cart.drawer.previous_recommendation' | t }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+                  <button type="button" class="s-mini-cart__rec-arrow s-mini-cart__rec-arrow--next" data-rec-next aria-label="{{ 'cart.drawer.next_recommendation' | t }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
                 </div>
               </div>
               <div class="scroller" data-rec-scroller>
@@ -560,7 +583,7 @@
                       </div>
                       <div class="drawer__product-content">
                         <a href="{{ addon_href }}"{% if addon_scroll %} data-scroll-to="shop"{% endif %} class="drawer__product-title">{{ product.title }}</a>
-                        <div class="drawer__product-price"><strong>{{ addon_variant.price | money }}</strong></div>
+                        <div class="drawer__product-price"><strong>{% render 'money', amount: addon_variant.price %}</strong></div>
                         {%- if section.settings.addon_goal_reason != blank -%}
                           <p class="drawer__product-reason" data-addon-reason hidden>{{ section.settings.addon_goal_reason }}</p>
                         {%- endif -%}
@@ -616,17 +639,17 @@
           {%- if cart.total_discount > 0 -%}
           <div class="total-info__row total-info__row--savings">
             <span class="total-info__label">{{ section.settings.discount_label }}</span>
-            <span class="total-info__price total-info__price--savings">- <span class="product_price">{{ cart.total_discount | money }}</span></span>
+            <span class="total-info__price total-info__price--savings">- <span class="product_price">{% render 'money', amount: cart.total_discount %}</span></span>
           </div>
           {%- endif -%}
           <div class="total-info__row total-info__row--estimated">
             <span class="total-info__label">{{ section.settings.subtotal_label }}</span>
-            <span class="total-info__prices"><span class="total-info__price total-info__price--highlight"><span class="product_price">{% if settings.currency_code_enable %}{{ cart.total_price | money_with_currency }}{% else %}{{ cart.total_price | money }}{% endif %}</span></span></span>
+            <span class="total-info__prices"><span class="total-info__price total-info__price--highlight"><span class="product_price">{% if settings.currency_code_enable %}{% render 'money', amount: cart.total_price, format: 'with_currency' %}{% else %}{% render 'money', amount: cart.total_price %}{% endif %}</span></span></span>
           </div>
         </div>
         <button form="mini-cart-form" type="submit" class="checkout-button button button--primary button--full" name="checkout">
           <span class="checkout-button__lock"><svg aria-hidden="true" width="16" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
-          <span class="checkout-button__label">{{ section.settings.checkout_label }}</span>{% if section.settings.show_total_on_button %} - <span class="product_price">{{ cart.total_price | money }}</span>{% endif %}
+          <span class="checkout-button__label">{{ section.settings.checkout_label }}</span>{% if section.settings.show_total_on_button %} - <span class="product_price">{% render 'money', amount: cart.total_price %}</span>{% endif %}
         </button>
         {%- comment -%}
           The payment methods checkout accepts, read from the store's payment settings, so the strip

@@ -6,7 +6,7 @@
   </a>
   <a class="product-card__title" href="{{ routes.root_url }}#shop" data-scroll-to="shop">{{ product.title }}</a>
   <div class="product-card__price">
-    {{ product.price | money }}
-    {%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}
+    {% render 'money', amount: product.price %}
+    {%- if product.compare_at_price > product.price -%}<s>{% render 'money', amount: product.compare_at_price %}</s>{%- endif -%}
   </div>
 </div>

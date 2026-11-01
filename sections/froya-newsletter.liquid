@@ -22,7 +22,7 @@
         <div class="s-newsletter__input-row">
           <div class="s-newsletter__input">
             <input aria-label="{{ section.settings.placeholder | escape }}" class="s-newsletter__input-field" id="{{ form_id }}-email" name="contact[email]" placeholder="{{ section.settings.placeholder | escape }}" required type="email" value="{{ form.email }}">
-            <label class="s-newsletter__input-label" for="{{ form_id }}-email">Your e-mail</label>
+            <label class="s-newsletter__input-label" for="{{ form_id }}-email">{{ 'sections.newsletter.email_label' | t }}</label>
           </div>
 
           <div class="s-newsletter__input">

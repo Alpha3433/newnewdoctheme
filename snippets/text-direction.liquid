@@ -1,0 +1,15 @@
+{%- comment -%}
+  The text direction of the storefront's current language: "rtl" for Arabic, Hebrew, Persian and
+  Urdu (regional variants such as ar-SA included), "ltr" for every other language. The layouts put it
+  on <html dir="…">, and only a right-to-left page loads the Arabic font and assets/rtl.css.
+  Prints the word and nothing else; capture it.
+{%- endcomment -%}
+{%- liquid
+  assign language = request.locale.iso_code | split: '-' | first | downcase
+  case language
+    when 'ar', 'he', 'fa', 'ur'
+      echo 'rtl'
+    else
+      echo 'ltr'
+  endcase
+-%}

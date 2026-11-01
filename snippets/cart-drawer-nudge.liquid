@@ -48,7 +48,9 @@
       endif
     elsif next_price < now_price
       assign saving = now_price | minus: next_price | times: order_keep | plus: 500000 | divided_by: 1000000
-      assign saving_money = saving | money
+      capture saving_money
+        render 'money', amount: saving
+      endcapture
       assign nudge_text = save | replace: '{count}', extra | replace: '{amount}', saving_money
     endif
     assign nudge_button = button | replace: '{total}', next_total

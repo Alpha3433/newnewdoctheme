@@ -1,0 +1,60 @@
+{%- comment -%}
+  A bundle tier's name or supply line (Theme settings → Bundle tiers) in the shopper's language.
+
+  tier       the tier's number, 1-4; or
+  quantity   a bottle count instead: the biggest tier it fills, i.e. the tier whose discount applies
+  field      'title' for the tier name ("Buy 2, Get 1 Free"), 'supply' for its supply line
+             ("3-month supply")
+
+  Shopify can't translate Theme settings, so they only hold the store's default language. In that
+  language the setting prints as typed, so edits in the theme editor still show straight away. Every
+  other language prints the tier's key under products.bundle_tiers in the locale files instead
+  (tier_1_title, tier_1_supply …), which are translated with the store's other theme text. Tiers 1-3
+  have keys; a fourth tier keeps its setting until keys are added for it. A tier with no name is
+  named from its numbers ("Buy 2, Get 1 Free", or just the bottle count) and an empty supply line
+  prints nothing, in every language. Prints the text and nothing else; capture it:
+    capture tier_name
+      render 'bundle-tier-text', tier: 2, field: 'title'
+    endcapture
+{%- endcomment -%}
+{%- liquid
+  assign slot_number = tier | default: 0 | plus: 0
+  if slot_number == 0 and quantity
+    assign best_total = 0
+    for slot in (1..4)
+      assign slot_key = 'bundle_tier_' | append: slot
+      assign paid_key = slot_key | append: '_paid'
+      assign free_key = slot_key | append: '_free'
+      assign slot_paid = settings[paid_key] | default: 0
+      assign slot_free = settings[free_key] | default: 0
+      assign slot_total = slot_paid | plus: slot_free
+      if slot_paid > 0 and slot_total <= quantity and slot_total > best_total
+        assign best_total = slot_total
+        assign slot_number = slot
+      endif
+    endfor
+  endif
+
+  assign text = ''
+  if slot_number > 0
+    assign slot_key = 'bundle_tier_' | append: slot_number
+    assign setting_key = slot_key | append: '_' | append: field
+    assign text = settings[setting_key]
+    if text != blank and request.locale.primary == false and slot_number <= 3
+      assign locale_key = 'products.bundle_tiers.tier_' | append: slot_number | append: '_' | append: field
+      assign text = locale_key | t
+    endif
+    if text == blank and field == 'title'
+      assign paid_key = slot_key | append: '_paid'
+      assign free_key = slot_key | append: '_free'
+      assign tier_paid = settings[paid_key] | default: 0
+      assign tier_free = settings[free_key] | default: 0
+      if tier_free > 0
+        assign text = 'products.bundle_tiers.buy_get' | t: paid: tier_paid, free: tier_free
+      else
+        assign text = tier_paid | plus: tier_free
+      endif
+    endif
+  endif
+  echo text
+-%}

@@ -41,7 +41,13 @@ template (`templates/page.froya-landing.json`).
   prices: the real discount is applied at checkout by the Kaching Bundles app, so the tier
   quantities and discounts must match the quantity breaks configured there. `KACHING_DEAL` in
   `assets/main.js` repeats the two free-bottle tiers with Kaching's own bar and plan IDs (see
-  below); change it too if the tiers change.
+  below); change it too if the tiers change. The names and supply lines typed there are the
+  store's default language (English) only, because Shopify can't translate Theme settings: every
+  other language shows the theme's translations under `products.bundle_tiers` instead
+  (`snippets/bundle-tier-text.liquid`) - the names and supply lines of tiers 1-3, the
+  "{{ count }}-month supply" line for other bottle counts and the "Buy {{ paid }}, Get {{ free }}
+  Free" name of a tier left unnamed. In the cart those languages also show the tier's name where
+  English shows the bundle discount's own title. Rename a tier and update its translations too.
 * **Subscription cadence follows the bundle** – with Subscribe & save on, 1 bottle renews every
   month (Kaching Plan #1, `1039991141`), Buy 2 Get 1 Free every 3 months (Plan #2, `1052770661`) and
   Buy 3 Get 3 Free every 6 months (Plan #3, `1052803429`). The mapping sits next to the Kaching bars
@@ -170,6 +176,16 @@ template (`templates/page.froya-landing.json`).
   reads the variant's real stock and only shows at or below the threshold; *A fixed number* shows
   the figure typed below on every visit. The store tracks more than 2,000 units of the serum, so the
   landing page uses the fixed number; switch back to tracked inventory once real stock is low.
+* **Rounded prices** – Theme settings → Currency format → *Round prices to whole amounts* (off by
+  default) shows every price the storefront prints as a whole amount, in whatever currency the
+  shopper sees: $34.99 as $35, the Buy 2, Get 1 Free bundle's $69.98 as $70, $23.33 a bottle as $23.
+  Each figure is rounded to the nearest whole amount on its own, so a total and its saving can be a
+  dollar off what the rounded figures add up to; the free express shipping gap is rounded up
+  instead, so "$16 away" is never a cent short. Only the display changes: every price in the buy
+  box, bundle cards, cart drawer (lines, nudge, upgrade card, add-ons, totals), product pages and
+  cart page goes through `snippets/money.liquid`, while the cart, Kaching and checkout still charge
+  the exact prices, and the account's order history and gift card balances keep showing the amounts
+  as charged. Prices typed into text settings (such as "US$4.99" in the FAQ) are not changed.
 * **Typography** – the Pangram and Apercu Mono fonts are served from this store's own Files (see the
   `@font-face` rules in `assets/critical.css`). Weight 400 maps to the Regular face and 600/700 to the
   Bold face; an earlier mapping pointed regular text at the Light file, which is why paragraphs looked
@@ -178,6 +194,32 @@ template (`templates/page.froya-landing.json`).
 * **Sliders** – the logo & quote, review and video sliders can be swiped: the track follows the
   finger (or mouse), snaps to the nearest slide and a long or fast swipe moves several slides, so
   the whole set can be run through right-to-left. The dots still work.
+* **Languages** – English is the store's default language; Spanish, French, German, Italian and
+  Dutch are published and Arabic is translated but unpublished. Translations live in Shopify
+  (Settings → Languages, Translate & Adapt), not in theme files: section and block settings are
+  translated there, and so is the theme's own text in `locales/en.default.json` (accessibility
+  labels, alt text, the menu card and cart drawer buttons, fallbacks such as the countdown's unit
+  labels). The script's messages ("Added to cart", the cart error, the email popup's fallbacks)
+  reach `assets/main.js` through `window.theme.translations` in `layout/theme.liquid`. Keys ending
+  in `_html` come out of the `t` filter unescaped: those are text that gets escaped once later
+  (alt text handed to `snippets/froya-image.liquid`, the script's strings) or that holds markup
+  (the menu card's "from {{ price }}"). The bundle tiers are the exception described under
+  *Bundles*.
+* **Right-to-left (Arabic)** – Arabic, Hebrew, Persian and Urdu pages get `dir="rtl"`
+  (`snippets/text-direction.liquid`), Noto Sans Arabic from Google Fonts and `assets/rtl.css`;
+  left-to-right pages load neither, so they render exactly as before. `rtl.css` mirrors every rule
+  written with a physical side (left/right offsets, margins, paddings, borders, text alignment,
+  `translateX`) with `[dir="rtl"]` in front of the same selector, so a left/right rule added or
+  changed in the other stylesheets needs its mirror there too. On those pages the header, buy box
+  (gallery arrows, thumbnails, bundle cards, the Subscribe & save switch), cart drawer (it slides in
+  from the left), timelines, FAQ and email popup are mirrored and arrows point the other way. The
+  review, video and logo carousels start on the right and move on with a swipe to the right
+  (`attachSwipe` in `assets/main.js` reads the swipe mirrored), the scrolling offer banner runs left
+  to right and the countdown reads hours first from the right. The mobile menu still opens from the
+  left. The brand fonts stay first in every font stack, so Latin text (product names, prices) looks
+  as it does in English and Arabic letters fall through to Noto Sans Arabic; tracking
+  (letter-spacing) is off on these pages so the letters join up. Arabic can be previewed before it
+  is published from Settings → Languages.
 * **Hair-loss fit quiz** – three questions, one result screen that says how well Elaren fits the
   *kind* of hair loss the visitor has (never a probability). *Question* blocks are asked in sidebar
   order; each *Answer* block names the question it belongs to and the hair-loss type it points to;
@@ -407,6 +449,7 @@ The theme folders Shopify needs (`layout`, `templates`, `sections`, `snippets`, 
 | `sections/froya-*.liquid` | The landing page, one editable section per block (settings + blocks in each `{% schema %}`): announcement bar, sticky header with mega menus and mobile drawer, cart drawer, hero, benefits strip, logo/quote slider, review slider, results timeline ("What to expect"), backed-by-science timeline, research results, featured product (gallery, ingredients modal, buy box with bundle tiers), founder story, hair-loss types & badges, review wall, guarantee, video reviews, how-to-use, ingredient quality, ingredient science, newsletter, footer, and the sticky buy bar for phones. Markup keeps the captured page's class names so the verbatim CSS still applies. |
 | `snippets/froya-image.liquid`, `snippets/froya-nav-card.liquid` | Image-picker-with-fallback helper and the menu bestseller card. |
 | `snippets/bundle-tier-price.liquid`, `snippets/bundle-supply.liquid` | The price of a bottle count and its supply line under Theme settings → Bundle tiers, shared by the buy box and the cart drawer. |
+| `snippets/money.liquid` | Prints every storefront price with the money filters, rounded to whole amounts when Theme settings → Currency format → *Round prices to whole amounts* is on. |
 | `snippets/cart-drawer-nudge.liquid`, `snippets/cart-drawer-upgrade.liquid` | The cart drawer's next-tier nudge and upgrade card. |
 | `snippets/product-json-ld.liquid` | Product structured data for the serum's product page. |
 | `sections/main-*.liquid` | Minimal, on-brand sections for the rest of the store: page, product, collection, collections list, cart, search, blog, article, 404, password, and the customer account pages. |

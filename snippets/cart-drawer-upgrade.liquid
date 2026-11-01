@@ -56,8 +56,12 @@
     capture upgrade_supply
       render 'bundle-supply', quantity: next_total
     endcapture
-    assign upgrade_delta_money = upgrade_delta | money
-    assign upgrade_each_money = upgrade_each | money
+    capture upgrade_delta_money
+      render 'money', amount: upgrade_delta
+    endcapture
+    capture upgrade_each_money
+      render 'money', amount: upgrade_each
+    endcapture
     assign upgrade_title = title | replace: '{supply}', upgrade_supply
     assign upgrade_text = text | replace: '{amount}', upgrade_delta_money | replace: '{count}', upgrade_extra | replace: '{price}', upgrade_each_money
     assign upgrade_button = button | replace: '{total}', next_total

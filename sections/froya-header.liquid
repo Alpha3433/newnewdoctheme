@@ -41,6 +41,10 @@
     assign bar_total = bar_total | plus: 1
   endif
   assign bar_left_count = bar_total | plus: 1 | divided_by: 2 | at_most: bar_count
+  comment
+    froya-image escapes its alt text itself, so the alt is the translation's raw text (an _html key).
+  endcomment
+  assign before_after_alt = 'general.accessibility.customer_before_after_html' | t
 -%}
 {%- comment -%}
   Single-page bar: the section links and Track Order are shared evenly either side of the logo, the
@@ -126,7 +130,7 @@
 <div class="shopify-section froya-nav-section" id="shopify-section-froya-nav-variant">
 <froya-nav-variant class="froya-nav" data-section-id="froya-nav-variant" role="banner">
   <div class="froya-nav__bar">
-    <button aria-controls="froya-nav-drawer-froya-nav-variant" aria-expanded="false" aria-label="Open menu" class="froya-nav__burger" type="button">
+    <button aria-controls="froya-nav-drawer-froya-nav-variant" aria-expanded="false" aria-label="{{ 'sections.header.open_menu' | t }}" class="froya-nav__burger" type="button">
       <svg aria-hidden="true" fill="none" viewBox="0 0 20 14"><path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.5"></path></svg>
     </button>{%- if simple_menu -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--left froya-nav__desktop-nav--anchors" role="list">{{ bar_left }}</ul>{%- else -%}<ul class="froya-nav__desktop-nav froya-nav__desktop-nav--left" role="list"><li class="froya-nav__nav-item">
           <button aria-controls="froya-nav-mega-default-shop" aria-expanded="false" class="froya-nav__nav-link" data-mega-href="{{ section.settings.shop_all_url | default: '/collections/all' }}" data-mega-kind="shop" data-mega-label="{{ section.settings.shop_label | escape }}" data-mega-target="default-shop" type="button"><span class="froya-nav__nav-label">{{ section.settings.shop_label }}</span></button>
@@ -160,7 +164,7 @@
       {%- endif -%}
     {%- endif -%}
 
-      <a aria-controls="mini-cart" aria-expanded="false" aria-label="Cart" class="header__icon-wrapper tap-area button header-button cart-button js-cart-toggle" href="{{ routes.cart_url }}">
+      <a aria-controls="mini-cart" aria-expanded="false" aria-label="{{ 'sections.header.cart' | t }}" class="header__icon-wrapper tap-area button header-button cart-button js-cart-toggle" href="{{ routes.cart_url }}">
         {{ section.settings.cart_label }}
         <cart-count class="header__cart-count header__cart-count--floating bubble-count{% if cart.item_count == 0 %} hidden{% endif %}" data-cart-count-bubble>{{ cart.item_count }}</cart-count>
       </a>
@@ -197,7 +201,7 @@
         {%- if testimonial != blank -%}
         <div class="froya-nav__mega-testimonial-card">
           <div class="froya-nav__mega-testimonial-image">
-            {%- render 'froya-image', image: section.settings.testimonial_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Group_1484582098_1.png', alt: 'Customer before and after', width: 240, height: 144 -%}
+            {%- render 'froya-image', image: section.settings.testimonial_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Group_1484582098_1.png', alt: before_after_alt, width: 240, height: 144 -%}
           </div>
           <div class="froya-nav__mega-testimonial-content">{{ testimonial }}</div>
         </div>
@@ -223,7 +227,7 @@
     </ul></div></div>{%- endunless -%}
 </froya-nav-variant><froya-nav-drawer aria-hidden="true" class="froya-nav-drawer" id="froya-nav-drawer-froya-nav-variant">
   <div class="froya-nav-drawer__overlay" data-drawer-overlay></div>
-  <div aria-label="Site navigation" aria-modal="true" class="froya-nav-drawer__panel" role="dialog">
+  <div aria-label="{{ 'sections.header.site_navigation' | t }}" aria-modal="true" class="froya-nav-drawer__panel" role="dialog">
     <div class="froya-nav-drawer__header">
       <span class="froya-nav-drawer__header-logo">
         {%- if section.settings.logo != blank -%}
@@ -232,14 +236,14 @@
           <img alt="{{ shop.name | escape }}" class="header__logo-image" height="69" loading="lazy" src="{{ logo_fallback }}" width="369">
         {%- endif -%}
       </span>
-      <button aria-label="Close menu" class="froya-nav-drawer__header-close" data-drawer-close type="button">
+      <button aria-label="{{ 'sections.header.close_menu' | t }}" class="froya-nav-drawer__header-close" data-drawer-close type="button">
         <svg aria-hidden="true" fill="none" viewBox="0 0 16 16"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5"></path></svg>
       </button>
     </div>
     <div class="froya-nav-drawer__scroll">
       {%- if simple_menu -%}
       <div class="froya-nav-drawer__body froya-nav-drawer__body--anchors">
-        <nav aria-label="Page sections"><ul class="froya-nav-drawer__anchors" role="list">
+        <nav aria-label="{{ 'sections.header.page_sections' | t }}"><ul class="froya-nav-drawer__anchors" role="list">
           {%- for block in anchors -%}
             {%- liquid
             assign anchor_target = block.settings.target | default: 'reviews'
@@ -264,7 +268,7 @@
         {%- if testimonial != blank -%}
         <div class="froya-nav-drawer__testimonial">
           <div class="froya-nav-drawer__testimonial-image">
-            {%- render 'froya-image', image: section.settings.testimonial_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Group_1484582098.png', alt: 'Customer before and after', width: 150, height: 90 -%}
+            {%- render 'froya-image', image: section.settings.testimonial_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Group_1484582098.png', alt: before_after_alt, width: 150, height: 90 -%}
           </div>
           <div class="froya-nav-drawer__testimonial-content">{{ testimonial | replace: 'froya-nav__mega-testimonial-quote', 'froya-nav-drawer__testimonial-quote' | replace: 'froya-nav__mega-testimonial-meta', 'froya-nav-drawer__testimonial-meta' }}</div>
         </div>
@@ -325,7 +329,7 @@
         {%- if testimonial != blank -%}
         <div class="froya-nav-drawer__testimonial">
           <div class="froya-nav-drawer__testimonial-image">
-            {%- render 'froya-image', image: section.settings.testimonial_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Group_1484582098.png', alt: 'Customer before and after', width: 150, height: 90 -%}
+            {%- render 'froya-image', image: section.settings.testimonial_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Group_1484582098.png', alt: before_after_alt, width: 150, height: 90 -%}
           </div>
           <div class="froya-nav-drawer__testimonial-content">{{ testimonial | replace: 'froya-nav__mega-testimonial-quote', 'froya-nav-drawer__testimonial-quote' | replace: 'froya-nav__mega-testimonial-meta', 'froya-nav-drawer__testimonial-meta' }}</div>
         </div>

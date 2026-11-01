@@ -1,0 +1,244 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "search": {
+      "search": "Cerca",
+      "placeholder": "Cerca prodotti",
+      "no_results": "Nessun risultato trovato per “{{ terms }}”.",
+      "results_for": "Risultati per “{{ terms }}”"
+    },
+    "404": {
+      "title": "Pagina non trovata",
+      "subtext": "La pagina che stavi cercando non esiste.",
+      "link": "Continua lo shopping"
+    },
+    "password_page": {
+      "login_form_heading": "Accedi al negozio usando la password",
+      "login_form_password_label": "Password",
+      "login_form_submit": "Entra"
+    },
+    "pagination": {
+      "previous": "Precedente",
+      "next": "Successiva"
+    },
+    "meta": {
+      "tagged": "con il tag \"{{ tags }}\"",
+      "page": "Pagina {{ page }}"
+    },
+    "accessibility": {
+      "skip_to_content": "Vai al contenuto",
+      "close": "Chiudi",
+      "hero_banner": "Banner principale",
+      "five_star_rating_html": "Valutazione a cinque stelle",
+      "five_stars_html": "5 stelle",
+      "customer_before_after_html": "Prima e dopo di una cliente",
+      "customer_review_video": "Video recensione di una cliente",
+      "customer_testimonial_video": "Video testimonianza di una cliente",
+      "video_not_supported": "Il tuo browser non supporta la riproduzione video.",
+      "decrease_quantity": "Diminuisci quantità",
+      "increase_quantity": "Aumenta quantità"
+    },
+    "localization": {
+      "country_label": "Paese/regione",
+      "language_label": "Lingua"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Aggiungi al carrello",
+      "sold_out": "Esaurito",
+      "unavailable": "Non disponibile",
+      "quantity": "Quantità",
+      "regular_price": "Prezzo di listino",
+      "sale_price": "Prezzo scontato",
+      "add_to_cart_button": "AGGIUNGI AL CARRELLO",
+      "sold_out_button": "ESAURITO",
+      "shop_now": "ACQUISTA ORA",
+      "price_from_html": "da {{ price }}",
+      "star_rating": "Valutazione di {{ rating }} su 5 stelle",
+      "read_reviews": "Leggi le recensioni",
+      "reviews_count": "{{ count }} recensioni",
+      "close_ingredients": "Chiudi ingredienti",
+      "show_image": "Mostra immagine {{ index }} di {{ total }}"
+    },
+    "bundle_tiers": {
+      "tier_1_title": "1 flacone",
+      "tier_1_supply": "Fornitura per 30 giorni",
+      "tier_2_title": "Compra 2, il 3° è in omaggio",
+      "tier_2_supply": "Fornitura per 3 mesi",
+      "tier_3_title": "Compra 3, altri 3 in omaggio",
+      "tier_3_supply": "Fornitura per 6 mesi",
+      "supply_months": {
+        "one": "Fornitura per {{ count }} mese",
+        "other": "Fornitura per {{ count }} mesi"
+      },
+      "buy_get": "Compra {{ paid }}, ricevi {{ free }} in omaggio"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_products": "Nessun prodotto trovato in questa collezione.",
+      "view_all": "Visualizza tutto"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Il tuo carrello",
+      "empty": "Il tuo carrello è attualmente vuoto.",
+      "continue_shopping": "Continua lo shopping",
+      "subtotal": "Subtotale",
+      "checkout": "Check-out",
+      "remove": "Rimuovi",
+      "update": "Aggiorna carrello",
+      "taxes_and_shipping": "Imposte e spese di spedizione calcolate al check-out"
+    },
+    "drawer": {
+      "close": "Chiudi carrello",
+      "free_express_shipping": "Spedizione Express gratuita",
+      "remove_item": "Rimuovi {{ title }}",
+      "previous_recommendation": "Suggerimento precedente",
+      "next_recommendation": "Suggerimento successivo",
+      "added_html": "Aggiunto al carrello",
+      "error_html": "Qualcosa è andato storto. Riprova."
+    }
+  },
+  "blogs": {
+    "article": {
+      "read_more": "Leggi di più",
+      "back_to_blog": "Torna a {{ title }}"
+    }
+  },
+  "customer": {
+    "login": {
+      "title": "Accedi",
+      "email": "Email",
+      "password": "Password",
+      "forgot_password": "Hai dimenticato la password?",
+      "sign_in": "Accedi",
+      "create_account": "Crea account",
+      "guest_continue": "Continua come ospite"
+    },
+    "register": {
+      "title": "Crea account",
+      "first_name": "Nome",
+      "last_name": "Cognome",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Crea"
+    },
+    "account": {
+      "title": "Account",
+      "log_out": "Esci",
+      "order_history": "Cronologia ordini",
+      "no_orders": "Non hai ancora effettuato ordini.",
+      "view_addresses": "Visualizza indirizzi",
+      "track_orders": "Traccia i tuoi ordini"
+    },
+    "order": {
+      "title": "Ordine {{ name }}",
+      "date": "Effettuato il {{ date }}",
+      "product": "Prodotto",
+      "quantity": "Quantità",
+      "total": "Totale",
+      "shipping_address": "Indirizzo di spedizione",
+      "billing_address": "Indirizzo di fatturazione",
+      "delivery": "Consegna",
+      "status_page": "Dettagli completi della consegna"
+    },
+    "addresses": {
+      "title": "Indirizzi",
+      "default": "Predefinito",
+      "add_new": "Aggiungi un nuovo indirizzo",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "update": "Aggiorna indirizzo",
+      "cancel": "Annulla",
+      "first_name": "Nome",
+      "last_name": "Cognome",
+      "company": "Azienda",
+      "address1": "Indirizzo 1",
+      "address2": "Indirizzo 2",
+      "city": "Città",
+      "country": "Paese/area geografica",
+      "province": "Provincia",
+      "zip": "CAP",
+      "phone": "Telefono",
+      "set_default": "Imposta come indirizzo predefinito"
+    },
+    "activate_account": {
+      "title": "Attiva account",
+      "subtext": "Crea la tua password per attivare il tuo account.",
+      "password": "Password",
+      "password_confirm": "Conferma password",
+      "submit": "Attiva account",
+      "cancel": "Rifiuta invito"
+    },
+    "reset_password": {
+      "title": "Reimposta la password dell’account",
+      "subtext": "Inserisci una nuova password",
+      "password": "Password",
+      "password_confirm": "Conferma password",
+      "submit": "Reimposta password"
+    },
+    "recover_password": {
+      "title": "Reimposta la tua password",
+      "subtext": "Ti invieremo un’email per reimpostare la password.",
+      "submit": "Invia",
+      "cancel": "Annulla"
+    },
+    "tracking": {
+      "step_placed": "Ordine effettuato",
+      "step_preparing": "In preparazione",
+      "step_shipped": "Spedito",
+      "step_on_way": "In viaggio",
+      "carrier": "Corriere",
+      "shipped_on": "Spedito il {{ date }}",
+      "track": "Traccia",
+      "partial": "Parte di questo ordine è stata spedita; il resto arriverà in un pacco separato con un proprio numero di tracciamento.",
+      "no_number": "Il tuo ordine è stato spedito. Il numero di tracciamento sta arrivando nella tua casella di posta.",
+      "cancelled": "Questo ordine è stato annullato."
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Ecco il tuo buono regalo da {{ value }} per {{ shop }}!",
+      "subtext": "Il tuo buono regalo",
+      "gift_card_code": "Codice del buono regalo",
+      "shop_link": "Continua lo shopping",
+      "remaining_html": "Saldo residuo {{ balance }}",
+      "add_to_apple_wallet": "Aggiungi a Apple Wallet",
+      "print_gift_card": "Stampa"
+    }
+  },
+  "sections": {
+    "header": {
+      "open_menu": "Apri menu",
+      "close_menu": "Chiudi menu",
+      "cart": "Carrello",
+      "site_navigation": "Navigazione del sito",
+      "page_sections": "Sezioni della pagina"
+    },
+    "announcement_bar": {
+      "countdown_units": "Giorni,Ore,Minuti,Secondi"
+    },
+    "featured_product": {
+      "no_product_html": "<strong>Prodotto in evidenza:</strong> seleziona un prodotto nelle impostazioni della sezione per mostrare il box d’acquisto.",
+      "fallback_image_alts_html": "Flacone di Olio Ricrescita Elaren ai semi di zucca con Complesso alla Caffeina|Donna che applica l’Olio Ricrescita Elaren sul cuoio capelluto lungo la riga|Olio Ricrescita ai semi di zucca|Olio Ricrescita Elaren tenuto in mano con i principali benefici|Griglia di foto prima e dopo di clienti con riga, vertice e attaccatura più folti|Valutazione a stelle e due recensioni verificate di clienti|Risultati di ricerche pubblicate sull’olio di semi di zucca e sulla caffeina|Ingredienti: olio di semi di zucca spremuto a freddo e Complesso alla Caffeina|Tempistiche della ricrescita a 2 settimane, 30 giorni e 30 giorni|Guida alla routine serale di due minuti per il cuoio capelluto|Donna che tiene l’Olio Ricrescita Elaren con la garanzia soddisfatti o rimborsati di 30 giorni"
+    },
+    "newsletter": {
+      "email_label": "La tua email"
+    },
+    "email_popup": {
+      "copied_html": "Copiato!",
+      "invalid_email_html": "Inserisci un indirizzo email valido."
+    }
+  }
+}

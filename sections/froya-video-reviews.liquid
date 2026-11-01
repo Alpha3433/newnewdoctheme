@@ -5,6 +5,7 @@
 {%- liquid
   assign shop_href = section.settings.shop_url | default: '#shop'
   assign shop_attrs = ''
+  assign stars_alt = 'general.accessibility.five_stars_html' | t
   if shop_href contains '#'
     assign shop_attrs = shop_href | split: '#' | last | prepend: ' data-scroll-to="' | append: '"'
   endif
@@ -32,7 +33,7 @@
                     {%- if block.settings.video != blank -%}
                       {{ block.settings.video | video_tag: controls: true, preload: 'none' }}
                     {%- else -%}
-                      <video aria-label="Customer testimonial video" controls data-sources="{{ block.settings.video_url }}" data-types="video/mp4" loading="lazy" preload="none">Your browser does not support the video tag.</video>
+                      <video aria-label="{{ 'general.accessibility.customer_testimonial_video' | t }}" controls data-sources="{{ block.settings.video_url }}" data-types="video/mp4" loading="lazy" preload="none">{{ 'general.accessibility.video_not_supported' | t }}</video>
                     {%- endif -%}
                   </div>
                   <div class="s-videos-slider__video-content">
@@ -42,7 +43,7 @@
                         {%- if block.settings.date != blank -%}<span class="s-videos-slider__date">{{ block.settings.date }}</span>{%- endif -%}
                       </div>
                       <div class="s-videos-slider__stars">
-                        <picture>{%- render 'froya-image', image: section.settings.stars_image, fallback: 'https://froyaorganics.com/cdn/shop/files/stars.svg', alt: '5 stars', width: 71, height: 16 -%}</picture>
+                        <picture>{%- render 'froya-image', image: section.settings.stars_image, fallback: 'https://froyaorganics.com/cdn/shop/files/stars.svg', alt: stars_alt, width: 71, height: 16 -%}</picture>
                       </div>
                     </div>
                     {%- if product != blank -%}
@@ -52,7 +53,7 @@
                       </a>
                       <div class="s-videos-slider__product-info">
                         <div class="s-videos-slider__product-title">{{ block.settings.product_title | default: product.title }}</div>
-                        <div class="s-videos-slider__product-price"><span>{{ section.settings.from_label }} <span class="product_price">{{ product.price_min | money }}</span></span></div>
+                        <div class="s-videos-slider__product-price"><span>{{ section.settings.from_label }} <span class="product_price">{% render 'money', amount: product.price_min %}</span></span></div>
                         <a class="s-videos-slider__product-button custom-button" href="{{ shop_href }}"{{ shop_attrs }}>{{ section.settings.shop_label }}</a>
                       </div>
                     </div>

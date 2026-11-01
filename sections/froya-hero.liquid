@@ -21,13 +21,14 @@
   assign mobile_fit = section.settings.image_mobile_fit | default: 'cover'
   assign mobile_position = section.settings.image_mobile_position | default: 'center center'
   assign mobile_size = 'cover'
+  assign stars_alt = 'general.accessibility.five_star_rating_html' | t
   if mobile_fit == 'top'
     assign mobile_size = '100% auto'
     assign mobile_position = 'center top'
   endif
 -%}
 <div class="shopify-section" id="shopify-section-template--26717513089391__hero_banner_BnFCDE" data-anchor="top">
-<section aria-label="Hero banner" class="s-hero-aging-lp" role="region" style="--mobile-text-color:{{ section.settings.mobile_text_color }};--ig-aging-lp-mobile-min-height:550px;--ig-aging-lp-cta-max-width:550px;--hero-aging-lp-mobile-bg:url('{{ mobile_bg }}');--hero-aging-lp-mobile-offset:0px;--hero-aging-lp-mobile-size:{{ mobile_size }};--hero-aging-lp-mobile-position:{{ mobile_position }};--hero-aging-lp-mobile-bg-color:{{ section.settings.image_mobile_bg | default: '#3d4b33' }};--hero-aging-lp-mobile-photo-space:{{ section.settings.mobile_photo_space | default: 150 }}px;--hero-aging-lp-scrim:{{ section.settings.mobile_scrim | default: 35 | divided_by: 100.0 }};">
+<section aria-label="{{ 'general.accessibility.hero_banner' | t }}" class="s-hero-aging-lp" role="region" style="--mobile-text-color:{{ section.settings.mobile_text_color }};--ig-aging-lp-mobile-min-height:550px;--ig-aging-lp-cta-max-width:550px;--hero-aging-lp-mobile-bg:url('{{ mobile_bg }}');--hero-aging-lp-mobile-offset:0px;--hero-aging-lp-mobile-size:{{ mobile_size }};--hero-aging-lp-mobile-position:{{ mobile_position }};--hero-aging-lp-mobile-bg-color:{{ section.settings.image_mobile_bg | default: '#3d4b33' }};--hero-aging-lp-mobile-photo-space:{{ section.settings.mobile_photo_space | default: 150 }}px;--hero-aging-lp-scrim:{{ section.settings.mobile_scrim | default: 35 | divided_by: 100.0 }};">
   <div class="s-hero-aging-lp__container" data-hero-link="{{ section.settings.button_link | default: '#product-section' }}"><div class="s-hero-aging-lp__image-desktop">
       {%- render 'froya-image', image: section.settings.image, fallback: desktop_fallback, alt: section.settings.image_alt, width: 1600, height: 1179, loading: 'eager', sizes: '(min-width: 1920px) 960px, (min-width: 1200px) 600px, 50vw' -%}
     </div>
@@ -49,7 +50,7 @@
         {%- endif -%}
         {%- if section.settings.review_text != blank -%}
         <div class="s-hero-aging-lp__review"><div class="s-hero-aging-lp__stars">
-            {%- render 'froya-image', image: section.settings.stars_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Frame_3202_8b62166a-5f2f-4223-9107-a3d1271e7343.png?v=1732651187', alt: 'Five star rating', width: 68, height: 14, loading: 'eager' -%}
+            {%- render 'froya-image', image: section.settings.stars_image, fallback: 'https://froyaorganics.com/cdn/shop/files/Frame_3202_8b62166a-5f2f-4223-9107-a3d1271e7343.png?v=1732651187', alt: stars_alt, width: 68, height: 14, loading: 'eager' -%}
           </div><div class="s-hero-aging-lp__review-text">{{ section.settings.review_text }}</div></div>
         {%- endif -%}
         <h1 class="s-hero-aging-lp__title" id="main-heading"><p>{{ section.settings.title }}</p></h1>
