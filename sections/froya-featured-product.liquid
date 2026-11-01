@@ -1003,7 +1003,7 @@
     { "type": "range", "id": "low_stock_threshold", "label": "Low-stock threshold", "min": 5, "max": 500, "step": 5, "default": 150, "info": "Tracked inventory only." },
     { "type": "number", "id": "low_stock_count", "label": "Fixed number", "default": 156, "info": "Fixed number only." },
     { "type": "text", "id": "low_stock_text", "label": "Low-stock text", "default": "Low Stock: only {count} left" },
-    { "type": "header", "content": "Under the stock notice", "info": "Add \"See it in action video\" blocks for a row of videos and \"Question under the stock notice\" blocks for the questions below it." },
+    { "type": "header", "content": "Under the stock notice", "info": "Add \"See it in action video\" blocks for a row of videos and \"Question (under stock)\" blocks for the questions below it." },
     { "type": "text", "id": "videos_title", "label": "Videos heading", "default": "See it in action", "info": "The videos show once a block has a video." }
   ],
   "blocks": [
@@ -1075,7 +1075,7 @@
     },
     {
       "type": "stock_faq",
-      "name": "Question under the stock notice",
+      "name": "Question (under stock)",
       "settings": [
         { "type": "text", "id": "title", "label": "Question", "default": "What results can I expect?" },
         { "type": "richtext", "id": "content", "label": "Answer", "default": "<p>Write the answer here.</p>" }
