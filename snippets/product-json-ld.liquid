@@ -1,0 +1,48 @@
+{%- comment -%}
+  Product structured data for the serum's product page (layout/theme.liquid renders it there only).
+  Google Merchant Center compares it with the product feed, so the offer is what the feed sells: one
+  bottle bought once, at the variant's price in the shop's current currency. The description is the
+  product description, or the SEO description while the product has none. No aggregateRating or
+  review markup: the rating on the page is typed into the buy box, not read from the review app.
+
+  {% render 'product-json-ld', product: product %}
+{%- endcomment -%}
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign description = product.description | replace: '<', ' <' | strip_html | replace: '&nbsp;', ' ' | replace: '&amp;', '&' | split: ' ' | join: ' '
+  if description == blank
+    assign description = page_description | strip_html | strip
+  endif
+-%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "url": {{ canonical_url | json }},
+    {%- if product.images.size > 0 %}
+    "image": [
+      {%- for image in product.images limit: 10 -%}
+        {{ image | image_url: width: 1920 | prepend: 'https:' | json }}{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ],
+    {%- endif -%}
+    {%- if variant.sku != blank %}
+    "sku": {{ variant.sku | json }},
+    {%- endif %}
+    "brand": {
+      "@type": "Brand",
+      "name": "Elaren"
+    },
+    {%- if description != blank %}
+    "description": {{ description | json }},
+    {%- endif %}
+    "offers": {
+      "@type": "Offer",
+      "url": {{ canonical_url | json }},
+      "price": {{ variant.price | divided_by: 100.0 | json }},
+      "priceCurrency": {{ cart.currency.iso_code | json }},
+      "availability": "https://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}"
+    }
+  }
+</script>

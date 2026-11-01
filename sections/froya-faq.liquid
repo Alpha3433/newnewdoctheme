@@ -1,7 +1,9 @@
 {% comment %}
   FAQ – numbered accordion in the "Backed by science" style. Heading and every question/answer are
   editable in the theme editor; the wrapper carries data-anchor="faq" so menu and footer links can scroll here.
+  On a product page it only shows on the serum's page (the Bundled product, templates/product.json).
 {% endcomment %}
+{%- unless template.name == 'product' and product.id != settings.bundle_product.id -%}
 <div class="shopify-section shopify-section-faq" data-anchor="faq" id="shopify-section-{{ section.id }}-faq">
 <section aria-labelledby="s-faq-title-{{ section.id }}" class="s-faq" id="faq-section">
   <div class="s-faq__container">
@@ -26,6 +28,7 @@
   </div>
 </section>
 </div>
+{%- endunless -%}
 
 {% schema %}
 {

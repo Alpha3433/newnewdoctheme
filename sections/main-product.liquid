@@ -1,3 +1,10 @@
+{%- comment -%}
+  The plain product page, for every product but the serum: the Bundled product (Theme settings →
+  Bundle tiers) has its own page in templates/product.json, built from the landing page's sections,
+  and this section stays empty there. Other products only reach it while "Send product pages to the
+  home page" is off.
+{%- endcomment -%}
+{%- unless product.id == settings.bundle_product.id -%}
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 <div class="page-width">
   <div class="product-page">
@@ -52,10 +59,13 @@
     </div>
   </div>
 </div>
+{%- endunless -%}
 
 {% schema %}
 {
   "name": "Product",
-  "settings": []
+  "settings": [
+    { "type": "paragraph", "content": "Every product except the Bundled product (Theme settings → Bundle tiers) uses this plain layout. The serum's page is the buy box and the sections above, which stay empty on other products." }
+  ]
 }
 {% endschema %}

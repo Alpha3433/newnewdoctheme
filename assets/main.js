@@ -898,16 +898,18 @@
   /* An amount in the store's money format, built from a sample the section renders with Liquid's
      money filter (data-money: 1234567.89 in the shopper's currency), so it reads exactly like every
      other price on the page - symbol, separators, decimals and any markup the format carries. A
-     sample without decimals (Round prices on, or a currency like JPY) prints a whole amount:
-     rounded, or rounded up with roundUp. */
-  function formatMoney(cents, sample, roundUp) {
+     sample without decimals (a currency like JPY) prints a whole amount: rounded, or rounded up
+     with roundUp. trimZeros drops a whole amount's ".00" ($16, but $5.50), like the cart's prices
+     with Round prices on. */
+  function formatMoney(cents, sample, roundUp, trimZeros) {
     // (?:) keeps each back-reference apart from the digits after it: \1567 would read as one escape.
     var m = String(sample || '').match(/1(\D?)234\1(?:567)(\D)89|1(\D?)234\3(?:568)/);
     if (!m) return (cents / 100).toFixed(2);
-    var decimals = m[2] !== undefined;
-    var amount = decimals ? (cents / 100).toFixed(2) : String(Math[roundUp ? 'ceil' : 'round'](cents / 100));
+    var hasDecimals = m[2] !== undefined;
+    var decimals = hasDecimals && !(trimZeros && cents % 100 === 0);
+    var amount = decimals ? (cents / 100).toFixed(2) : String(Math[roundUp && !hasDecimals ? 'ceil' : 'round'](cents / 100));
     var parts = amount.split('.');
-    var number = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, decimals ? m[1] : m[3]) + (decimals ? m[2] + parts[1] : '');
+    var number = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, hasDecimals ? m[1] : m[3]) + (decimals ? m[2] + parts[1] : '');
     return sample.slice(0, m.index) + number + sample.slice(m.index + m[0].length);
   }
   function escapeHtml(text) {
@@ -936,8 +938,9 @@
         text.innerHTML = goal.reached
           ? escapeHtml(bar.getAttribute('data-text-reached'))
           : escapeHtml(bar.getAttribute('data-text')).replace('{amount}', function () {
-            // Rounded up when prices show whole amounts: "$15 away" with $15.01 to go is a cent short.
-            return '<span class="free-shipping__highlight">' + formatMoney(goal.gap, bar.getAttribute('data-money'), true) + '</span>';
+            // Exact, like the rest of the cart; rounded up only for a currency without decimals, where
+            // "$15 away" with $15.01 to go would be a cent short.
+            return '<span class="free-shipping__highlight">' + formatMoney(goal.gap, bar.getAttribute('data-money'), true, bar.hasAttribute('data-money-trim')) + '</span>';
           });
       }
       var note = $('[data-cart-shipping-note]', bar);
@@ -1094,12 +1097,20 @@
     var burger = $('.froya-nav__burger');
     if (burger) burger.setAttribute('aria-expanded', 'false');
   }
-  function scrollToId(id) {
+  function scrollToId(id, instant) {
     var el = findAnchor(id);
     if (!el) return false;
     var offset = ($('.froya-nav__bar') || { offsetHeight: 0 }).offsetHeight + 8;
     var top = el.getBoundingClientRect().top + window.pageYOffset - offset;
-    window.scrollTo({ top: top, behavior: 'smooth' });
+    if (instant) {
+      // html scrolls smoothly (theme.css), so a jump switches that off for the moment.
+      var root = document.documentElement, was = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';
+      window.scrollTo(0, top);
+      root.style.scrollBehavior = was;
+    } else {
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
     return true;
   }
   document.addEventListener('click', function (e) {
@@ -1275,6 +1286,13 @@
     video.dataset.loaded = '1';
     if (srcs.join('').trim()) video.load();
   }
+  // Muted and inline, so browsers let it start without a tap (and iOS keeps it in the page).
+  function playMuted(video) {
+    video.muted = true;
+    video.playsInline = true;
+    var playing = video.play();
+    if (playing && playing.catch) playing.catch(function () { /* autoplay refused: the play icon stays */ });
+  }
   function initVideos(root) {
     $$('.s-videos-slider__video-item', root).forEach(function (item) {
       if (!once(item, 'init')) return;
@@ -1326,7 +1344,12 @@
         var active = k === current;
         s.classList.toggle('is-active', active);
         var v = s.querySelector('video');
-        if (v) { if (active) loadVideo(v); else v.pause(); }
+        if (!v) return;
+        if (!active) { v.pause(); return; }
+        loadVideo(v);
+        // The demo video (Featured product → Demo video) plays muted and looped while its slide
+        // is showing; for visitors who ask their device for reduced motion it waits for a tap.
+        if (v.classList.contains('js-gallery-autoplay') && !reduceMotion()) playMuted(v);
       });
       thumbs.forEach(function (t, k) { t.classList.toggle('is-active', k === current); });
       var activeThumb = thumbs[current];
@@ -1336,6 +1359,14 @@
         else strip.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
       }
     };
+    // A tap on the demo video pauses or resumes it; its slide shows a play icon while it is paused
+    // (also when the device refuses to autoplay, as iOS does in Low Power Mode).
+    $$('video.js-gallery-autoplay', gallery).forEach(function (v) {
+      var slide = v.closest('.s-featured-product__slide');
+      v.addEventListener('play', function () { slide.classList.remove('is-paused'); });
+      v.addEventListener('pause', function () { slide.classList.add('is-paused'); });
+      slide.addEventListener('click', function () { if (v.paused) playMuted(v); else v.pause(); });
+    });
     var prev = $('.js-arrow-prev', gallery), next = $('.js-arrow-next', gallery);
     if (prev) prev.addEventListener('click', function () { show(current - 1); });
     if (next) next.addEventListener('click', function () { show(current + 1); });
@@ -1402,6 +1433,8 @@
     };
     var priceMain = $('.c-buybox-toggle__price--sub .product_price', sub);
     var priceOtp = $('.c-buybox-toggle__price--otp .product_price', sub);
+    var priceMainCompare = $('.c-buybox-toggle__price--sub .c-buybox-toggle__price-compare', sub);
+    var priceOtpCompare = $('.c-buybox-toggle__price--otp .c-buybox-toggle__price-compare', sub);
     var buttonPrice = $('.c-subscribtion__add-to-cart .js-subscribtion__main-price .product_price', sub);
     var buttonCompare = $('.c-subscribtion__add-to-cart .igcp', sub);
     // Strike-through for each mode, rendered by the section: the page may load in either mode,
@@ -1430,6 +1463,21 @@
       // markup as visible text, so render it as HTML, exactly as the server does on first paint.
       if (priceMain) priceMain.innerHTML = d('data-unit-sub');
       if (priceOtp) priceOtp.innerHTML = d('data-unit-otp');
+      // The regular price struck through beside the big price follows the tier too: it shows only
+      // while the tier's price per bottle is below it, so one bottle bought once reads "$52", not
+      // "$52 $52".
+      var compareUnitCents = parseInt(d('data-compare-unit-cents'), 10) || 0;
+      var showCompare = function (el, unitCents) {
+        if (!el) return;
+        if (compareUnitCents > unitCents) {
+          ($('.product_price', el) || el).innerHTML = d('data-compare-unit');
+          el.removeAttribute('hidden');
+        } else {
+          el.setAttribute('hidden', '');
+        }
+      };
+      showCompare(priceMainCompare, parseInt(d('data-unit-sub-cents'), 10) || 0);
+      showCompare(priceOtpCompare, parseInt(d('data-unit-otp-cents'), 10) || 0);
       if (buttonPrice) buttonPrice.innerHTML = total;
       if (buttonCompare) buttonCompare.innerHTML = saveCents > 0 ? d('data-compare-total') : '';
       if (congratsPrice) congratsPrice.innerHTML = save;
@@ -1478,6 +1526,87 @@
     // Start in whatever mode the section rendered (Subscribe & save is off unless the merchant
     // pre-selects it): the checked purchase_type radio carries that state.
     setMode(!!defaultPlan && (!radios.length || radios.some(function (r) { return r.checked && r.value === 'subscription'; })));
+  }
+
+  /* ====================================================== sticky buy bar */
+  /* sections/froya-sticky-buy-bar.liquid, phones only (assets/sections.css). The bar shows once the
+     hero has left the screen (on a page without one, once the page has scrolled) and hides again
+     while any part of the buy box (#product-section) is on screen; an open drawer, the ingredients
+     modal or the email popup hides it through its body class. {price} is the lowest one-time price
+     per bottle on the bundle cards, already in the visitor's currency. The bar watches other
+     sections, so every section (re)load sets it up afresh. */
+  var stickyBuyBar = { observers: [], onScroll: null };
+  var reduceMotion = function () { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); };
+  function initStickyBuyBar() {
+    stickyBuyBar.observers.forEach(function (o) { o.disconnect(); });
+    stickyBuyBar.observers = [];
+    if (stickyBuyBar.onScroll) window.removeEventListener('scroll', stickyBuyBar.onScroll);
+    stickyBuyBar.onScroll = null;
+    var bar = $('[data-sticky-buy-bar]');
+    if (!bar) { document.body.classList.remove('has-sticky-buy-bar'); return; }
+    var targetId = bar.getAttribute('data-target') || 'choose-bundle';
+    var target = document.getElementById(targetId);
+    var form = target && (target.closest('form') || target);
+    var cheapest = null;
+    if (form) {
+      $$('.js-bundle-card', form).forEach(function (card) {
+        var cents = parseInt(card.getAttribute('data-unit-otp-cents'), 10);
+        if (!isNaN(cents) && (!cheapest || cents < cheapest.cents)) cheapest = { cents: cents, html: card.getAttribute('data-unit-otp') };
+      });
+      // No bundle cards: the one-time price in the price line is the price of a bottle.
+      var single = !cheapest && $('.c-buybox-toggle__price--otp .product_price', form);
+      if (single) cheapest = { html: single.innerHTML.trim() };
+    }
+    var ready = !!(cheapest && cheapest.html) && 'IntersectionObserver' in window;
+    document.body.classList.toggle('has-sticky-buy-bar', ready);
+    if (!ready) { bar.classList.remove('is-visible'); return; }
+    // Rendered as HTML, as the buy box does (renderTier): the money format may carry markup.
+    $$('[data-sticky-buy-bar-price]', bar).forEach(function (slot) { slot.innerHTML = cheapest.html; });
+
+    // The page keeps room for the bar at the bottom (body.has-sticky-buy-bar), as tall as it is.
+    var setHeight = function () { document.documentElement.style.setProperty('--sticky-buy-bar-height', bar.offsetHeight + 'px'); };
+    setHeight();
+    if ('ResizeObserver' in window) {
+      var resize = new ResizeObserver(setHeight);
+      resize.observe(bar);
+      stickyBuyBar.observers.push(resize);
+    }
+
+    var pastTop = false, onForm = false;
+    var update = function () { bar.classList.toggle('is-visible', pastTop && !onForm); };
+    var hero = $('.s-hero-aging-lp');
+    if (hero) {
+      var heroWatch = new IntersectionObserver(function (entries) {
+        var entry = entries[entries.length - 1];
+        pastTop = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+        update();
+      });
+      heroWatch.observe(hero);
+      stickyBuyBar.observers.push(heroWatch);
+    } else {
+      stickyBuyBar.onScroll = function () { pastTop = window.pageYOffset > 0; update(); };
+      window.addEventListener('scroll', stickyBuyBar.onScroll, { passive: true });
+      stickyBuyBar.onScroll();
+    }
+    var formWatch = new IntersectionObserver(function (entries) { onForm = entries[entries.length - 1].isIntersecting; update(); });
+    formWatch.observe(target.closest('#product-section') || form);
+    stickyBuyBar.observers.push(formWatch);
+
+    if (!once(bar, 'init')) return;
+    bar.addEventListener('click', function (e) {
+      if (!e.target.closest('[data-sticky-buy-bar-button]')) return;
+      var id = bar.getAttribute('data-target') || 'choose-bundle';
+      if (window.clarity) window.clarity('event', 'sticky_bar_tap');
+      scrollToId(id, reduceMotion());
+      // From the keyboard (a click with no pointer behind it, detail 0) focus follows the bar to the
+      // selected bundle, so the visitor carries on from there instead of from a bar that has just
+      // hidden itself. A tap leaves focus alone: moving it drew a focus ring round the card.
+      if (e.detail !== 0) return;
+      var line = document.getElementById(id);
+      var buyForm = line && (line.closest('form') || line);
+      var next = buyForm && ($('.js-bundle-card input:checked', buyForm) || $('button, input:not([type="hidden"])', buyForm));
+      if (next) next.focus({ preventScroll: true });
+    });
   }
 
   /* ============================================ backed-by-science scroll spy */
@@ -1667,7 +1796,9 @@
      intent, whichever comes first), posts the customer form in the background, reveals the code and
      attaches it to the session via /discount/CODE so checkout applies it automatically. Closing it,
      with or without signing up, is remembered per visitor in localStorage for the days set in the
-     section, and it never reopens on its own within the same visit. */
+     section, and it never reopens on its own within the same visit. It never opens over the buy box
+     or the cart drawer, and on a page with a buy box the delay only starts once the visitor has
+     scrolled past it. */
   function initEmailPopup(root) {
     var popup = $('[data-email-popup]', root) || (root === document ? $('[data-email-popup]') : null);
     if (!popup || !once(popup, 'init')) return;
@@ -1730,12 +1861,21 @@
       window.setTimeout(function () { if (!opened) popup.setAttribute('hidden', ''); }, 400);
       if (rememberDays && !designMode) remember(rememberDays, 'dismissed');
     };
+    // Never over the buy box or the cart: the popup doesn't open while any part of the buy box
+    // (#product-section) is on screen or while the cart drawer is open.
+    var buyBox = document.getElementById('product-section');
+    var inTheWay = function () {
+      if (document.body.classList.contains('cart-open')) return true;
+      if (!buyBox || !document.body.contains(buyBox)) return false;
+      var r = buyBox.getBoundingClientRect();
+      return r.bottom > 0 && r.top < window.innerHeight;
+    };
     // The popup fires once per visit at most. The delay timer and exit intent both come through
     // here: the first one to fire wins, and a popup the visitor has already closed (this visit, or
     // within the remembered days from an earlier one) never comes back on its own. Only the theme
     // editor (popup.__open) can reopen it.
     var autoOpen = function () {
-      if (fired || opened || hiddenUntil() > Date.now()) return;
+      if (fired || opened || hiddenUntil() > Date.now() || inTheWay()) return;
       fired = true;
       if (exitIntent) document.removeEventListener('mouseout', exitIntent);
       open();
@@ -1865,10 +2005,30 @@
     if (!enabled || hiddenUntil() > Date.now()) return;
 
     var delay = Math.max(0, parseInt(popup.getAttribute('data-delay') || '6', 10)) * 1000;
-    timer = window.setTimeout(autoOpen, delay);
+    // Once the delay is up the popup opens, or waits while the buy box or the cart is in the way.
+    var due = function () {
+      timer = null;
+      if (inTheWay()) { timer = window.setTimeout(due, 1000); return; }
+      autoOpen();
+    };
+    // On a page with a buy box the delay only starts once the visitor has scrolled past the bottom
+    // of it; on any other page it starts now. A scroll listener rather than an IntersectionObserver:
+    // a jump from above the buy box to below it (a menu link, a restored scroll position) never
+    // intersects it, so an observer would not report it.
+    if (buyBox) {
+      var pastBuyBox = function () {
+        if (buyBox.getBoundingClientRect().bottom > 0) return;
+        window.removeEventListener('scroll', pastBuyBox);
+        if (!fired && !opened) timer = window.setTimeout(due, delay);
+      };
+      window.addEventListener('scroll', pastBuyBox, { passive: true });
+      pastBuyBox();
+    } else {
+      timer = window.setTimeout(due, delay);
+    }
     if (popup.getAttribute('data-exit-intent') === 'true' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       exitIntent = function (e) {
-        if (!e.relatedTarget && e.clientY <= 0 && !document.body.classList.contains('cart-open')) autoOpen();
+        if (!e.relatedTarget && e.clientY <= 0 && !inTheWay()) autoOpen();
       };
       document.addEventListener('mouseout', exitIntent);
     }
@@ -1884,6 +2044,7 @@
     initGallery(root);
     initModal(root);
     initBuyBox(root);
+    initStickyBuyBar();
     initScience(root);
     initBars(root);
     initNewsletter(root);
@@ -1904,6 +2065,12 @@
       if (cartCount) Cart.run(function () { return Cart.reconcile(); }, true).catch(function () {});
     }
     document.documentElement.classList.add('loaded');
+    // Clarity: tag visits that see the buy box with its layout, so recordings can be filtered by it.
+    // The Clarity snippet may only define window.clarity after this script has run; try again on load.
+    if (document.getElementById('choose-bundle')) {
+      var tagLayout = function () { if (window.clarity) window.clarity('set', 'buybox_layout', 'price_first'); };
+      if (window.clarity) tagLayout(); else window.addEventListener('load', tagLayout);
+    }
     autoLocalize();
     // Arrived from another page with a section key in the hash (e.g. /#faq): scroll to that section.
     var hash = (window.location.hash || '').replace(/^#/, '');
@@ -1912,6 +2079,47 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 
   // Theme editor: re-initialise a section after it is re-rendered, and open drawers when selected.
+  // "See it in action" videos under the stock notice: a thumbnail plays its video in the dialog
+  // beside it. Delegated, so a section the theme editor re-renders needs no setup.
+  document.addEventListener('click', function (e) {
+    var target = e.target;
+    if (!target || !target.closest) return;
+    var thumb = target.closest('.js-buybox-video');
+    if (thumb) {
+      var src = thumb.getAttribute('data-video-src');
+      var wrap = thumb.closest('.c-buybox-videos');
+      var dialog = wrap && $('.js-video-dialog', wrap);
+      var video = dialog && $('video', dialog);
+      if (!src) return;
+      if (!dialog || !video || typeof dialog.showModal !== 'function') {
+        window.open(src, '_blank', 'noopener');
+        return;
+      }
+      video.src = src;
+      dialog.showModal();
+      var playing = video.play();
+      if (playing && playing.catch) playing.catch(function () {});
+      return;
+    }
+    var closeButton = target.closest('.js-video-dialog-close');
+    if (closeButton) {
+      closeButton.closest('dialog').close();
+      return;
+    }
+    // A click on the dark backdrop lands on the dialog element itself
+    if (target.classList && target.classList.contains('js-video-dialog')) target.close();
+  });
+  // However the dialog closes (button, backdrop, Esc), stop the video and drop it
+  document.addEventListener('close', function (e) {
+    var dialog = e.target;
+    if (!dialog || !dialog.classList || !dialog.classList.contains('js-video-dialog')) return;
+    var video = $('video', dialog);
+    if (!video) return;
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+  }, true);
+
   document.addEventListener('shopify:section:load', function (e) {
     var old = document.querySelector('#ingredients-modal[data-for-section]');
     if (old && e.target.querySelector('.js-view-ingredients')) old.parentNode.removeChild(old);
@@ -1926,10 +2134,14 @@
     if (e.target.querySelector('#mini-cart')) Cart.open();
     var popup = popupForSection(e.target);
     if (popup && popup.__open) popup.__open();
+    var bar = e.target.querySelector('[data-sticky-buy-bar]');
+    if (bar) bar.classList.add('is-selected');
   });
   document.addEventListener('shopify:section:deselect', function (e) {
     if (e.target.querySelector('#mini-cart')) Cart.close();
     var popup = popupForSection(e.target);
     if (popup && popup.__close) popup.__close();
+    var bar = e.target.querySelector('[data-sticky-buy-bar]');
+    if (bar) bar.classList.remove('is-selected');
   });
 })();

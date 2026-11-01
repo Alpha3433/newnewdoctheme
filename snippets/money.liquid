@@ -1,13 +1,17 @@
 {%- comment -%}
-  A price as the money filters print it in the shopper's currency, or rounded to a whole amount
-  when Theme settings → Currency format → Round prices to whole amounts is on: $34.99 shows as $35,
-  $23.33 as $23.
+  A price as the money filters print it in the shopper's currency. When Theme settings → Currency
+  format → Round prices to whole amounts is on, prices show the way froyaorganics.com shows them:
+  whole amounts on the product pages ($32.40 shows as $32, $23.33 as $23), exact amounts from the
+  cart on. The cart drawer, the cart page and the checkout button pass exact: true, which keeps the
+  cents and only drops a whole amount's ".00" ($72, $64.80), so the cart always reads like checkout.
   Only what the storefront prints changes. The cart, Kaching and checkout keep the exact prices,
   and the theme's own comparisons (whether a saving shows, the shipping goal) still use the cents.
 
   amount   the price in cents
   format   'with_currency' prints it like money_with_currency (code after it), 'without_trailing_zeros'
            like money_without_trailing_zeros, anything else like money
+  exact    true keeps the exact price while rounding is on (the cart); a whole amount loses its ".00".
+           No effect while rounding is off.
   Prints the price and nothing else; capture it to use it in a sentence or an attribute:
     capture saving_money
       render 'money', amount: saving
@@ -15,25 +19,30 @@
 {%- endcomment -%}
 {%- liquid
   if settings.round_prices and amount != nil
-    assign whole = amount | divided_by: 100.0 | round | times: 100
-    assign rounded = whole | money_without_trailing_zeros
+    if exact
+      assign value = amount
+    else
+      assign value = amount | divided_by: 100.0 | round | times: 100
+    endif
+    assign short = value | money_without_trailing_zeros
     if format == 'with_currency'
-      assign coded = whole | money_with_currency
-      assign padded = whole | money
-      if padded != rounded
+      assign coded = value | money_with_currency
+      assign padded = value | money
+      if padded != short
         comment
-          No filter prints the currency code without the decimals, so the number itself (35.00)
-          loses its zero decimals inside the coded price ($35.00 USD), whatever symbol or markup
-          the format puts around it.
+          A whole amount. No filter prints the currency code without the decimals, so the number
+          itself (35.00) loses its zero decimals inside the coded price ($35.00 USD), whatever
+          symbol or markup the format puts around it. An amount with cents ($64.80) prints the
+          same either way and is left alone.
         endcomment
-        assign number = whole | money_without_currency
+        assign number = value | money_without_currency
         assign number_size = number.size | minus: 3
         assign trimmed = number | slice: 0, number_size
         assign coded = coded | replace: number, trimmed
       endif
       echo coded
     else
-      echo rounded
+      echo short
     endif
   elsif format == 'with_currency'
     echo amount | money_with_currency

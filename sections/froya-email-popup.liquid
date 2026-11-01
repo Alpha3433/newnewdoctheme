@@ -8,6 +8,8 @@
   form falls back to a normal submit and the success step renders from form.posted_successfully?
   instead. Full screen on phones, a split card on desktop. The popup is hidden in the theme editor
   until the section is selected, and is remembered per visitor (localStorage) for the "days" set below.
+  It never opens while the buy box (#product-section) is on screen or the cart drawer is open, and on
+  a page with a buy box the delay only starts once the visitor has scrolled past it (assets/main.js).
 {% endcomment %}
 {%- liquid
   assign sid = section.id
@@ -87,7 +89,7 @@
   "class": "shopify-section-email-popup",
   "settings": [
     { "type": "checkbox", "id": "enabled", "label": "Show the popup", "default": true },
-    { "type": "range", "id": "delay", "label": "Open after", "min": 0, "max": 60, "step": 1, "unit": "s", "default": 6 },
+    { "type": "range", "id": "delay", "label": "Open after", "min": 0, "max": 60, "step": 1, "unit": "s", "default": 6, "info": "Counted from the moment the visitor has scrolled past the buy box (from page load on a page without one). The popup never opens over the buy box or the cart drawer." },
     { "type": "checkbox", "id": "exit_intent", "label": "Also open when the cursor leaves the page (desktop)", "default": true },
     { "type": "range", "id": "dismiss_days", "label": "Hide after closing for", "min": 1, "max": 90, "step": 1, "unit": "d", "default": 7 },
     { "type": "range", "id": "signup_days", "label": "Hide after signing up for", "min": 5, "max": 365, "step": 5, "unit": "d", "default": 60 },

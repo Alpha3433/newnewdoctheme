@@ -1,0 +1,73 @@
+{% comment %}
+  "What to expect" results timeline: heading, optional intro line, one Step block per milestone
+  (label, title, text) on a vertical line with a marker each, a footnote and a button. The button
+  scrolls to the buy box's price and bundles (#choose-bundle) through data-scroll-to, like the
+  other buttons on the page. Menu links can reach the section with #timeline.
+  On a product page it only shows on the serum's page (the Bundled product, templates/product.json).
+{% endcomment %}
+{%- unless template.name == 'product' and product.id != settings.bundle_product.id -%}
+<div class="s-results-timeline" data-anchor="timeline">
+  <div class="s-results-timeline__container">
+    <header class="s-results-timeline__header">
+      {%- if section.settings.heading != blank -%}<h2 class="s-results-timeline__title section-title" id="results-timeline-title-{{ section.id }}">{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.intro != blank -%}<p class="s-results-timeline__intro">{{ section.settings.intro }}</p>{%- endif -%}
+    </header>
+    {%- if section.blocks.size > 0 -%}
+    <ol class="s-results-timeline__steps"{% if section.settings.heading != blank %} aria-labelledby="results-timeline-title-{{ section.id }}"{% endif %}>
+      {%- for block in section.blocks -%}
+        <li class="s-results-timeline__step" {{ block.shopify_attributes }}>
+          <span aria-hidden="true" class="s-results-timeline__marker"></span>
+          {%- if block.settings.label != blank -%}<p class="s-results-timeline__label">{{ block.settings.label }}</p>{%- endif -%}
+          {%- if block.settings.title != blank -%}<h3 class="s-results-timeline__step-title">{{ block.settings.title }}</h3>{%- endif -%}
+          {%- if block.settings.text != blank -%}<p class="s-results-timeline__text">{{ block.settings.text }}</p>{%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ol>
+    {%- endif -%}
+    {%- if section.settings.footnote != blank -%}<p class="s-results-timeline__footnote">{{ section.settings.footnote }}</p>{%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+    {%- assign timeline_link = section.settings.button_link | default: '#choose-bundle' -%}
+    <div class="s-results-timeline__cta"><a class="s-results-timeline__button custom-button" href="{{ timeline_link }}"{% if timeline_link contains '#' %} data-scroll-to="{{ timeline_link | split: '#' | last }}"{% endif %}>{{ section.settings.button_label }}</a></div>
+    {%- endif -%}
+  </div>
+</div>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Results timeline",
+  "tag": "section",
+  "class": "section-results-timeline",
+  "settings": [
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "What to expect" },
+    { "type": "text", "id": "intro", "label": "Intro line", "info": "Optional. A short line under the heading." },
+    { "type": "text", "id": "footnote", "label": "Footnote", "default": "Hair grows in cycles, so results build with consistent nightly use. Individual results vary." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Choose your bundle", "info": "Leave empty to hide the button." },
+    { "type": "text", "id": "button_link", "label": "Button link", "default": "#choose-bundle", "info": "#choose-bundle scrolls to the buy box's price and bundles, #product-section to the top of the buy box." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "WEEK 2" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Less shedding" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Most customers notice fewer hairs in the shower and on their brush in the first weeks." }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Results timeline",
+      "blocks": [
+        { "type": "step", "settings": { "label": "FIRST NIGHTS", "title": "Two minutes a night", "text": "Glide the roller along your part, massage for 60 seconds, leave it in overnight." } },
+        { "type": "step", "settings": { "label": "WEEK 2", "title": "Less shedding", "text": "Most customers notice fewer hairs in the shower and on their brush in the first weeks." } },
+        { "type": "step", "settings": { "label": "DAY 30", "title": "Fuller-looking hair", "text": "Around day 30 your part starts to look fuller. Not happy? Your money-back guarantee starts at night 30." } },
+        { "type": "step", "settings": { "label": "MONTH 3", "title": "New baby hairs", "text": "New baby hairs along the part and hairline. One full growth cycle, which is the 3-month supply." } },
+        { "type": "step", "settings": { "label": "MONTH 6", "title": "Density keeps building", "text": "Density keeps building with nightly use, which is the 6-month supply." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

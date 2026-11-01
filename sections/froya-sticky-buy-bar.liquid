@@ -1,0 +1,35 @@
+{% comment %}
+  Sticky buy bar (phones only). Pinned to the bottom of the screen once the hero has scrolled away
+  (on a page without a hero, once the page is scrolled), it shows the lowest one-time price per
+  bottle and scrolls to the buy box's price line (#choose-bundle) when tapped. assets/main.js
+  (initStickyBuyBar) fills in {price} from the buy box's bundle cards, so it is always the visitor's
+  currency, and hides the bar while any part of the buy box is on screen and while the cart drawer,
+  the menu, the ingredients modal or the email popup is open.
+  On a product page it belongs to the Bundled product (Theme settings → Bundle tiers) only.
+{% endcomment %}
+{%- unless template.name == 'product' and product.id != settings.bundle_product.id -%}
+{%- liquid
+  assign price_placeholder = '{price}'
+  assign price_slot = '<span class="sticky-buy-bar__price" data-sticky-buy-bar-price></span>'
+  assign bar_text = section.settings.text | escape | replace: price_placeholder, price_slot
+-%}
+<div class="sticky-buy-bar" data-sticky-buy-bar data-target="choose-bundle">
+  <button class="sticky-buy-bar__inner" type="button" data-sticky-buy-bar-button>
+    <span class="sticky-buy-bar__text">{{ bar_text }}</span>
+    <span class="sticky-buy-bar__button custom-button">{{ section.settings.button_label | escape }}</span>
+  </button>
+</div>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Sticky buy bar",
+  "tag": "section",
+  "settings": [
+    { "type": "paragraph", "content": "Phones only. The bar appears once the hero has scrolled off screen and hides while any part of the buy box is on screen. A tap scrolls to the price (#choose-bundle)." },
+    { "type": "text", "id": "text", "label": "Text", "default": "Choose your bundle · from {price} a bottle", "info": "{price} is the lowest one-time price per bottle on the buy box's bundle cards, in the visitor's currency." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop now" }
+  ],
+  "presets": [ { "name": "Sticky buy bar" } ]
+}
+{% endschema %}

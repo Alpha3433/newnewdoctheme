@@ -697,7 +697,7 @@
         "bundle_title": "Choose your bundle",
         "price_style": "unit",
         "unit_suffix": "per bottle",
-        "total_text": "{total} total",
+        "total_text": "",
         "save_text": "Save {amount} ({percent}% off)",
         "toggle_title": "Save {percent}% with our flexible plan",
         "toggle_sub": "No contracts. Cancel with ease.",

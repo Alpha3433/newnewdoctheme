@@ -1064,6 +1064,14 @@ body.cart-open { overflow: hidden; }
   .mini-cart .drawer__footer { padding: 14px 16px 18px; }
   .mini-cart .line-item__content-wrapper { grid-template-columns: 92px minmax(0, 1fr); gap: 12px; }
 }
+/* Phones: the payment logos and the three trust icons make way, so on a short screen the serum
+   line and the checkout button both fit without scrolling. critical.css gives every <footer> a
+   200px min-height, which the drawer's shorter footer would otherwise keep as empty space. */
+@media screen and (max-width: 767px) {
+  .cart-drawer__payment-icons,
+  .s-mini-cart__guarantee-badges { display: none; }
+  .mini-cart .drawer__footer { min-height: 0; }
+}
 
 /* Mobile menu: short review quotes under the testimonial (Header → Mobile quote blocks). */
 .froya-nav-drawer__quotes { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
