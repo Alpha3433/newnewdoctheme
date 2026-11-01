@@ -26,14 +26,14 @@
         "pill_icon": true,
         "pill_bg": "#b3173a",
         "pill_color": "#ffffff",
-        "review_text": "Rated 4.77/5 by women with thinning hair",
-        "title": "Less Shedding in <em>2 Weeks.</em>",
+        "review_text": "",
+        "title": "Less Shedding in <em>3 Weeks.</em>",
         "subtitle": "Pumpkin seed oil and caffeine feed tired follicles, calm shedding and help hair grow back thicker. For the part, crown and edges, postpartum and menopausal shedding.",
-        "button_label": "Try it risk-free - save up to 50%",
+        "button_label": "Try it risk free - save up to 50%",
         "button_link": "#choose-bundle",
         "stat_1": "FOR EVERY TEXTURE & TYPE OF HAIR LOSS",
-        "stat_2": "",
-        "stat_3": ""
+        "stat_2": "NO MINOXIDIL. NO HORMONES.",
+        "stat_3": "JUST 2 MINUTES A NIGHT"
       }
     },
     "benefits-strip": {
@@ -797,7 +797,7 @@
         "days_per_tube": 30,
         "per_day_text": "{price} a day",
         "sub_default": false,
-        "why_subscribe": "<strong>Why subscribe?</strong> Hair grows in cycles, so results come from nightly use over 3+ months. Subscribing keeps you stocked.",
+        "why_subscribe": "<strong>Why subscribe?</strong> Hair grows in cycles, so results come from nightly use over 2+ months. Subscribing keeps you stocked.",
         "toggle_title": "Save {percent}% with our flexible plan",
         "toggle_sub": "No contracts. Cancel with ease.",
         "benefit_1": "<strong>Free Insured Shipping</strong> Every Order",
