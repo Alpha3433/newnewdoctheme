@@ -819,7 +819,7 @@
         "info_1": "",
         "info_2": "",
         "button_label": "Add to Cart",
-        "button_price": "total_compare",
+        "button_price": "total",
         "sold_out_label": "Sold out",
         "show_low_stock": true,
         "low_stock_source": "fixed",

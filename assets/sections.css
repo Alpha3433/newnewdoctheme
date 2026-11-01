@@ -1202,7 +1202,6 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
   .c-bundle__card { padding: 12px; }
   .c-bundle__name { font-size: 15px; }
   .c-bundle__unit { font-size: 18px; }
-  .c-bundle__meta,
   .c-bundle__gift,
   .c-bundle__perks { padding-left: 0; }
 }
@@ -1225,6 +1224,9 @@ div.custom_loox_star_rating, div.custom_loox_star_rating div { content-visibilit
 }
 @media screen and (max-width: 479px) {
   .c-bundle__main { gap: 10px; }
+  /* The savings line starts where the name and supply line do: the 20px dot plus this 10px gap
+     (32px above this width, the base rule, with the 12px gap) */
+  .c-bundle__meta { padding-left: 30px; }
   .c-bundle__pricing { flex-direction: column; align-items: flex-end; gap: 0; }
   .c-bundle__badge { font-size: 9px; padding: 3px 7px; }
   /* The price line stacks over "per bottle" here, and both are set tighter, so the price per day

@@ -224,9 +224,11 @@ html[dir="rtl"] {
 [dir="rtl"] .c-bundle--plan .c-bundle__perks { padding-left: 0; padding-right: 38px; }
 @media screen and (max-width: 767px) {
   [dir="rtl"] .custom_loox_star_rating--above-name .loox-rating-label { margin-left: 0; margin-right: 4px; }
-  [dir="rtl"] .c-bundle__meta,
   [dir="rtl"] .c-bundle__gift,
   [dir="rtl"] .c-bundle__perks { padding-right: 0; }
+}
+@media screen and (max-width: 479px) {
+  [dir="rtl"] .c-bundle__meta { padding-right: 30px; }
 }
 
 /* --------------------------------------------------------------------------
