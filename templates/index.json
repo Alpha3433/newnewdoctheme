@@ -417,8 +417,8 @@
       "settings": {
         "heading": "What to expect",
         "intro": "",
-        "footnote": "Hair grows in cycles, so results build with consistent nightly use. Individual results vary.",
-        "button_label": "Choose your bundle",
+        "footnote": "",
+        "button_label": "",
         "button_link": "#choose-bundle"
       }
     },
