@@ -18,6 +18,14 @@
     var r = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
     return r.charAt(r.length - 1) === '/' ? r : r + '/';
   };
+  // Text in the shopper's language: layout/theme.liquid passes it in from the locale files.
+  var translate = function (key) {
+    var strings = window.theme && window.theme.translations;
+    return (strings && strings[key]) || '';
+  };
+  // Arabic and the other right-to-left languages mirror the page: <html dir="rtl">
+  // (snippets/text-direction.liquid) and assets/rtl.css.
+  var isRtl = function () { return document.documentElement.getAttribute('dir') === 'rtl'; };
 
   function readFlag(key) { try { return window.sessionStorage.getItem(key); } catch (err) { return null; } }
   function writeFlag(key, value) { try { window.sessionStorage.setItem(key, value); } catch (err) { /* private mode */ } }
@@ -67,7 +75,7 @@
   // A cart request that gets no answer within this long fails, so a dropped connection can never
   // leave the drawer greyed out for good.
   var CART_TIMEOUT = 20000;
-  var CART_ERROR = 'Something went wrong. Please try again.';
+  var CART_ERROR = translate('cartError');
   var totalQuantity = function (lines) { return lines.reduce(function (total, line) { return total + line.quantity; }, 0); };
   var planOf = function (item) { return item.selling_plan_allocation ? item.selling_plan_allocation.selling_plan.id : ''; };
 
@@ -269,7 +277,7 @@
         // Opened from the page, the drawer also says where the shipping goal and any nudge now
         // stand; inside an open drawer those are read out as they change (announceDrawer).
         var extra = self.isOpen() ? [] : drawerMessages(self.drawer());
-        self.announce(['Added to cart'].concat(extra).join('. '));
+        self.announce([translate('addedToCart')].concat(extra).join('. '));
         self.open();
       });
     },
@@ -871,7 +879,7 @@
     var prev = e.target.closest('[data-rec-prev]'), next = e.target.closest('[data-rec-next]');
     if (prev || next) {
       var scroller = $('[data-rec-scroller]', Cart.drawer());
-      if (scroller) scroller.scrollBy({ left: (prev ? -1 : 1) * Math.max(160, scroller.clientWidth * 0.8), behavior: 'smooth' });
+      if (scroller) scroller.scrollBy({ left: (prev ? -1 : 1) * (isRtl() ? -1 : 1) * Math.max(160, scroller.clientWidth * 0.8), behavior: 'smooth' });
     }
   });
 
@@ -1124,11 +1132,15 @@
      follows the finger, rubber-bands at the ends, snaps to the nearest slide on release and lets
      a long or fast swipe travel several slides, so the shopper can run through every slide by
      dragging right-to-left. Pointer events where they exist (one code path for mouse, pen and
-     touch), touch events otherwise. Vertical movement is handed back to the page immediately. */
+     touch), touch events otherwise. Vertical movement is handed back to the page immediately.
+     Right to left, assets/rtl.css mirrors the track (the first slide sits on the right and a swipe
+     to the right moves on), so horizontal positions are read mirrored too. */
   function attachSwipe(slider) {
     var track = slider && slider.track;
     if (!track || slider.isStatic || !once(track, 'swipe')) return;
     var usePointer = 'PointerEvent' in window;
+    var mirrored = isRtl();
+    var xOf = function (p) { return mirrored ? -p.clientX : p.clientX; };
     var active = false, moved = false, axis = null;
     var startX = 0, startY = 0, lastX = 0, lastT = 0, velocity = 0, dragged = 0;
 
@@ -1171,7 +1183,7 @@
       var p = point(e);
       if (!p) return;
       active = true; moved = false; axis = null;
-      startX = lastX = p.clientX; startY = p.clientY; lastT = Date.now(); velocity = 0;
+      startX = lastX = xOf(p); startY = p.clientY; lastT = Date.now(); velocity = 0;
       slider.isTransitioning = false; // a new swipe must never die because the last one is still animating
       track.style.transitionDuration = '0ms';
       listen('addEventListener');
@@ -1180,7 +1192,7 @@
       if (!active) return;
       var p = point(e);
       if (!p) return;
-      var dx = p.clientX - startX, dy = p.clientY - startY;
+      var dx = xOf(p) - startX, dy = p.clientY - startY;
       if (!axis) {
         if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
         axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
@@ -1189,8 +1201,8 @@
       if (e.cancelable) e.preventDefault();
       moved = true;
       var now = Date.now();
-      if (now > lastT) velocity = (p.clientX - lastX) / (now - lastT); // px per ms
-      lastX = p.clientX; lastT = now;
+      if (now > lastT) velocity = (xOf(p) - lastX) / (now - lastT); // px per ms
+      lastX = xOf(p); lastT = now;
       if (!slider.config.loop && ((dx > 0 && atStart()) || (dx < 0 && atEnd()))) dx *= 0.3; // rubber-band
       paint(dx);
     };
@@ -1320,7 +1332,8 @@
       var activeThumb = thumbs[current];
       if (activeThumb && strip && strip.scrollWidth > strip.clientWidth) {
         var left = activeThumb.offsetLeft - (strip.clientWidth - activeThumb.offsetWidth) / 2;
-        strip.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+        if (isRtl()) strip.scrollBy({ left: activeThumb.getBoundingClientRect().left - strip.getBoundingClientRect().left - (strip.clientWidth - activeThumb.offsetWidth) / 2, behavior: 'smooth' });
+        else strip.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
       }
     };
     var prev = $('.js-arrow-prev', gallery), next = $('.js-arrow-next', gallery);
@@ -1332,7 +1345,7 @@
     gallery.addEventListener('touchend', function (e) {
       if (startX === null) return;
       var dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 40) show(dx < 0 ? current + 1 : current - 1);
+      if (Math.abs(dx) > 40) show((dx < 0) !== isRtl() ? current + 1 : current - 1);
       startX = null;
     });
     show(current);
@@ -1770,7 +1783,7 @@
         var text = codeEl ? codeEl.textContent.trim() : code;
         var done = function () {
           var label = copy.textContent;
-          copy.textContent = popup.getAttribute('data-copied-label') || 'Copied!';
+          copy.textContent = popup.getAttribute('data-copied-label') || translate('copied');
           window.setTimeout(function () { copy.textContent = label; }, 1800);
         };
         if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, done);
@@ -1790,7 +1803,7 @@
         if (error) error.setAttribute('hidden', '');
         if (input && !input.checkValidity()) {
           input.setAttribute('aria-invalid', 'true');
-          if (error) { error.textContent = popup.getAttribute('data-error-text') || 'Please enter a valid email address.'; error.removeAttribute('hidden'); }
+          if (error) { error.textContent = popup.getAttribute('data-error-text') || translate('invalidEmail'); error.removeAttribute('hidden'); }
           input.focus();
           return;
         }
@@ -1820,7 +1833,7 @@
             if (submit) submit.disabled = false;
             if (err && err.message === 'invalid') {
               if (input) input.setAttribute('aria-invalid', 'true');
-              if (error) { error.textContent = err.detail || popup.getAttribute('data-error-text') || 'Please enter a valid email address.'; error.removeAttribute('hidden'); }
+              if (error) { error.textContent = err.detail || popup.getAttribute('data-error-text') || translate('invalidEmail'); error.removeAttribute('hidden'); }
               return;
             }
             form.dataset.native = '1';

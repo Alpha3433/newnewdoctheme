@@ -41,7 +41,13 @@ template (`templates/page.froya-landing.json`).
   prices: the real discount is applied at checkout by the Kaching Bundles app, so the tier
   quantities and discounts must match the quantity breaks configured there. `KACHING_DEAL` in
   `assets/main.js` repeats the two free-bottle tiers with Kaching's own bar and plan IDs (see
-  below); change it too if the tiers change.
+  below); change it too if the tiers change. The names and supply lines typed there are the
+  store's default language (English) only, because Shopify can't translate Theme settings: every
+  other language shows the theme's translations under `products.bundle_tiers` instead
+  (`snippets/bundle-tier-text.liquid`) - the names and supply lines of tiers 1-3, the
+  "{{ count }}-month supply" line for other bottle counts and the "Buy {{ paid }}, Get {{ free }}
+  Free" name of a tier left unnamed. In the cart those languages also show the tier's name where
+  English shows the bundle discount's own title. Rename a tier and update its translations too.
 * **Subscription cadence follows the bundle** – with Subscribe & save on, 1 bottle renews every
   month (Kaching Plan #1, `1039991141`), Buy 2 Get 1 Free every 3 months (Plan #2, `1052770661`) and
   Buy 3 Get 3 Free every 6 months (Plan #3, `1052803429`). The mapping sits next to the Kaching bars
@@ -130,6 +136,32 @@ template (`templates/page.froya-landing.json`).
 * **Sliders** – the logo & quote, review and video sliders can be swiped: the track follows the
   finger (or mouse), snaps to the nearest slide and a long or fast swipe moves several slides, so
   the whole set can be run through right-to-left. The dots still work.
+* **Languages** – English is the store's default language; Spanish, French, German, Italian and
+  Dutch are published and Arabic is translated but unpublished. Translations live in Shopify
+  (Settings → Languages, Translate & Adapt), not in theme files: section and block settings are
+  translated there, and so is the theme's own text in `locales/en.default.json` (accessibility
+  labels, alt text, the menu card and cart drawer buttons, fallbacks such as the countdown's unit
+  labels). The script's messages ("Added to cart", the cart error, the email popup's fallbacks)
+  reach `assets/main.js` through `window.theme.translations` in `layout/theme.liquid`. Keys ending
+  in `_html` come out of the `t` filter unescaped: those are text that gets escaped once later
+  (alt text handed to `snippets/froya-image.liquid`, the script's strings) or that holds markup
+  (the menu card's "from {{ price }}"). The bundle tiers are the exception described under
+  *Bundles*.
+* **Right-to-left (Arabic)** – Arabic, Hebrew, Persian and Urdu pages get `dir="rtl"`
+  (`snippets/text-direction.liquid`), Noto Sans Arabic from Google Fonts and `assets/rtl.css`;
+  left-to-right pages load neither, so they render exactly as before. `rtl.css` mirrors every rule
+  written with a physical side (left/right offsets, margins, paddings, borders, text alignment,
+  `translateX`) with `[dir="rtl"]` in front of the same selector, so a left/right rule added or
+  changed in the other stylesheets needs its mirror there too. On those pages the header, buy box
+  (gallery arrows, thumbnails, bundle cards, the Subscribe & save switch), cart drawer (it slides in
+  from the left), timelines, FAQ and email popup are mirrored and arrows point the other way. The
+  review, video and logo carousels start on the right and move on with a swipe to the right
+  (`attachSwipe` in `assets/main.js` reads the swipe mirrored), the scrolling offer banner runs left
+  to right and the countdown reads hours first from the right. The mobile menu still opens from the
+  left. The brand fonts stay first in every font stack, so Latin text (product names, prices) looks
+  as it does in English and Arabic letters fall through to Noto Sans Arabic; tracking
+  (letter-spacing) is off on these pages so the letters join up. Arabic can be previewed before it
+  is published from Settings → Languages.
 * **Hair-loss fit quiz** – three questions, one result screen that says how well Elaren fits the
   *kind* of hair loss the visitor has (never a probability). *Question* blocks are asked in sidebar
   order; each *Answer* block names the question it belongs to and the hair-loss type it points to;

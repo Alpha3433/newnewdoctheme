@@ -11,6 +11,9 @@
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
   assign option_suffix = section.settings.option_suffix
+  capture text_direction
+    render 'text-direction'
+  endcapture
   assign image_count = 0
   for media in product.media
     if media.media_type == 'image'
@@ -46,7 +49,8 @@
           {%- assign thumb_index = 0 -%}
           {%- for media in product.media -%}
             {%- if media.media_type == 'image' -%}
-              <button type="button" class="compact-pdp__thumb{% if thumb_index == 0 %} is-active{% endif %}" data-thumb="{{ thumb_index }}" aria-label="Show image {{ thumb_index | plus: 1 }} of {{ image_count }}">
+              {%- assign thumb_number = thumb_index | plus: 1 -%}
+              <button type="button" class="compact-pdp__thumb{% if thumb_index == 0 %} is-active{% endif %}" data-thumb="{{ thumb_index }}" aria-label="{{ 'products.product.show_image' | t: index: thumb_number, total: image_count }}">
                 {{ media | image_url: width: 160, height: 160, crop: 'center' | image_tag: loading: 'lazy', alt: '' }}
               </button>
               {%- assign thumb_index = thumb_index | plus: 1 -%}
@@ -131,9 +135,9 @@
 
         <div class="compact-pdp__buy">
           <div class="compact-pdp__qty">
-            <button type="button" class="compact-pdp__qty-btn" data-qty-step="-1" aria-label="Decrease quantity">&minus;</button>
+            <button type="button" class="compact-pdp__qty-btn" data-qty-step="-1" aria-label="{{ 'general.accessibility.decrease_quantity' | t }}">&minus;</button>
             <input type="number" name="quantity" value="1" min="1" max="99" inputmode="numeric" class="compact-pdp__qty-input" data-qty aria-label="{{ 'products.product.quantity' | t }}">
-            <button type="button" class="compact-pdp__qty-btn" data-qty-step="1" aria-label="Increase quantity">+</button>
+            <button type="button" class="compact-pdp__qty-btn" data-qty-step="1" aria-label="{{ 'general.accessibility.increase_quantity' | t }}">+</button>
           </div>
           <button type="submit" class="custom-button compact-pdp__add" data-add-button{% unless current_variant.available %} disabled{% endunless %}>
             <span data-add-label data-label-add="{{ section.settings.add_label | escape }}" data-label-sold="{{ 'products.product.sold_out' | t | escape }}">
@@ -186,7 +190,7 @@
                     {%- if block.settings.heading != blank -%}<span class="compact-pdp__pair-heading">{{ block.settings.heading }}</span>{%- endif -%}
                     {%- if pair_product != blank -%}<span class="compact-pdp__pair-title">{{ pair_product.title }}</span>{%- endif -%}
                     {%- if block.settings.text != blank -%}<span class="compact-pdp__pair-copy">{{ block.settings.text }}</span>{%- endif -%}
-                    {%- if block.settings.link_label != blank -%}<span class="compact-pdp__pair-link">{{ block.settings.link_label }} &rarr;</span>{%- endif -%}
+                    {%- if block.settings.link_label != blank -%}<span class="compact-pdp__pair-link">{{ block.settings.link_label }} {% if text_direction == 'rtl' %}&larr;{% else %}&rarr;{% endif %}</span>{%- endif -%}
                   </span>
                 </a>
             {%- endcase -%}
@@ -305,7 +309,9 @@
         stage.addEventListener('touchend', function (e) {
           if (startX === null) return;
           var dx = e.changedTouches[0].clientX - startX;
-          if (Math.abs(dx) > 40) show(dx < 0 ? current + 1 : current - 1);
+          // Right to left (Arabic…) the next photo comes with a swipe to the right.
+          var rtl = document.documentElement.getAttribute('dir') === 'rtl';
+          if (Math.abs(dx) > 40) show((dx < 0) !== rtl ? current + 1 : current - 1);
           startX = null;
         });
       }

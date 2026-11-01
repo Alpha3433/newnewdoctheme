@@ -1,7 +1,10 @@
 {%- comment -%}
   The supply line for `quantity` bottles under Theme settings → Bundle tiers: the tier's own supply
   line when the count is a tier's ("3-month supply"), otherwise "Supply line for other bottle counts"
-  with {count} filled in ("4-month supply"). Prints the text and nothing else; capture it.
+  with {count} filled in ("4-month supply"). Theme settings can't be translated, so in any language
+  but the store's default one both come from the locale files instead: the tier's key
+  (snippets/bundle-tier-text.liquid) and products.bundle_tiers.supply_months for other counts.
+  Prints the text and nothing else; capture it.
 {%- endcomment -%}
 {%- liquid
   assign supply = ''
@@ -14,12 +17,18 @@
     assign slot_free = settings[free_key] | default: 0
     assign slot_total = slot_paid | plus: slot_free
     if slot_paid > 0 and slot_total == quantity and settings[supply_key] != blank
-      assign supply = settings[supply_key]
+      capture supply
+        render 'bundle-tier-text', tier: slot, field: 'supply'
+      endcapture
       break
     endif
   endfor
-  if supply == blank
-    assign supply = settings.bundle_supply_text | replace: '{count}', quantity
+  if supply == blank and settings.bundle_supply_text != blank
+    if request.locale.primary
+      assign supply = settings.bundle_supply_text | replace: '{count}', quantity
+    else
+      assign supply = 'products.bundle_tiers.supply_months' | t: count: quantity
+    endif
   endif
   echo supply
 -%}

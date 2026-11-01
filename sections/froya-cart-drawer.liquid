@@ -30,7 +30,7 @@
   <div class="drawer__panel">
     <header class="drawer__header">
       <span id="mini-cart-title" class="s-mini-cart__title" data-cart-title>{{ section.settings.title }} · {{ cart.item_count }}</span>
-      <button type="button" class="drawer__close-button tap-area" data-cart-close aria-label="Close cart">
+      <button type="button" class="drawer__close-button tap-area" data-cart-close aria-label="{{ 'cart.drawer.close' | t }}">
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.1"/></svg>
       </button>
     </header>
@@ -65,7 +65,7 @@
       {%- if section.settings.show_shipping_bar and express_threshold > 0 -%}
       <div class="s-mini-cart__shipping free-shipping{% if cart.item_count == 0 %} s-mini-cart__shipping--empty{% endif %}" data-cart-shipping data-threshold="{{ express_threshold }}" data-total="{{ cart.total_price }}" data-money="{{ money_sample | escape }}" data-text="{{ section.settings.express_progress_text | escape }}" data-text-reached="{{ section.settings.express_unlocked_text | escape }}" data-progress="0" data-reached="false">
         <p class="free-shipping__text" data-cart-shipping-text></p>
-        <div class="free-shipping__bar" role="progressbar" aria-label="Free express shipping" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="free-shipping__bar" role="progressbar" aria-label="{{ 'cart.drawer.free_express_shipping' | t }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
           <div class="free-shipping__progress" style="width: 0%;"></div>
           <span class="free-shipping__dot free-shipping__dot--start" aria-hidden="true"></span>
           <span class="free-shipping__dot free-shipping__dot--end" aria-hidden="true"></span>
@@ -120,7 +120,7 @@
                 {%- form 'product', empty_product, class: 'drawer__product-form js-ajax-add' -%}
                   <input type="hidden" name="id" value="{{ empty_variant.id }}">
                   <input type="hidden" name="quantity" value="1">
-                  <button type="submit" class="drawer__product-button"{% unless empty_variant.available %} disabled{% endunless %}>{% if empty_variant.available %}{{ section.settings.empty_add_label }}{% else %}SOLD OUT{% endif %}</button>
+                  <button type="submit" class="drawer__product-button"{% unless empty_variant.available %} disabled{% endunless %}>{% if empty_variant.available %}{{ section.settings.empty_add_label }}{% else %}{{ 'products.product.sold_out_button' | t }}{% endif %}</button>
                 {%- endform -%}
               </div>
             </div>
@@ -338,11 +338,24 @@
                 capture row_supply
                   render 'bundle-supply', quantity: row_qty
                 endcapture
+                comment
+                  The discount's title is the bundle app's own English name for the tier. In any
+                  language but the store's default one the row names the tier its bottles fill
+                  instead, from the locale files (snippets/bundle-tier-text.liquid).
+                endcomment
+                if row_tier != blank and request.locale.primary == false
+                  capture row_tier_name
+                    render 'bundle-tier-text', quantity: row_qty, field: 'title'
+                  endcapture
+                  if row_tier_name != blank
+                    assign row_tier = row_tier_name
+                  endif
+                endif
               endif
             -%}
             <line-item class="line-item{% if is_gift %} line-item--gift{% endif %}{% if is_bundle %} line-item--bundle{% endif %}" data-line="{{ line }}" data-key="{{ item.key }}"{% if is_gift %} data-gift{% endif %}{% if is_bundle %} data-group-variant="{{ item.variant_id }}" data-group-plan="{{ row_plan }}" data-group-properties="{{ item.properties | json | escape }}"{% endif %}>
               <div class="line-item__content-wrapper">
-                <button type="button" class="s-mini-cart__remove-btn" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: item.quantity }}"{% elsif is_bundle %}data-cart-group-set="0"{% else %}data-cart-remove="{{ line }}"{% endif %} aria-label="Remove {{ item.product.title | escape }}">
+                <button type="button" class="s-mini-cart__remove-btn" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: item.quantity }}"{% elsif is_bundle %}data-cart-group-set="0"{% else %}data-cart-remove="{{ line }}"{% endif %} aria-label="{{ 'cart.drawer.remove_item' | t: title: item.product.title }}">
                   <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
                 </button>
                 {%- liquid
@@ -401,9 +414,9 @@
                     {%- endif -%}
                     <div class="product-item-meta__info">
                       <line-item-quantity class="line-item__quantity"><div class="custom-quantity-selector custom-quantity-selector--small">
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: 1 }}"{% elsif is_bundle %}data-cart-group-step="-1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}"{% endif %} aria-label="Decrease quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7" stroke-linecap="round"/></svg></button>
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | minus: 1 }}"{% elsif is_bundle %}data-cart-group-step="-1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | minus: 1 }}"{% endif %} aria-label="{{ 'general.accessibility.decrease_quantity' | t }}"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7" stroke-linecap="round"/></svg></button>
                         <span class="custom-quantity-selector__text">{% if is_bundle %}{{ row_qty }}{% else %}{{ item.quantity }}{% endif %}</span>
-                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | plus: 1 }}"{% elsif is_bundle %}data-cart-group-step="1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}"{% endif %} aria-label="Increase quantity"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7M9 5.5v7" stroke-linecap="round"/></svg></button>
+                        <button type="button" class="custom-quantity-selector__button custom-quantity-selector__button--icon" {% if is_gift %}data-cart-gift-qty="{{ gift_total_qty | plus: 1 }}"{% elsif is_bundle %}data-cart-group-step="1"{% else %}data-cart-qty="{{ line }}" data-cart-qty-value="{{ item.quantity | plus: 1 }}"{% endif %} aria-label="{{ 'general.accessibility.increase_quantity' | t }}"><svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="9" cy="9" r="8"/><path d="M5.5 9h7M9 5.5v7" stroke-linecap="round"/></svg></button>
                       </div></line-item-quantity>
                       <div class="product-item-meta__price-list-container text--small"><div class="price-list">
                         {%- if is_gift and item.final_line_price == 0 and section.settings.gift_free_text != blank -%}
@@ -514,8 +527,8 @@
               <div class="s-mini-cart__rec-header">
                 <p data-addon-heading data-heading="{{ section.settings.addon_heading | escape }}" data-heading-goal="{{ section.settings.addon_goal_heading | escape }}">{{ section.settings.addon_heading }}</p>
                 <div class="s-mini-cart__rec-arrows">
-                  <button type="button" class="s-mini-cart__rec-arrow s-mini-cart__rec-arrow--prev" data-rec-prev aria-label="Previous recommendation"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-                  <button type="button" class="s-mini-cart__rec-arrow s-mini-cart__rec-arrow--next" data-rec-next aria-label="Next recommendation"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+                  <button type="button" class="s-mini-cart__rec-arrow s-mini-cart__rec-arrow--prev" data-rec-prev aria-label="{{ 'cart.drawer.previous_recommendation' | t }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+                  <button type="button" class="s-mini-cart__rec-arrow s-mini-cart__rec-arrow--next" data-rec-next aria-label="{{ 'cart.drawer.next_recommendation' | t }}"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
                 </div>
               </div>
               <div class="scroller" data-rec-scroller>

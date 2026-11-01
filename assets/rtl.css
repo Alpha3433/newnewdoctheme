@@ -1,0 +1,269 @@
+/* ==========================================================================
+   Right-to-left layout: Arabic (and Hebrew, Persian, Urdu)
+
+   Loaded only on right-to-left pages (<html dir="rtl">, see snippets/text-direction.liquid and
+   layout/theme.liquid), so left-to-right pages never download or apply any of it.
+
+   Flex and grid rows, `start`/`end` alignment and inherited text alignment already follow the
+   text direction. What doesn't is everything written with physical sides: left/right offsets,
+   margins, paddings and borders, text-align: left/right, translateX() and arrow icons. Each rule
+   below mirrors one of those in critical.css, theme.css, sections-inline.css, sections.css or a
+   section's own <style>, with [dir="rtl"] in front of the same selector, so it wins by exactly
+   one step of specificity and the original cascade keeps working. When a left/right rule is added
+   or changed in those files, mirror it here too.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Type: Arabic letters come from Noto Sans Arabic (Google Fonts, linked by the layout on
+   right-to-left pages only). The brand faces stay first, so Latin text (product names, prices)
+   looks as it does in English; they have no Arabic glyphs, so Arabic falls through to Noto.
+   -------------------------------------------------------------------------- */
+html[dir="rtl"] {
+  --font-sans: 'PP Pangram Sans', 'Pangram', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Libre Baskerville', 'Noto Sans Arabic', Georgia, serif;
+  --font-mono: 'Apercu Mono Pro', 'Apercu', 'Noto Sans Arabic', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-heading: 'Libre Baskerville', 'Noto Sans Arabic', serif;
+  --font-body-primary: 'PP Pangram Sans', 'Noto Sans Arabic', sans-serif;
+  --font-body-secondary: 'Apercu Mono Pro', 'Noto Sans Arabic', monospace;
+  --text-font-family: 'PP Pangram Sans', 'Noto Sans Arabic', Arial, sans-serif;
+}
+[dir="rtl"] body { font-family: 'PP Pangram Sans', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+[dir="rtl"] .s-backed-by-science {
+  --bbs-font-sans: 'PP Pangram Sans', 'Pangram', 'Noto Sans Arabic', 'Objectivity', sans-serif;
+  --bbs-font-serif: 'Libre Baskerville', 'Noto Sans Arabic', Georgia, serif;
+}
+[dir="rtl"] .s-faq {
+  --faq-font-sans: 'PP Pangram Sans', 'Pangram', 'Noto Sans Arabic', 'Objectivity', sans-serif;
+  --faq-font-serif: 'Libre Baskerville', 'Noto Sans Arabic', Georgia, serif;
+}
+[dir="rtl"] .s-hero-aging-lp__highlight-label,
+[dir="rtl"] .s-hero-aging-lp__subtitle { font-family: 'PP Pangram Sans', 'Noto Sans Arabic', sans-serif; }
+[dir="rtl"] .s-hero-aging-lp__review-text,
+[dir="rtl"] .s-hero-aging-lp__stats p { font-family: var(--font-mono); }
+[dir="rtl"] .igsf__text { font-family: 'Pangram', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+/* Arabic letters join up, and some browsers pull them apart when tracking (letter-spacing) is set, so
+   these pages set none. */
+[dir="rtl"] body,
+[dir="rtl"] body * { letter-spacing: normal !important; }
+
+/* --------------------------------------------------------------------------
+   Base (theme.css, critical.css)
+   -------------------------------------------------------------------------- */
+[dir="rtl"] .skip-to-content:focus { left: auto !important; right: 12px !important; }
+[dir="rtl"] .metafield-rich_text_field ul,
+[dir="rtl"] .form-errors ul { padding-left: 0; padding-right: 1.2em; }
+[dir="rtl"] .rte ul,
+[dir="rtl"] .rte ol { padding-left: 0; padding-right: 1.3em; }
+[dir="rtl"] .cart-table th,
+[dir="rtl"] .password-page .form-field { text-align: right; }
+[dir="rtl"] .product-card__price { margin-right: 0; margin-left: 5px; }
+[dir="rtl"] .product-card__price s { margin-left: 0; margin-right: 6px; }
+[dir="rtl"] .product-page__price s { margin-left: 0; margin-right: 8px; }
+/* Country / language selects: the chevron and the room for it move to the left */
+[dir="rtl"] .custom-select__select { padding: 0 14px 0 36px; }
+[dir="rtl"] .custom-select::after { right: auto; left: 14px; }
+
+/* --------------------------------------------------------------------------
+   Announcement bar and countdown. The timer's tiles follow the reading direction (hours on the
+   right); the position settings are mirrored, so "message left" puts the message on the right.
+   -------------------------------------------------------------------------- */
+@media screen and (min-width: 741px) {
+  [dir="rtl"] .announcement-bar__message { text-align: right; }
+  [dir="rtl"] .announcement-bar .announcement-bar__item--layout-message-left .announcement-bar__message { text-align: right; }
+  [dir="rtl"] .announcement-bar .announcement-bar__item--layout-countdown-left .announcement-bar__countdown { margin-left: auto; margin-right: 0; }
+  [dir="rtl"] .announcement-bar .announcement-bar__item--layout-countdown-left .announcement-bar__message { text-align: left; }
+}
+@media screen and (max-width: 740px) {
+  [dir="rtl"] #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row .announcement-bar__message { text-align: right; }
+  [dir="rtl"] #shopify-section-sections--26717504897391__announcement-bar .announcement-bar__item--mobile-row-countdown-first .announcement-bar__message { text-align: left; }
+}
+
+/* --------------------------------------------------------------------------
+   Header, mega menu cards and the mobile menu. The menu drawer keeps opening from the left.
+   -------------------------------------------------------------------------- */
+[dir="rtl"] .froya-nav__burger { margin-left: 0; margin-right: -10px; }
+[dir="rtl"] .froya-nav__nav-link::after { transform-origin: right; }
+[dir="rtl"] .header__cart-count--floating { right: auto; left: -14px; }
+[dir="rtl"] .froya-nav-card__badge { left: auto; right: 10px; }
+[dir="rtl"] .froya-nav-card__price .product_price { margin-left: 0; margin-right: 4px; }
+/* The half star fills from the right */
+[dir="rtl"] .froya-nav-stars__star--partial svg { transform: scaleX(-1); }
+[dir="rtl"] .froya-nav-drawer__header { padding: 0 20px 0 16px; }
+[dir="rtl"] .froya-nav-drawer__anchor-arrow { transform: scaleX(-1); }
+[dir="rtl"] .froya-nav-drawer__anchor:active .froya-nav-drawer__anchor-arrow { transform: scaleX(-1) translateX(3px); }
+
+/* --------------------------------------------------------------------------
+   Cart drawer: slides in from the left
+   -------------------------------------------------------------------------- */
+[dir="rtl"] .mini-cart .drawer__panel {
+  right: auto;
+  left: 0;
+  box-shadow: 12px 0 40px rgba(0, 0, 0, 0.12);
+  transform: translateX(-100%);
+}
+[dir="rtl"] cart-drawer.mini-cart[open] .drawer__panel { transform: translateX(0); }
+[dir="rtl"] .mini-cart .drawer__header { padding: 14px 20px 12px 18px; }
+[dir="rtl"] .mini-cart .drawer__close-button { margin-right: 0; margin-left: -8px; }
+[dir="rtl"] .mini-cart .line-item__info { padding-right: 0; padding-left: 24px; }
+[dir="rtl"] .mini-cart .s-mini-cart__remove-btn { right: auto; left: 0; }
+[dir="rtl"] .mini-cart .product-item-meta__price-list-container { margin-left: 0; margin-right: auto; }
+[dir="rtl"] .mini-cart .price--unit { text-align: left; }
+[dir="rtl"] .mini-cart .total-info__price--savings { direction: ltr; unicode-bidi: isolate; }
+[dir="rtl"] .mini-cart .subscription-toggle-knob { left: auto; right: 2px; }
+[dir="rtl"] .mini-cart .subscription-checkbox:checked ~ .subscription-toggle-switch .subscription-toggle-knob { transform: translateX(-14px); }
+[dir="rtl"] .mini-cart__recommendations { padding: 12px 16px 14px 0; }
+[dir="rtl"] .s-mini-cart__rec-header { padding-right: 0; padding-left: 16px; }
+[dir="rtl"] .s-mini-cart__rec-arrow svg { transform: scaleX(-1); }
+[dir="rtl"] .mini-cart__upgrade { margin: 0 0 14px 16px; }
+/* Free express shipping bar: fills from the right */
+[dir="rtl"] .free-shipping__progress { left: auto; right: 0; }
+[dir="rtl"] .free-shipping__dot--start { left: 100%; }
+[dir="rtl"] .free-shipping__dot--end { left: 0; }
+[dir="rtl"] .s-mini-cart__market .custom-select__select { padding: 0 10px 0 30px; }
+[dir="rtl"] .s-mini-cart__market .custom-select::after { right: auto; left: 11px; }
+@media screen and (max-width: 740px) {
+  [dir="rtl"] .mini-cart .drawer__header { padding: 14px 18px 12px 16px; }
+}
+
+/* --------------------------------------------------------------------------
+   Carousels (Blaze Slider: logo & quote, reviews, video reviews). Blaze lays its track out left
+   to right whatever the page direction, so the track is mirrored as a whole and each slide is
+   mirrored back: the first slide sits on the right, the rest follow to the left and a swipe to
+   the right moves on (assets/main.js, attachSwipe, reads the finger mirrored too). The dots read
+   right to left as well.
+   -------------------------------------------------------------------------- */
+[dir="rtl"] .blaze-track-container { transform: scaleX(-1); }
+[dir="rtl"] .blaze-track > * { transform: scaleX(-1); direction: rtl; }
+[dir="rtl"] .blaze-pagination { direction: rtl; }
+
+/* --------------------------------------------------------------------------
+   Scrolling offer banner: runs left to right, the way Arabic reads into it
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  [dir="rtl"] .s-offer-marquee__track { animation-name: s-offer-marquee-rtl; }
+}
+@keyframes s-offer-marquee-rtl { from { transform: translateX(0); } to { transform: translateX(50%); } }
+
+/* --------------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  [dir="rtl"] .s-hero-aging-lp__content,
+  [dir="rtl"] .s-hero-aging-lp__subtitle,
+  [dir="rtl"] .s-hero-aging-lp__stats p { text-align: right; }
+}
+@media screen and (min-width: 768px) {
+  [dir="rtl"] .s-hero-aging-lp__content-wrapper { padding: 40px 60px 40px 40px; }
+}
+@media screen and (min-width: 1200px) {
+  [dir="rtl"] .s-hero-aging-lp__content-wrapper { padding-left: 40px; padding-right: 80px; }
+}
+
+/* --------------------------------------------------------------------------
+   Benefits strip, "Backed by science", results panel, story and plants sections
+   -------------------------------------------------------------------------- */
+[dir="rtl"] #shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__small-icon-item,
+[dir="rtl"] #shopify-section-template--26717513089391__icons_with_text_hPpB9d .s-icons-with-text-custom__small-icon-text p { text-align: right; }
+[dir="rtl"] .s-backed-by-science__item { padding-left: 0; padding-right: calc(var(--bbs-circle-size) + var(--bbs-line-gap)); }
+[dir="rtl"] .s-backed-by-science__item::before { left: auto; right: calc(var(--bbs-circle-size) / 2 - 1px); }
+[dir="rtl"] .s-backed-by-science__num { left: auto; right: 0; }
+[dir="rtl"] .s-image-content-grid__title { text-align: right; }
+[dir="rtl"] .s-image-content-grid__progress-fill { padding-right: 0; padding-left: 12px; }
+[dir="rtl"] .s-image-text-section__title { text-align: right; }
+[dir="rtl"] .s-image-text-section__title--desktop-alignment--right { text-align: left; }
+[dir="rtl"] .s-image-text-section__title--desktop-alignment--left { text-align: right; }
+[dir="rtl"] .s-image-text-section--position--right .s-image-text-section__rich-content--width--medium { margin-left: 0; margin-right: auto; }
+[dir="rtl"] .s-icons-with-text__title { text-align: right; }
+[dir="rtl"] .s-how-to-use__title--desktop { text-align: right; }
+[dir="rtl"] .s-image-with-text-blocks__images { padding-right: 0; padding-left: 40px; }
+[dir="rtl"] .s-image-with-text-blocks__image--desktop-small { right: auto; left: 0; }
+@media screen and (max-width: 767px) {
+  [dir="rtl"] .s-image-text-section__title--mobile-alignment--left { text-align: right; }
+  [dir="rtl"] .s-image-text-section--position--right .s-image-text-section__rich-content--width--medium { margin-right: 0; }
+}
+@media screen and (max-width: 539px) {
+  [dir="rtl"] .s-icons-with-text__main-icon { text-align: right; }
+}
+
+/* --------------------------------------------------------------------------
+   Review and video sliders: the section bleeds off the left edge instead of the right
+   -------------------------------------------------------------------------- */
+[dir="rtl"] .s-reviews-slider__container,
+[dir="rtl"] .s-videos-slider__container { padding: 0 40px 0 0; }
+[dir="rtl"] .s-reviews-slider__title,
+[dir="rtl"] .s-videos-slider__title { margin: 0 0 32px 40px; }
+@media screen and (max-width: 767px) {
+  [dir="rtl"] .s-reviews-slider__container,
+  [dir="rtl"] .s-videos-slider__container { padding-left: 0; padding-right: 20px; }
+  [dir="rtl"] .s-reviews-slider__title,
+  [dir="rtl"] .s-videos-slider__title { margin-right: 0; margin-left: 20px; }
+}
+
+/* --------------------------------------------------------------------------
+   Buy box (Featured product)
+   -------------------------------------------------------------------------- */
+/* Gallery: "previous" sits on the right and points right */
+[dir="rtl"] .s-featured-product__gallery-arrow--prev { left: auto; right: 14px; }
+[dir="rtl"] .s-featured-product__gallery-arrow--next { right: auto; left: 14px; }
+[dir="rtl"] .s-featured-product__gallery-arrow svg { transform: scaleX(-1); }
+[dir="rtl"] .s-featured-product__gallery-tags { left: auto; right: 14px; }
+[dir="rtl"] .s-main-product__modal-close { right: auto; left: 16px; }
+[dir="rtl"] .s-main-product__modal-content-title { text-align: right; }
+[dir="rtl"] .loox-rating-label { margin-left: 0; margin-right: 6px; }
+[dir="rtl"] .c-buybox-toggle__head { text-align: right; }
+/* The Subscribe & save switch is on at the left */
+[dir="rtl"] .c-buybox-toggle__knob { left: 3px; }
+[dir="rtl"] .c-buybox-toggle__head[aria-checked="false"] .c-buybox-toggle__knob { left: 23px; }
+[dir="rtl"] .c-buybox-toggle__gift { background: linear-gradient(270deg, #fbe7dc 0%, #f8efe4 100%); }
+[dir="rtl"] .c-bundle__pricing { margin-left: 0; margin-right: auto; text-align: left; }
+[dir="rtl"] .c-bundle__meta,
+[dir="rtl"] .c-bundle__gift,
+[dir="rtl"] .c-bundle__perks { padding-left: 0; padding-right: 32px; }
+[dir="rtl"] .c-bundle--plan .c-bundle__badge { right: auto; left: 0; border-radius: 0 0 10px 0; }
+[dir="rtl"] .c-bundle--plan .c-bundle__gift { padding: 12px var(--bundle-pad); }
+[dir="rtl"] .c-bundle--plan .c-bundle__perks { padding-left: 0; padding-right: 38px; }
+@media screen and (max-width: 767px) {
+  [dir="rtl"] .custom_loox_star_rating--above-name .loox-rating-label { margin-left: 0; margin-right: 4px; }
+  [dir="rtl"] .c-bundle__meta,
+  [dir="rtl"] .c-bundle__gift,
+  [dir="rtl"] .c-bundle__perks { padding-right: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   FAQ (landing page and Track your order)
+   -------------------------------------------------------------------------- */
+[dir="rtl"] .s-faq__answer { padding: 0 calc(20px + var(--faq-circle-size) + 16px) 20px 20px; }
+@media screen and (min-width: 768px) {
+  [dir="rtl"] .s-faq__answer { padding: 0 calc(24px + var(--faq-circle-size) + 16px) 24px 24px; }
+}
+@media screen and (max-width: 767.98px) {
+  [dir="rtl"] .s-faq__answer { padding: 0 calc(16px + var(--faq-circle-size) + 12px) 16px 16px; }
+}
+
+/* --------------------------------------------------------------------------
+   Email popup: the photo moves to the right on desktop, the close button to the left
+   -------------------------------------------------------------------------- */
+[dir="rtl"] .s-email-popup__close { right: auto; left: 12px; }
+[dir="rtl"] .s-email-popup__button-spinner { margin-left: 0; margin-right: 10px; }
+[dir="rtl"] .s-email-popup__copy { border-left: 0; border-right: 2px dashed var(--brand-mauve); }
+@media screen and (min-width: 768px) {
+  [dir="rtl"] .s-email-popup__media { border-radius: 0 24px 24px 0; }
+  [dir="rtl"] .s-email-popup__content { padding: 44px 48px 40px 44px; }
+}
+
+/* --------------------------------------------------------------------------
+   Track your order and the account's order tracker: the timeline runs right to left
+   -------------------------------------------------------------------------- */
+[dir="rtl"] .s-track__step::before { left: auto; right: calc(var(--track-num) / 2 - 1px); }
+[dir="rtl"] .order-tracking__step::before { right: auto; left: 50%; }
+@media screen and (min-width: 768px) {
+  [dir="rtl"] .s-track__help { text-align: right; }
+}
+@media screen and (min-width: 1000px) {
+  [dir="rtl"] .s-track__step::before { right: 50%; }
+}
+
+/* --------------------------------------------------------------------------
+   Product page for products sold on their own page (sections/main-product-compact.liquid)
+   -------------------------------------------------------------------------- */
+[dir="rtl"] .compact-pdp__option { text-align: right; }
