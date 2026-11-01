@@ -772,7 +772,7 @@
         "price_style": "unit",
         "compare_basis": "price",
         "unit_suffix": "per bottle",
-        "total_text": "{total} total",
+        "total_text": "",
         "save_text": "Save {amount} ({percent}% off)",
         "sub_default": false,
         "toggle_title": "Save {percent}% with our flexible plan",

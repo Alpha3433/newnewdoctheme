@@ -253,7 +253,7 @@
         "price_style": "unit",
         "compare_basis": "price",
         "unit_suffix": "per bottle",
-        "total_text": "{total} total",
+        "total_text": "",
         "save_text": "Save {amount} ({percent}% off)",
         "days_per_tube": 30,
         "per_day_text": "{price} a day",
